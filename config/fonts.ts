@@ -1,6 +1,6 @@
 export enum StyleFonts {
-  FiraSansBold = `FiraSansBold`,
-  FiraSansSemiBold = `FiraSansSemiBold`,
-  FiraSansMedium = `FiraSansMedium`,
-  FiraSansRegular = `FiraSansRegular`,
+  Bold = `FiraSansBold`,
+  SemiBold = `FiraSansSemiBold`,
+  Medium = `FiraSansMedium`,
+  Regular = `FiraSansRegular`
 }
