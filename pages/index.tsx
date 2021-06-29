@@ -6,7 +6,8 @@ import {
   MainSection,
   InfoSection,
   FeaturesSection,
-  AppsSection
+  AppsSection,
+  PartnershipsSection
 } from 'components/sections';
 
 export const MainPage: NextPage = () => {
@@ -18,6 +19,7 @@ export const MainPage: NextPage = () => {
       <InfoSection />
       <FeaturesSection />
       <AppsSection />
+      <PartnershipsSection />
     </>
   );
 };

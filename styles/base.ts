@@ -39,4 +39,16 @@ export const BaseStyles = createGlobalStyle`
     margin: 0;
     padding: 0;
   }
+
+  .slick-slider {
+    width: 100%;
+    height: 100%;
+  }
+
+  .slick-dots li button:before {
+    color: ${Colors.White};
+  }
+  .slick-dots li.slick-active button:before {
+    color: ${Colors.White};
+  }
 `;
