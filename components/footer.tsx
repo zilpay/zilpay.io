@@ -27,6 +27,8 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+
   padding-left: 30px;
   padding-right: 30px;
 `;
@@ -39,7 +41,6 @@ const Involved = styled.div`
   align-items: center;
 `;
 const InvolvedWrapper = styled.div`
-
   a {
     margin: 10px;
   }
