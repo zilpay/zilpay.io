@@ -1,11 +1,11 @@
 import React from 'react';
-import styled from 'styled-components';
 import { NextPage } from 'next';
 
 import { Navbar } from 'components/nav-bar';
 import {
   MainSection,
-  InfoSection
+  InfoSection,
+  FeaturesSection
 } from 'components/sections';
 
 export const MainPage: NextPage = () => {
@@ -15,6 +15,7 @@ export const MainPage: NextPage = () => {
       <Navbar />
       <MainSection />
       <InfoSection />
+      <FeaturesSection />
     </>
   );
 };

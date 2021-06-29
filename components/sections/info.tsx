@@ -9,8 +9,16 @@ const Container = styled.section`
   justify-content: center;
   flex-wrap: wrap;
 
-  height: 60vh;
   width: 100%;
+  height: 100%;
+
+  margin-bottom: 20vh;
+  margin-top: 20vh;
+
+  @media (max-width: 1000px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 `;
 
 export const InfoSection: React.FC = () => {
