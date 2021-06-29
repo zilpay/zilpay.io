@@ -76,7 +76,11 @@ export const TeamCard: React.FC<Prop> = ({
             href={github}
             target="_blank"
           >
-            <GitHubIcon />
+            <GitHubIcon
+              color={Colors.White}
+              height="15"
+              width="15"
+            />
           </a>
         ) : null}
         {linkedin ? (
@@ -84,7 +88,11 @@ export const TeamCard: React.FC<Prop> = ({
             href={linkedin}
             target="_blank"
           >
-            <LinkedinIcon />
+            <LinkedinIcon
+              color={Colors.White}
+              height="15"
+              width="15"
+            />
           </a>
         ) : null}
         {twitter ? (
@@ -92,7 +100,11 @@ export const TeamCard: React.FC<Prop> = ({
             href={twitter}
             target="_blank"
           >
-            <TwitterIcon />
+            <TwitterIcon
+              color={Colors.White}
+              height="15"
+              width="15"
+            />
           </a>
         ) : null}
       </IconsWrapper>

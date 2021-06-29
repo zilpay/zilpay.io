@@ -9,9 +9,11 @@ type Prop = {
   nowrap?: boolean;
   upperCase?: boolean;
   css?: string;
+  pointer?: boolean;
 };
 
 export const Text = styled.div`
+  ${(props: Prop) => props.pointer ? 'cursor: pointer;' : ''}
   font-family: ${(props: Prop) => props.fontVariant};
   font-size: ${(props: Prop) => props.size};
   color: ${(props: Prop) => props.fontColors};
@@ -24,6 +26,10 @@ export const Text = styled.div`
   text-overflow: ellipsis;
   margin-block-start: 0.6em;
   margin-block-end: 0.6em;
+
+  :hover {
+    ${(props: Prop) => props.pointer ? `color: ${Colors.White}` : ''}
+  }
   ${(props: Prop) => props.css}
 `;
 
