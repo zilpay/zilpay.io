@@ -5,7 +5,8 @@ import { Navbar } from 'components/nav-bar';
 import {
   MainSection,
   InfoSection,
-  FeaturesSection
+  FeaturesSection,
+  AppsSection
 } from 'components/sections';
 
 export const MainPage: NextPage = () => {
@@ -16,6 +17,7 @@ export const MainPage: NextPage = () => {
       <MainSection />
       <InfoSection />
       <FeaturesSection />
+      <AppsSection />
     </>
   );
 };
