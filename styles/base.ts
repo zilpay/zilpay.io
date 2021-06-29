@@ -19,6 +19,10 @@ export const BaseStyles = createGlobalStyle`
     font-family: ${StyleFonts.Regular};
     src: url('/fonts/Poppins-Regular.ttf');
   }
+  @font-face {
+    font-family: ${StyleFonts.Light};
+    src: url('/fonts/Poppins-Light.ttf');
+  }
 
   ul {
     padding: 0;
