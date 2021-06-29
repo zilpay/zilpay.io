@@ -4,20 +4,20 @@ import { Colors } from 'config/colors';
 
 export const BaseStyles = createGlobalStyle`
   @font-face {
-    font-family: ${StyleFonts.FiraSansBold};
-    src: url('/fonts/FiraSans-Bold.ttf');
+    font-family: ${StyleFonts.Bold};
+    src: url('/fonts/Poppins-Bold.ttf');
   }
   @font-face {
-    font-family: ${StyleFonts.FiraSansSemiBold};
-    src: url('/fonts/FiraSans-SemiBold.ttf');
+    font-family: ${StyleFonts.SemiBold};
+    src: url('/fonts/Poppins-SemiBold.ttf');
   }
   @font-face {
-    font-family: ${StyleFonts.FiraSansMedium};
-    src: url('/fonts/FiraSans-Medium.ttf');
+    font-family: ${StyleFonts.Medium};
+    src: url('/fonts/Poppins-Medium.ttf');
   }
   @font-face {
-    font-family: ${StyleFonts.FiraSansRegular};
-    src: url('/fonts/FiraSans-Regular.ttf');
+    font-family: ${StyleFonts.Regular};
+    src: url('/fonts/Poppins-Regular.ttf');
   }
 
   ul {
@@ -38,14 +38,5 @@ export const BaseStyles = createGlobalStyle`
     background: ${Colors.Black};
     margin: 0;
     padding: 0;
-  }
-
-  @keyframes load {
-    from {
-        left: -150px;
-    }
-    to   {
-        left: 100%;
-    }
   }
 `;

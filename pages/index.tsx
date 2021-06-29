@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { NextPage } from 'next';
 
 import { Navbar } from 'components/nav-bar';
+import { MainSection } from 'components/sections';
 
 const Container = styled.div`
   display: flex;
@@ -13,9 +14,10 @@ const Container = styled.div`
 export const MainPage: NextPage = () => {
 
   return (
-    <Container>
+    <>
       <Navbar />
-    </Container>
+      <MainSection />
+    </>
   );
 };
 
