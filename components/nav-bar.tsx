@@ -25,6 +25,7 @@ const Ul = styled.ul`
   align-items: center;
 `;
 const Li = styled.li`
+  cursor: pointer;
   padding-top: 20px;
   padding-bottom: 20px;
   margin-left: 10px;
@@ -38,7 +39,7 @@ const Li = styled.li`
     border-bottom: solid 2px ${Colors.Secondary};
   }
 `;
-export const Anchor = styled.a`
+export const Anchor = styled.span`
   font-family: ${StyleFonts.SemiBold}, Sans-serif;
   font-size: 15px;
   font-weight: 500;
@@ -67,32 +68,42 @@ export const Navbar: React.FC = () => {
       </Link>
       <Ul>
         <Li>
-          <Anchor href="/#services">
-            Features
-          </Anchor>
+          <Link href="/#services">
+            <Anchor>
+              Features
+            </Anchor>
+          </Link>
         </Li>
         <Li>
-          <Anchor href="/#partnerships">
-            Partnerships
-          </Anchor>
+          <Link href="/#partnerships">
+            <Anchor>
+              Partnerships
+            </Anchor>
+          </Link>
         </Li>
         <Li>
-          <Anchor href="/#team">
-            Our Team
-          </Anchor>
+          <Link href="/#team">
+            <Anchor>
+              Our Team
+            </Anchor>
+          </Link>
         </Li>
         <Li>
-          <Anchor href="/#contact">
-            Contact Us
-          </Anchor>
+          <Link href="/#contact">
+            <Anchor>
+              Contact Us
+            </Anchor>
+          </Link>
         </Li>
         <Li>
-          <Anchor
+          <a
             href="https://zilpay.github.io/zilpay-docs/"
             target="_blanck"
           >
-            Documentation
-          </Anchor>
+            <Anchor>
+              Documentation
+            </Anchor>
+          </a>
         </Li>
         <a
           href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
