@@ -34,7 +34,7 @@ export const Text = styled.div`
 `;
 
 Text.defaultProps = {
-  size: '20px',
+  size: '16px',
   fontVariant: StyleFonts.Regular,
   fontColors: Colors.Text,
   nowrap: false,
