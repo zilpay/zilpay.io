@@ -44,7 +44,7 @@ export const AppsSection: React.FC = () => {
       </HeaderWrapper>
       <Wrapper>
         <ZoomCard
-          url="https://zilpay.io/wp-content/uploads/2021/03/vlx-konstantinov-02-1-1024x576.png"
+          url="/images/vlx-konstantinov-02-1-1024x576.webp"
           href="https://dragonzil.xyz/"
           title="DragonZIL"
           onClick={(url) => hanldeClick(url, false)}
@@ -52,7 +52,7 @@ export const AppsSection: React.FC = () => {
           {t(`app0`)}
         </ZoomCard>
         <ZoomCard
-          url="https://zilpay.io/wp-content/uploads/2021/03/kyle-brinker-0vVHYD3PcKo-unsplash_3-1-1024x822.jpg"
+          url="/images/kyle-brinker-0vVHYD3PcKo-unsplash_3-1-1024x822.webp"
           href="https://unstoppabledomains.com/"
           title="UnstoppableDomains"
           onClick={(url) => hanldeClick(url, false)}
@@ -60,7 +60,7 @@ export const AppsSection: React.FC = () => {
           {t(`app1`)}
         </ZoomCard>
         <ZoomCard
-          url="https://zilpay.io/wp-content/uploads/2021/03/fingerprint-1024x683.png"
+          url="/images/fingerprint-1024x683.webp"
           href="https://zilpay-b255e.web.app/Verification#/Verification"
           title="Signature Verification"
           onClick={(url) => hanldeClick(url, false)}
@@ -68,7 +68,7 @@ export const AppsSection: React.FC = () => {
           {t(`app2`)}
         </ZoomCard>
         <ZoomCard
-          url="https://zilpay.io/wp-content/uploads/2021/03/UD-laptop-1024x683.png"
+          url="/images/UD-laptop-1024x683.webp"
           href="https://stake.zilliqa.com/"
           title="Stake"
           onClick={(url) => hanldeClick(url, false)}
@@ -76,7 +76,7 @@ export const AppsSection: React.FC = () => {
           {t(`app3`)}
         </ZoomCard>
         <ZoomCard
-          url="https://zilpay.io/wp-content/uploads/2021/03/data-1024x682.png"
+          url="/images/data-1024x682.webp"
           href="https://ide.zilliqa.com/#/"
           title="Scilla Editor"
           onClick={(url) => hanldeClick(url, false)}
@@ -84,7 +84,7 @@ export const AppsSection: React.FC = () => {
           {t(`app4`)}
         </ZoomCard>
         <ZoomCard
-          url="https://zilpay.io/wp-content/uploads/2021/03/graph-1024x682.png"
+          url="/images/graph-1024x682.webp"
           href="https://zilswap.io/swap"
           title="Zilswap"
           onClick={(url) => hanldeClick(url, false)}

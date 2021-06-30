@@ -22,12 +22,12 @@ const Container = styled.section`
   height: 90vh;
   width: 100%;
 
-  background-image: url(https://zilpay.io/wp-content/uploads/2021/03/bg.png);
+  background-image: url(/images/bg.webp);
   background-position: center center;
   background-size: cover;
 
   @media (max-width: 900px) {
-    background-image: url(https://zilpay.io/wp-content/uploads/2021/03/mob2.png);
+    background-image: url(/images/mob2.webp);
   }
 `;
 const Wrapper = styled.div`

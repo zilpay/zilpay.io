@@ -24,14 +24,14 @@ export const TestimonialsSection: React.FC = () => {
       </HeaderWrapper>
       <Wrapper>
         <TestimonialsCard
-          img="https://zilpay.io/wp-content/uploads/2021/03/hanwen.png"
+          img="/images/hanwen.webp"
           title={t(`testimonials_title0`)}
           info={t(`testimonials_sub_title0`)}
         >
           {t(`testimonials_info0`)}
         </TestimonialsCard>
         <TestimonialsCard
-          img="https://zilpay.io/wp-content/uploads/2021/03/amrit.png"
+          img="/images/amrit.webp"
           title={t(`testimonials_title1`)}
           info={t(`testimonials_sub_title1`)}
         >
