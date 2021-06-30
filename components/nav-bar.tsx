@@ -38,7 +38,7 @@ const Li = styled.li`
     border-bottom: solid 2px ${Colors.Secondary};
   }
 `;
-const Anchor = styled.a`
+export const Anchor = styled.a`
   font-family: ${StyleFonts.SemiBold}, Sans-serif;
   font-size: 15px;
   font-weight: 500;

@@ -68,4 +68,14 @@ export const BaseStyles = createGlobalStyle`
     align-items: center !important;
     justify-content: center !important;
   }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  
+    to {
+      opacity: 0.5;
+    }
+  }
 `;

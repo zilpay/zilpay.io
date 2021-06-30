@@ -4,10 +4,12 @@ import Link from 'next/link';
 
 import { Text } from 'components/text';
 import { BurgerIcon } from 'components/icons';
-import { Button } from 'components/button';
+import { MobileModal } from 'components/modals/mobile';
+import { Anchor } from 'components/nav-bar';
 
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
+import { Button } from './button';
 
 const Container = styled.nav`
   display: flex;
@@ -16,36 +18,98 @@ const Container = styled.nav`
 
   padding: 5px 16px;
 `;
+const Ul = styled.ul`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;
+const Li = styled.li`
+  padding: 10px;
+
+  border-bottom: solid 2px transparent;
+  color: ${Colors.White};
+
+  :hover {
+    color: ${Colors.Secondary};
+    border-bottom: solid 2px ${Colors.Secondary};
+  }
+`;
 
 export const MobileNavBar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <Container>
-      <Link href="/">
-        <div style={{
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center'
-        }}>
-          <img
-            src="/icons/zilpay.svg"
-            height="30"
-            width-="30"
-          />
-          <Text
-            fontColors={Colors.White}
-            fontVariant={StyleFonts.Bold}
-            css="margin: 5px;"
+    <>
+      <Container>
+        <Link href="/">
+          <div style={{
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            <img
+              src="/icons/zilpay.svg"
+              height="30"
+              width-="30"
+            />
+            <Text
+              fontColors={Colors.White}
+              fontVariant={StyleFonts.Bold}
+              css="margin: 5px;"
+            >
+              ZilPay
+            </Text>
+          </div>
+        </Link>
+        <BurgerIcon
+          height="25"
+          width="30"
+          onClick={() => setIsOpen(true)}
+        />
+      </Container>
+      <MobileModal
+        show={isOpen}
+        color={Colors.Black}
+        onClose={() => setIsOpen(false)}
+      >
+        <Ul>
+          <Li>
+            <Anchor href="/#services">
+              Features
+            </Anchor>
+          </Li>
+          <Li>
+            <Anchor href="/#partnerships">
+              Partnerships
+            </Anchor>
+          </Li>
+          <Li>
+            <Anchor href="/#team">
+              Our Team
+            </Anchor>
+          </Li>
+          <Li>
+            <Anchor href="/#contact">
+              Contact Us
+            </Anchor>
+          </Li>
+          <Li>
+            <Anchor
+              href="https://zilpay.github.io/zilpay-docs/"
+              target="_blanck"
+            >
+              Documentation
+            </Anchor>
+          </Li>
+          <a
+            href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
+            target="_blanck"
           >
-            ZilPay
-          </Text>
-        </div>
-      </Link>
-      <BurgerIcon
-        height="25"
-        width="30"
-        onClick={() => setIsOpen(true)}
-      />
-    </Container>
+          </a>
+        </Ul>
+        <Button css="margin-top: 8px;">
+          WHITE PAPER
+        </Button>
+      </MobileModal>
+    </>
   );
 };
