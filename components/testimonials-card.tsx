@@ -9,6 +9,10 @@ import { StyleFonts } from '@/config/fonts';
 const Container = styled.div`
   width: 559px;
   margin: 16px;
+
+  @media (max-width: 400px) {
+    width: 250px;
+  }
 `;
 const Avatar = styled.img`
   border-radius: 100%;

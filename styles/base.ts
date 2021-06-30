@@ -63,4 +63,9 @@ export const BaseStyles = createGlobalStyle`
     width: 100%;
     max-width: 1200px;
   }
+  .slick-slide => div => a {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
 `;

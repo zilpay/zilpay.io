@@ -1,7 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
 
-import { Navbar } from 'components/nav-bar';
 import {
   MainSection,
   InfoSection,
@@ -16,7 +15,6 @@ export const MainPage: NextPage = () => {
 
   return (
     <>
-      <Navbar />
       <MainSection />
       <InfoSection />
       <FeaturesSection />

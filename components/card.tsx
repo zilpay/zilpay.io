@@ -36,7 +36,7 @@ const Container = styled.div`
   transition: background 0.3s, border 0.5s, border-radius 0.5s, box-shadow 0.5s;
 
   @media (max-width: 1000px) {
-    width: 80vw;
+    width: auto;
   }
 `;
 

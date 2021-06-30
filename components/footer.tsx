@@ -41,6 +41,10 @@ const Involved = styled.div`
   align-items: center;
 `;
 const InvolvedWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
   a {
     margin: 10px;
   }

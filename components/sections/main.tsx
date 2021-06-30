@@ -1,7 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { isBrowser } from 'react-device-detect';
-import Link from 'next/link';
+import {
+  isChrome,
+  isEdge,
+  isFirefox,
+  isAndroid,
+  isIOS
+} from 'react-device-detect';
 
 import { Text } from 'components/text';
 import { Button } from 'components/button';
@@ -33,6 +38,70 @@ const Wrapper = styled.div`
   padding-left: 10vw;
   padding-right: 10vw;
 `;
+const GetButton = styled(Button)`
+  padding: 20px 30px;
+`;
+
+// https://microsoftedge.microsoft.com/addons/detail/zilpay/fbekallmnjoeggkefjkbebpineneilec
+
+// https://addons.mozilla.org/en-GB/firefox/addon/zilpay/
+const InstallButton: React.FC = () => {
+  if (isChrome) {
+    return (
+      <GetButton
+        color={Colors.Secondary}
+        fontColors={Colors.Secondary}
+      >
+        GET CHROME EXTENSION.
+      </GetButton>
+    );
+  } else if (isEdge) {
+    return (
+      <GetButton
+        color="#0067b8"
+        fontColors="#0067b8"
+      >
+        GET MICROSOFT EDGE EXTENSION.
+      </GetButton>
+    );
+  } else if (isFirefox) {
+    return (
+      <GetButton
+        color="#CC2993"
+        fontColors="#CC2993"
+      >
+        GET FIREFOX EXTENSION.
+      </GetButton>
+    );
+  } else if (isAndroid) {
+    return (
+      <GetButton
+        color={Colors.Secondary}
+        fontColors={Colors.Secondary}
+      >
+        GET ZILPAY ANDROID.
+      </GetButton>
+    );
+  } else if (isIOS) {
+    return (
+      <GetButton
+        color="#bfe2e8"
+        fontColors="#bfe2e8"
+      >
+        GET ZILPAY IOS.
+      </GetButton>
+    );
+  }
+
+  return (
+    <GetButton
+      color={Colors.Secondary}
+      fontColors={Colors.Secondary}
+    >
+      GET CHROME EXTENSION.
+    </GetButton>
+  );
+};
 
 export const MainSection: React.FC = () => {
   return (
@@ -56,9 +125,7 @@ export const MainSection: React.FC = () => {
         <Text size="16px">
           A web3 wallet of the ZIlliqa blockchain.
         </Text>
-        <Button>
-          CHROME EXTENSION.
-        </Button>
+        <InstallButton />
       </Wrapper>
     </Container>
   );

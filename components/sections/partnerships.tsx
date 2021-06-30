@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import Slider from 'react-slick';
 
 import { Text } from 'components/text';
@@ -14,6 +13,7 @@ const settings = {
   speed: 500,
   slidesToShow: 6,
   slidesToScroll: 5,
+  arrows: false,
   responsive: [
     {
       breakpoint: 1024,
@@ -88,25 +88,28 @@ export const PartnershipsSection: React.FC = () => {
         </Text>
       </HeaderWrapper>
       <Wrapper>
-        <Slider {...settings}>
+        <Slider {...settings} useCSS={true}>
           {list.map((el, index) => (
-            <a
-              key={index}
-              href={el.href}
-              style={{
-                width: 'auto'
-              }}
-              target="_blank"
-            >
-              <img
-                src={`/icons/${el.img}`}
+            <div key={index}>
+              <a
+                href={el.href}
                 style={{
-                  borderRadius: '100%'
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
-                height="150"
-                width="150"
-              />
-            </a>
+                target="_blank"
+              >
+                <img
+                  src={`/icons/${el.img}`}
+                  style={{
+                    borderRadius: '100%'
+                  }}
+                  height="150"
+                  width="150"
+                />
+              </a>
+            </div>
           ))}
         </Slider>
       </Wrapper>

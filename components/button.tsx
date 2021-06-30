@@ -6,7 +6,7 @@ type Prop = {
   size?: number | string;
   fontVariant?: StyleFonts | string;
   fontColors?: Colors | string;
-  color?: Colors;
+  color?: Colors | string;
   nowrap?: boolean;
   upperCase?: boolean;
   css?: string;
