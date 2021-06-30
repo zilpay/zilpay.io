@@ -24,8 +24,7 @@ type Prop = {
   info: string;
 };
 
-export const TestimonialsCard: React.FC<Prop> = ({ img, info, title, children }) => {
-  return (
+export const TestimonialsCard: React.FC<Prop> = ({ img, info, title, children }) => (
     <Container>
       <Avatar
         src={img}
@@ -54,4 +53,3 @@ export const TestimonialsCard: React.FC<Prop> = ({ img, info, title, children })
       </Text>
     </Container>
   );
-};

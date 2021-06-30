@@ -11,7 +11,7 @@ import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 import { Button } from './button';
 
-const BurgerIcon = dynamic(import('components/icons/burger'));
+const BurgerIcon = dynamic(import(`components/icons/burger`));
 
 const MobileContainer = styled.nav`
   display: flex;
@@ -44,14 +44,15 @@ export const MobileNavBar: React.FC = () => {
       <MobileContainer>
         <Link href="/">
           <div style={{
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center'
+            cursor: `pointer`,
+            display: `flex`,
+            alignItems: `center`
           }}>
             <img
               src="/icons/zilpay.svg"
               height="30"
               width-="30"
+              alt="Logo"
             />
             <Text
               fontColors={Colors.White}
@@ -112,15 +113,15 @@ export const MobileNavBar: React.FC = () => {
               </Anchor>
             </a>
           </Li>
-          <a
-            href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
-            target="_blanck"
-          >
-          </a>
         </Ul>
-        <Button css="margin-top: 8px;">
-          WHITE PAPER
-        </Button>
+        <a
+          href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
+          target="_blanck"
+        >
+          <Button css="margin-left: 30px;margin-right: 30px;">
+            WHITE PAPER
+          </Button>
+        </a>
       </MobileModal>
     </>
   );

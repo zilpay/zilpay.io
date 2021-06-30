@@ -19,7 +19,7 @@ const Container = styled.aside`
 
   z-index: 10;
 
-  display: ${(p: ContainerProp) => p.show ? 'block' : 'none'};
+  display: ${(p: ContainerProp) => p.show ? `block` : `none`};
 
   transition: all 0.4s;
 `;
@@ -40,7 +40,7 @@ const Closer = styled.a`
 
   opacity: 0.5;
 
-  display: ${(p: ContainerProp) => p.show ? 'block' : 'none'};
+  display: ${(p: ContainerProp) => p.show ? `block` : `none`};
 `;
 
 type Prop = {
@@ -49,8 +49,7 @@ type Prop = {
   color: Colors | string;
 };
 
-export const MobileModal: React.FC<Prop> = ({ children, onClose, show, color }) => {
-  return (
+export const MobileModal: React.FC<Prop> = ({ children, onClose, show, color }) => (
     <>
       <Container
         show={show}
@@ -64,4 +63,3 @@ export const MobileModal: React.FC<Prop> = ({ children, onClose, show, color }) 
       />
     </>
   );
-};

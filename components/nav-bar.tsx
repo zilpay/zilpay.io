@@ -47,8 +47,7 @@ export const Anchor = styled.span`
   padding-bottom: 20px;
 `;
 
-export const Navbar: React.FC = () => {
-  return (
+export const Navbar: React.FC = () => (
     <Container>
       <Link href="/">
         <Logo>
@@ -56,6 +55,7 @@ export const Navbar: React.FC = () => {
             src="/icons/zilpay.svg"
             height="30"
             width-="30"
+            alt="Logo"
           />
           <Text
             fontColors={Colors.White}
@@ -116,4 +116,3 @@ export const Navbar: React.FC = () => {
       </Ul>
     </Container>
   );
-};

@@ -49,7 +49,7 @@ const GetButton = styled(Button)`
 `;
 
 const InstallButton: React.FC = () => {
-  const { t } = useTranslation('main');
+  const { t } = useTranslation(`main`);
 
   if (isChrome) {
     return (
@@ -58,51 +58,51 @@ const InstallButton: React.FC = () => {
           color={Colors.Secondary}
           fontColors={Colors.Secondary}
         >
-          {t('get_chrome')}
+          {t(`get_chrome`)}
         </GetButton>
       </a>
     );
-  } else if (isEdge) {
+  } if (isEdge) {
     return (
       <a href="https://microsoftedge.microsoft.com/addons/detail/zilpay/fbekallmnjoeggkefjkbebpineneilec">
         <GetButton
           color="#0067b8"
           fontColors="#0067b8"
         >
-          {t('get_edge')}
+          {t(`get_edge`)}
         </GetButton>
       </a>
     );
-  } else if (isFirefox) {
+  } if (isFirefox) {
     return (
       <a href="https://addons.mozilla.org/en-GB/firefox/addon/zilpay/">
         <GetButton
           color="#CC2993"
           fontColors="#CC2993"
         >
-          {t('get_firefox')}
+          {t(`get_firefox`)}
         </GetButton>
       </a>
     );
-  } else if (isAndroid) {
+  } if (isAndroid) {
     return (
       <a href="https://play.google.com/store/apps/details?id=com.zilpaymobile">
         <GetButton
           color={Colors.Secondary}
           fontColors={Colors.Secondary}
         >
-          {t('get_android')}
+          {t(`get_android`)}
         </GetButton>
       </a>
     );
-  } else if (isIOS) {
+  } if (isIOS) {
     return (
       <a href="https://apps.apple.com/ru/app/zilpay/id1547105860">
         <GetButton
           color="#bfe2e8"
           fontColors="#bfe2e8"
         >
-          {t('get_ios')}
+          {t(`get_ios`)}
         </GetButton>
       </a>
     );
@@ -112,7 +112,7 @@ const InstallButton: React.FC = () => {
 };
 
 export const MainSection: React.FC = () => {
-  const { t } = useTranslation('main');
+  const { t } = useTranslation(`main`);
 
   return (
     <Container>
@@ -122,7 +122,7 @@ export const MainSection: React.FC = () => {
           fontVariant={StyleFonts.Medium}
           size="12px"
         >
-          {t('sub_title')}
+          {t(`sub_title`)}
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
@@ -130,10 +130,10 @@ export const MainSection: React.FC = () => {
           size="65px"
           css="line-height: 1.2em;ont-weight: 900;"
         >
-          {t('title')}
+          {t(`title`)}
         </Text>
         <Text size="16px">
-          {t('under_title')}
+          {t(`under_title`)}
         </Text>
         {process.browser ? (
           <InstallButton />

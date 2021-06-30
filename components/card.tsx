@@ -24,7 +24,7 @@ const Container = styled.div`
 
   border-style: solid;
   border-width: 2px 2px 2px 2px;
-  ${(p: ContainerProp) => p.selected ? `border-color: ${Colors.Secondary};` : ''}
+  ${(p: ContainerProp) => p.selected ? `border-color: ${Colors.Secondary};` : ``}
 
   :hover {
     border-color: ${Colors.Secondary};
@@ -44,13 +44,13 @@ type Prop = {
   selected?: boolean;
 };
 
-export const Card: React.FC<Prop> = ({ url, selected, title, children }) => {
-  return (
+export const Card: React.FC<Prop> = ({ url, selected, title, children }) => (
     <Container selected={Boolean(selected)}>
       <img
         src={url}
         height="60"
         width="60"
+        alt="Icon"
       />
       <Text
         fontColors={Colors.White}
@@ -64,4 +64,3 @@ export const Card: React.FC<Prop> = ({ url, selected, title, children }) => {
       </Text>
     </Container>
   );
-};

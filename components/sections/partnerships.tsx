@@ -44,33 +44,33 @@ const settings = {
 };
 const list = [
   {
-    img: 'dragon-zil.svg',
-    href: 'https://dragonzil.xyz/'
+    img: `dragon-zil.svg`,
+    href: `https://dragonzil.xyz/`
   },
   {
-    img: 'partners_Switcheo.svg',
-    href: 'https://www.switcheo.com'
+    img: `partners_Switcheo.svg`,
+    href: `https://www.switcheo.com`
   },
   {
-    img: 'partners_UD.svg',
-    href: 'https://unstoppabledomains.com/'
+    img: `partners_UD.svg`,
+    href: `https://unstoppabledomains.com/`
   },
   {
-    img: 'partners_zillet.svg',
-    href: 'https://zillet.io/'
+    img: `partners_zillet.svg`,
+    href: `https://zillet.io/`
   },
   {
-    img: 'partners_Zilliqa.svg',
-    href: 'https://www.zilliqa.com/'
+    img: `partners_Zilliqa.svg`,
+    href: `https://www.zilliqa.com/`
   },
   {
-    img: 'partners_zilswap.svg',
-    href: 'https://zilswap.io'
+    img: `partners_zilswap.svg`,
+    href: `https://zilswap.io`
   },
 ];
 
 export const PartnershipsSection: React.FC = () => {
-  const { t } = useTranslation('main');
+  const { t } = useTranslation(`main`);
   return (
     <Container id="partnerships">
       <HeaderWrapper>
@@ -79,36 +79,37 @@ export const PartnershipsSection: React.FC = () => {
           fontColors={Colors.White}
           size="40px"
         >
-          {t('partnerships_title')}
+          {t(`partnerships_title`)}
         </Text>
         <Text
           fontVariant={StyleFonts.Medium}
           fontColors={Colors.Secondary}
           size="12px"
         >
-          {t('partnerships_sub_title')}
+          {t(`partnerships_sub_title`)}
         </Text>
       </HeaderWrapper>
       <Wrapper>
-        <Slider {...settings} useCSS={true}>
+        <Slider {...settings} useCSS>
           {list.map((el, index) => (
             <div key={index}>
               <a
                 href={el.href}
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  display: `flex`,
+                  alignItems: `center`,
+                  justifyContent: `center`,
                 }}
-                target="_blank"
+                target="_blank" rel="noreferrer"
               >
                 <img
                   src={`/icons/${el.img}`}
                   style={{
-                    borderRadius: '100%'
+                    borderRadius: `100%`
                   }}
                   height="150"
                   width="150"
+                  alt="Ava"
                 />
               </a>
             </div>

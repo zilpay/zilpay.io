@@ -4,12 +4,12 @@ import dynamic from 'next/dynamic';
 
 import { Text } from 'components/text';
 
-const GitHubIcon = dynamic(import('components/icons/github'));
-const TwitterIcon = dynamic(import('components/icons/twitter'));
-const LinkedinIcon = dynamic(import('components/icons/linkedin'));
-
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
+
+const GitHubIcon = dynamic(import(`components/icons/github`));
+const TwitterIcon = dynamic(import(`components/icons/twitter`));
+const LinkedinIcon = dynamic(import(`components/icons/linkedin`));
 
 const Container = styled.div`
   display: flex;
@@ -48,8 +48,7 @@ export const TeamCard: React.FC<Prop> = ({
   github,
   linkedin,
   twitter
-}) => {
-  return (
+}) => (
     <Container>
       <Avatar
         src={img}
@@ -74,7 +73,7 @@ export const TeamCard: React.FC<Prop> = ({
         {github ? (
           <a
             href={github}
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             <GitHubIcon
               color={Colors.White}
@@ -86,7 +85,7 @@ export const TeamCard: React.FC<Prop> = ({
         {linkedin ? (
           <a
             href={linkedin}
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             <LinkedinIcon
               color={Colors.White}
@@ -98,7 +97,7 @@ export const TeamCard: React.FC<Prop> = ({
         {twitter ? (
           <a
             href={twitter}
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             <TwitterIcon
               color={Colors.White}
@@ -110,4 +109,3 @@ export const TeamCard: React.FC<Prop> = ({
       </IconsWrapper>
     </Container>
   );
-};

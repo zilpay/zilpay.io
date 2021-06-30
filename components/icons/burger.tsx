@@ -39,8 +39,7 @@ const BurgerIcon: React.FC<Prop> = ({
   height,
   color = Colors.White,
   onClick
-}) => {
-  return (
+}) => (
     <Container
       onClick={onClick}
       width={width}
@@ -51,6 +50,5 @@ const BurgerIcon: React.FC<Prop> = ({
       <Line color={color}/>
     </Container>
   );
-};
 
 export default BurgerIcon;

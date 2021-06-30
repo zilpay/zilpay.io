@@ -18,7 +18,7 @@ export const Button = styled.div`
   font-size: ${(props: Prop) => props.size};
   color: ${(props: Prop) => props.fontColors};
   text-transform: ${(props: Prop) =>
-    props.upperCase ? 'uppercase' : 'initial'};
+    props.upperCase ? `uppercase` : `initial`};
 
   padding: 0.8rem;
   min-width: 142px;
@@ -41,6 +41,6 @@ Button.defaultProps = {
   color: Colors.Secondary,
   nowrap: false,
   upperCase: false,
-  size: '14px',
-  css: '',
+  size: `14px`,
+  css: ``,
 };

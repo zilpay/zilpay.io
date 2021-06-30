@@ -13,13 +13,13 @@ type Prop = {
 };
 
 export const Text = styled.div`
-  ${(props: Prop) => props.pointer ? 'cursor: pointer;' : ''}
+  ${(props: Prop) => props.pointer ? `cursor: pointer;` : ``}
   font-family: ${(props: Prop) => props.fontVariant};
   font-size: ${(props: Prop) => props.size};
   color: ${(props: Prop) => props.fontColors};
-  white-space: ${(props: Prop) => (props.nowrap ? 'nowrap' : 'normal')};
+  white-space: ${(props: Prop) => (props.nowrap ? `nowrap` : `normal`)};
   text-transform: ${(props: Prop) =>
-    props.upperCase ? 'uppercase' : 'initial'};
+    props.upperCase ? `uppercase` : `initial`};
   font-style: normal;
   font-weight: normal;
   overflow: hidden;
@@ -28,16 +28,16 @@ export const Text = styled.div`
   margin-block-end: 0.6em;
 
   :hover {
-    ${(props: Prop) => props.pointer ? `color: ${Colors.White}` : ''}
+    ${(props: Prop) => props.pointer ? `color: ${Colors.White}` : ``}
   }
   ${(props: Prop) => props.css}
 `;
 
 Text.defaultProps = {
-  size: '16px',
+  size: `16px`,
   fontVariant: StyleFonts.Regular,
   fontColors: Colors.Text,
   nowrap: false,
   upperCase: false,
-  css: '',
+  css: ``,
 };

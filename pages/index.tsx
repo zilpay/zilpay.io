@@ -12,9 +12,7 @@ import {
   TeamSection
 } from 'components/sections';
 
-export const MainPage: NextPage = () => {
-
-  return (
+export const MainPage: NextPage = () => (
     <>
       <MainSection />
       <InfoSection />
@@ -25,14 +23,11 @@ export const MainPage: NextPage = () => {
       <TeamSection />
     </>
   );
-};
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => {
-  return {
+export const getStaticProps = async (props: GetServerSidePropsContext) => ({
     props: {
-      ...await serverSideTranslations(props.locale || 'en', ['main', 'common']),
+      ...await serverSideTranslations(props.locale || `en`, [`main`, `common`]),
     },
-  };
-};
+  });
 
 export default MainPage;

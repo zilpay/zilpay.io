@@ -12,7 +12,7 @@ import { Container, Wrapper, HeaderWrapper } from './styles';
 
 export const AppsSection: React.FC = () => {
   const router = useRouter();
-  const { t } = useTranslation('main');
+  const { t } = useTranslation(`main`);
 
   const hanldeClick = React.useCallback((url: string, native: boolean) => {
     if (native) {
@@ -20,7 +20,7 @@ export const AppsSection: React.FC = () => {
     }
 
     if (!native && process.browser) {
-      window.open(url, '_blank');
+      window.open(url, `_blank`);
     }
   }, [router]);
 
@@ -32,14 +32,14 @@ export const AppsSection: React.FC = () => {
           fontColors={Colors.White}
           size="40px"
         >
-          {t('apps_title')}
+          {t(`apps_title`)}
         </Text>
         <Text
           fontVariant={StyleFonts.Medium}
           fontColors={Colors.Secondary}
           size="12px"
         >
-          {t('apps_sub_title')}
+          {t(`apps_sub_title`)}
         </Text>
       </HeaderWrapper>
       <Wrapper>
@@ -49,7 +49,7 @@ export const AppsSection: React.FC = () => {
           title="DragonZIL"
           onClick={(url) => hanldeClick(url, false)}
         >
-          {t('app0')}
+          {t(`app0`)}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/kyle-brinker-0vVHYD3PcKo-unsplash_3-1-1024x822.jpg"
@@ -57,7 +57,7 @@ export const AppsSection: React.FC = () => {
           title="UnstoppableDomains"
           onClick={(url) => hanldeClick(url, false)}
         >
-          {t('app1')}
+          {t(`app1`)}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/fingerprint-1024x683.png"
@@ -65,7 +65,7 @@ export const AppsSection: React.FC = () => {
           title="Signature Verification"
           onClick={(url) => hanldeClick(url, false)}
         >
-          {t('app2')}
+          {t(`app2`)}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/UD-laptop-1024x683.png"
@@ -73,7 +73,7 @@ export const AppsSection: React.FC = () => {
           title="Stake"
           onClick={(url) => hanldeClick(url, false)}
         >
-          {t('app3')}
+          {t(`app3`)}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/data-1024x682.png"
@@ -81,7 +81,7 @@ export const AppsSection: React.FC = () => {
           title="Scilla Editor"
           onClick={(url) => hanldeClick(url, false)}
         >
-          {t('app4')}
+          {t(`app4`)}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/graph-1024x682.png"
@@ -89,7 +89,7 @@ export const AppsSection: React.FC = () => {
           title="Zilswap"
           onClick={(url) => hanldeClick(url, false)}
         >
-          {t('app5')}
+          {t(`app5`)}
         </ZoomCard>
       </Wrapper>
     </Container>

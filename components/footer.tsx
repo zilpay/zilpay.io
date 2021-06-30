@@ -9,15 +9,15 @@ import { Text } from 'components/text';
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
-const AppleIcon = dynamic(import('components/icons/apple'));
-const GoogleIcon = dynamic(import('components/icons/google'));
-const FireFoxIcon = dynamic(import('components/icons/firefox'));
-const ChromeIcon = dynamic(import('components/icons/chrome'));
-const TelegramIcon = dynamic(import('components/icons/telegram'));
-const TwitterIcon = dynamic(import('components/icons/twitter'));
-const EmailIcon = dynamic(import('components/icons/email'));
-const GitHubIcon = dynamic(import('components/icons/github'));
-const MediumIcon = dynamic(import('components/icons/medium'));
+const AppleIcon = dynamic(import(`components/icons/apple`));
+const GoogleIcon = dynamic(import(`components/icons/google`));
+const FireFoxIcon = dynamic(import(`components/icons/firefox`));
+const ChromeIcon = dynamic(import(`components/icons/chrome`));
+const TelegramIcon = dynamic(import(`components/icons/telegram`));
+const TwitterIcon = dynamic(import(`components/icons/twitter`));
+const EmailIcon = dynamic(import(`components/icons/email`));
+const GitHubIcon = dynamic(import(`components/icons/github`));
+const MediumIcon = dynamic(import(`components/icons/medium`));
 
 const Container = styled.div`
   background-color: ${Colors.Dark};
@@ -55,7 +55,7 @@ const Legal = styled.div`
 `;
 
 export const Footer: React.FC = () => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(`common`);
   return (
     <Container id="contact">
       <Wrapper>
@@ -65,13 +65,13 @@ export const Footer: React.FC = () => {
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
-            {t('office')}
+            {t(`office`)}
           </Text>
           <Text
             fontVariant={StyleFonts.Light}
             size="14px"
           >
-            {t('office_value')}
+            {t(`office_value`)}
           </Text>
         </Office>
         <Involved>
@@ -80,12 +80,12 @@ export const Footer: React.FC = () => {
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
-            {t('footer_icons')}
+            {t(`footer_icons`)}
           </Text>
           <InvolvedWrapper>
             <a
               href="https://apps.apple.com/ru/app/zilpay/id1547105860"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <AppleIcon
                 color={Colors.Text}
@@ -95,7 +95,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://play.google.com/store/apps/details?id=com.zilpaymobile"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <GoogleIcon
                 color={Colors.Text}
@@ -105,7 +105,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://addons.mozilla.org/en-GB/firefox/addon/zilpay/"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <FireFoxIcon
                 color={Colors.Text}
@@ -115,7 +115,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <ChromeIcon
                 color={Colors.Text}
@@ -125,7 +125,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://t.me/zilpaychat"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <TelegramIcon
                 color={Colors.Text}
@@ -135,7 +135,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://twitter.com/pay_zil"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <TwitterIcon
                 color={Colors.Text}
@@ -145,7 +145,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="mailto:contact@zilpay.io"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <EmailIcon
                 color={Colors.Text}
@@ -155,7 +155,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://github.com/zilpay/zil-pay"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <GitHubIcon
                 color={Colors.Text}
@@ -165,7 +165,7 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://medium.com/@lich666black"
-              target="_blank"
+              target="_blank" rel="noreferrer"
             >
               <MediumIcon
                 color={Colors.Text}
@@ -181,7 +181,7 @@ export const Footer: React.FC = () => {
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
-            {t('legal')}
+            {t(`legal`)}
           </Text>
           <Link href="/terms">
             <Text
@@ -189,7 +189,7 @@ export const Footer: React.FC = () => {
               size="14px"
               pointer
             >
-              {t('terms')}
+              {t(`terms`)}
             </Text>
           </Link>
           <Link href="/policy">
@@ -198,7 +198,7 @@ export const Footer: React.FC = () => {
               size="14px"
               pointer
             >
-              {t('privacy')}
+              {t(`privacy`)}
             </Text>
           </Link>
         </Legal>

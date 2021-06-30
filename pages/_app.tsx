@@ -11,8 +11,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { isMobile, isDesktop, isAndroid, isIOS } from 'react-device-detect';
 
-const App = ({ Component, pageProps }: AppProps) => {
-  return (
+const App = ({ Component, pageProps }: AppProps) => (
     <>
       <BaseStyles />
       {isDesktop && !isAndroid && !isIOS ? (
@@ -24,7 +23,6 @@ const App = ({ Component, pageProps }: AppProps) => {
       <Component {...pageProps} />
       <Footer />
     </>
-  );
-}
+  )
 
 export default appWithTranslation(App);

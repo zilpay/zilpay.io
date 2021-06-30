@@ -57,8 +57,7 @@ export const ZoomCard: React.FC<Prop> = ({
   href,
   children,
   onClick = () => null
-}) => {
-  return (
+}) => (
     <Container
       image={url}
       onClick={() => onClick(href)}
@@ -79,4 +78,3 @@ export const ZoomCard: React.FC<Prop> = ({
       </Text>
     </Container>
   );
-};
