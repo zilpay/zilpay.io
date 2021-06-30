@@ -50,7 +50,7 @@ const Legal = styled.div`
 
 export const Footer: React.FC = () => {
   return (
-    <Container>
+    <Container id="contact">
       <Wrapper>
         <Office>
           <Text

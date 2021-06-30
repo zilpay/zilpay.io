@@ -38,6 +38,10 @@ export const BaseStyles = createGlobalStyle`
     color: inherit;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background: ${Colors.Black};
     margin: 0;
@@ -54,5 +58,9 @@ export const BaseStyles = createGlobalStyle`
   }
   .slick-dots li.slick-active button:before {
     color: ${Colors.White};
+  }
+  .slick-list {
+    width: 100%;
+    max-width: 1200px;
   }
 `;

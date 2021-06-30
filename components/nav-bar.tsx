@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { isBrowser } from 'react-device-detect';
 import Link from 'next/link';
 
 import { Text } from 'components/text';
@@ -48,7 +47,7 @@ const Anchor = styled.a`
 `;
 
 export const Navbar: React.FC = () => {
-  return isBrowser ? (
+  return (
     <Container>
       <Link href="/">
         <Logo>
@@ -99,13 +98,11 @@ export const Navbar: React.FC = () => {
           href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
           target="_blanck"
         >
-          <Button css="margin-left: 30px;">
+          <Button css="margin-left: 30px;margin-right: 30px;">
             WHITE PAPER
           </Button>
         </a>
       </Ul>
     </Container>
-  ) : (
-    <div></div>
   );
 };

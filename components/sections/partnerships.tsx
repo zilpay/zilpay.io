@@ -6,11 +6,7 @@ import { Text } from 'components/text';
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
 
-import { Container, HeaderWrapper } from './styles';
-
-const Img = styled.img`
-  border-radius: 100%;
-`;
+import { Container, HeaderWrapper, Wrapper } from './styles';
 
 const settings = {
   dots: true,
@@ -74,7 +70,7 @@ const list = [
 
 export const PartnershipsSection: React.FC = () => {
   return (
-    <Container>
+    <Container id="partnerships">
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}
@@ -91,24 +87,29 @@ export const PartnershipsSection: React.FC = () => {
           DRIVING TECHNOLOGY FOR LEADING BRANDS
         </Text>
       </HeaderWrapper>
-      <Slider {...settings}>
-        {list.map((el, index) => (
-          <a
-            key={index}
-            href={el.href}
-            style={{
-              width: 'auto'
-            }}
-            target="_blank"
-          >
-            <Img
-              src={`/icons/${el.img}`}
-              height="200"
-              width="200"
-            />
-          </a>
-        ))}
-      </Slider>
+      <Wrapper>
+        <Slider {...settings}>
+          {list.map((el, index) => (
+            <a
+              key={index}
+              href={el.href}
+              style={{
+                width: 'auto'
+              }}
+              target="_blank"
+            >
+              <img
+                src={`/icons/${el.img}`}
+                style={{
+                  borderRadius: '100%'
+                }}
+                height="150"
+                width="150"
+              />
+            </a>
+          ))}
+        </Slider>
+      </Wrapper>
     </Container>
   );
 };

@@ -10,7 +10,7 @@ import { Container, HeaderWrapper, Wrapper } from './styles';
 
 export const TeamSection: React.FC = () => {
   return (
-    <Container>
+    <Container id="team">
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}

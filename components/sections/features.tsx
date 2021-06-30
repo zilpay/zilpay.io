@@ -9,7 +9,7 @@ import { Container, Wrapper, HeaderWrapper } from './styles';
 
 export const FeaturesSection: React.FC = () => {
   return (
-    <Container>
+    <Container id="services">
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}

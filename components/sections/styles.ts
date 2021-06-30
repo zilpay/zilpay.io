@@ -28,5 +28,5 @@ export const Wrapper = styled.div`
 `;
 export const HeaderWrapper = styled.div`
   width: 100%;
-  margin-left: 22vw;
+  text-indent: 10vw;
 `;
