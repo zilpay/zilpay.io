@@ -30,7 +30,7 @@ export const MainPage: NextPage = () => {
 export const getStaticProps = async (props: GetServerSidePropsContext) => {
   return {
     props: {
-      ...await serverSideTranslations(props.locale || 'en', ['main']),
+      ...await serverSideTranslations(props.locale || 'en', ['main', 'common']),
     },
   };
 };

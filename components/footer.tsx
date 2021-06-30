@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
@@ -53,6 +54,7 @@ const Legal = styled.div`
 `;
 
 export const Footer: React.FC = () => {
+  const { t } = useTranslation('common');
   return (
     <Container id="contact">
       <Wrapper>
@@ -62,13 +64,13 @@ export const Footer: React.FC = () => {
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
-            Office
+            {t('office')}
           </Text>
           <Text
             fontVariant={StyleFonts.Light}
             size="14px"
           >
-            Ulitsa Borisa Yel'tsina, 3, Yekaterinburg, Sverdlovsk Oblast, Russia, 620014
+            {t('office_value')}
           </Text>
         </Office>
         <Involved>
@@ -77,7 +79,7 @@ export const Footer: React.FC = () => {
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
-            Get Involved
+            {t('footer_icons')}
           </Text>
           <InvolvedWrapper>
             <a
@@ -178,7 +180,7 @@ export const Footer: React.FC = () => {
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
-            Legal
+            {t('legal')}
           </Text>
           <Link href="/terms">
             <Text
@@ -186,7 +188,7 @@ export const Footer: React.FC = () => {
               size="14px"
               pointer
             >
-              Terms of Service
+              {t('terms')}
             </Text>
           </Link>
           <Link href="/policy">
@@ -195,7 +197,7 @@ export const Footer: React.FC = () => {
               size="14px"
               pointer
             >
-              Privacy Policy
+              {t('privacy')}
             </Text>
           </Link>
         </Legal>

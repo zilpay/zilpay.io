@@ -1,5 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 
 import { Text } from 'components/text';
 import { ZoomCard } from 'components/zoom-card';
@@ -11,6 +12,7 @@ import { Container, Wrapper, HeaderWrapper } from './styles';
 
 export const AppsSection: React.FC = () => {
   const router = useRouter();
+  const { t } = useTranslation('main');
 
   const hanldeClick = React.useCallback((url: string, native: boolean) => {
     if (native) {
@@ -30,14 +32,14 @@ export const AppsSection: React.FC = () => {
           fontColors={Colors.White}
           size="40px"
         >
-          dApps
+          {t('apps_title')}
         </Text>
         <Text
           fontVariant={StyleFonts.Medium}
           fontColors={Colors.Secondary}
           size="12px"
         >
-          EXPLORE DAPPS USING ZILPAY
+          {t('apps_sub_title')}
         </Text>
       </HeaderWrapper>
       <Wrapper>
@@ -47,7 +49,7 @@ export const AppsSection: React.FC = () => {
           title="DragonZIL"
           onClick={(url) => hanldeClick(url, false)}
         >
-          Buy and train dragons
+          {t('app0')}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/kyle-brinker-0vVHYD3PcKo-unsplash_3-1-1024x822.jpg"
@@ -55,7 +57,7 @@ export const AppsSection: React.FC = () => {
           title="UnstoppableDomains"
           onClick={(url) => hanldeClick(url, false)}
         >
-          buy and manage domains
+          {t('app1')}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/fingerprint-1024x683.png"
@@ -63,7 +65,7 @@ export const AppsSection: React.FC = () => {
           title="Signature Verification"
           onClick={(url) => hanldeClick(url, false)}
         >
-          Verify transactions signatures
+          {t('app2')}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/UD-laptop-1024x683.png"
@@ -71,7 +73,7 @@ export const AppsSection: React.FC = () => {
           title="Stake"
           onClick={(url) => hanldeClick(url, false)}
         >
-          Delegate validators
+          {t('app3')}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/data-1024x682.png"
@@ -79,7 +81,7 @@ export const AppsSection: React.FC = () => {
           title="Scilla Editor"
           onClick={(url) => hanldeClick(url, false)}
         >
-          Edit and deploy a smart contract on scilla language
+          {t('app4')}
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/graph-1024x682.png"
@@ -87,7 +89,7 @@ export const AppsSection: React.FC = () => {
           title="Zilswap"
           onClick={(url) => hanldeClick(url, false)}
         >
-          Swap or provide liquidity to ZRC2 tokens
+          {t('app5')}
         </ZoomCard>
       </Wrapper>
     </Container>

@@ -48,15 +48,12 @@ const GetButton = styled(Button)`
   padding: 20px 30px;
 `;
 
-// https://microsoftedge.microsoft.com/addons/detail/zilpay/fbekallmnjoeggkefjkbebpineneilec
-
-// https://addons.mozilla.org/en-GB/firefox/addon/zilpay/
 const InstallButton: React.FC = () => {
   const { t } = useTranslation('main');
 
   if (isChrome) {
     return (
-      <a href="">
+      <a href="https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd">
         <GetButton
           color={Colors.Secondary}
           fontColors={Colors.Secondary}
@@ -67,7 +64,7 @@ const InstallButton: React.FC = () => {
     );
   } else if (isEdge) {
     return (
-      <a href="">
+      <a href="https://microsoftedge.microsoft.com/addons/detail/zilpay/fbekallmnjoeggkefjkbebpineneilec">
         <GetButton
           color="#0067b8"
           fontColors="#0067b8"
@@ -78,7 +75,7 @@ const InstallButton: React.FC = () => {
     );
   } else if (isFirefox) {
     return (
-      <a href="">
+      <a href="https://addons.mozilla.org/en-GB/firefox/addon/zilpay/">
         <GetButton
           color="#CC2993"
           fontColors="#CC2993"
@@ -89,7 +86,7 @@ const InstallButton: React.FC = () => {
     );
   } else if (isAndroid) {
     return (
-      <a href="">
+      <a href="https://play.google.com/store/apps/details?id=com.zilpaymobile">
         <GetButton
           color={Colors.Secondary}
           fontColors={Colors.Secondary}
@@ -100,7 +97,7 @@ const InstallButton: React.FC = () => {
     );
   } else if (isIOS) {
     return (
-      <a href="">
+      <a href="https://apps.apple.com/ru/app/zilpay/id1547105860">
         <GetButton
           color="#bfe2e8"
           fontColors="#bfe2e8"
@@ -111,16 +108,7 @@ const InstallButton: React.FC = () => {
     );
   }
 
-  return (
-    <a href="">
-      <GetButton
-        color={Colors.Secondary}
-        fontColors={Colors.Secondary}
-      >
-        {t('get_chrome')}
-      </GetButton>
-    </a>
-  );
+  return null;
 };
 
 export const MainSection: React.FC = () => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 
 import { Card } from 'components/card';
 import { Text } from 'components/text';
@@ -8,6 +9,7 @@ import { Colors } from '@/config/colors';
 import { Container, Wrapper, HeaderWrapper } from './styles';
 
 export const FeaturesSection: React.FC = () => {
+  const { t } = useTranslation('main');
   return (
     <Container id="services">
       <HeaderWrapper>
@@ -16,52 +18,52 @@ export const FeaturesSection: React.FC = () => {
           fontColors={Colors.White}
           size="40px"
         >
-          Our features
+          {t('features_title')}
         </Text>
         <Text
           fontVariant={StyleFonts.Medium}
           fontColors={Colors.Secondary}
           size="12px"
         >
-          LEARN WHAT SETS US APART
+          {t('features_sub_title')}
         </Text>
       </HeaderWrapper>
       <Wrapper>
         <Card
           url="/icons/wallet.svg"
-          title="Decentralised wallet"
+          title={t('features_title_card0')}
         >
-          You will have full ownership over all your assets.
+          {t('features_sub_title_card0')}
         </Card>
         <Card
           url="/icons/location.svg"
-          title="A portal to DApps"
+          title={t('features_title_card1')}
         >
-          You will be able to access all the main dApps on the Zilliqa blockchain
+          {t('features_sub_title_card1')}
         </Card>
         <Card
           url="/icons/key.svg"
-          title="Own your data"
+          title={t('features_title_card2')}
         >
-          You will always be able to access your account.
+          {t('features_sub_title_card2')}
         </Card>
         <Card
           url="/icons/lock.svg"
-          title="Multi-layer security"
+          title={t('features_title_card3')}
         >
-          Your assets will always be safe.
+          {t('features_sub_title_card3')}
         </Card>
         <Card
           url="/icons/settings.svg"
-          title="Transaction resetting"
+          title={t('features_title_card4')}
         >
-          You can reset your nounce at any given time
+          {t('features_sub_title_card4')}
         </Card>
         <Card
           url="/icons/rokket.svg"
-          title="Seamless experience"
+          title={t('features_title_card5')}
         >
-          You will always have a stable and reliable experience
+          {t('features_sub_title_card5')}
         </Card>
       </Wrapper>
     </Container>

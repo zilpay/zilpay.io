@@ -1,5 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
+import { useTranslation } from 'next-i18next';
 
 import { Text } from 'components/text';
 import { StyleFonts } from '@/config/fonts';
@@ -69,6 +70,7 @@ const list = [
 ];
 
 export const PartnershipsSection: React.FC = () => {
+  const { t } = useTranslation('main');
   return (
     <Container id="partnerships">
       <HeaderWrapper>
@@ -77,14 +79,14 @@ export const PartnershipsSection: React.FC = () => {
           fontColors={Colors.White}
           size="40px"
         >
-          Partnerships
+          {t('partnerships_title')}
         </Text>
         <Text
           fontVariant={StyleFonts.Medium}
           fontColors={Colors.Secondary}
           size="12px"
         >
-          DRIVING TECHNOLOGY FOR LEADING BRANDS
+          {t('partnerships_sub_title')}
         </Text>
       </HeaderWrapper>
       <Wrapper>
