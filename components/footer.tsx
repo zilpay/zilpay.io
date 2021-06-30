@@ -34,7 +34,7 @@ const Wrapper = styled.div`
   padding-right: 30px;
 `;
 const Office = styled.div`
-  max-width: 180px;
+  width: 180px;
 `;
 const Involved = styled.div`
   display: flex;
@@ -51,6 +51,7 @@ const InvolvedWrapper = styled.div`
   }
 `;
 const Legal = styled.div`
+  width: 180px;
 `;
 
 export const Footer: React.FC = () => {

@@ -9,16 +9,16 @@ import { MobileNavBar } from 'components/mobile-nav-bar';
 
 import 'slick-carousel/slick/slick.css'; 
 import 'slick-carousel/slick/slick-theme.css';
-import { isMobileOnly, isBrowser } from 'react-device-detect';
+import { isMobile, isDesktop, isAndroid, isIOS } from 'react-device-detect';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <BaseStyles />
-      {isBrowser ? (
+      {isDesktop && !isAndroid && !isIOS ? (
         <Navbar />
       ) : null}
-      {isMobileOnly ? (
+      {isMobile || isAndroid || isIOS ? (
         <MobileNavBar />
       ) : null}
       <Component {...pageProps} />
