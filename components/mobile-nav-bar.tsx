@@ -75,32 +75,42 @@ export const MobileNavBar: React.FC = () => {
       >
         <Ul>
           <Li>
-            <Anchor href="/#services">
-              Features
-            </Anchor>
+            <Link href="/#services">
+              <Anchor>
+                Features
+              </Anchor>
+            </Link>
           </Li>
           <Li>
-            <Anchor href="/#partnerships">
-              Partnerships
-            </Anchor>
+            <Link href="/#partnerships">
+              <Anchor>
+                Partnerships
+              </Anchor>
+            </Link>
           </Li>
           <Li>
-            <Anchor href="/#team">
-              Our Team
-            </Anchor>
+            <Link href="/#team">
+              <Anchor>
+                Our Team
+              </Anchor>
+            </Link>
           </Li>
           <Li>
-            <Anchor href="/#contact">
-              Contact Us
-            </Anchor>
+            <Link href="/#contact">
+              <Anchor>
+                Contact Us
+              </Anchor>
+            </Link>
           </Li>
           <Li>
-            <Anchor
+            <a
               href="https://zilpay.github.io/zilpay-docs/"
               target="_blanck"
             >
-              Documentation
-            </Anchor>
+              <Anchor>
+                Documentation
+              </Anchor>
+            </a>
           </Li>
           <a
             href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"

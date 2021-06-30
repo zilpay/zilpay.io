@@ -61,7 +61,7 @@ export const AppsSection: React.FC = () => {
         </ZoomCard>
         <ZoomCard
           url="https://zilpay.io/wp-content/uploads/2021/03/fingerprint-1024x683.png"
-          href="https://zilpay-b255e.web.app/Verification"
+          href="https://zilpay-b255e.web.app/Verification#/Verification"
           title="Signature Verification"
           onClick={(url) => hanldeClick(url, false)}
         >
