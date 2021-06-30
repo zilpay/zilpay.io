@@ -53,58 +53,70 @@ const GetButton = styled(Button)`
 const InstallButton: React.FC = () => {
   if (isChrome) {
     return (
+      <a href="">
+        <GetButton
+          color={Colors.Secondary}
+          fontColors={Colors.Secondary}
+        >
+          GET CHROME EXTENSION.
+        </GetButton>
+      </a>
+    );
+  } else if (isEdge) {
+    return (
+      <a href="">
+        <GetButton
+          color="#0067b8"
+          fontColors="#0067b8"
+        >
+          GET MICROSOFT EDGE EXTENSION.
+        </GetButton>
+      </a>
+    );
+  } else if (isFirefox) {
+    return (
+      <a href="">
+        <GetButton
+          color="#CC2993"
+          fontColors="#CC2993"
+        >
+          GET FIREFOX EXTENSION.
+        </GetButton>
+      </a>
+    );
+  } else if (isAndroid) {
+    return (
+      <a href="">
+        <GetButton
+          color={Colors.Secondary}
+          fontColors={Colors.Secondary}
+        >
+          GET ZILPAY ANDROID.
+        </GetButton>
+      </a>
+    );
+  } else if (isIOS) {
+    return (
+      <a href="">
+        <GetButton
+          color="#bfe2e8"
+          fontColors="#bfe2e8"
+        >
+          GET ZILPAY IOS.
+        </GetButton>
+      </a>
+    );
+  }
+
+  return (
+    <a href="">
       <GetButton
         color={Colors.Secondary}
         fontColors={Colors.Secondary}
       >
         GET CHROME EXTENSION.
       </GetButton>
-    );
-  } else if (isEdge) {
-    return (
-      <GetButton
-        color="#0067b8"
-        fontColors="#0067b8"
-      >
-        GET MICROSOFT EDGE EXTENSION.
-      </GetButton>
-    );
-  } else if (isFirefox) {
-    return (
-      <GetButton
-        color="#CC2993"
-        fontColors="#CC2993"
-      >
-        GET FIREFOX EXTENSION.
-      </GetButton>
-    );
-  } else if (isAndroid) {
-    return (
-      <GetButton
-        color={Colors.Secondary}
-        fontColors={Colors.Secondary}
-      >
-        GET ZILPAY ANDROID.
-      </GetButton>
-    );
-  } else if (isIOS) {
-    return (
-      <GetButton
-        color="#bfe2e8"
-        fontColors="#bfe2e8"
-      >
-        GET ZILPAY IOS.
-      </GetButton>
-    );
-  }
-
-  return (
-    <GetButton
-      color={Colors.Secondary}
-      fontColors={Colors.Secondary}
-    >
-      GET CHROME EXTENSION.
-    </GetButton>
+    </a>
   );
 };
 
@@ -130,9 +142,9 @@ export const MainSection: React.FC = () => {
         <Text size="16px">
           A web3 wallet of the ZIlliqa blockchain.
         </Text>
-        {process.browser ? (
+        {/* {process.browser ? (
           <InstallButton />
-        ) : null}
+        ) : null} */}
       </Wrapper>
     </Container>
   );

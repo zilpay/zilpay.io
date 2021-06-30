@@ -13,7 +13,7 @@ import { Button } from './button';
 
 const BurgerIcon = dynamic(import('components/icons/burger'));
 
-const MobileContainer = styled.div`
+const MobileContainer = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
