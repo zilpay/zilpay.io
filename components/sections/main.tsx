@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useTranslation } from 'next-i18next';
 import {
   isChrome,
   isEdge,
@@ -51,6 +52,8 @@ const GetButton = styled(Button)`
 
 // https://addons.mozilla.org/en-GB/firefox/addon/zilpay/
 const InstallButton: React.FC = () => {
+  const { t } = useTranslation('main');
+
   if (isChrome) {
     return (
       <a href="">
@@ -58,7 +61,7 @@ const InstallButton: React.FC = () => {
           color={Colors.Secondary}
           fontColors={Colors.Secondary}
         >
-          GET CHROME EXTENSION.
+          {t('get_chrome')}
         </GetButton>
       </a>
     );
@@ -69,7 +72,7 @@ const InstallButton: React.FC = () => {
           color="#0067b8"
           fontColors="#0067b8"
         >
-          GET MICROSOFT EDGE EXTENSION.
+          {t('get_edge')}
         </GetButton>
       </a>
     );
@@ -80,7 +83,7 @@ const InstallButton: React.FC = () => {
           color="#CC2993"
           fontColors="#CC2993"
         >
-          GET FIREFOX EXTENSION.
+          {t('get_firefox')}
         </GetButton>
       </a>
     );
@@ -91,7 +94,7 @@ const InstallButton: React.FC = () => {
           color={Colors.Secondary}
           fontColors={Colors.Secondary}
         >
-          GET ZILPAY ANDROID.
+          {t('get_android')}
         </GetButton>
       </a>
     );
@@ -102,7 +105,7 @@ const InstallButton: React.FC = () => {
           color="#bfe2e8"
           fontColors="#bfe2e8"
         >
-          GET ZILPAY IOS.
+          {t('get_ios')}
         </GetButton>
       </a>
     );
@@ -114,13 +117,15 @@ const InstallButton: React.FC = () => {
         color={Colors.Secondary}
         fontColors={Colors.Secondary}
       >
-        GET CHROME EXTENSION.
+        {t('get_chrome')}
       </GetButton>
     </a>
   );
 };
 
 export const MainSection: React.FC = () => {
+  const { t } = useTranslation('main');
+
   return (
     <Container>
       <Wrapper>
@@ -129,7 +134,7 @@ export const MainSection: React.FC = () => {
           fontVariant={StyleFonts.Medium}
           size="12px"
         >
-          THE WALLET OF THE ZILLIQA ECOSYSTEM
+          {t('sub_title')}
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
@@ -137,14 +142,14 @@ export const MainSection: React.FC = () => {
           size="65px"
           css="line-height: 1.2em;ont-weight: 900;"
         >
-          ZilPay Wallet
+          {t('title')}
         </Text>
         <Text size="16px">
-          A web3 wallet of the ZIlliqa blockchain.
+          {t('under_title')}
         </Text>
-        {/* {process.browser ? (
+        {process.browser ? (
           <InstallButton />
-        ) : null} */}
+        ) : null}
       </Wrapper>
     </Container>
   );

@@ -1,4 +1,5 @@
 import { AppProps } from 'next/app';
+import { appWithTranslation } from 'next-i18next'
 import { BaseStyles } from '@/styles';
 import React from 'react';
 
@@ -10,7 +11,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { isMobileOnly, isBrowser } from 'react-device-detect';
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+const App = ({ Component, pageProps }: AppProps) => {
   return (
     <>
       <BaseStyles />
@@ -25,3 +26,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     </>
   );
 }
+
+export default appWithTranslation(App);
