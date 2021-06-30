@@ -1,4 +1,5 @@
 import React from 'react';
+import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -15,6 +16,14 @@ export const TermsPage: NextPage = () => {
   return (
     <Container>
       <Dummy />
+      <Head>
+        <title>{t('head_title')}</title>
+        <meta
+          property="og:title"
+          content={t('head_title')}
+          key="title"
+        />
+      </Head>
       <Wrapper>
         <Text
           fontVariant={StyleFonts.Light}

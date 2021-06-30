@@ -1,5 +1,6 @@
 import { useTranslation } from 'next-i18next';
 import React from 'react';
+import Head from 'next/head';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Container, Dummy, Wrapper} from 'components/wrappers/terms-policy';
@@ -13,6 +14,14 @@ export const PolicyPage: NextPage = () => {
 
   return (
     <Container>
+      <Head>
+        <title>{t('head_title')}</title>
+        <meta
+          property="og:title"
+          content={t('head_title')}
+          key="title"
+        />
+      </Head>
       <Dummy />
       <Wrapper>
         <Text

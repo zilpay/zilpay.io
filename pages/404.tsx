@@ -1,4 +1,5 @@
 import { useTranslation } from 'next-i18next';
+import Head from 'next/head';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -13,6 +14,14 @@ export const PageNotFound: NextPage = () => {
 
   return (
     <Container>
+      <Head>
+        <title>{t('head_title')}</title>
+        <meta
+          property="og:title"
+          content={t('head_title')}
+          key="title"
+        />
+      </Head>
       <Wrapper>
         <Text
           fontVariant={StyleFonts.Bold}
