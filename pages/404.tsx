@@ -15,10 +15,10 @@ export const PageNotFound: NextPage = () => {
   return (
     <Container>
       <Head>
-        <title>{t('head_title')}</title>
+        <title>{t(`head_title`)}</title>
         <meta
           property="og:title"
-          content={t('head_title')}
+          content={t(`head_title`)}
           key="title"
         />
       </Head>
@@ -29,13 +29,13 @@ export const PageNotFound: NextPage = () => {
           size="80px"
           css="text-align: center;"
         >
-          {t('title')}
+          {t(`title`)}
         </Text>
         <Text
           fontColors={Colors.White}
           css="text-align: center;"
         >
-          {t('sub_title')}
+          {t(`sub_title`)}
         </Text>
       </Wrapper>
     </Container>

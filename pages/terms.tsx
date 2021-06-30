@@ -17,10 +17,10 @@ export const TermsPage: NextPage = () => {
     <Container>
       <Dummy />
       <Head>
-        <title>{t('head_title')}</title>
+        <title>{t(`head_title`)}</title>
         <meta
           property="og:title"
-          content={t('head_title')}
+          content={t(`head_title`)}
           key="title"
         />
       </Head>
