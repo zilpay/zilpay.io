@@ -8,3 +8,4 @@ export * from './apple';
 export * from './telegram';
 export * from './medium';
 export * from './email';
+export * from './burger';

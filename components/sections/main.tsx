@@ -37,6 +37,11 @@ const Wrapper = styled.div`
 
   padding-left: 10vw;
   padding-right: 10vw;
+
+  @media (max-width: 900px) {
+    align-items: center;
+    text-align: center;
+  }
 `;
 const GetButton = styled(Button)`
   padding: 20px 30px;
@@ -125,7 +130,9 @@ export const MainSection: React.FC = () => {
         <Text size="16px">
           A web3 wallet of the ZIlliqa blockchain.
         </Text>
-        <InstallButton />
+        {process.browser ? (
+          <InstallButton />
+        ) : null}
       </Wrapper>
     </Container>
   );

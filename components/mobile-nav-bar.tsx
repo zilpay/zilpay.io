@@ -3,29 +3,30 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 import { Text } from 'components/text';
+import { BurgerIcon } from 'components/icons';
 import { Button } from 'components/button';
 
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
-const Container = styled.div`
+const Container = styled.nav`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 16px;
-`;
-const Logo = styled.div`
-  cursor: pointer;
 
-  display: flex;
-  align-items: center;
+  padding: 5px 16px;
 `;
 
 export const MobileNavBar: React.FC = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
   return (
     <Container>
       <Link href="/">
-        <Logo>
+        <div style={{
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center'
+        }}>
           <img
             src="/icons/zilpay.svg"
             height="30"
@@ -38,8 +39,13 @@ export const MobileNavBar: React.FC = () => {
           >
             ZilPay
           </Text>
-        </Logo>
+        </div>
       </Link>
+      <BurgerIcon
+        height="25"
+        width="30"
+        onClick={() => setIsOpen(true)}
+      />
     </Container>
   );
 };
