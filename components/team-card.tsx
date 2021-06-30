@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import dynamic from 'next/dynamic';
 
 import { Text } from 'components/text';
-import {
-  GitHubIcon,
-  LinkedinIcon,
-  TwitterIcon
-} from 'components/icons';
+
+const GitHubIcon = dynamic(import('components/icons/github'));
+const TwitterIcon = dynamic(import('components/icons/twitter'));
+const LinkedinIcon = dynamic(import('components/icons/linkedin'));
 
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';

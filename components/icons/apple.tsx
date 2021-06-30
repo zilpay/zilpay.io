@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const AppleIcon: React.FC<Prop> = ({
+const AppleIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -32,3 +32,5 @@ export const AppleIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default AppleIcon;

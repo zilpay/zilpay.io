@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const TelegramIcon: React.FC<Prop> = ({
+const TelegramIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -34,3 +34,5 @@ export const TelegramIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default TelegramIcon;

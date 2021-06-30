@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const GoogleIcon: React.FC<Prop> = ({
+const GoogleIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -29,3 +29,5 @@ export const GoogleIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default GoogleIcon;

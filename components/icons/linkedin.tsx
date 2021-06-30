@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const LinkedinIcon: React.FC<Prop> = ({
+const LinkedinIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -29,3 +29,5 @@ export const LinkedinIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default LinkedinIcon;

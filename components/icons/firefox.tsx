@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const FireFoxIcon: React.FC<Prop> = ({
+const FireFoxIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -32,3 +32,5 @@ export const FireFoxIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default FireFoxIcon;

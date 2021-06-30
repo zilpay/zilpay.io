@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const ChromeIcon: React.FC<Prop> = ({
+const ChromeIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -43,3 +43,4 @@ export const ChromeIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+export default ChromeIcon;

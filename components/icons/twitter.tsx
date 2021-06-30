@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const TwitterIcon: React.FC<Prop> = ({
+const TwitterIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -34,3 +34,5 @@ export const TwitterIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default TwitterIcon;

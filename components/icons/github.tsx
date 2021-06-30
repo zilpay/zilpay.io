@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const GitHubIcon: React.FC<Prop> = ({
+const GitHubIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -36,3 +36,5 @@ export const GitHubIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default GitHubIcon;

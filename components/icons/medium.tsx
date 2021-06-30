@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const MediumIcon: React.FC<Prop> = ({
+const MediumIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -34,3 +34,5 @@ export const MediumIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default MediumIcon;

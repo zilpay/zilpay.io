@@ -9,7 +9,7 @@ type Prop = {
   hoverColor?: Colors;
 };
 
-export const EmailIcon: React.FC<Prop> = ({
+const EmailIcon: React.FC<Prop> = ({
   width,
   height,
   color,
@@ -32,3 +32,5 @@ export const EmailIcon: React.FC<Prop> = ({
     </svg>
   );
 };
+
+export default EmailIcon;

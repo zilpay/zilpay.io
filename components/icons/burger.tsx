@@ -34,7 +34,7 @@ type Prop = {
   onClick: () => void;
 };
 
-export const BurgerIcon: React.FC<Prop> = ({
+const BurgerIcon: React.FC<Prop> = ({
   width,
   height,
   color = Colors.White,
@@ -52,3 +52,5 @@ export const BurgerIcon: React.FC<Prop> = ({
     </Container>
   );
 };
+
+export default BurgerIcon;

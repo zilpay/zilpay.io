@@ -1,22 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 import { Text } from 'components/text';
-import {
-  AppleIcon,
-  GoogleIcon,
-  FireFoxIcon,
-  ChromeIcon,
-  TelegramIcon,
-  TwitterIcon,
-  EmailIcon,
-  GitHubIcon,
-  MediumIcon
-} from 'components/icons';
 
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
+
+const AppleIcon = dynamic(import('components/icons/apple'));
+const GoogleIcon = dynamic(import('components/icons/google'));
+const FireFoxIcon = dynamic(import('components/icons/firefox'));
+const ChromeIcon = dynamic(import('components/icons/chrome'));
+const TelegramIcon = dynamic(import('components/icons/telegram'));
+const TwitterIcon = dynamic(import('components/icons/twitter'));
+const EmailIcon = dynamic(import('components/icons/email'));
+const GitHubIcon = dynamic(import('components/icons/github'));
+const MediumIcon = dynamic(import('components/icons/medium'));
 
 const Container = styled.div`
   background-color: ${Colors.Dark};

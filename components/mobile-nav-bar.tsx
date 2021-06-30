@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 import { Text } from 'components/text';
-import { BurgerIcon } from 'components/icons';
 import { MobileModal } from 'components/modals/mobile';
 import { Anchor } from 'components/nav-bar';
 
@@ -11,7 +11,9 @@ import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 import { Button } from './button';
 
-const Container = styled.nav`
+const BurgerIcon = dynamic(import('components/icons/burger'));
+
+const MobileContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -39,7 +41,7 @@ export const MobileNavBar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
     <>
-      <Container>
+      <MobileContainer>
         <Link href="/">
           <div style={{
             cursor: 'pointer',
@@ -65,7 +67,7 @@ export const MobileNavBar: React.FC = () => {
           width="30"
           onClick={() => setIsOpen(true)}
         />
-      </Container>
+      </MobileContainer>
       <MobileModal
         show={isOpen}
         color={Colors.Black}
