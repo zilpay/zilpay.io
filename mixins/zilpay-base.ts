@@ -19,7 +19,7 @@ export class ZilPayBase {
   }
 
   public get net() {
-    return this._zilpay.wallet.net;
+    return this._zilpay.wallet.net || 'testnet';
   }
 
   async getSubState(contract: string, field: string, params: string[] = []) {

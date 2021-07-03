@@ -59,10 +59,6 @@ export const BaseStyles = createGlobalStyle`
   .slick-dots li.slick-active button:before {
     color: ${Colors.White};
   }
-  .slick-list {
-    width: 100%;
-    max-width: 1200px;
-  }
   .slick-slide => div => a {
     display: flex !important;
     align-items: center !important;
