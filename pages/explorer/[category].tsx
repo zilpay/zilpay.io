@@ -28,10 +28,10 @@ export const CategoryPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>{router.query.category} - ZilPay</title>
+        <title>{t(`cat_${router.query.category}`)} - ZilPay</title>
         <meta
           property="og:title"
-          content={`${router.query.category} - ZilPay`}
+          content={t(`cat_${router.query.category} - ZilPay`)}
           key="title"
         />
       </Head>
@@ -44,5 +44,19 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => ({
     ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
   },
 });
+
+export async function getStaticPaths() {
+  return {
+    paths: [
+      '/explorer/[category]',
+      {
+        params: {
+          category: '0'
+        }
+      }
+    ],
+    fallback: true
+  }
+}
 
 export default CategoryPage;

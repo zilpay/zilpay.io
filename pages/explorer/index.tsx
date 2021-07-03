@@ -11,6 +11,7 @@ import { AppCard } from 'components/app-card';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, Banner } from 'mixins/explorer';
+import { Categories } from 'config/categories';
 
 const Container = styled.div`
   display: flex;
@@ -67,12 +68,12 @@ const settings = {
   ]
 };
 const list = [
-  'games',
-  'finance',
-  'social',
-  'high_risk',
-  'exchange',
-  'gambling'
+  Categories.Games,
+  Categories.Finance,
+  Categories.Social,
+  Categories.HighRisk,
+  Categories.Exchange,
+  Categories.Gambling
 ];
 export const ExplorerMainPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
@@ -118,15 +119,15 @@ export const ExplorerMainPage: NextPage = () => {
           </Slider>
         </div>
         <AppsWrapper>
-            {list.map((el, index) => (
+            {list.map((el) => (
               <Link
-                key={index}
-                href={`/explorer/${index}`}
+                key={el}
+                href={`/explorer/${el}`}
               >
                 <div>
                   <AppCard
-                    url={`/images/${el}.webp`}
-                    title={t(el)}
+                    url={`/images/categories/${el}.webp`}
+                    title={t(`cat_${el}`)}
                   />
                 </div>
               </Link>

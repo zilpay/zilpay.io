@@ -1,9 +1,9 @@
 {
   "head_title": "Explorer - ZIlPay",
-  "games": "Games",
-  "finance": "Finance",
-  "social": "Social",
-  "high_risk": "High-Risk",
-  "exchange": "Exchange",
-  "gambling": "Gambling"
+  "cat_0": "Games",
+  "cat_1": "Finance",
+  "cat_2": "Social",
+  "cat_3": "High-Risk",
+  "cat_4": "Exchange",
+  "cat_5": "Gambling"
 }
