@@ -1,12 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
+import Link from 'next/link';
 import styled from 'styled-components';
 
 import Slider from 'react-slick';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Wrapper } from 'components/wrappers/terms-policy';
 import { AppCard } from 'components/app-card';
 
 import { useZilPay } from 'mixins/zilpay';
@@ -67,30 +67,12 @@ const settings = {
   ]
 };
 const list = [
-  {
-    name: 'Games',
-    category: 0
-  },
-  {
-    name: 'Finance',
-    category: 1
-  },
-  {
-    name: 'Social',
-    category: 2
-  },
-  {
-    name: 'High-Risk',
-    category: 3
-  },
-  {
-    name: 'Exchange',
-    category: 4
-  },
-  {
-    name: 'Gambling',
-    category: 5
-  }
+  'games',
+  'finance',
+  'social',
+  'high_risk',
+  'exchange',
+  'gambling'
 ];
 export const ExplorerMainPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
@@ -137,11 +119,17 @@ export const ExplorerMainPage: NextPage = () => {
         </div>
         <AppsWrapper>
             {list.map((el, index) => (
-              <AppCard
+              <Link
                 key={index}
-                url={`/images/${el.name}.webp`.toLowerCase()}
-                title={el.name}
-              />
+                href={`/explorer/${index}`}
+              >
+                <div>
+                  <AppCard
+                    url={`/images/${el}.webp`}
+                    title={t(el)}
+                  />
+                </div>
+              </Link>
             ))}
           </AppsWrapper>
       </Container>

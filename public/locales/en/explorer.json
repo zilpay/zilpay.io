@@ -1,3 +1,9 @@
 {
-  "head_title": "Explorer - ZIlPay"
+  "head_title": "Explorer - ZIlPay",
+  "games": "Games",
+  "finance": "Finance",
+  "social": "Social",
+  "high_risk": "High-Risk",
+  "exchange": "Exchange",
+  "gambling": "Gambling"
 }

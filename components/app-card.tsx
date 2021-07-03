@@ -9,8 +9,10 @@ import { StyleFonts } from '@/config/fonts';
 const Container = styled.div`
   align-content: flex-start;
   align-items: flex-start;
+  cursor: pointer;
 
   width: 250px;
+  height: 200px;
 
   background-color: ${Colors.Dark};
 
