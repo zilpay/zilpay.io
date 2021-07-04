@@ -9,6 +9,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Slider from 'react-slick';
 import { Text } from 'components/text';
 import { Button } from 'components/button';
+import { AcceptAdPolicy } from 'components/accept-ad-policy';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, AnApp } from 'mixins/explorer';
@@ -28,6 +29,8 @@ export const SubmitAppPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
 
+  const [accepted, setAccepted] = React.useState(false);
+
   return (
     <>
       <Head>
@@ -38,8 +41,11 @@ export const SubmitAppPage: NextPage = () => {
           key="title"
         />
       </Head>
-      <Container>
-      </Container>
+        <Container>
+          {accepted ? null : (
+            <AcceptAdPolicy />
+          )}
+        </Container>
     </>
   );
 }
