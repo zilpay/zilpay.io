@@ -7,20 +7,20 @@ import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { useZilPay } from 'mixins/zilpay';
-import { Explorer, Banner } from 'mixins/explorer';
+import { Explorer, AnApp } from 'mixins/explorer';
 
 export const CategoryPage: NextPage = () => {
   const router = useRouter();
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
-  const [items, setItems] = React.useState<Banner[]>([]);
+  const [items, setItems] = React.useState<AnApp[]>([]);
 
   React.useEffect(() => {
-    if (zilpay.instance) {
+    if (zilpay.instance && items.length === 0) {
       const explorer = new Explorer(zilpay.instance);
 
       explorer
-        .getBannerList()
+        .getApplicationList(Number(router.query.category))
         .then((values) => setItems(values));
     }
   }, [zilpay]);

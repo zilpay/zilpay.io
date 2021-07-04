@@ -7,6 +7,14 @@ export interface Banner {
   url: string;
   ipfs: string;
 }
+export interface AnApp {
+  title: string;
+  icon: string;
+  url: string;
+  images: string;
+  description: string;
+  category: string;
+}
 
 export class Explorer extends ZilPayBase {
 
@@ -28,7 +36,7 @@ export class Explorer extends ZilPayBase {
     const contract = this._contract[this.net];
     const result = await this.getSubState(contract, field);
 
-    if (result) {
+    if (result && Array.isArray(result)) {
       return result.map((el: { arguments: string[]; }) => ({
         block: el.arguments[1],
         url: el.arguments[2],
@@ -39,5 +47,27 @@ export class Explorer extends ZilPayBase {
     return [];
   }
 
-  public async getApplicationList(category: number) {}
+  public async getApplicationList(category: number | string): Promise<AnApp[]> {
+    const field = 'app_list';
+
+    const contract = this._contract[this.net];
+    const result = await this.getSubState(
+      contract,
+      field,
+      [String(category)]
+    );
+
+    if (!result) {
+      return [];
+    }
+
+    return Object.keys(result).map((key) => ({
+      title: result[key].arguments[0],
+      icon: result[key].arguments[1],
+      url: result[key].arguments[2],
+      images: result[key].arguments[3],
+      description: result[key].arguments[4],
+      category:result[key].arguments[5]
+    }));
+  }
 }
