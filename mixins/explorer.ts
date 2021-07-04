@@ -11,7 +11,7 @@ export interface AnApp {
   title: string;
   icon: string;
   url: string;
-  images: string;
+  images: string[];
   description: string;
   category: string;
   owner: string;
@@ -22,6 +22,8 @@ export class Explorer extends ZilPayBase {
   private _contract: {
     [key: string]: string;
   };
+  private _appList = 'app_list';
+  private _adList = 'ad_list';
 
   constructor(zilpay: ZilPayType) {
     super(zilpay);
@@ -30,12 +32,12 @@ export class Explorer extends ZilPayBase {
       mainnet: '0x0c20e40b3fe650c4c767db6bbb93db8295beac40',
       testnet: '0x6cef2b9fda817cbd07469d5d0fd5b91d26bcdc01'
     };
+    
   }
 
   public async getBannerList(): Promise<Banner[]> {
-    const field = 'ad_list';
     const contract = this._contract[this.net];
-    const result = await this.getSubState(contract, field);
+    const result = await this.getSubState(contract, this._adList);
 
     if (result && Array.isArray(result)) {
       return result.map((el: { arguments: string[]; }) => ({
@@ -49,12 +51,10 @@ export class Explorer extends ZilPayBase {
   }
 
   public async getApplicationList(category: number | string): Promise<AnApp[]> {
-    const field = 'app_list';
-
     const contract = this._contract[this.net];
     const result = await this.getSubState(
       contract,
-      field,
+      this._appList,
       [String(category)]
     );
 
@@ -71,5 +71,28 @@ export class Explorer extends ZilPayBase {
       icon: result[key].arguments[4],
       category:result[key].arguments[5]
     }));
+  }
+
+  public async getApplication(category: number | string, owner: string): Promise<AnApp | null> {
+    const contract = this._contract[this.net];
+    const result = await this.getSubState(
+      contract,
+      this._appList,
+      [String(category), owner]
+    );
+
+    if (result && result[category] && result[category][owner]) {
+      return {
+        owner,
+        title: result[category][owner].arguments[0],
+        description: result[category][owner].arguments[1],
+        url: result[category][owner].arguments[2],
+        images: result[category][owner].arguments[3],
+        icon: result[category][owner].arguments[4],
+        category: result[category][owner].arguments[5]
+      };
+    }
+
+    return null;
   }
 }

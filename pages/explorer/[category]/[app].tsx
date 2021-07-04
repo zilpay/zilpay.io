@@ -7,7 +7,9 @@ import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Link from 'next/link';
 
+import Slider from 'react-slick';
 import { Text } from 'components/text';
+import { Button } from 'components/button';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, AnApp } from 'mixins/explorer';
@@ -19,22 +21,139 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
+
+  margin-bottom: 100px;
+`;
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  margin: 30px;
+
+  div > .slick-slider {
+    width: 90vw;
+    max-width: initial;
+  }
+`;
+const PreviewImg = styled.img`
+  height: 500px
+  width: auto;
+  border-radius: 8px;
 `;
 
+const settings = {
+  className: "center",
+  centerMode: true,
+  infinite: true,
+  centerPadding: "60px",
+  speed: 500,
+  slidesToShow: 3,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        infinite: true,
+        dots: true
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }
+  ]
+};
 export const AppPage: NextPage = () => {
   const router = useRouter();
   const { t } = useTranslation(`explorer`);
+  const zilpay = useZilPay();
+  const [app, setApp] = React.useState<AnApp | null>(null);
+  const [description, setDescription] = React.useState<string>('');
+
+  React.useEffect(() => {
+    if (zilpay.instance) {
+      const explorer = new Explorer(zilpay.instance);
+      const { category, app } = router.query;
+
+      explorer
+        .getApplication(Number(category), String(app))
+        .then((e) => {
+          setApp(e);
+
+          if (!e || !e.description) {
+            throw new Error();
+          }
+
+          return fetch(`${IPFS}/${e?.description}`);
+        })
+        .then((res) => res.text())
+        .then((t) => setDescription(t))
+        .catch(() => null);
+    }
+  }, [zilpay, router.query.category]);
 
   return (
     <>
       <Head>
-        <title>{t(`${router.query.category}`)} - ZilPay</title>
+        <title>{app?.title} - ZilPay</title>
         <meta
           property="og:title"
-          content={t(`${router.query.app} - ZilPay`)}
+          content={`${app?.title} - ZilPay`}
           key="title"
         />
       </Head>
+      <Container>
+        <TitleWrapper>
+          <img
+            src={`${IPFS}/${app?.icon}`}
+            alt="logo"
+            height="100"
+          />
+          <Text
+            fontVariant={StyleFonts.Bold}
+            fontColors={Colors.White}
+            size="40px"
+            css="text-indent: 40px;"
+          >
+            {app?.title}
+          </Text>
+        </TitleWrapper>
+        <Wrapper>
+          <div>
+            <Slider {...settings}>
+              {app?.images.map((image) => (
+                <PreviewImg
+                  src={`${IPFS}/${image}`}
+                  alt="preview"
+                />
+              ))}
+            </Slider>
+          </div>
+          <Text
+            size="20px"
+            css="text-align: center;margin: 30px;max-width: 700px;"
+          >
+            {description}
+          </Text>
+          <a
+            href={app?.url}
+            target="_blank"
+          >
+            <Button upperCase>
+              {t('launch_btn')}
+            </Button>
+          </a>
+        </Wrapper>
+      </Container>
     </>
   );
 }
