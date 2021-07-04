@@ -5,33 +5,33 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Link from 'next/link';
+
+import { Text } from 'components/text';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, AnApp } from 'mixins/explorer';
+import { StyleFonts } from '@/config/fonts';
+import { Colors } from '@/config/colors';
+import { IPFS } from 'config/ipfs';
 
-export const CategoryPage: NextPage = () => {
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+`;
+
+export const AppPage: NextPage = () => {
   const router = useRouter();
   const { t } = useTranslation(`explorer`);
-  const zilpay = useZilPay();
-  const [items, setItems] = React.useState<AnApp[]>([]);
-
-  React.useEffect(() => {
-    if (zilpay.instance && items.length === 0) {
-      const explorer = new Explorer(zilpay.instance);
-
-      explorer
-        .getApplicationList(Number(router.query.category))
-        .then((values) => setItems(values));
-    }
-  }, [zilpay]);
 
   return (
     <>
       <Head>
-        <title>{t(`cat_${router.query.category}`)} - ZilPay</title>
+        <title>{t(`${router.query.category}`)} - ZilPay</title>
         <meta
           property="og:title"
-          content={t(`cat_${router.query.category} - ZilPay`)}
+          content={t(`${router.query.app} - ZilPay`)}
           key="title"
         />
       </Head>
@@ -48,10 +48,11 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => ({
 export async function getStaticPaths() {
   return {
     paths: [
-      '/explorer/[category]',
+      '/explorer/[category]/[app]',
       {
         params: {
-          category: '0'
+          category: '0',
+          app: '0'
         }
       }
     ],
@@ -59,4 +60,4 @@ export async function getStaticPaths() {
   }
 }
 
-export default CategoryPage;
+export default AppPage;

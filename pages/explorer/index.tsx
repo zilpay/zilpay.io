@@ -12,6 +12,7 @@ import { AppCard } from 'components/app-card';
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, Banner } from 'mixins/explorer';
 import { Categories } from 'config/categories';
+import { IPFS } from 'config/ipfs';
 
 const Container = styled.div`
   display: flex;
@@ -110,7 +111,7 @@ export const ExplorerMainPage: NextPage = () => {
                   target="_blank"
                 >
                   <BannerImage
-                    src={`https://ipfs.io/ipfs/${el.ipfs}`}
+                    src={`${IPFS}/${el.ipfs}`}
                     alt="banner"
                   />
                 </BannerLink>

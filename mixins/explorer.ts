@@ -14,6 +14,7 @@ export interface AnApp {
   images: string;
   description: string;
   category: string;
+  owner: string;
 }
 
 export class Explorer extends ZilPayBase {
@@ -62,11 +63,12 @@ export class Explorer extends ZilPayBase {
     }
 
     return Object.keys(result).map((key) => ({
+      owner: key,
       title: result[key].arguments[0],
-      icon: result[key].arguments[1],
+      description: result[key].arguments[1],
       url: result[key].arguments[2],
       images: result[key].arguments[3],
-      description: result[key].arguments[4],
+      icon: result[key].arguments[4],
       category:result[key].arguments[5]
     }));
   }
