@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Link from 'next/link';
 
 import Slider from 'react-slick';
 import { Text } from 'components/text';

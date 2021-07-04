@@ -8,6 +8,7 @@ import Slider from 'react-slick';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { AppCard } from 'components/app-card';
+import { Button } from 'components/button';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, Banner } from 'mixins/explorer';
@@ -40,6 +41,14 @@ const AppsWrapper = styled.div`
 
   max-width: 1200px;
   margin-top: 40px;
+`;
+const SubmitWrapper = styled.div`
+  display: flex;
+  margin: 30px;
+
+  div {
+    margin: 10px;
+  }
 `;
 
 const settings = {
@@ -120,20 +129,32 @@ export const ExplorerMainPage: NextPage = () => {
           </Slider>
         </div>
         <AppsWrapper>
-            {list.map((el) => (
-              <Link
-                key={el}
-                href={`/explorer/${el}`}
-              >
-                <div>
-                  <AppCard
-                    url={`/images/categories/${el}.webp`}
-                    title={t(`cat_${el}`)}
-                  />
-                </div>
-              </Link>
-            ))}
-          </AppsWrapper>
+          {list.map((el) => (
+            <Link
+              key={el}
+              href={`/explorer/${el}`}
+            >
+              <div>
+                <AppCard
+                  url={`/images/categories/${el}.webp`}
+                  title={t(`cat_${el}`)}
+                />
+              </div>
+            </Link>
+          ))}
+        </AppsWrapper>
+        <SubmitWrapper>
+          <Link href="/explorer/submit/banner">
+            <Button>
+              {t('submit_ad')}
+            </Button>
+          </Link>
+          <Link href="/explorer/submit/app">
+            <Button>
+              {t('submit_app')}
+            </Button>
+          </Link>
+        </SubmitWrapper>
       </Container>
     </>
   );
