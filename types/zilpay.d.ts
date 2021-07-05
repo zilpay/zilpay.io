@@ -34,6 +34,7 @@ export interface ZilPayType {
     isEnable: boolean;
     net: 'testnet' | 'mainnet';
     observableTransaction: any;
+    observableAccount: any;
   };
   blockchain: {
     getBalance: (address: string) => Promise<ZIlliqaResponse>;

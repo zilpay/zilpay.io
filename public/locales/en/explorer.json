@@ -22,5 +22,6 @@
   "blocks_tx": "Blocks (TX)",
   "banner_page_title": "Upload banner.",
   "unlock": "Unlock",
-  "url_placeholder": "Paste here URL like https://dragonzil.xyz"
+  "url_placeholder": "Paste here URL like https://dragonzil.xyz",
+  "buy_on_zilswap": "Buy ZLP"
 }

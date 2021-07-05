@@ -45,7 +45,6 @@ const FormWrapper = styled.form`
 
   max-width: 900px;
   width: 100%;
-  margin-top: 60px;
   padding: 16px;
 
   .rangeslider {
@@ -60,6 +59,7 @@ const FormWrapper = styled.form`
 
   .rangeslider {
     background-color: ${Colors.Dark};
+    margin-top: 80px;
   }
 
   .rangeslider__handle-tooltip {
@@ -77,6 +77,14 @@ const ButtonsWrapper = styled.div`
     margin: 10px;
   }
 `;
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-left: 45px;
+  padding-right: 45px;
+`;
 
 export const SubmitBannerPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
@@ -84,10 +92,11 @@ export const SubmitBannerPage: NextPage = () => {
   const [loading, setLoading] = React.useState(false);
   const [hash, setHash] = React.useState('');
   const [url, setUrl] = React.useState('');
-  const [amount, setAmount] = React.useState(1);
+  const [amount, setAmount] = React.useState(500);
   const [blocks, setBlocks] = React.useState(1);
   const [reserve, setReserve] = React.useState('3000');
   const [approved, setApproved] = React.useState(new BN(0));
+  const [balance, setBalance] = React.useState(0);
 
   const bnAmount = React.useMemo(() => {
     const _value = new BN(Math.round(amount));
@@ -117,7 +126,7 @@ export const SubmitBannerPage: NextPage = () => {
   }, [reserve]);
   const handleChangeUrl = React.useCallback((value: string) => {
     window.localStorage.setItem(StorageFields.BannerUrl, value);
-    setUrl(value)
+    setUrl(value);
   }, []);
 
   const handleApprove = React.useCallback(async() => {
@@ -171,6 +180,29 @@ export const SubmitBannerPage: NextPage = () => {
     }
   }, [zilpay, amount, hash, url]);
 
+  const handleUpdate = React.useCallback(async() => {
+    if (!zilpay.instance) {
+      return null;
+    }
+
+    setLoading(true);
+
+    try {
+      const zlp = new ZLPExplorer(zilpay.instance);
+      const bannerControll = new ExplorerBanner(zilpay.instance);
+      const allowances = await zlp.getAllowances(bannerControll.selfAddress);
+      
+      setApproved(allowances);
+  
+      const balance = await zlp.getBalance(zlp.zilpay.wallet.defaultAccount.base16);
+      const amount = Number(balance) / Number(ZLPExplorer.DECIMAL);
+      setBalance(Math.hypot(Number(amount.toFixed(6))));
+    } catch {
+      //
+    }
+
+    setLoading(false);
+  }, [zilpay]);
 
   React.useEffect(() => {
     const ipfsHash = window.localStorage.getItem(StorageFields.BannerHash);
@@ -190,7 +222,6 @@ export const SubmitBannerPage: NextPage = () => {
     if (zilpay.instance) {
       const explorer = new Explorer(zilpay.instance);
       const zlp = new ZLPExplorer(zilpay.instance);
-      const bannerControll = new ExplorerBanner(zilpay.instance);
 
       explorer.getReserve().then((r) => {
         setReserve(r);
@@ -199,9 +230,17 @@ export const SubmitBannerPage: NextPage = () => {
         setBlocks(Number(blocks));
       });
 
-      zlp
-        .getAllowances(bannerControll.selfAddress)
-        .then((value) => setApproved(value));
+      handleUpdate();
+
+      const observable = zlp
+        .zilpay
+        .wallet
+        .observableAccount()
+        .subscribe(() => handleUpdate());
+
+      return () => {
+        observable.unsubscribe();
+      }
     }
   }, [zilpay]);
 
@@ -216,14 +255,26 @@ export const SubmitBannerPage: NextPage = () => {
         />
       </Head>
       <Container>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
-          size="25px"
-          css="text-indent: 30px;"
-        >
-          {t('banner_page_title')}
-        </Text>
+        <TitleWrapper>
+          <Text
+            fontVariant={StyleFonts.Bold}
+            fontColors={Colors.White}
+            size="25px"
+          >
+            {t('banner_page_title')}
+          </Text>
+          <a
+            href="https://zilswap.io"
+            target="_blank"
+          >
+            <Button
+              color={balance < amount ? Colors.Warning : Colors.Secondary}
+              fontColors={balance < amount ? Colors.Warning : Colors.Secondary}
+            >
+              {balance === 0 ? t('buy_on_zilswap') : `${balance} ZLP`}
+            </Button>
+          </a>
+        </TitleWrapper>
         <Wrapper>
           {hash ? (
             <BannerImage
@@ -241,6 +292,7 @@ export const SubmitBannerPage: NextPage = () => {
                 </Text>
                 <Input
                   value={hash}
+                  disabled={loading}
                   type="text"
                   css="width: 100%;"
                   onChange={(e) => setHash(e.target.value)}
@@ -252,8 +304,9 @@ export const SubmitBannerPage: NextPage = () => {
                 </Text>
                 <Input
                   value={url}
-                  type="url"
                   placeholder={t('url_placeholder')}
+                  disabled={loading}
+                  type="url"
                   css="width: 100%;"
                   onChange={(e) => handleChangeUrl(e.target.value)}
                 />
@@ -262,6 +315,7 @@ export const SubmitBannerPage: NextPage = () => {
                 min={1}
                 max={ExplorerBanner.MAX_BLOCKS.toNumber()}
                 value={amount}
+                disabled={loading}
                 onChange={handleChangeAmount}
               />
               <ButtonsWrapper>
@@ -271,6 +325,7 @@ export const SubmitBannerPage: NextPage = () => {
                   </Text>
                   <Input
                     value={amount}
+                    disabled={loading}
                     type="number"
                     min="1"
                     onChange={(e) => handleChangeAmount(Number(e.target.value))}
@@ -282,6 +337,7 @@ export const SubmitBannerPage: NextPage = () => {
                   </Text>
                   <Input
                     value={blocks}
+                    disabled={loading}
                     type="number"
                     min="1"
                     onChange={(e) => handleChangeBlocks(Number(e.target.value))}
@@ -297,8 +353,8 @@ export const SubmitBannerPage: NextPage = () => {
                 />
               ) : approved.lt(bnAmount) ? (
                 <Button
-                  color={Colors.Warngin}
-                  fontColors={Colors.Warngin}
+                  color={Colors.Warning}
+                  fontColors={Colors.Warning}
                   css="margin: 30px;"
                   onClick={handleApprove}
                 >

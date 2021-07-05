@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { Button } from 'components/button';
 
 import { IPFS } from 'config/ipfs';
+import { StyleFonts } from '@/config/fonts';
 
 type ContainerProp = {
   url: string;
@@ -31,6 +32,10 @@ const Container = styled.div`
   background-position: center center;
   background-size: cover;
 
+  div {
+    border-width: 3px;
+  }
+
   @media (max-width: 400px) {
     width: 250px;
   }
@@ -50,6 +55,7 @@ export const BannerImage: React.FC<Prop> = ({ hash, onRemove }) => {
         onClick={onRemove}
         fontColors={Colors.Danger}
         color={Colors.Danger}
+        fontVariant={StyleFonts.Bold}
         size="20px"
       >
         {t('remove_item')}
