@@ -125,8 +125,13 @@ export const SubmitBannerPage: NextPage = () => {
     setBlocks(blocks);
   }, [reserve]);
   const handleChangeUrl = React.useCallback((value: string) => {
-    window.localStorage.setItem(StorageFields.BannerUrl, value);
-    setUrl(value);
+    try {
+      const { href } = new URL(value);
+      window.localStorage.setItem(StorageFields.BannerUrl, href);
+      setUrl(href);
+    } catch {
+      //
+    }
   }, []);
 
   const handleApprove = React.useCallback(async() => {
