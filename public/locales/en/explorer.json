@@ -16,5 +16,9 @@
   "error_0": "Cannot be more than 2 MB",
   "error_1": "Image format should be ony png,webp,jpg,jpeg",
   "error_2": "Oops something wrong with IPFS.",
-  "remove_item": "Remove an image."
+  "remove_item": "Remove an image.",
+  "amount_zlp": "Amount (ZLP)",
+  "place": "Place",
+  "blocks_tx": "Blocks (TX)",
+  "banner_page_title": "Upload banner."
 }

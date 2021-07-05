@@ -12,6 +12,8 @@ import { Dropzone } from 'components/dropzone';
 import { Text } from 'components/text';
 import { BannerImage } from 'components/banner-image';
 import Slider from 'react-rangeslider';
+import { Input } from 'components/input';
+import { Button } from 'components/button';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, AnApp } from 'mixins/explorer';
@@ -33,9 +35,19 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 const FormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   max-width: 900px;
   width: 100%;
   margin-top: 60px;
+  padding: 16px;
+
+  .rangeslider {
+    min-width: 200px;
+    width: 100%;
+  }
 
   .rangeslider-horizontal .rangeslider__fill {
     background-color: ${Colors.Secondary};
@@ -44,6 +56,17 @@ const FormWrapper = styled.div`
 
   .rangeslider__handle-tooltip {
     background-color: ${Colors.Dark};
+    color: ${Colors.Secondary};
+  }
+`;
+const ButtonsWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  width: 100%;
+
+  div {
+    margin: 10px;
   }
 `;
 
@@ -74,10 +97,10 @@ export const SubmitBannerPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Banner - ZilPay</title>
+        <title>{t('banner_page_title')} - ZilPay</title>
         <meta
           property="og:title"
-          content={`Banner - ZilPay`}
+          content={`${t('banner_page_title')} - ZilPay`}
           key="title"
         />
       </Head>
@@ -88,7 +111,7 @@ export const SubmitBannerPage: NextPage = () => {
           size="25px"
           css="text-indent: 30px;"
         >
-          Upload banner.
+          {t('banner_page_title')}
         </Text>
         <Wrapper>
           {hash ? (
@@ -101,11 +124,33 @@ export const SubmitBannerPage: NextPage = () => {
           )}
           <FormWrapper>
             <Slider
-              min={0}
-              max={100}
+              min={1}
+              max={1000}
               value={amount}
               onChange={setAmount}
             />
+            <ButtonsWrapper>
+              <label>
+                <Text>
+                  {t('amount_zlp')}
+                </Text>
+                <Input
+                  defaultValue={amount}
+                  type="number"
+                  min="1"
+                  onChange={(e) => setAmount(Number(e.target.value))}
+                />
+              </label>
+              <label>
+                <Text>
+                  {t('blocks_tx')}
+                </Text>
+                <Input />
+              </label>
+            </ButtonsWrapper>
+            <Button css="margin: 30px;">
+              {t('place')}
+            </Button>
           </FormWrapper>
         </Wrapper>
       </Container>
