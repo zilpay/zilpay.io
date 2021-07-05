@@ -79,13 +79,17 @@ const ButtonsWrapper = styled.div`
     margin: 10px;
   }
 `;
-const TitleWrapper = styled.div`
+const TitleWrapper = styled.aside`
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   padding-left: 45px;
   padding-right: 45px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
 `;
 
 export const SubmitBannerPage: NextPage = () => {
