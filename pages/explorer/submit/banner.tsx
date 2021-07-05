@@ -1,3 +1,5 @@
+import 'react-rangeslider/lib/index.css';
+
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -9,6 +11,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Dropzone } from 'components/dropzone';
 import { Text } from 'components/text';
 import { BannerImage } from 'components/banner-image';
+import Slider from 'react-rangeslider';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, AnApp } from 'mixins/explorer';
@@ -29,11 +32,27 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+const FormWrapper = styled.div`
+  max-width: 900px;
+  width: 100%;
+  margin-top: 60px;
+
+  .rangeslider-horizontal .rangeslider__fill {
+    background-color: ${Colors.Secondary};
+    border-radius: 8px;
+  }
+
+  .rangeslider__handle-tooltip {
+    background-color: ${Colors.Dark};
+  }
+`;
+
 export const SubmitBannerPage: NextPage = () => {
   const router = useRouter();
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
   const [hash, setHash] = React.useState('');
+  const [amount, setAmount] = React.useState(0);
 
   const hanldeUploaded = React.useCallback((hash: string) => {
     window.localStorage.setItem(StorageFields.Bannerhash, hash);
@@ -80,6 +99,14 @@ export const SubmitBannerPage: NextPage = () => {
           ) : (
             <Dropzone onUploaded={hanldeUploaded}/>
           )}
+          <FormWrapper>
+            <Slider
+              min={0}
+              max={100}
+              value={amount}
+              onChange={setAmount}
+            />
+          </FormWrapper>
         </Wrapper>
       </Container>
     </>
