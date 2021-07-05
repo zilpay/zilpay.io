@@ -27,7 +27,11 @@ const Wrapper = styled.div`
   overflow-y: scroll;
 `;
 
-export const AcceptAdPolicy: React.FC = () => {
+type Prop = {
+  onAccepted: () => void;
+};
+
+export const AcceptAdPolicy: React.FC<Prop> = ({ onAccepted }) => {
   const { t } = useTranslation(`explorer`);
   return (
     <Container>
@@ -47,7 +51,10 @@ export const AcceptAdPolicy: React.FC = () => {
           </strong>
         </Text>
       </Wrapper>
-      <Button css="margin: 10px;width: 250px;">
+      <Button
+        css="margin: 10px;width: 250px;"
+        onClick={onAccepted}
+      >
         Accept
       </Button>
     </Container>

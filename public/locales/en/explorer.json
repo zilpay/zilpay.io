@@ -9,5 +9,12 @@
   "no_apps": "Have no Apps yet.",
   "launch_btn": "Launch",
   "submit_app": "Submint DApp",
-  "submit_ad": "Submit Banner"
+  "submit_ad": "Submit Banner",
+  "uploading": "Uploading...",
+  "drop_file_here": "Drop the files here ...",
+  "try_drop_file": "Try dropping an image here, or click to select a file to transport. (Maximum file size: 2 MB)",
+  "error_0": "Cannot be more than 2 MB",
+  "error_1": "Image format should be ony png,webp,jpg,jpeg",
+  "error_2": "Oops something wrong with IPFS.",
+  "remove_item": "Remove an image."
 }
