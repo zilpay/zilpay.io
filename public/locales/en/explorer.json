@@ -20,5 +20,6 @@
   "amount_zlp": "Amount (ZLP)",
   "place": "Place",
   "blocks_tx": "Blocks (TX)",
-  "banner_page_title": "Upload banner."
+  "banner_page_title": "Upload banner.",
+  "unlock": "Unlock"
 }

@@ -12,19 +12,19 @@ const DEFAUL_GAS = {
   gaslimit: '5000'
 };
 export class ZilPayBase {
-  private _zilpay: ZilPayType;
+  public zilpay: ZilPayType;
 
   constructor(zilpay: ZilPayType) {
-    this._zilpay = zilpay;
+    this.zilpay = zilpay;
   }
 
   public get net() {
-    return this._zilpay.wallet.net || 'mainnet';
+    return this.zilpay.wallet.net || 'testnet';
   }
 
   async getSubState(contract: string, field: string, params: string[] = []) {
     const res = await this
-      ._zilpay
+      .zilpay
       .blockchain
       .getSmartContractSubState(
         contract,
@@ -54,7 +54,7 @@ export class ZilPayBase {
 
   async getBlockchainInfo() {
     const { error, result } = await this
-      ._zilpay
+      .zilpay
       .blockchain
       .getBlockChainInfo();
 
@@ -66,7 +66,7 @@ export class ZilPayBase {
   }
 
   async call(data: Params, gas = DEFAUL_GAS) {
-    const { contracts, utils } = this._zilpay;
+    const { contracts, utils } = this.zilpay;
     const contract = contracts.at(data.contractAddress);
     const gasPrice = utils.units.toQa(gas.gasPrice, utils.units.Units.Li);
     const gasLimit = utils.Long.fromNumber(gas.gaslimit);
