@@ -175,8 +175,9 @@ export const SubmitBannerPage: NextPage = () => {
         setTxId(TranID);
         setModalShow(true);
       } catch {
-        setLoading(false);
+        //
       }
+      setLoading(false);
     }
   }, [zilpay, amount, hash, url]);
 
@@ -284,33 +285,34 @@ export const SubmitBannerPage: NextPage = () => {
           ) : (
             <Dropzone onUploaded={hanldeUploaded}/>
           )}
-          {hash ? (
-            <FormWrapper>
-              <label style={{ width: '80%' }}>
-                <Text>
-                  IPFS HASH
-                </Text>
-                <Input
-                  value={hash}
-                  disabled={loading}
-                  type="text"
-                  css="width: 100%;"
-                  onChange={(e) => setHash(e.target.value)}
-                />
-              </label>
-              <label style={{ width: '80%' }}>
-                <Text>
-                  URL
-                </Text>
-                <Input
-                  value={url}
-                  placeholder={t('url_placeholder')}
-                  disabled={loading}
-                  type="url"
-                  css="width: 100%;"
-                  onChange={(e) => handleChangeUrl(e.target.value)}
-                />
-              </label>
+          <FormWrapper>
+            <label style={{ width: '80%' }}>
+              <Text>
+                IPFS HASH
+              </Text>
+              <Input
+                value={hash}
+                disabled={loading}
+                type="text"
+                css="width: 100%;"
+                onChange={(e) => setHash(e.target.value)}
+              />
+            </label>
+            <label style={{ width: '80%' }}>
+              <Text>
+                URL
+              </Text>
+              <Input
+                value={url}
+                placeholder={t('url_placeholder')}
+                disabled={loading}
+                type="url"
+                css="width: 100%;"
+                onChange={(e) => handleChangeUrl(e.target.value)}
+              />
+            </label>
+            {hash ? (
+              <>
               <Slider
                 min={1}
                 max={ExplorerBanner.MAX_BLOCKS.toNumber()}
@@ -368,8 +370,9 @@ export const SubmitBannerPage: NextPage = () => {
                   {t('place')}
                 </Button>
               )}
-            </FormWrapper>
-          ) : null}
+              </>
+            ) : null}
+          </FormWrapper>
         </Wrapper>
       </Container>
       <Modal
@@ -393,7 +396,7 @@ export const SubmitBannerPage: NextPage = () => {
         </Text>
         <ButtonsWrapper>
           <Button
-            fontVariant={Colors.Warning}
+            fontColors={Colors.Warning}
             color={Colors.Warning}
             onClick={() => setModalShow(false)}
           >

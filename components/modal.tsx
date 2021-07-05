@@ -16,6 +16,7 @@ const Container = styled.div`
   background-color: ${Colors.Dark};
   border-radius: 16px;
   padding: 30px;
+  height: min-content;
 
   z-index: 30;
 
