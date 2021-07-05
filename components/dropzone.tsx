@@ -1,5 +1,3 @@
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-
 import { Colors } from '@/config/colors';
 import React from 'react';
 import { useTranslation } from 'next-i18next';

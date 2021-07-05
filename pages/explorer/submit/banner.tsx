@@ -1,10 +1,10 @@
 import 'react-rangeslider/lib/index.css';
+import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import BN from 'bn.js';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -15,6 +15,7 @@ import { BannerImage } from 'components/banner-image';
 import Slider from 'react-rangeslider';
 import { Input } from 'components/input';
 import { Button } from 'components/button';
+import Loader from 'react-loader-spinner';
 
 import { useZilPay } from 'mixins/zilpay';
 import { ExplorerBanner } from 'mixins/place-banner';
@@ -23,7 +24,6 @@ import { ZLPExplorer } from 'mixins/zlp';
 
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
-import { IPFS } from 'config/ipfs';
 import { StorageFields } from 'config/storage-fields';
 
 const Container = styled.div`
@@ -75,9 +75,9 @@ const ButtonsWrapper = styled.div`
 `;
 
 export const SubmitBannerPage: NextPage = () => {
-  const router = useRouter();
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
+  const [loading, setLoading] = React.useState(false);
   const [hash, setHash] = React.useState('');
   const [amount, setAmount] = React.useState(1);
   const [blocks, setBlocks] = React.useState(1);
@@ -98,18 +98,61 @@ export const SubmitBannerPage: NextPage = () => {
     setHash('');
   }, []);
 
-  const hanldeChangeAmount = React.useCallback((amount: number) => {
+  const handleChangeAmount = React.useCallback((amount: number) => {
     const { blocks } = ExplorerBanner.estimateBlocks(amount, reserve);
 
     setAmount(amount);
     setBlocks(Number(blocks));
   }, [reserve]);
-  const hanldeChangeBlocks = React.useCallback((blocks: number) => {
+  const handleChangeBlocks = React.useCallback((blocks: number) => {
     const { price, decimal } = ExplorerBanner.estimateBlocks(1, reserve);
 
     setAmount(Number(price) / decimal * blocks);
     setBlocks(blocks);
   }, [reserve]);
+
+  const handleApprove = React.useCallback(async() => {
+    if (zilpay.instance) {
+      setLoading(true);
+      const zlp = new ZLPExplorer(zilpay.instance);
+      const bannerControll = new ExplorerBanner(zilpay.instance);
+      const { TranID } = await zlp.approve(bannerControll.selfAddress);
+
+      const observer = zlp
+        .zilpay
+        .wallet
+        .observableTransaction(TranID)
+        .subscribe(async(hashs: string[]) => {
+          console.log(hashs, TranID);
+          if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
+            setLoading(false);
+            const allowances = await zlp.getAllowances(bannerControll.selfAddress);
+  
+            setApproved(allowances);
+            observer.unsubscribe();
+          }
+        });
+    }
+  }, [zilpay]);
+  const handlePlace = React.useCallback(async() => {
+    if (zilpay.instance) {
+      setLoading(true);
+      const bannerControll = new ExplorerBanner(zilpay.instance);
+      const { TranID } = await bannerControll.place(amount, '', hash);
+
+      const observer = bannerControll
+        .zilpay
+        .wallet
+        .observableTransaction(TranID)
+        .subscribe(async(hashs: string[]) => {
+          console.log(hashs, TranID);
+          if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
+            setLoading(false);
+            observer.unsubscribe();
+          }
+        });
+    }
+  }, [zilpay, amount, hash]);
 
 
   React.useEffect(() => {
@@ -171,9 +214,9 @@ export const SubmitBannerPage: NextPage = () => {
             <FormWrapper>
               <Slider
                 min={1}
-                max={1000}
+                max={ExplorerBanner.MAX_BLOCKS.toNumber()}
                 value={amount}
-                onChange={hanldeChangeAmount}
+                onChange={handleChangeAmount}
               />
               <ButtonsWrapper>
                 <label>
@@ -184,7 +227,7 @@ export const SubmitBannerPage: NextPage = () => {
                     value={amount}
                     type="number"
                     min="1"
-                    onChange={(e) => hanldeChangeAmount(Number(e.target.value))}
+                    onChange={(e) => handleChangeAmount(Number(e.target.value))}
                   />
                 </label>
                 <label>
@@ -195,16 +238,29 @@ export const SubmitBannerPage: NextPage = () => {
                     value={blocks}
                     type="number"
                     min="1"
-                    onChange={(e) => hanldeChangeBlocks(Number(e.target.value))}
+                    onChange={(e) => handleChangeBlocks(Number(e.target.value))}
                   />
                 </label>
               </ButtonsWrapper>
-              {approved.lt(bnAmount) ? (
-                <Button css="margin: 30px;">
+              {loading ? (
+                <Loader
+                  type="Puff"
+                  color={Colors.Secondary}
+                  height={100}
+                  width={100}
+                />
+              ) : approved.lt(bnAmount) ? (
+                <Button
+                  css="margin: 30px;"
+                  onClick={handleApprove}
+                >
                   {t('unlock')}
                 </Button>
               ) : (
-                <Button css="margin: 30px;">
+                <Button
+                  css="margin: 30px;"
+                  onClick={handlePlace}
+                >
                   {t('place')}
                 </Button>
               )}

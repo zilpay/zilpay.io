@@ -20,7 +20,9 @@ export function useZilPay() {
     });
 
     return zilpay;
-  } else {
+  }
+
+  if (process.browser) {
     let k = 0;
     const i = setInterval(() => {
       if (zilpay.code !== 0 && k >= 5) {

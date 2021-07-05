@@ -22,17 +22,19 @@ export class ZLPExplorer extends ZilPayBase {
   }
 
   public async getAllowances(address: string): Promise<BN> {
+    const owner = String(this.zilpay.wallet.defaultAccount.base16).toLowerCase();
+    const approvel = String(address).toLowerCase();
     const allowances = await this.getSubState(
       this._contract[this.net],
       this._allowances,
-      [String(address).toLowerCase()]
+      [owner, approvel]
     );
 
-    if (!allowances || isNaN(allowances)) {
+    if (!allowances) {
       return new BN(0);
     }
 
-    return new BN(allowances);
+    return new BN(allowances[owner][approvel]);
   }
 
   public async getBalance(address: string) {
@@ -50,17 +52,17 @@ export class ZLPExplorer extends ZilPayBase {
   }
 
   public async approve(spender: string) {
-    const amount = this.getBalance(this.zilpay.wallet.defaultAccount.bech32);
+    const amount = await this.getBalance(this.zilpay.wallet.defaultAccount.bech32);
     const params = [
       {
         vname: 'spender',
         type: 'ByStr20',
-        value: spender
+        value: String(spender)
       },
       {
         vname: 'amount',
         type: 'Uint128',
-        value: amount
+        value: String(amount)
       }
     ];
     const contractAddress = this._contract[this.net];
