@@ -16,6 +16,7 @@ import Slider from 'react-rangeslider';
 import { Input } from 'components/input';
 import { Button } from 'components/button';
 import Loader from 'react-loader-spinner';
+import { Modal } from 'components/modal';
 
 import { useZilPay } from 'mixins/zilpay';
 import { ExplorerBanner } from 'mixins/place-banner';
@@ -24,6 +25,7 @@ import { ZLPExplorer } from 'mixins/zlp';
 
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
+import { VIEW_BLOCK } from 'config/explorer';
 import { StorageFields } from 'config/storage-fields';
 
 const Container = styled.div`
@@ -89,6 +91,7 @@ const TitleWrapper = styled.div`
 export const SubmitBannerPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
+  const [modalShow, setModalShow] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [hash, setHash] = React.useState('');
   const [url, setUrl] = React.useState('');
@@ -97,6 +100,7 @@ export const SubmitBannerPage: NextPage = () => {
   const [reserve, setReserve] = React.useState('3000');
   const [approved, setApproved] = React.useState(new BN(0));
   const [balance, setBalance] = React.useState(0);
+  const [txId, setTxId] = React.useState('');
 
   const bnAmount = React.useMemo(() => {
     const _value = new BN(Math.round(amount));
@@ -104,11 +108,11 @@ export const SubmitBannerPage: NextPage = () => {
   }, [amount]);
 
   const hanldeUploaded = React.useCallback((hash: string) => {
-    window.localStorage.setItem(StorageFields.Bannerhash, hash);
+    window.localStorage.setItem(StorageFields.BannerHash, hash);
     setHash(hash);
   }, []);
   const hanldeRemoveImage = React.useCallback(() => {
-    window.localStorage.removeItem(StorageFields.Bannerhash);
+    window.localStorage.removeItem(StorageFields.BannerHash);
     setHash('');
   }, []);
 
@@ -167,18 +171,9 @@ export const SubmitBannerPage: NextPage = () => {
       try {
         const bannerControll = new ExplorerBanner(zilpay.instance);
         const { TranID } = await bannerControll.place(amount, url, hash);
-  
-        const observer = bannerControll
-          .zilpay
-          .wallet
-          .observableTransaction(TranID)
-          .subscribe(async(hashs: string[]) => {
-            console.log(hashs, TranID);
-            if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
-              setLoading(false);
-              observer.unsubscribe();
-            }
-          });
+ 
+        setTxId(TranID);
+        setModalShow(true);
       } catch {
         setLoading(false);
       }
@@ -377,6 +372,43 @@ export const SubmitBannerPage: NextPage = () => {
           ) : null}
         </Wrapper>
       </Container>
+      <Modal
+        show={modalShow}
+        onClose={() => setModalShow(false)}
+      >
+        <Text
+          fontColors={Colors.White}
+          fontVariant={StyleFonts.Bold}
+          size="24px"
+        >
+          Sent to verify.
+        </Text>
+        <Text size="16px">
+          <strong>
+            {t('sent_banner_tx_title')}
+          </strong>
+        </Text>
+        <Text size="16px">
+          {t('sent_banner_tx')}
+        </Text>
+        <ButtonsWrapper>
+          <Button
+            fontVariant={Colors.Warning}
+            color={Colors.Warning}
+            onClick={() => setModalShow(false)}
+          >
+            {t('sent_banner_tx_btn_close')}
+          </Button>
+          <a
+            href={`${VIEW_BLOCK}/tx/${txId}`}
+            target="_blank"
+          >
+            <Button>
+              {t('sent_banner_tx_btn_view')}
+            </Button>
+          </a>
+        </ButtonsWrapper>
+      </Modal>
     </>
   );
 }
