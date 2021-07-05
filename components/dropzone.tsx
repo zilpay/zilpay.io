@@ -22,7 +22,7 @@ const Container = styled.div`
   padding: 16px;
   margin: 16px;
 
-  height: 200px;
+  height: 30vh;
   max-width: 900px;
   width: 100%;
 

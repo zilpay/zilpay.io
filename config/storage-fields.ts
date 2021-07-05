@@ -1,3 +1,4 @@
 export enum StorageFields {
-  Bannerhash = 'banner_hash'
+  BannerHash = 'banner_hash',
+  BannerUrl = 'banner_url'
 }

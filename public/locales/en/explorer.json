@@ -21,5 +21,6 @@
   "place": "Place",
   "blocks_tx": "Blocks (TX)",
   "banner_page_title": "Upload banner.",
-  "unlock": "Unlock"
+  "unlock": "Unlock",
+  "url_placeholder": "Paste here URL like https://dragonzil.xyz"
 }

@@ -38,7 +38,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const FormWrapper = styled.div`
+const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -56,6 +56,10 @@ const FormWrapper = styled.div`
   .rangeslider-horizontal .rangeslider__fill {
     background-color: ${Colors.Secondary};
     border-radius: 8px;
+  }
+
+  .rangeslider {
+    background-color: ${Colors.Dark};
   }
 
   .rangeslider__handle-tooltip {
@@ -79,6 +83,7 @@ export const SubmitBannerPage: NextPage = () => {
   const zilpay = useZilPay();
   const [loading, setLoading] = React.useState(false);
   const [hash, setHash] = React.useState('');
+  const [url, setUrl] = React.useState('');
   const [amount, setAmount] = React.useState(1);
   const [blocks, setBlocks] = React.useState(1);
   const [reserve, setReserve] = React.useState('3000');
@@ -110,56 +115,74 @@ export const SubmitBannerPage: NextPage = () => {
     setAmount(Number(price) / decimal * blocks);
     setBlocks(blocks);
   }, [reserve]);
+  const handleChangeUrl = React.useCallback((value: string) => {
+    window.localStorage.setItem(StorageFields.BannerUrl, value);
+    setUrl(value)
+  }, []);
 
   const handleApprove = React.useCallback(async() => {
     if (zilpay.instance) {
       setLoading(true);
-      const zlp = new ZLPExplorer(zilpay.instance);
-      const bannerControll = new ExplorerBanner(zilpay.instance);
-      const { TranID } = await zlp.approve(bannerControll.selfAddress);
-
-      const observer = zlp
-        .zilpay
-        .wallet
-        .observableTransaction(TranID)
-        .subscribe(async(hashs: string[]) => {
-          console.log(hashs, TranID);
-          if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
-            setLoading(false);
-            const allowances = await zlp.getAllowances(bannerControll.selfAddress);
+      try {
+        const zlp = new ZLPExplorer(zilpay.instance);
+        const bannerControll = new ExplorerBanner(zilpay.instance);
+        const { TranID } = await zlp.approve(bannerControll.selfAddress);
   
-            setApproved(allowances);
-            observer.unsubscribe();
-          }
-        });
+        const observer = zlp
+          .zilpay
+          .wallet
+          .observableTransaction(TranID)
+          .subscribe(async(hashs: string[]) => {
+            console.log(hashs, TranID);
+            if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
+              setLoading(false);
+              const allowances = await zlp.getAllowances(bannerControll.selfAddress);
+    
+              setApproved(allowances);
+              observer.unsubscribe();
+            }
+          }); 
+      } catch {
+        setLoading(false);
+      }
     }
   }, [zilpay]);
   const handlePlace = React.useCallback(async() => {
     if (zilpay.instance) {
       setLoading(true);
-      const bannerControll = new ExplorerBanner(zilpay.instance);
-      const { TranID } = await bannerControll.place(amount, '', hash);
-
-      const observer = bannerControll
-        .zilpay
-        .wallet
-        .observableTransaction(TranID)
-        .subscribe(async(hashs: string[]) => {
-          console.log(hashs, TranID);
-          if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
-            setLoading(false);
-            observer.unsubscribe();
-          }
-        });
+      try {
+        const bannerControll = new ExplorerBanner(zilpay.instance);
+        const { TranID } = await bannerControll.place(amount, url, hash);
+  
+        const observer = bannerControll
+          .zilpay
+          .wallet
+          .observableTransaction(TranID)
+          .subscribe(async(hashs: string[]) => {
+            console.log(hashs, TranID);
+            if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
+              setLoading(false);
+              observer.unsubscribe();
+            }
+          });
+      } catch {
+        setLoading(false);
+      }
     }
-  }, [zilpay, amount, hash]);
+  }, [zilpay, amount, hash, url]);
 
 
   React.useEffect(() => {
-    const ipfsHash = window.localStorage.getItem(StorageFields.Bannerhash);
+    const ipfsHash = window.localStorage.getItem(StorageFields.BannerHash);
 
     if (ipfsHash) {
       setHash(String(ipfsHash));
+    }
+
+    const url = window.localStorage.getItem(StorageFields.BannerUrl);
+
+    if (url) {
+      setUrl(url);
     }
   }, []);
 
@@ -212,6 +235,29 @@ export const SubmitBannerPage: NextPage = () => {
           )}
           {hash ? (
             <FormWrapper>
+              <label style={{ width: '80%' }}>
+                <Text>
+                  IPFS HASH
+                </Text>
+                <Input
+                  value={hash}
+                  type="text"
+                  css="width: 100%;"
+                  onChange={(e) => setHash(e.target.value)}
+                />
+              </label>
+              <label style={{ width: '80%' }}>
+                <Text>
+                  URL
+                </Text>
+                <Input
+                  value={url}
+                  type="url"
+                  placeholder={t('url_placeholder')}
+                  css="width: 100%;"
+                  onChange={(e) => handleChangeUrl(e.target.value)}
+                />
+              </label>
               <Slider
                 min={1}
                 max={ExplorerBanner.MAX_BLOCKS.toNumber()}
@@ -251,6 +297,8 @@ export const SubmitBannerPage: NextPage = () => {
                 />
               ) : approved.lt(bnAmount) ? (
                 <Button
+                  color={Colors.Warngin}
+                  fontColors={Colors.Warngin}
                   css="margin: 30px;"
                   onClick={handleApprove}
                 >
