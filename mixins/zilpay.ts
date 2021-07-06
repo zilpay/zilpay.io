@@ -1,10 +1,19 @@
 import React from 'react';
 
 const { window } = global;
+import { ZilPayType } from 'types';
 
+type ZIlPayInstance = {
+  code: number;
+  instance: ZilPayType | null;
+};
+
+const zilpayLink = (): ZilPayType => {
+  return (window as any)['zilPay'];
+};
 
 export function useZilPay() {
-  const [zilpay, setZilPay] = React.useState({
+  const [zilpay, setZilPay] = React.useState<ZIlPayInstance>({
     code: 0,
     instance: null
   });
@@ -13,16 +22,16 @@ export function useZilPay() {
     return zilpay;
   }
 
-  if (process.browser && typeof window['zilPay'] !== 'undefined') {
+  if (process.browser && typeof zilpayLink() !== 'undefined') {
     setZilPay({
-      instance: window['zilPay'],
+      instance: zilpayLink(),
       code: 1
     });
 
-    if (!window['zilPay'].wallet.isConnect || !window['zilPay'].wallet.isEnable) {
-      window['zilPay'].wallet.connect().then(() => {
+    if (!zilpayLink().wallet.isConnect || !zilpayLink().wallet.isEnable) {
+      zilpayLink().wallet.connect().then(() => {
         setZilPay({
-          instance: window['zilPay'],
+          instance: zilpayLink(),
           code: 1
         });
       });
@@ -43,16 +52,16 @@ export function useZilPay() {
         return null;
       }
 
-      if (process.browser && window['zilPay']) {
+      if (process.browser && zilpayLink) {
         setZilPay({
-          instance: window['zilPay'],
+          instance: zilpayLink(),
           code: 1
         });
 
-        if (!window['zilPay'].wallet.isConnect || !window['zilPay'].wallet.isEnable) {
-          window['zilPay'].wallet.connect().then(() => {
+        if (!zilpayLink().wallet.isConnect || !zilpayLink().wallet.isEnable) {
+          zilpayLink().wallet.connect().then(() => {
             setZilPay({
-              instance: window['zilPay'],
+              instance: zilpayLink(),
               code: 1
             });
           });
