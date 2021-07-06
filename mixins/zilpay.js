@@ -9,7 +9,7 @@ export function useZilPay() {
     instance: null
   });
 
-  if (zilpay.code === 1) {
+  if (zilpay.code === 1 || zilpay.code === -1) {
     return zilpay;
   }
 
@@ -19,13 +19,22 @@ export function useZilPay() {
       code: 1
     });
 
+    if (!window['zilPay'].wallet.isConnect || !window['zilPay'].wallet.isEnable) {
+      window['zilPay'].wallet.connect().then(() => {
+        setZilPay({
+          instance: window['zilPay'],
+          code: 1
+        });
+      });
+    }
+
     return zilpay;
   }
 
   if (process.browser) {
     let k = 0;
     const i = setInterval(() => {
-      if (zilpay.code !== 0 && k >= 5) {
+      if (k >= 3) {
         setZilPay({
           instance: null,
           code: -1
@@ -39,8 +48,19 @@ export function useZilPay() {
           instance: window['zilPay'],
           code: 1
         });
+
+        if (!window['zilPay'].wallet.isConnect || !window['zilPay'].wallet.isEnable) {
+          window['zilPay'].wallet.connect().then(() => {
+            setZilPay({
+              instance: window['zilPay'],
+              code: 1
+            });
+          });
+        }
+
         clearInterval(i);
       }
+      k++;
     }, 100);
   }
 

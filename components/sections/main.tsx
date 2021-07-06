@@ -48,7 +48,7 @@ const GetButton = styled(Button)`
   padding: 20px 30px;
 `;
 
-const InstallButton: React.FC = () => {
+export const InstallButton: React.FC = () => {
   const { t } = useTranslation(`main`);
 
   if (isChrome) {
@@ -135,9 +135,7 @@ export const MainSection: React.FC = () => {
         <Text size="16px">
           {t(`under_title`)}
         </Text>
-        {process.browser ? (
-          <InstallButton />
-        ) : null}
+        <InstallButton />
       </Wrapper>
     </Container>
   );

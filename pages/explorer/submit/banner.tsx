@@ -17,6 +17,7 @@ import { Input } from 'components/input';
 import { Button } from 'components/button';
 import Loader from 'react-loader-spinner';
 import { Modal } from 'components/modal';
+import { InstallButton } from 'components/sections/main';
 
 import { useZilPay } from 'mixins/zilpay';
 import { ExplorerBanner } from 'mixins/place-banner';
@@ -96,6 +97,7 @@ export const SubmitBannerPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
   const [modalShow, setModalShow] = React.useState(false);
+  const [noZilPayModal, setNoZilPayModal] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [hash, setHash] = React.useState('');
   const [url, setUrl] = React.useState('');
@@ -228,24 +230,29 @@ export const SubmitBannerPage: NextPage = () => {
       const explorer = new Explorer(zilpay.instance);
       const zlp = new ZLPExplorer(zilpay.instance);
 
-      explorer.getReserve().then((r) => {
-        setReserve(r);
-        const { blocks } = ExplorerBanner.estimateBlocks(amount, r);
+      if (zlp.zilpay.wallet.isConnect && zlp.zilpay.wallet.isEnable) {
+        explorer.getReserve().then((r) => {
+          setReserve(r);
+          const { blocks } = ExplorerBanner.estimateBlocks(amount, r);
 
-        setBlocks(Number(blocks));
-      });
+          setBlocks(Number(blocks));
+        });
 
-      handleUpdate();
+        handleUpdate();
 
-      const observable = zlp
-        .zilpay
-        .wallet
-        .observableAccount()
-        .subscribe(() => handleUpdate());
+        const observable = zlp
+          .zilpay
+          .wallet
+          .observableAccount()
+          .subscribe(() => handleUpdate());
+            return () => {
+              observable.unsubscribe();
+            }
+        }
+    }
 
-      return () => {
-        observable.unsubscribe();
-      }
+    if (zilpay.code === -1) {
+      setNoZilPayModal(true);
     }
   }, [zilpay]);
 
@@ -388,7 +395,7 @@ export const SubmitBannerPage: NextPage = () => {
           fontVariant={StyleFonts.Bold}
           size="24px"
         >
-          Sent to verify.
+          {t('sent_modal_head')}
         </Text>
         <Text size="16px">
           <strong>
@@ -416,13 +423,37 @@ export const SubmitBannerPage: NextPage = () => {
           </a>
         </ButtonsWrapper>
       </Modal>
+      <Modal
+        show={noZilPayModal}
+        onClose={() => null}
+      >
+        <Text
+          fontColors={Colors.White}
+          fontVariant={StyleFonts.Bold}
+          size="24px"
+        >
+          {t('doent_installed_zilpay')}
+        </Text>
+        <Text size="16px">
+          {t('doent_installed_zilpay_desc')}
+        </Text>
+        <InstallButton />
+        <Button
+          color={Colors.Warning}
+          fontColors={Colors.Warning}
+          css="margin: 50px;"
+          onClick={() => window.location.reload()}
+        >
+          {t('refresh')}
+        </Button>
+      </Modal>
     </>
   );
 }
 
 export const getStaticProps = async (props: GetServerSidePropsContext) => ({
   props: {
-    ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
+    ...await serverSideTranslations(props.locale || `en`, [`main`, `explorer`, `common`]),
   },
 });
 

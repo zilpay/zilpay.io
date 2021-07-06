@@ -24,8 +24,12 @@
   "unlock": "Unlock",
   "url_placeholder": "Paste here URL like https://dragonzil.xyz",
   "buy_on_zilswap": "Buy ZLP",
+  "sent_modal_head": "Sent to verify.",
   "sent_banner_tx_title": "Your banner under moderation process.",
   "sent_banner_tx": "Wait for the moderators to check your banner and approve or reject it. If your banners contain incorrect content, the moderators will reject it and return some of the tokens (ZLP) spent to banner. If banner will be approved your ZLP will spent as rewards for moderators, platform rewards for Liquidity providers and your banner will show on the ZilPay mobile app explorer.",
   "sent_banner_tx_btn_close": "Close",
-  "sent_banner_tx_btn_view": "ViewBlock"
+  "sent_banner_tx_btn_view": "ViewBlock",
+  "doent_installed_zilpay": "ZIlPay is not installed",
+  "doent_installed_zilpay_desc": "For using application you need install ZIlpay wallet.",
+  "refresh": "Try again"
 }
