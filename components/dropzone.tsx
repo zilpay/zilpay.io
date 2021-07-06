@@ -141,3 +141,5 @@ export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
     </Container>
   );
 };
+
+export default Dropzone;

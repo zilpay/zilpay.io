@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -6,7 +7,6 @@ import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import Slider from 'react-slick';
 import { Text } from 'components/text';
 import { Button } from 'components/button';
 
@@ -15,6 +15,8 @@ import { Explorer, AnApp } from 'mixins/explorer';
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
 import { IPFS } from 'config/ipfs';
+
+const Slider = dynamic(import(`react-slick`));
 
 const Container = styled.div`
   display: flex;

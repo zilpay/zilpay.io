@@ -41,3 +41,5 @@ export const TestimonialsSection: React.FC = () => {
     </Container>
   );
 };
+
+export default TestimonialsSection;

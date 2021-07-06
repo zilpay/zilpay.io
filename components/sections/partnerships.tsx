@@ -119,3 +119,5 @@ export const PartnershipsSection: React.FC = () => {
     </Container>
   );
 };
+
+export default PartnershipsSection;

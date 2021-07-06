@@ -95,3 +95,5 @@ export const AppsSection: React.FC = () => {
     </Container>
   );
 };
+
+export default AppsSection;

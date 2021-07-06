@@ -33,3 +33,5 @@ export const InfoSection: React.FC = () => {
     </Container>
   );
 };
+
+export default InfoSection;

@@ -52,3 +52,5 @@ export const TeamSection: React.FC = () => {
     </Container>
   );
 };
+
+export default TeamSection;

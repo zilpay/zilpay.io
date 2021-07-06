@@ -1,18 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import {
-  MainSection,
-  InfoSection,
-  FeaturesSection,
-  AppsSection,
-  PartnershipsSection,
-  TestimonialsSection,
-  TeamSection
-} from 'components/sections';
+const MainSection = dynamic(import(`components/sections/main`));
+const InfoSection = dynamic(import(`components/sections/info`));
+const FeaturesSection = dynamic(import(`components/sections/features`));
+const AppsSection = dynamic(import(`components/sections/apps`));
+const PartnershipsSection = dynamic(import(`components/sections/partnerships`));
+const TestimonialsSection = dynamic(import(`components/sections/testimonials`));
+const TeamSection = dynamic(import(`components/sections/team`));
 
 export const MainPage: NextPage = () => {
   const { t } = useTranslation(`main`);

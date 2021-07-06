@@ -2,6 +2,7 @@ import 'react-rangeslider/lib/index.css';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
 import BN from 'bn.js';
+import dynamic from 'next/dynamic';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -9,13 +10,9 @@ import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Dropzone } from 'components/dropzone';
 import { Text } from 'components/text';
-import { BannerImage } from 'components/banner-image';
-import Slider from 'react-rangeslider';
 import { Input } from 'components/input';
 import { Button } from 'components/button';
-import Loader from 'react-loader-spinner';
 import { Modal } from 'components/modal';
 import { InstallButton } from 'components/sections/main';
 
@@ -28,6 +25,11 @@ import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
 import { VIEW_BLOCK } from 'config/explorer';
 import { StorageFields } from 'config/storage-fields';
+
+const Dropzone = dynamic(import(`components/dropzone`));
+const BannerImage = dynamic(import(`components/banner-image`));
+const Slider = dynamic(import(`react-rangeslider`));
+const Loader = dynamic(import(`react-loader-spinner`));
 
 const Container = styled.div`
   display: flex;

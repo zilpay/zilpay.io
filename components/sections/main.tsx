@@ -140,3 +140,5 @@ export const MainSection: React.FC = () => {
     </Container>
   );
 };
+
+export default MainSection;

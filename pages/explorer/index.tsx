@@ -1,19 +1,21 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-import Slider from 'react-slick';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { AppCard } from 'components/app-card';
 import { Button } from 'components/button';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, Banner } from 'mixins/explorer';
 import { Categories } from 'config/categories';
 import { IPFS } from 'config/ipfs';
+ 
+const Slider = dynamic(import(`react-slick`));
+const AppCard = dynamic(import(`components/app-card`));
 
 const Container = styled.div`
   display: flex;

@@ -43,17 +43,19 @@ type Prop = {
 };
 
 export const AppCard: React.FC<Prop> = ({ url, title }) => (
-    <Container>
-      <ImageContainer
-        src={url}
-        alt="image"
-      />
-      <Text
-        fontColors={Colors.White}
-        fontVariant={StyleFonts.SemiBold}
-        size="22px"
-      >
-        {title}
-      </Text>
-    </Container>
-  );
+  <Container>
+    <ImageContainer
+      src={url}
+      alt="image"
+    />
+    <Text
+      fontColors={Colors.White}
+      fontVariant={StyleFonts.SemiBold}
+      size="22px"
+    >
+      {title}
+    </Text>
+  </Container>
+);
+
+export default AppCard;

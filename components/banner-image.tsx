@@ -63,3 +63,5 @@ export const BannerImage: React.FC<Prop> = ({ hash, onRemove }) => {
     </Container>
   )
 };
+
+export default BannerImage;

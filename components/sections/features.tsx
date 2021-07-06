@@ -69,3 +69,5 @@ export const FeaturesSection: React.FC = () => {
     </Container>
   );
 };
+
+export default FeaturesSection;
