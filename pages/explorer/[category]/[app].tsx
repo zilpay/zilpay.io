@@ -15,7 +15,6 @@ import { Explorer, AnApp } from 'mixins/explorer';
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
 import { IPFS } from 'config/ipfs';
-import { ZilPayType } from '@/types';
 
 const Container = styled.div`
   display: flex;
