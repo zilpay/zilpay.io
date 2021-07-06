@@ -44,39 +44,39 @@ type Prop = {
 };
 
 const approvedImages = [
-  'image/jpeg',
-  'image/webp',
-  'image/png',
-  'image/jpg'
+  `image/jpeg`,
+  `image/webp`,
+  `image/png`,
+  `image/jpg`
 ];
 export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
   const { t } = useTranslation(`explorer`);
 
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState(``);
   const [loading, setLoading] = React.useState(false);
 
   const onDrop = React.useCallback(async([file]) => {
     setLoading(true);
-    setError('');
+    setError(``);
     const { type, size } = file;
     const mb = size / 1000000;
 
     if (mb > 2) {
-      setError(t('error_0'));
+      setError(t(`error_0`));
       setLoading(false);
       return null;
     }
 
     if (!approvedImages.includes(type)) {
-      setError(t('error_1'));
+      setError(t(`error_1`));
       setLoading(false);
       return null;
     }
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append(`file`, file);
     const options = {
-      method: 'POST',
+      method: `POST`,
       body: formData
     };
 
@@ -86,7 +86,7 @@ export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
 
       onUploaded(result.Hash);
     } catch (err) {
-      setError(t('error_2'));
+      setError(t(`error_2`));
     }
 
     setLoading(false);
@@ -118,7 +118,7 @@ export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
             size="25px"
             css="text-align: center;"
           >
-            {t('uploading')}
+            {t(`uploading`)}
           </Text>
         </LoadingContainer>
       ) : isDragActive ? (
@@ -127,7 +127,7 @@ export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
           size="25px"
           css="text-align: center;"
         >
-          {t('drop_file_here')}
+          {t(`drop_file_here`)}
         </Text>
       ) : (
         <Text
@@ -135,7 +135,7 @@ export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
           size="25px"
           css="text-align: center;"
         >
-          {t('try_drop_file')}
+          {t(`try_drop_file`)}
         </Text>
       )}
     </Container>

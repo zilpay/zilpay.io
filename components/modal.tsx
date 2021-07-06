@@ -1,10 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Text } from 'components/text';
-
 import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
 
 const Container = styled.div`
   position: fixed;

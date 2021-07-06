@@ -88,7 +88,7 @@ export const CategoryPage: NextPage = () => {
         <Wrapper>
           {items.length === 0 ? (
             <Text size="25px">
-              {t('no_apps')}
+              {t(`no_apps`)}
             </Text>
           ) : null}
           {items.map((el) => (
@@ -132,10 +132,10 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => ({
 export async function getStaticPaths() {
   return {
     paths: [
-      '/explorer/[category]',
+      `/explorer/[category]`,
       {
         params: {
-          category: '0'
+          category: `0`
         }
       }
     ],

@@ -58,7 +58,7 @@ export const BannerImage: React.FC<Prop> = ({ hash, onRemove }) => {
         fontVariant={StyleFonts.Bold}
         size="20px"
       >
-        {t('remove_item')}
+        {t(`remove_item`)}
       </Button>
     </Container>
   )

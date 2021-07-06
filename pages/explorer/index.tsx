@@ -52,10 +52,10 @@ const SubmitWrapper = styled.div`
 `;
 
 const settings = {
-  className: "center",
+  className: `center`,
   centerMode: true,
   infinite: true,
-  centerPadding: "60px",
+  centerPadding: `60px`,
   speed: 500,
   slidesToShow: 3,
   responsive: [
@@ -146,12 +146,12 @@ export const ExplorerMainPage: NextPage = () => {
         <SubmitWrapper>
           <Link href="/explorer/submit/banner">
             <Button>
-              {t('submit_ad')}
+              {t(`submit_ad`)}
             </Button>
           </Link>
           <Link href="/explorer/submit/app">
             <Button>
-              {t('submit_app')}
+              {t(`submit_app`)}
             </Button>
           </Link>
         </SubmitWrapper>

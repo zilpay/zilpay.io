@@ -18,6 +18,10 @@
   "extends": ["airbnb", "prettier"],
   "rules": {
     "camelcase": "off",
+    "no-underscore-dangle": "off",
+    "no-nested-ternary": "off",
+    "consistent-return": "off",
+    "jsx-a11y/label-has-associated-control": "off",
     "import/prefer-default-export": "off",
     "react/prop-types": "off",
     "react/jsx-filename-extension": "off",

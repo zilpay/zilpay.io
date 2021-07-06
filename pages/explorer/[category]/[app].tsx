@@ -46,10 +46,10 @@ const PreviewImg = styled.img`
 `;
 
 const settings = {
-  className: "center",
+  className: `center`,
   centerMode: true,
   infinite: true,
-  centerPadding: "60px",
+  centerPadding: `60px`,
   speed: 500,
   slidesToShow: 3,
   responsive: [
@@ -76,15 +76,15 @@ export const AppPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
   const [app, setApp] = React.useState<AnApp | null>(null);
-  const [description, setDescription] = React.useState<string>('');
+  const [description, setDescription] = React.useState<string>(``);
 
   React.useEffect(() => {
     if (zilpay.instance) {
       const explorer = new Explorer(zilpay.instance);
-      const { category, app } = router.query;
+      const { category } = router.query;
 
       explorer
-        .getApplication(Number(category), String(app))
+        .getApplication(Number(category), String(router.query.app))
         .then((e) => {
           setApp(e);
 
@@ -95,7 +95,7 @@ export const AppPage: NextPage = () => {
           return fetch(`${IPFS}/${e?.description}`);
         })
         .then((res) => res.text())
-        .then((t) => setDescription(t))
+        .then((des) => setDescription(des))
         .catch(() => null);
     }
   }, [zilpay, router.query.category]);
@@ -145,10 +145,10 @@ export const AppPage: NextPage = () => {
           </Text>
           <a
             href={app?.url}
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             <Button upperCase>
-              {t('launch_btn')}
+              {t(`launch_btn`)}
             </Button>
           </a>
         </Wrapper>
@@ -166,11 +166,11 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => ({
 export async function getStaticPaths() {
   return {
     paths: [
-      '/explorer/[category]/[app]',
+      `/explorer/[category]/[app]`,
       {
         params: {
-          category: '0',
-          app: '0'
+          category: `0`,
+          app: `0`
         }
       }
     ],

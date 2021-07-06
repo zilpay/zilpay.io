@@ -32,7 +32,7 @@ class ZilPayDocument extends Document {
   render() {
     return (
       <Html>
-        <head>
+        <Head>
           <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
           <link rel="apple-touch-icon" type="image/png" sizes="57x57" href="/favicon/apple-icon-57x57.png" />
           <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="/favicon/apple-icon-60x60.png" />
@@ -48,8 +48,7 @@ class ZilPayDocument extends Document {
           <link rel="apple-touch-icon" type="image/png" sizes="96x96" href="/favicon/apple-icon-96x96.png" />
           <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="/favicon/apple-icon-16x16.png" />
           <link rel="manifest" href="/favicon/manifest.json" />
-        </head>
-        <Head />
+        </Head>
         <body>
           <Main />
           <NextScript />

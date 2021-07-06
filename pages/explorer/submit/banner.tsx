@@ -99,40 +99,40 @@ export const SubmitBannerPage: NextPage = () => {
   const [modalShow, setModalShow] = React.useState(false);
   const [noZilPayModal, setNoZilPayModal] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
-  const [hash, setHash] = React.useState('');
-  const [url, setUrl] = React.useState('');
+  const [hash, setHash] = React.useState(``);
+  const [url, setUrl] = React.useState(``);
   const [amount, setAmount] = React.useState(500);
   const [blocks, setBlocks] = React.useState(1);
-  const [reserve, setReserve] = React.useState('3000');
+  const [reserve, setReserve] = React.useState(`3000`);
   const [approved, setApproved] = React.useState(new BN(0));
   const [balance, setBalance] = React.useState(0);
-  const [txId, setTxId] = React.useState('');
+  const [txId, setTxId] = React.useState(``);
 
   const bnAmount = React.useMemo(() => {
     const _value = new BN(Math.round(amount));
     return _value.mul(ZLPExplorer.DECIMAL);
   }, [amount]);
 
-  const hanldeUploaded = React.useCallback((hash: string) => {
-    window.localStorage.setItem(StorageFields.BannerHash, hash);
-    setHash(hash);
+  const hanldeUploaded = React.useCallback((ipfsHash: string) => {
+    window.localStorage.setItem(StorageFields.BannerHash, ipfsHash);
+    setHash(ipfsHash);
   }, []);
   const hanldeRemoveImage = React.useCallback(() => {
     window.localStorage.removeItem(StorageFields.BannerHash);
-    setHash('');
+    setHash(``);
   }, []);
 
-  const handleChangeAmount = React.useCallback((amount: number) => {
-    const { blocks } = ExplorerBanner.estimateBlocks(amount, reserve);
+  const handleChangeAmount = React.useCallback((amountZLP: number) => {
+    const result = ExplorerBanner.estimateBlocks(amountZLP, reserve);
 
-    setAmount(amount);
-    setBlocks(Number(blocks));
+    setAmount(amountZLP);
+    setBlocks(Number(result.blocks));
   }, [reserve]);
-  const handleChangeBlocks = React.useCallback((blocks: number) => {
+  const handleChangeBlocks = React.useCallback((blocksValue: number) => {
     const { price, decimal } = ExplorerBanner.estimateBlocks(1, reserve);
 
-    setAmount(Number(price) / decimal * blocks);
-    setBlocks(blocks);
+    setAmount(Number(price) / decimal * blocksValue);
+    setBlocks(blocksValue);
   }, [reserve]);
   const handleChangeUrl = React.useCallback((value: string) => {
     try {
@@ -157,7 +157,6 @@ export const SubmitBannerPage: NextPage = () => {
           .wallet
           .observableTransaction(TranID)
           .subscribe(async(hashs: string[]) => {
-            console.log(hashs, TranID);
             if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
               setLoading(false);
               const allowances = await zlp.getAllowances(bannerControll.selfAddress);
@@ -201,14 +200,16 @@ export const SubmitBannerPage: NextPage = () => {
       
       setApproved(allowances);
   
-      const balance = await zlp.getBalance(zlp.zilpay.wallet.defaultAccount.base16);
-      const amount = Number(balance) / Number(ZLPExplorer.DECIMAL);
-      setBalance(Math.hypot(Number(amount.toFixed(6))));
+      const ownerBalance = await zlp.getBalance(zlp.zilpay.wallet.defaultAccount.base16);
+      const ownerAmount = Number(ownerBalance) / Number(ZLPExplorer.DECIMAL);
+      setBalance(Math.hypot(Number(ownerAmount.toFixed(6))));
     } catch {
       //
     }
 
     setLoading(false);
+
+    return null;
   }, [zilpay]);
 
   React.useEffect(() => {
@@ -218,10 +219,10 @@ export const SubmitBannerPage: NextPage = () => {
       setHash(String(ipfsHash));
     }
 
-    const url = window.localStorage.getItem(StorageFields.BannerUrl);
+    const stredUrl = window.localStorage.getItem(StorageFields.BannerUrl);
 
-    if (url) {
-      setUrl(url);
+    if (stredUrl) {
+      setUrl(stredUrl);
     }
   }, []);
 
@@ -233,9 +234,9 @@ export const SubmitBannerPage: NextPage = () => {
       if (zlp.zilpay.wallet.isConnect && zlp.zilpay.wallet.isEnable) {
         explorer.getReserve().then((r) => {
           setReserve(r);
-          const { blocks } = ExplorerBanner.estimateBlocks(amount, r);
+          const result = ExplorerBanner.estimateBlocks(amount, r);
 
-          setBlocks(Number(blocks));
+          setBlocks(Number(result.blocks));
         });
 
         handleUpdate();
@@ -245,9 +246,10 @@ export const SubmitBannerPage: NextPage = () => {
           .wallet
           .observableAccount()
           .subscribe(() => handleUpdate());
-            return () => {
-              observable.unsubscribe();
-            }
+
+          return () => {
+            observable.unsubscribe();
+          }
         }
     }
 
@@ -259,10 +261,10 @@ export const SubmitBannerPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>{t('banner_page_title')} - ZilPay</title>
+        <title>{t(`banner_page_title`)} - ZilPay</title>
         <meta
           property="og:title"
-          content={`${t('banner_page_title')} - ZilPay`}
+          content={`${t(`banner_page_title`)} - ZilPay`}
           key="title"
         />
       </Head>
@@ -273,17 +275,17 @@ export const SubmitBannerPage: NextPage = () => {
             fontColors={Colors.White}
             size="25px"
           >
-            {t('banner_page_title')}
+            {t(`banner_page_title`)}
           </Text>
           <a
             href="https://zilswap.io"
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             <Button
               color={balance < amount ? Colors.Warning : Colors.Secondary}
               fontColors={balance < amount ? Colors.Warning : Colors.Secondary}
             >
-              {balance === 0 ? t('buy_on_zilswap') : `${balance} ZLP`}
+              {balance === 0 ? t(`buy_on_zilswap`) : `${balance} ZLP`}
             </Button>
           </a>
         </TitleWrapper>
@@ -297,7 +299,7 @@ export const SubmitBannerPage: NextPage = () => {
             <Dropzone onUploaded={hanldeUploaded}/>
           )}
           <FormWrapper>
-            <label style={{ width: '80%' }}>
+            <label style={{ width: `80%` }}>
               <Text>
                 IPFS HASH
               </Text>
@@ -309,13 +311,13 @@ export const SubmitBannerPage: NextPage = () => {
                 onChange={(e) => setHash(e.target.value)}
               />
             </label>
-            <label style={{ width: '80%' }}>
+            <label style={{ width: `80%` }}>
               <Text>
                 URL
               </Text>
               <Input
                 value={url}
-                placeholder={t('url_placeholder')}
+                placeholder={t(`url_placeholder`)}
                 disabled={loading}
                 type="url"
                 css="width: 100%;"
@@ -334,7 +336,7 @@ export const SubmitBannerPage: NextPage = () => {
               <ButtonsWrapper>
                 <label>
                   <Text>
-                    {t('amount_zlp')}
+                    {t(`amount_zlp`)}
                   </Text>
                   <Input
                     value={amount}
@@ -346,7 +348,7 @@ export const SubmitBannerPage: NextPage = () => {
                 </label>
                 <label>
                   <Text>
-                    {t('blocks_tx')}
+                    {t(`blocks_tx`)}
                   </Text>
                   <Input
                     value={blocks}
@@ -371,14 +373,14 @@ export const SubmitBannerPage: NextPage = () => {
                   css="margin: 30px;"
                   onClick={handleApprove}
                 >
-                  {t('unlock')}
+                  {t(`unlock`)}
                 </Button>
               ) : (
                 <Button
                   css="margin: 30px;"
                   onClick={handlePlace}
                 >
-                  {t('place')}
+                  {t(`place`)}
                 </Button>
               )}
               </>
@@ -395,15 +397,15 @@ export const SubmitBannerPage: NextPage = () => {
           fontVariant={StyleFonts.Bold}
           size="24px"
         >
-          {t('sent_modal_head')}
+          {t(`sent_modal_head`)}
         </Text>
         <Text size="16px">
           <strong>
-            {t('sent_banner_tx_title')}
+            {t(`sent_banner_tx_title`)}
           </strong>
         </Text>
         <Text size="16px">
-          {t('sent_banner_tx')}
+          {t(`sent_banner_tx`)}
         </Text>
         <ButtonsWrapper>
           <Button
@@ -411,14 +413,14 @@ export const SubmitBannerPage: NextPage = () => {
             color={Colors.Warning}
             onClick={() => setModalShow(false)}
           >
-            {t('sent_banner_tx_btn_close')}
+            {t(`sent_banner_tx_btn_close`)}
           </Button>
           <a
             href={`${VIEW_BLOCK}/tx/${txId}`}
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             <Button>
-              {t('sent_banner_tx_btn_view')}
+              {t(`sent_banner_tx_btn_view`)}
             </Button>
           </a>
         </ButtonsWrapper>
@@ -432,10 +434,10 @@ export const SubmitBannerPage: NextPage = () => {
           fontVariant={StyleFonts.Bold}
           size="24px"
         >
-          {t('doent_installed_zilpay')}
+          {t(`doent_installed_zilpay`)}
         </Text>
         <Text size="16px">
-          {t('doent_installed_zilpay_desc')}
+          {t(`doent_installed_zilpay_desc`)}
         </Text>
         <InstallButton />
         <Button
@@ -444,7 +446,7 @@ export const SubmitBannerPage: NextPage = () => {
           css="margin: 50px;"
           onClick={() => window.location.reload()}
         >
-          {t('refresh')}
+          {t(`refresh`)}
         </Button>
       </Modal>
     </>
