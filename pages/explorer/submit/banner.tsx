@@ -31,7 +31,7 @@ const BannerImage = dynamic(import(`components/banner-image`));
 const Slider = dynamic(import(`react-rangeslider`));
 const Loader = dynamic(import(`react-loader-spinner`));
 
-const Container = styled.div`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: left;
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-const FormWrapper = styled.form`
+export const FormWrapper = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,7 +82,7 @@ const ButtonsWrapper = styled.div`
     margin: 10px;
   }
 `;
-const TitleWrapper = styled.aside`
+export const TitleWrapper = styled.aside`
   display: flex;
   align-items: center;
   justify-content: space-between;

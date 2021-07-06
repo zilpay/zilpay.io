@@ -41,6 +41,7 @@ const LoadingContainer = styled.div`
 
 type Prop = {
   onUploaded: (hash: string) => void;
+  title?: string;
 };
 
 const approvedImages = [
@@ -49,7 +50,7 @@ const approvedImages = [
   `image/png`,
   `image/jpg`
 ];
-export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
+export const Dropzone: React.FC<Prop> = ({ title, onUploaded }) => {
   const { t } = useTranslation(`explorer`);
 
   const [error, setError] = React.useState(``);
@@ -135,7 +136,7 @@ export const Dropzone: React.FC<Prop> = ({ onUploaded }) => {
           size="25px"
           css="text-align: center;"
         >
-          {t(`try_drop_file`)}
+          {Boolean(title) ? title : t(`try_drop_file`)}
         </Text>
       )}
     </Container>

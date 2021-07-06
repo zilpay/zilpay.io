@@ -9,12 +9,14 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Text } from 'components/text';
 import { Button } from 'components/button';
+import { PreviewImg } from 'components/preview-img';
 
 import { useZilPay } from 'mixins/zilpay';
 import { Explorer, AnApp } from 'mixins/explorer';
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
 import { IPFS } from 'config/ipfs';
+import { sliderProps } from 'config/slider';
 
 const Slider = dynamic(import(`react-slick`));
 
@@ -41,38 +43,7 @@ const Wrapper = styled.div`
     max-width: initial;
   }
 `;
-const PreviewImg = styled.img`
-  height: 500px
-  width: auto;
-  border-radius: 8px;
-`;
 
-const settings = {
-  className: `center`,
-  centerMode: true,
-  infinite: true,
-  centerPadding: `60px`,
-  speed: 500,
-  slidesToShow: 3,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-        infinite: true,
-        dots: true
-      }
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
-  ]
-};
 export const AppPage: NextPage = () => {
   const router = useRouter();
   const { t } = useTranslation(`explorer`);
@@ -130,7 +101,7 @@ export const AppPage: NextPage = () => {
         </TitleWrapper>
         <Wrapper>
           <div>
-            <Slider {...settings}>
+            <Slider {...sliderProps}>
               {app?.images.map((image) => (
                 <PreviewImg
                   src={`${IPFS}/${image}`}
