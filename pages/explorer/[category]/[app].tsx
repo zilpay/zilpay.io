@@ -166,13 +166,6 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => ({
 export async function getStaticPaths() {
   return {
     paths: [
-      `/explorer/[category]/[app]`,
-      {
-        params: {
-          category: `0`,
-          app: `0`
-        }
-      }
     ],
     fallback: true
   }
