@@ -72,7 +72,7 @@ export const FormWrapper = styled.form`
     color: ${Colors.Secondary};
   }
 `;
-const ButtonsWrapper = styled.div`
+export const ButtonsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -177,7 +177,7 @@ export const SubmitBannerPage: NextPage = () => {
       setLoading(true);
       try {
         const bannerControll = new ExplorerBanner(zilpay.instance);
-        const { TranID } = await bannerControll.place(amount, url, hash);
+        const { TranID } = await bannerControll.placeBanner(amount, url, hash);
  
         setTxId(TranID);
         setModalShow(true);

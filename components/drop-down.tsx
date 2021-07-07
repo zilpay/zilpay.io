@@ -8,7 +8,7 @@ type ListType = {
   show: boolean;
 };
 
-const Button = styled.div`
+const Button = styled.button`
   cursor: pointer;
   font-family: ${StyleFonts.SemiBold};
   font-size: 16px;
@@ -16,12 +16,10 @@ const Button = styled.div`
   text-transform: uppercase;
 
   padding: 0.8rem;
-  min-width: 142px;
+  min-width: 160px;
   text-align: center;
   background-color: ${Colors.Dark};
   user-select: none;
-
-  width: 142.5px;
 
   border-left: 1px solid ${Colors.Secondary};
   border-top: 1px solid ${Colors.Secondary};
@@ -31,11 +29,13 @@ const Button = styled.div`
   :hover {
     color: ${Colors.White};
   }
+
+  :disabled {
+    opacity: 0.7;
+  }
 `;
 const List = styled.ul`
   position: absolute;
-
-  width: 168px;
 
   border-left: 1px solid ${Colors.Secondary};
   border-right: 1px solid ${Colors.Secondary};
@@ -54,8 +54,10 @@ const Item = styled.li`
   color: ${Colors.Text};
   font-family: ${StyleFonts.SemiBold};
   text-transform: uppercase;
+  font-size: 16px;
 
-  padding: 10px;
+  min-width: 133px;
+  padding: 0.8rem;
 
   :hover {
     border-top: 1px solid ${Colors.Secondary};
@@ -70,10 +72,11 @@ type Prop = {
     name: string;
   }[];
   selected: number;
+  disabled?: boolean;
   onSelect: (index: number) => void;
 };
 
-export const DropDown: React.FC<Prop> = ({ items, selected, onSelect }) => {
+export const DropDown: React.FC<Prop> = ({ items, selected, disabled, onSelect }) => {
   const [show, setShow] = React.useState(false);
 
   const handleOnSelect = React.useCallback((index: number) => {
@@ -85,6 +88,7 @@ export const DropDown: React.FC<Prop> = ({ items, selected, onSelect }) => {
     <div>
       <Button
         show={show}
+        disabled={Boolean(disabled)}
         onClick={() => setShow(!show)}
       >
         {items[selected].name}
@@ -93,7 +97,7 @@ export const DropDown: React.FC<Prop> = ({ items, selected, onSelect }) => {
         {items.filter((el) => el.value >= 0).map((el, index) => (
           <Item
             key={el.value}
-            onClick={() => handleOnSelect(index)}
+            onClick={() => handleOnSelect(index + 1)}
           >
             {el.name}
           </Item>

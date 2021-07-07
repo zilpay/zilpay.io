@@ -4,6 +4,15 @@ import BN from 'bn.js';
 
 import { ZLPExplorer } from './zlp';
 
+export interface UploadApp {
+  title: string;
+  desUrl: string;
+  url: string;
+  ipfsImage: string[];
+  ipfsIcon: string;
+  category: string | number;
+}
+
 export class ExplorerBanner extends ZilPayBase {
 
   public static CUSTOMIZATION = new BN('100000000');
@@ -73,7 +82,7 @@ export class ExplorerBanner extends ZilPayBase {
     return this._contract[this.net];
   }
 
-  public async place(amount: number, url: string, ipfs: string) {
+  public async placeBanner(amount: number, url: string, ipfs: string) {
     const _amount = new BN(amount).mul(ZLPExplorer.DECIMAL);
     const params = [
       {
@@ -94,6 +103,50 @@ export class ExplorerBanner extends ZilPayBase {
     ];
     const contractAddress = this._contract[this.net];
     const transition = 'AddAdvertising';
+
+    return this.call({
+      params,
+      contractAddress,
+      transition,
+      amount: '0'
+    });
+  }
+
+  public addApplication(data: UploadApp) {
+    const params = [
+      {
+        vname: 'title',
+        type: 'String',
+        value: data.title
+      },
+      {
+        vname: 'des_url',
+        type: 'String',
+        value: data.desUrl
+      },
+      {
+        vname: 'url',
+        type: 'String',
+        value: data.url
+      },
+      {
+        vname: 'ipfs_image',
+        type: 'List String',
+        value: data.ipfsImage
+      },
+      {
+        vname: 'ipfs_icon',
+        type: 'String',
+        value: data.ipfsIcon
+      },
+      {
+        vname: 'category',
+        type: 'Uint32',
+        value: String(data.category)
+      }
+    ];
+    const contractAddress = this._contract[this.net];
+    const transition = 'AddApp';
 
     return this.call({
       params,

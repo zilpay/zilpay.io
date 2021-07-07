@@ -1,5 +1,6 @@
 {
   "head_title": "Explorer - ZIlPay",
+  "category": "Category",
   "cat_0": "Games",
   "cat_1": "Finance",
   "cat_2": "Social",
@@ -29,7 +30,12 @@
   "sent_banner_tx": "Wait for the moderators to check your banner and approve or reject it. If your banners contain incorrect content, the moderators will reject it and return some of the tokens (ZLP) spent to banner. If banner will be approved your ZLP will spent as rewards for moderators, platform rewards for Liquidity providers and your banner will show on the ZilPay mobile app explorer.",
   "sent_banner_tx_btn_close": "Close",
   "sent_banner_tx_btn_view": "ViewBlock",
+  "sent_app_tx": "Wait for the moderators to check your Dapp and approve or reject it. If your Dapp contain incorrect content, the moderators will reject it. If moderators will approve your DApp it will show on the ZilPay mobile app explorer.",
   "doent_installed_zilpay": "ZIlPay is not installed",
   "doent_installed_zilpay_desc": "For using application you need install ZIlpay wallet.",
-  "refresh": "Try again"
+  "refresh": "Try again",
+  "url_error": "Incorrect URL",
+  "icon_error": "Incorrect ICON",
+  "title_error": "Incorrect Title",
+  "description_error": "Incorrect description"
 }

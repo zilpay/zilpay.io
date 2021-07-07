@@ -16,6 +16,15 @@ export interface AnApp {
   owner: string;
 }
 
+export interface UploadApp {
+  title: string;
+  desUrl: string;
+  url: string;
+  ipfsImage: string[];
+  ipfsIcon: string;
+  category: string | number;
+}
+
 export class Explorer extends ZilPayBase {
 
   private _contract: {

@@ -12,7 +12,7 @@ type Prop = {
   css?: string;
 };
 
-export const Button = styled.div`
+export const Button = styled.button`
   cursor: pointer;
   font-family: ${(props: Prop) => props.fontVariant};
   font-size: ${(props: Prop) => props.size};
@@ -30,6 +30,10 @@ export const Button = styled.div`
   :hover {
     color: ${Colors.White};
     border: solid 1px ${Colors.White};
+  }
+
+  :disabled {
+    opacity: 0.7;
   }
 
   ${(props: Prop) => props.css}

@@ -6,6 +6,7 @@ export enum StorageFields {
   AppIconHash = 'app_icon_hash',
   AppTitle = 'app_title',
   AppUrl = 'app_url',
+  AppCategory = 'app_category',
   AppDescription = 'app_description',
   AppDescriptionHash = 'app_description_hash'
 }
