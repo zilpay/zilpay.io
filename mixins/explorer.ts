@@ -40,7 +40,7 @@ export class Explorer extends ZilPayBase {
     super(zilpay);
 
     this._contract = {
-      mainnet: '0x0c20e40b3fe650c4c767db6bbb93db8295beac40',
+      mainnet: '0xf27a87c0a82f7ddb1daed81904fcbee253d9fc29',
       testnet: '0x223edfb1376e68142a35d5612dd548c3f61fd992'
     };
   }

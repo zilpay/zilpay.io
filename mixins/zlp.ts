@@ -16,7 +16,7 @@ export class ZLPExplorer extends ZilPayBase {
     super(zilpay);
 
     this._contract = {
-      mainnet: '0x0c20e40b3fe650c4c767db6bbb93db8295beac40',
+      mainnet: '0xfbd07e692543d3064b9cf570b27faabfd7948da4',
       testnet: '0x4a0cd578a55e809297e3acac13a08de2a58e92f8'
     };
   }
