@@ -10,6 +10,7 @@ import { Container, FormWrapper } from './banner';
 import { PreviewImg } from 'components/preview-img';
 import { Input } from 'components/input';
 import { Text } from 'components/text';
+import { DropDown } from 'components/drop-down';
 
 import { useZilPay } from 'mixins/zilpay';
 
@@ -43,6 +44,36 @@ const WrapperDropZOne = styled.line`
     width: auto;
   }
 `;
+const list = [
+  {
+    name: "Category",
+    value: -1
+  },
+  {
+    name: "Games",
+    value: 0
+  },
+  {
+    name: "Finance",
+    value: 1
+  },
+  {
+    name: "Social",
+    value: 2
+  },
+  {
+    name: "High-Risk",
+    value: 3
+  },
+  {
+    name: "Exchange",
+    value: 4
+  },
+  {
+    name: "Gambling",
+    value: 5
+  }
+];
 export const SubmitAppPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
@@ -54,6 +85,7 @@ export const SubmitAppPage: NextPage = () => {
   const [descriptionHash, setDescriptionHash] = React.useState('');
   const [url, setUrl] = React.useState('');
   const [iconHash, setIconHash] = React.useState('');
+  const [category, setCategory] = React.useState(0);
 
   const hanldeUploadedBanner = React.useCallback((ipfsHash: string) => {
     const hashList = hashs;
@@ -208,6 +240,11 @@ export const SubmitAppPage: NextPage = () => {
                 onChange={(e) => handleChangeUrl(e.target.value)}
               />
             </label>
+            <DropDown
+              items={list}
+              selected={category}
+              onSelect={setCategory}
+            />
             <Button onClick={hanldeUploadDescription}>
               upload
             </Button>
