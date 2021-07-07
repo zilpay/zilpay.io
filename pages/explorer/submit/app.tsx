@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Container, FormWrapper, ButtonsWrapper } from './banner';
 import { PreviewImg } from 'components/preview-img';
 import { Input } from 'components/input';
 import { Text } from 'components/text';
@@ -25,6 +24,7 @@ import { ExplorerBanner } from 'mixins/place-banner';
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 import { VIEW_BLOCK } from '@/config/explorer';
+import { Container, FormWrapper, ButtonsWrapper } from './banner';
 
 const Dropzone = dynamic(import(`components/dropzone`));
 const BannerImage = dynamic(import(`components/banner-image`));
@@ -56,45 +56,45 @@ export const SubmitAppPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
 
-  const [error, setError] = React.useState('');
+  const [error, setError] = React.useState(``);
   const [modalShow, setModalShow] = React.useState(false);
   const [txId, setTxId] = React.useState(``);
   const [noZilPayModal, setNoZilPayModal] = React.useState(false);
   const [hashs, setHashs] = React.useState<string[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const [title, setTitle] = React.useState('');
-  const [description, setDescription] = React.useState('');
-  const [url, setUrl] = React.useState('');
-  const [iconHash, setIconHash] = React.useState('');
+  const [title, setTitle] = React.useState(``);
+  const [description, setDescription] = React.useState(``);
+  const [url, setUrl] = React.useState(``);
+  const [iconHash, setIconHash] = React.useState(``);
   const [category, setCategory] = React.useState(0);
 
   const list = [
     {
-      name: t('category'),
+      name: t(`category`),
       value: -1
     },
     {
-      name: t('cat_0'),
+      name: t(`cat_0`),
       value: 0
     },
     {
-      name: t('cat_1'),
+      name: t(`cat_1`),
       value: 1
     },
     {
-      name: t('cat_2'),
+      name: t(`cat_2`),
       value: 2
     },
     {
-      name: t('cat_3'),
+      name: t(`cat_3`),
       value: 3
     },
     {
-      name: t('cat_4'),
+      name: t(`cat_4`),
       value: 4
     },
     {
-      name: t('cat_5'),
+      name: t(`cat_5`),
       value: 5
     }
   ];
@@ -102,35 +102,35 @@ export const SubmitAppPage: NextPage = () => {
   const hanldeUploadedBanner = React.useCallback((ipfsHash: string) => {
     const hashList = hashs;
 
-    setError('');
+    setError(``);
     hashList.push(ipfsHash);
     window.localStorage.setItem(StorageFields.AppHashSet, JSON.stringify(hashs));
 
     setHashs(hashList);
   }, []);
   const hanldeUploadedIcon = React.useCallback((ipfsHash: string) => {
-    setError('');
+    setError(``);
     window.localStorage.setItem(StorageFields.AppIconHash, ipfsHash);
     setIconHash(ipfsHash);
   }, []);
 
   const handleChangeTitle = React.useCallback((content: string) => {
-    setError('');
+    setError(``);
     window.localStorage.setItem(StorageFields.AppTitle, content);
     setTitle(content);
   }, []);
   const handleChangeDescription = React.useCallback((content: string) => {
-    setError('');
+    setError(``);
     window.localStorage.setItem(StorageFields.AppDescription, content);
     setDescription(content);
   }, []);
   const handleChangeUrl = React.useCallback((content: string) => {
-    setError('');
+    setError(``);
     window.localStorage.setItem(StorageFields.AppUrl, content);
     setUrl(content);
   }, []);
   const handleChangeCategory = React.useCallback((content: number) => {
-    setError('');
+    setError(``);
     window.localStorage.setItem(StorageFields.AppCategory, String(content));
     setCategory(content);
   }, []);
@@ -141,25 +141,25 @@ export const SubmitAppPage: NextPage = () => {
     }
 
     setLoading(true);
-    setError('');
+    setError(``);
 
     if (!url) {
-      setError(t('url_error'));
+      setError(t(`url_error`));
       return null;
     }
 
     if (!iconHash) {
-      setError(t('icon_error'));
+      setError(t(`icon_error`));
       return null;
     }
 
     if (!title) {
-      setError(t('title_error'));
+      setError(t(`title_error`));
       return null;
     }
 
     if (!description) {
-      setError(t('description_error'));
+      setError(t(`description_error`));
       return null;
     }
 
@@ -209,10 +209,10 @@ export const SubmitAppPage: NextPage = () => {
       setTitle(appTitle);
     }
 
-    const iconHash = window.localStorage.getItem(StorageFields.AppIconHash);
+    const icon = window.localStorage.getItem(StorageFields.AppIconHash);
     
-    if (iconHash) {
-      setIconHash(iconHash);
+    if (icon) {
+      setIconHash(icon);
     }
 
     const appUrl = window.localStorage.getItem(StorageFields.AppUrl);
@@ -268,10 +268,10 @@ export const SubmitAppPage: NextPage = () => {
               />
             </WrapperDropZOne>
           ) : (
-            <div style={{ margin: '33px' }}>
+            <div style={{ margin: `33px` }}>
               <BannerImage
                 hash={iconHash}
-                onRemove={() => hanldeUploadedIcon('')}
+                onRemove={() => hanldeUploadedIcon(``)}
               />
             </div>
           )}
@@ -297,7 +297,7 @@ export const SubmitAppPage: NextPage = () => {
                 value={title}
                 disabled={loading}
                 maxLength={30}
-                placeholder={'DragonZIL'}
+                placeholder="DragonZIL"
                 type="text"
                 css="width: 100%;"
                 onChange={(e) => handleChangeTitle(e.target.value)}
@@ -311,7 +311,7 @@ export const SubmitAppPage: NextPage = () => {
                 value={description}
                 disabled={loading}
                 maxLength={200}
-                placeholder={'The best game of zilliqa'}
+                placeholder="The best game of zilliqa"
                 type="text"
                 css="width: 100%;"
                 onChange={(e) => handleChangeDescription(e.target.value)}
@@ -325,7 +325,7 @@ export const SubmitAppPage: NextPage = () => {
                 value={url}
                 disabled={loading}
                 type="text"
-                placeholder={'https://dragonzil.xyz/'}
+                placeholder="https://dragonzil.xyz/"
                 css="width: 100%;"
                 onChange={(e) => handleChangeUrl(e.target.value)}
               />
@@ -342,7 +342,7 @@ export const SubmitAppPage: NextPage = () => {
                   height={20}
                   width={20}
                 />
-              ): 'Upload'}
+              ): `Upload`}
             </Button>
           </FormWrapper>
         </Wrapper>

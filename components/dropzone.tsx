@@ -136,7 +136,7 @@ export const Dropzone: React.FC<Prop> = ({ title, onUploaded }) => {
           size="25px"
           css="text-align: center;"
         >
-          {Boolean(title) ? title : t(`try_drop_file`)}
+          {title || t(`try_drop_file`)}
         </Text>
       )}
     </Container>

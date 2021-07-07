@@ -13,7 +13,6 @@ import { useZilPay } from 'mixins/zilpay';
 import { Explorer, Banner } from 'mixins/explorer';
 import { Categories } from 'config/categories';
 import { IPFS } from 'config/ipfs';
-import { sliderProps } from 'config/slider';
  
 const Slider = dynamic(import(`react-slick`));
 const AppCard = dynamic(import(`components/app-card`));
@@ -90,7 +89,7 @@ export const ExplorerMainPage: NextPage = () => {
       <Container>
         <div>
           <Slider>
-            {items.map((el, index) => (
+            {items.map((el) => (
               <div key={el.ipfs}>
                 <BannerLink
                   href={el.url}

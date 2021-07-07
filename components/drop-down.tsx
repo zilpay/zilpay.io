@@ -43,7 +43,7 @@ const List = styled.ul`
 
   background-color: ${Colors.Dark};
 
-  display: ${(p: ListType) => p.show ? 'block' : 'none'};
+  display: ${(p: ListType) => p.show ? `block` : `none`};
 `;
 const Item = styled.li`
   cursor: pointer;
