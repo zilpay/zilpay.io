@@ -105,7 +105,7 @@ export const SubmitBannerPage: NextPage = () => {
   const [url, setUrl] = React.useState(``);
   const [amount, setAmount] = React.useState(500);
   const [blocks, setBlocks] = React.useState(1);
-  const [reserve, setReserve] = React.useState(`3000`);
+  const [reserve, setReserve] = React.useState(`0`);
   const [approved, setApproved] = React.useState(new BN(0));
   const [balance, setBalance] = React.useState(0);
   const [txId, setTxId] = React.useState(``);
@@ -160,13 +160,13 @@ export const SubmitBannerPage: NextPage = () => {
           .observableTransaction(TranID)
           .subscribe(async(hashs: string[]) => {
             if (Array.isArray(hashs) && hashs[0] && hashs[0] === TranID) {
-              setLoading(false);
               const allowances = await zlp.getAllowances(bannerControll.selfAddress);
     
               setApproved(allowances);
               observer.unsubscribe();
+              setLoading(false);
             }
-          }); 
+          });
       } catch {
         setLoading(false);
       }

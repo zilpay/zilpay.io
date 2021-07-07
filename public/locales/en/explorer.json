@@ -37,5 +37,8 @@
   "url_error": "Incorrect URL",
   "icon_error": "Incorrect ICON",
   "title_error": "Incorrect Title",
-  "description_error": "Incorrect description"
+  "description_error": "Incorrect description",
+  "not_enough_images_error": "Promotion Images not engouh minimum 3",
+  "title": "DApp Title",
+  "app_description": "DApp Description"
 }

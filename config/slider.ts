@@ -4,7 +4,7 @@ export const sliderProps = {
   infinite: true,
   centerPadding: `60px`,
   speed: 500,
-  slidesToShow: 3,
+  slidesToShow: 1,
   slidesToScroll: 2,
   responsive: [
     {

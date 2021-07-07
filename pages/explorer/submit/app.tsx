@@ -14,7 +14,7 @@ import { Modal } from 'components/modal';
 import { useZilPay } from 'mixins/zilpay';
 
 import { sliderProps } from 'config/slider';
-import { IPFS, INFURA } from 'config/ipfs';
+import { INFURA } from 'config/ipfs';
 import { StorageFields } from '@/config/storage-fields';
 import { Button } from '@/components/button';
 
@@ -39,8 +39,14 @@ const Wrapper = styled.main`
   margin: 30px;
 
   div > .slick-slider {
-    width: 90vw;
+    width: 50vw;
     max-width: initial;
+  }
+
+  @media (max-width: 900px) {
+    div > .slick-slider {
+      width: 90vw;
+    }
   }
 `;
 const WrapperDropZOne = styled.line`
@@ -107,6 +113,10 @@ export const SubmitAppPage: NextPage = () => {
 
     setHashs(hashList);
   }, []);
+  const hanldeAddIPFS = React.useCallback((e: React.FocusEvent<HTMLInputElement>) => {
+    hanldeUploadedBanner(e.target.value);
+    e.target.value = '';
+  }, []);
   const hanldeUploadedIcon = React.useCallback((ipfsHash: string) => {
     setError(``);
     window.localStorage.setItem(StorageFields.AppIconHash, ipfsHash);
@@ -149,6 +159,11 @@ export const SubmitAppPage: NextPage = () => {
 
     if (!url) {
       setError(t(`url_error`));
+      return null;
+    }
+
+    if (hashs.length < 2) {
+      setError(t(`not_enough_images_error`));
       return null;
     }
 
@@ -261,8 +276,22 @@ export const SubmitAppPage: NextPage = () => {
               ))}
             </Slider>
           </div>
-          {hashs.length < 4 ? (
-            <Dropzone onUploaded={hanldeUploadedBanner}/>
+          {hashs.length < 3 ? (
+            <>
+              <Dropzone onUploaded={hanldeUploadedBanner}/>
+              <label style={{ width: `80%` }}>
+                <Text>
+                  add IPFS image manually
+                </Text>
+                <Input
+                  disabled={loading}
+                  placeholder="Pass here your IPFS"
+                  type="text"
+                  css="width: 100%;"
+                  onBlur={hanldeAddIPFS}
+                />
+              </label>
+            </>
           ) : null}
           {!iconHash ? (
             <WrapperDropZOne>
@@ -295,7 +324,7 @@ export const SubmitAppPage: NextPage = () => {
           <FormWrapper>
             <label style={{ width: `80%` }}>
               <Text>
-                Title
+                {t('title')}
               </Text>
               <Input
                 value={title}
@@ -309,7 +338,7 @@ export const SubmitAppPage: NextPage = () => {
             </label>
             <label style={{ width: `80%` }}>
               <Text>
-                Description
+                {t('app_description')}
               </Text>
               <Input
                 value={description}

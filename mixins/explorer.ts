@@ -34,8 +34,6 @@ export class Explorer extends ZilPayBase {
   private _adList = 'ad_list';
   private _reserve = 'reserve';
 
-  // 0x76a2027980f7c57bafb1c5d754038734983f1a15
-
   constructor(zilpay: ZilPayType) {
     super(zilpay);
 
