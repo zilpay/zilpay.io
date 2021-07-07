@@ -67,8 +67,8 @@ export const AppPage: NextPage = () => {
 
           return fetch(`${IPFS}/${e?.description}`);
         })
-        .then((res) => res.text())
-        .then((des) => setDescription(des))
+        .then((res) => res.json())
+        .then((des) => setDescription(des.text))
         .catch(() => null);
     }
   }, [zilpay, router.query.category]);
@@ -85,11 +85,13 @@ export const AppPage: NextPage = () => {
       </Head>
       <Container>
         <TitleWrapper>
-          <img
-            src={`${IPFS}/${app?.icon}`}
-            alt="logo"
-            height="100"
-          />
+          {app?.icon ? (
+            <img
+              src={`${IPFS}/${app.icon}`}
+              alt="logo"
+              height="100"
+            />
+          ) : null}
           <Text
             fontVariant={StyleFonts.Bold}
             fontColors={Colors.White}
@@ -104,6 +106,7 @@ export const AppPage: NextPage = () => {
             <Slider {...sliderProps}>
               {app?.images.map((image) => (
                 <PreviewImg
+                  key={image}
                   src={`${IPFS}/${image}`}
                   alt="preview"
                 />

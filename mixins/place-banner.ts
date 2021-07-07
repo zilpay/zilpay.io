@@ -73,7 +73,7 @@ export class ExplorerBanner extends ZilPayBase {
 
     this._contract = {
       mainnet: '0x0c20e40b3fe650c4c767db6bbb93db8295beac40',
-      testnet: '0x52777257408f4bca9d2fdceca4b3c3be4827f82c'
+      testnet: '0xb85cfededeac9eb1f838484404f0c182f3920365'
     };
     
   }

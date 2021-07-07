@@ -17,7 +17,7 @@ export class ZLPExplorer extends ZilPayBase {
 
     this._contract = {
       mainnet: '0x0c20e40b3fe650c4c767db6bbb93db8295beac40',
-      testnet: '0x5a16db0e4954e3436137109548fa2c94aea1fd97'
+      testnet: '0x4a0cd578a55e809297e3acac13a08de2a58e92f8'
     };
   }
 
@@ -44,7 +44,7 @@ export class ZLPExplorer extends ZilPayBase {
       [String(address).toLowerCase()]
     );
 
-    if (!balance || isNaN(balance)) {
+    if (!balance) {
       return '0';
     }
 
@@ -52,7 +52,7 @@ export class ZLPExplorer extends ZilPayBase {
   }
 
   public async approve(spender: string) {
-    const amount = await this.getBalance(this.zilpay.wallet.defaultAccount.bech32);
+    const amount = await this.getBalance(this.zilpay.wallet.defaultAccount.base16);
     const params = [
       {
         vname: 'spender',

@@ -34,12 +34,14 @@ export class Explorer extends ZilPayBase {
   private _adList = 'ad_list';
   private _reserve = 'reserve';
 
+  // 0x76a2027980f7c57bafb1c5d754038734983f1a15
+
   constructor(zilpay: ZilPayType) {
     super(zilpay);
 
     this._contract = {
       mainnet: '0x0c20e40b3fe650c4c767db6bbb93db8295beac40',
-      testnet: '0x64775441ce56bce245807389fccbae4e31b484b6'
+      testnet: '0x223edfb1376e68142a35d5612dd548c3f61fd992'
     };
   }
 

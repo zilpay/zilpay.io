@@ -13,11 +13,12 @@ import { useZilPay } from 'mixins/zilpay';
 import { Explorer, Banner } from 'mixins/explorer';
 import { Categories } from 'config/categories';
 import { IPFS } from 'config/ipfs';
+import { sliderProps } from 'config/slider';
  
 const Slider = dynamic(import(`react-slick`));
 const AppCard = dynamic(import(`components/app-card`));
 
-const Container = styled.div`
+const Container = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,32 +54,6 @@ const SubmitWrapper = styled.div`
   }
 `;
 
-const settings = {
-  className: `center`,
-  centerMode: true,
-  infinite: true,
-  centerPadding: `60px`,
-  speed: 500,
-  slidesToShow: 3,
-  responsive: [
-    {
-      breakpoint: 1024,
-      settings: {
-        slidesToShow: 2,
-        slidesToScroll: 2,
-        infinite: true,
-        dots: true
-      }
-    },
-    {
-      breakpoint: 600,
-      settings: {
-        slidesToShow: 1,
-        slidesToScroll: 1
-      }
-    }
-  ]
-};
 const list = [
   Categories.Games,
   Categories.Finance,
@@ -114,9 +89,9 @@ export const ExplorerMainPage: NextPage = () => {
       </Head>
       <Container>
         <div>
-          <Slider {...settings}>
+          <Slider>
             {items.map((el, index) => (
-              <div key={index}>
+              <div key={el.ipfs}>
                 <BannerLink
                   href={el.url}
                   target="_blank"
