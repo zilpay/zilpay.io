@@ -13,8 +13,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Text } from 'components/text';
 import { Input } from 'components/input';
 import { Button } from 'components/button';
-import { Modal } from 'components/modal';
-import { InstallButton } from 'components/sections/main';
 
 import { useZilPay } from 'mixins/zilpay';
 import { ExplorerBanner } from 'mixins/place-banner';
@@ -30,6 +28,8 @@ const Dropzone = dynamic(import(`components/dropzone`));
 const BannerImage = dynamic(import(`components/banner-image`));
 const Slider = dynamic(import(`react-rangeslider`));
 const Loader = dynamic(import(`react-loader-spinner`));
+const InstallButton = dynamic(import(`components/Install-button`));
+const Modal = dynamic(import(`components/modal`));
 
 export const Container = styled.div`
   display: flex;

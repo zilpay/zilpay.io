@@ -11,7 +11,6 @@ import { Input } from 'components/input';
 import { Text } from 'components/text';
 import { DropDown } from 'components/drop-down';
 import { Modal } from 'components/modal';
-import { InstallButton } from 'components/sections/main';
 
 import { useZilPay } from 'mixins/zilpay';
 
@@ -31,6 +30,7 @@ const BannerImage = dynamic(import(`components/banner-image`));
 const Slider = dynamic(import(`react-slick`));
 const IPFSnano = import(`nano-ipfs-store`);
 const Loader = dynamic(import(`react-loader-spinner`));
+const InstallButton = dynamic(import(`components/Install-button`));
 
 const Wrapper = styled.main`
   display: flex;

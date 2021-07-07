@@ -61,3 +61,5 @@ export const Modal: React.FC<Prop> = ({ children, show, onClose }) => {
 
   return null;
 };
+
+export default Modal;
