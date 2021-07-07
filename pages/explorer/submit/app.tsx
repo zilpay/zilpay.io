@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { PreviewImg } from 'components/preview-img';
 import { Input } from 'components/input';
 import { Text } from 'components/text';
 import { DropDown } from 'components/drop-down';
@@ -134,6 +133,11 @@ export const SubmitAppPage: NextPage = () => {
     window.localStorage.setItem(StorageFields.AppCategory, String(content));
     setCategory(content);
   }, []);
+  const handleRemoveImage = React.useCallback((image: string) => {
+    const newList = hashs.filter((img) => img !== image);
+    window.localStorage.setItem(StorageFields.AppHashSet, JSON.stringify(newList));
+    setHashs(newList);
+  }, [hashs]);
 
   const handleSubmit = React.useCallback(async() => {
     if (!zilpay.instance) {
@@ -249,10 +253,10 @@ export const SubmitAppPage: NextPage = () => {
           <div>
             <Slider {...sliderProps}>
               {hashs.map((image) => (
-                <PreviewImg
+                <BannerImage
                   key={image}
-                  src={`${IPFS}/${image}`}
-                  alt="preview"
+                  hash={image}
+                  onRemove={() => handleRemoveImage(image)}
                 />
               ))}
             </Slider>
