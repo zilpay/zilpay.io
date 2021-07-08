@@ -115,7 +115,7 @@ export const SubmitAppPage: NextPage = () => {
   }, []);
   const hanldeAddIPFS = React.useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     hanldeUploadedBanner(e.target.value);
-    e.target.value = '';
+    e.target.value = ``;
   }, []);
   const hanldeUploadedIcon = React.useCallback((ipfsHash: string) => {
     setError(``);
@@ -324,7 +324,7 @@ export const SubmitAppPage: NextPage = () => {
           <FormWrapper>
             <label style={{ width: `80%` }}>
               <Text>
-                {t('title')}
+                {t(`title`)}
               </Text>
               <Input
                 value={title}
@@ -338,7 +338,7 @@ export const SubmitAppPage: NextPage = () => {
             </label>
             <label style={{ width: `80%` }}>
               <Text>
-                {t('app_description')}
+                {t(`app_description`)}
               </Text>
               <Input
                 value={description}
