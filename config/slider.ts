@@ -10,8 +10,8 @@ export const sliderProps = {
     {
       breakpoint: 1024,
       settings: {
-        slidesToShow: 2,
-        slidesToScroll: 1,
+        slidesToShow: 1,
+        slidesToScroll: 2,
         infinite: true,
         dots: true
       }
