@@ -103,13 +103,13 @@ export const MobileNavBar: React.FC = () => {
               </Anchor>
             </Link>
           </Li>
-          {/* <Li>
+          <Li>
             <Link href="/explorer">
               <Anchor>
                 Explorer
               </Anchor>
             </Link>
-          </Li> */}
+          </Li>
           <Li>
             <a
               href="https://zilpay.github.io/zilpay-docs/"

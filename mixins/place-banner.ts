@@ -18,7 +18,7 @@ export class ExplorerBanner extends ZilPayBase {
   public static CUSTOMIZATION = new BN('100000000');
   public static EXPONENT = new BN('2');
   public static ONE = new BN('1');
-  public static MAX_BLOCKS = new BN('3000');
+  public static MAX_BLOCKS = new BN('5000');
 
   public static getPoolBalance(s: BN) {
     const _n = ExplorerBanner.EXPONENT.add(ExplorerBanner.ONE);

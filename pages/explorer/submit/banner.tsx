@@ -137,13 +137,12 @@ export const SubmitBannerPage: NextPage = () => {
     setBlocks(blocksValue);
   }, [reserve]);
   const handleChangeUrl = React.useCallback((value: string) => {
-    try {
-      const { href } = new URL(value);
-      window.localStorage.setItem(StorageFields.BannerUrl, href);
-      setUrl(href);
-    } catch {
-      //
-    }
+    window.localStorage.setItem(StorageFields.BannerUrl, value);
+    setUrl(value);
+  }, []);
+  const handleChangeIPFSHash = React.useCallback((value: string) => {
+    window.localStorage.setItem(StorageFields.BannerHash, value);
+    setHash(value);
   }, []);
 
   const handleApprove = React.useCallback(async() => {
@@ -300,7 +299,7 @@ export const SubmitBannerPage: NextPage = () => {
           ) : (
             <Dropzone onUploaded={hanldeUploaded}/>
           )}
-          <FormWrapper>
+          <FormWrapper onSubmit={handlePlace}>
             <label style={{ width: `80%` }}>
               <Text>
                 IPFS HASH
@@ -308,9 +307,10 @@ export const SubmitBannerPage: NextPage = () => {
               <Input
                 value={hash}
                 disabled={loading}
+                required
                 type="text"
                 css="width: 100%;"
-                onChange={(e) => setHash(e.target.value)}
+                onChange={(e) => handleChangeIPFSHash(e.target.value)}
               />
             </label>
             <label style={{ width: `80%` }}>
@@ -321,6 +321,7 @@ export const SubmitBannerPage: NextPage = () => {
                 value={url}
                 placeholder={t(`url_placeholder`)}
                 disabled={loading}
+                required
                 type="url"
                 css="width: 100%;"
                 onChange={(e) => handleChangeUrl(e.target.value)}
@@ -344,6 +345,7 @@ export const SubmitBannerPage: NextPage = () => {
                     value={amount}
                     disabled={loading}
                     type="number"
+                    required
                     min="1"
                     onChange={(e) => handleChangeAmount(Number(e.target.value))}
                   />
@@ -356,37 +358,42 @@ export const SubmitBannerPage: NextPage = () => {
                     value={blocks}
                     disabled={loading}
                     type="number"
+                    required
                     min="1"
                     onChange={(e) => handleChangeBlocks(Number(e.target.value))}
                   />
                 </label>
               </ButtonsWrapper>
-              {loading ? (
-                <Loader
-                  type="Puff"
-                  color={Colors.Secondary}
-                  height={100}
-                  width={100}
-                />
-              ) : approved.lt(bnAmount) ? (
+              {approved.lt(bnAmount) ? (
                 <Button
                   color={Colors.Warning}
                   fontColors={Colors.Warning}
                   css="margin: 30px;"
                   onClick={handleApprove}
                 >
-                  {t(`unlock`)}
+                  {loading ? (
+                    <Loader
+                      type="Puff"
+                      color={Colors.Warning}
+                      height={15}
+                      width={15}
+                    />
+                  ) : t(`unlock`)}
                 </Button>
               ) : (
-                <Button
-                  css="margin: 30px;"
-                  onClick={handlePlace}
-                >
-                  {t(`place`)}
+                <Button css="margin: 30px;">
+                  {loading ? (
+                    <Loader
+                      type="Puff"
+                      color={Colors.Secondary}
+                      height={15}
+                      width={15}
+                    />
+                  ) : t(`place`)}
                 </Button>
               )}
-              </>
             ) : null}
+            </>) : null}
           </FormWrapper>
         </Wrapper>
       </Container>
