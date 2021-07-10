@@ -149,7 +149,8 @@ export const SubmitAppPage: NextPage = () => {
     setHashs(newList);
   }, [hashs]);
 
-  const handleSubmit = React.useCallback(async() => {
+  const handleSubmit = React.useCallback(async(event) => {
+    event.preventDefault();
     if (!zilpay.instance) {
       return null;
     }
@@ -321,7 +322,7 @@ export const SubmitAppPage: NextPage = () => {
             disabled={loading}
             onSelect={handleChangeCategory}
           />
-          <FormWrapper>
+          <FormWrapper onSubmit={handleSubmit}>
             <label style={{ width: `80%` }}>
               <Text>
                 {t(`title`)}
@@ -330,6 +331,7 @@ export const SubmitAppPage: NextPage = () => {
                 value={title}
                 disabled={loading}
                 maxLength={30}
+                required
                 placeholder="DragonZIL"
                 type="text"
                 css="width: 100%;"
@@ -344,6 +346,7 @@ export const SubmitAppPage: NextPage = () => {
                 value={description}
                 disabled={loading}
                 maxLength={200}
+                required
                 placeholder="The best game of zilliqa"
                 type="text"
                 css="width: 100%;"
@@ -358,13 +361,13 @@ export const SubmitAppPage: NextPage = () => {
                 value={url}
                 disabled={loading}
                 type="text"
+                required
                 placeholder="https://dragonzil.xyz/"
                 css="width: 100%;"
                 onChange={(e) => handleChangeUrl(e.target.value)}
               />
             </label>
             <Button
-              onClick={handleSubmit}
               disabled={loading}
               css="margin: 36px;"
             >
@@ -372,8 +375,8 @@ export const SubmitAppPage: NextPage = () => {
                 <Loader
                   type="Puff"
                   color={Colors.Secondary}
-                  height={20}
-                  width={20}
+                  height={15}
+                  width={15}
                 />
               ): `Upload`}
             </Button>

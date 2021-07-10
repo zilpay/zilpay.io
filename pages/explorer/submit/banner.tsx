@@ -145,7 +145,8 @@ export const SubmitBannerPage: NextPage = () => {
     setHash(value);
   }, []);
 
-  const handleApprove = React.useCallback(async() => {
+  const handleApprove = React.useCallback(async(event) => {
+    event.preventDefault();
     if (zilpay.instance) {
       setLoading(true);
       try {
@@ -171,7 +172,8 @@ export const SubmitBannerPage: NextPage = () => {
       }
     }
   }, [zilpay]);
-  const handlePlace = React.useCallback(async() => {
+  const handlePlace = React.useCallback(async(event) => {
+    event.preventDefault();
     if (zilpay.instance) {
       setLoading(true);
       try {
