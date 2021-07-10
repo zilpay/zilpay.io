@@ -329,71 +329,71 @@ export const SubmitBannerPage: NextPage = () => {
             </label>
             {hash ? (
               <>
-              <Slider
-                min={1}
-                max={ExplorerBanner.MAX_BLOCKS.toNumber()}
-                value={amount}
-                disabled={loading}
-                onChange={handleChangeAmount}
-              />
-              <ButtonsWrapper>
-                <label>
-                  <Text>
-                    {t(`amount_zlp`)}
-                  </Text>
-                  <Input
-                    value={amount}
-                    disabled={loading}
-                    type="number"
-                    required
-                    min="1"
-                    onChange={(e) => handleChangeAmount(Number(e.target.value))}
-                  />
-                </label>
-                <label>
-                  <Text>
-                    {t(`blocks_tx`)}
-                  </Text>
-                  <Input
-                    value={blocks}
-                    disabled={loading}
-                    type="number"
-                    required
-                    min="1"
-                    onChange={(e) => handleChangeBlocks(Number(e.target.value))}
-                  />
-                </label>
-              </ButtonsWrapper>
-              {approved.lt(bnAmount) ? (
-                <Button
-                  color={Colors.Warning}
-                  fontColors={Colors.Warning}
-                  css="margin: 30px;"
-                  onClick={handleApprove}
-                >
-                  {loading ? (
-                    <Loader
-                      type="Puff"
-                      color={Colors.Warning}
-                      height={15}
-                      width={15}
+                <Slider
+                  min={1}
+                  max={ExplorerBanner.MAX_BLOCKS.toNumber()}
+                  value={amount}
+                  disabled={loading}
+                  onChange={handleChangeAmount}
+                />
+                <ButtonsWrapper>
+                  <label>
+                    <Text>
+                      {t(`amount_zlp`)}
+                    </Text>
+                    <Input
+                      value={amount}
+                      disabled={loading}
+                      type="number"
+                      required
+                      min="1"
+                      onChange={(e) => handleChangeAmount(Number(e.target.value))}
                     />
-                  ) : t(`unlock`)}
-                </Button>
-              ) : (
-                <Button css="margin: 30px;">
-                  {loading ? (
-                    <Loader
-                      type="Puff"
-                      color={Colors.Secondary}
-                      height={15}
-                      width={15}
+                  </label>
+                  <label>
+                    <Text>
+                      {t(`blocks_tx`)}
+                    </Text>
+                    <Input
+                      value={blocks}
+                      disabled={loading}
+                      type="number"
+                      required
+                      min="1"
+                      onChange={(e) => handleChangeBlocks(Number(e.target.value))}
                     />
-                  ) : t(`place`)}
-                </Button>
-              )}
+                  </label>
+                </ButtonsWrapper>
+                {approved.lt(bnAmount) ? (
+                  <Button
+                    color={Colors.Warning}
+                    fontColors={Colors.Warning}
+                    css="margin: 30px;"
+                    onClick={handleApprove}
+                  >
+                    {loading ? (
+                      <Loader
+                        type="Puff"
+                        color={Colors.Warning}
+                        height={15}
+                        width={15}
+                      />
+                    ) : t(`unlock`)}
+                  </Button>
+                ) : (
+                  <Button css="margin: 30px;">
+                    {loading ? (
+                      <Loader
+                        type="Puff"
+                        color={Colors.Secondary}
+                        height={15}
+                        width={15}
+                      />
+                    ) : t(`place`)}
+                  </Button>
+                )}
+              </>
             ) : null}
-            </>) : null}
           </FormWrapper>
         </Wrapper>
       </Container>
