@@ -49,9 +49,9 @@ export class Explorer extends ZilPayBase {
 
     if (result && Array.isArray(result)) {
       return result.map((el: { arguments: string[]; }) => ({
-        block: el.arguments[1],
+        end: el.arguments[1],
         url: el.arguments[2],
-        ipfs: el.arguments[3]
+        hash: el.arguments[3]
       }));
     }
 
