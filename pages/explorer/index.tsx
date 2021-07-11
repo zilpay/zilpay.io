@@ -134,10 +134,9 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
   let adsList = [];
 
   try {
-    const res = await fetch(`${LOCAL_URL}/api/v1/ads`);
-
+    const res = await fetch(`${LOCAL_URL}/ads`);
     adsList = await res.json();
-  } catch {
+  } catch (err) {
     //
   }
 
