@@ -238,7 +238,10 @@ export const SubmitBannerPage: NextPage = () => {
         explorer.getReserve().then((r) => {
           setReserve(r);
           const result = ExplorerBanner.estimateBlocks(amount, r);
+          const _price = new BN(result.price);
+          const max = ExplorerBanner.MAX_BLOCKS.mul(_price).div(ZLPExplorer.DECIMAL);
 
+          setAmount(Number(max));
           setBlocks(Number(result.blocks));
         });
 
