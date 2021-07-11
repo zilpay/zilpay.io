@@ -2,9 +2,9 @@ import { ZilPayBase } from './zilpay-base';
 import { ZilPayType } from '@/types';
 
 export interface Banner {
-  block: string;
+  end: string;
   url: string;
-  ipfs: string;
+  hash: string;
 }
 export interface AnApp {
   title: string;

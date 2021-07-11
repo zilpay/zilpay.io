@@ -2,7 +2,6 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -11,12 +10,12 @@ import { Text } from 'components/text';
 import { Button } from 'components/button';
 import { PreviewImg } from 'components/preview-img';
 
-import { useZilPay } from 'mixins/zilpay';
-import { Explorer, AnApp } from 'mixins/explorer';
+import { AnApp } from 'mixins/explorer';
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
 import { IPFS } from 'config/ipfs';
 import { sliderProps } from 'config/slider';
+import { LOCAL_URL } from 'config/api';
 
 const Slider = dynamic(import(`react-slick`));
 
@@ -44,50 +43,39 @@ const Wrapper = styled.div`
   }
 `;
 
-export const AppPage: NextPage = () => {
-  const router = useRouter();
+type prop = {
+  application: AnApp;
+}
+
+export const AppPage: NextPage<prop> = ({
+  application
+}) => {
   const { t } = useTranslation(`explorer`);
-  const zilpay = useZilPay();
-  const [app, setApp] = React.useState<AnApp | null>(null);
   const [description, setDescription] = React.useState<string>(``);
 
   React.useEffect(() => {
-    if (zilpay.instance) {
-      const explorer = new Explorer(zilpay.instance);
-      const { category } = router.query;
-
-      explorer
-        .getApplication(Number(category), String(router.query.app))
-        .then((e) => {
-          setApp(e);
-
-          if (!e || !e.description) {
-            throw new Error();
-          }
-
-          return fetch(`${IPFS}/${e?.description}`);
-        })
+    if (application) {
+      fetch(`${IPFS}/${application.description}`)
         .then((res) => res.json())
-        .then((des) => setDescription(des.text))
-        .catch(() => null);
+        .then((des) => setDescription(des.text));
     }
-  }, [zilpay, router.query.category]);
+  }, [application]);
 
   return (
     <>
       <Head>
-        <title>{app?.title} - ZilPay</title>
+        <title>{application?.title} - ZilPay</title>
         <meta
           property="og:title"
-          content={`${app?.title} - ZilPay`}
+          content={`${application?.title} - ZilPay`}
           key="title"
         />
       </Head>
       <Container>
         <TitleWrapper>
-          {app?.icon ? (
+          {application ? (
             <img
-              src={`${IPFS}/${app.icon}`}
+              src={`${IPFS}/${application.icon}`}
               alt="logo"
               height="100"
             />
@@ -98,46 +86,64 @@ export const AppPage: NextPage = () => {
             size="40px"
             css="text-indent: 40px;"
           >
-            {app?.title}
+            {application?.title}
           </Text>
         </TitleWrapper>
         <Wrapper>
-          <div>
-            <Slider {...sliderProps}>
-              {app?.images.map((image) => (
-                <PreviewImg
-                  key={image}
-                  src={`${IPFS}/${image}`}
-                  alt="preview"
-                />
-              ))}
-            </Slider>
-          </div>
+          {application ? (
+            <div>
+              <Slider {...sliderProps}>
+                {application.images.map((image) => (
+                  <PreviewImg
+                    key={image}
+                    src={`${IPFS}/${image}`}
+                    alt="preview"
+                  />
+                ))}
+              </Slider>
+            </div>
+          ) : null}
           <Text
             size="20px"
             css="text-align: center;margin: 30px;max-width: 700px;"
           >
             {description}
           </Text>
-          <a
-            href={app?.url}
-            target="_blank" rel="noreferrer"
-          >
-            <Button upperCase>
-              {t(`launch_btn`)}
-            </Button>
-          </a>
+          {application ? (
+            <a
+              href={application?.url}
+              target="_blank" rel="noreferrer"
+            >
+              <Button upperCase>
+                {t(`launch_btn`)}
+              </Button>
+            </a>
+          ) : null}
         </Wrapper>
       </Container>
     </>
   );
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-  props: {
-    ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
-  },
-});
+export const getStaticProps = async (props: GetServerSidePropsContext) => {
+  let application = {};
+  const category = String(props.params && props.params.category);
+  const owner = String(props.params && props.params.app);
+
+  try {
+    const res = await fetch(`${LOCAL_URL}/apps/${category}/${owner}`);
+    application = await res.json();
+  } catch {
+    //
+  }
+
+  return {
+    props: {
+      application,
+      ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
+    },
+  };
+};
 
 export async function getStaticPaths() {
   return {

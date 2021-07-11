@@ -9,10 +9,10 @@ import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { Button } from 'components/button';
 
-import { useZilPay } from 'mixins/zilpay';
-import { Explorer, Banner } from 'mixins/explorer';
+import { Banner } from 'mixins/explorer';
 import { Categories } from 'config/categories';
 import { IPFS } from 'config/ipfs';
+import { LOCAL_URL } from 'config/api';
  
 const Slider = dynamic(import(`react-slick`));
 const AppCard = dynamic(import(`components/app-card`));
@@ -53,6 +53,10 @@ const SubmitWrapper = styled.div`
   }
 `;
 
+type Prop = {
+  adsList: Banner[];
+}
+
 const list = [
   Categories.Games,
   Categories.Finance,
@@ -61,20 +65,10 @@ const list = [
   Categories.Exchange,
   Categories.Gambling
 ];
-export const ExplorerMainPage: NextPage = () => {
+export const ExplorerMainPage: NextPage<Prop> = ({
+  adsList = []
+}) => {
   const { t } = useTranslation(`explorer`);
-  const zilpay = useZilPay();
-  const [items, setItems] = React.useState<Banner[]>([]);
-
-  React.useEffect(() => {
-    if (zilpay.instance) {
-      const explorer = new Explorer(zilpay.instance);
-
-      explorer
-        .getBannerList()
-        .then((values) => setItems(values));
-    }
-  }, [zilpay]);
 
   return (
     <>
@@ -89,14 +83,14 @@ export const ExplorerMainPage: NextPage = () => {
       <Container>
         <div>
           <Slider>
-            {items.map((el) => (
-              <div key={el.ipfs}>
+            {adsList.map((el) => (
+              <div key={el.hash}>
                 <BannerLink
                   href={el.url}
                   target="_blank"
                 >
                   <BannerImage
-                    src={`${IPFS}/${el.ipfs}`}
+                    src={`${IPFS}/${el.hash}`}
                     alt="banner"
                   />
                 </BannerLink>
@@ -136,10 +130,24 @@ export const ExplorerMainPage: NextPage = () => {
   );
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-  props: {
-    ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
-  },
-});
+export const getStaticProps = async (props: GetServerSidePropsContext) => {
+  let adsList = [];
+
+  try {
+    const res = await fetch(`${LOCAL_URL}/api/v1/ads`);
+
+    adsList = await res.json();
+  } catch {
+    //
+  }
+
+  return {
+    props: {
+      adsList,
+      ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
+    },
+  };
+}
+
 
 export default ExplorerMainPage;

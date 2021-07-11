@@ -9,11 +9,11 @@ import Link from 'next/link';
 
 import { Text } from 'components/text';
 
-import { useZilPay } from 'mixins/zilpay';
-import { Explorer, AnApp } from 'mixins/explorer';
+import { AnApp } from 'mixins/explorer';
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
 import { IPFS } from 'config/ipfs';
+import { LOCAL_URL } from '@/config/api';
 
 const Container = styled.div`
   display: flex;
@@ -50,21 +50,15 @@ const TextCardWrapper = styled.div`
   text-indent: 50px;
 `;
 
-export const CategoryPage: NextPage = () => {
+type Prop = {
+  list: AnApp[];
+}
+
+export const CategoryPage: NextPage<Prop> = ({
+  list = []
+}) => {
   const router = useRouter();
   const { t } = useTranslation(`explorer`);
-  const zilpay = useZilPay();
-  const [items, setItems] = React.useState<AnApp[]>([]);
-
-  React.useEffect(() => {
-    if (zilpay.instance && router.query.category) {
-      const explorer = new Explorer(zilpay.instance);
-
-      explorer
-        .getApplicationList(Number(router.query.category))
-        .then((values) => setItems(values));
-    }
-  }, [zilpay, router.query.category]);
 
   return (
     <>
@@ -86,12 +80,12 @@ export const CategoryPage: NextPage = () => {
           {t(`cat_${router.query.category}`)}
         </Text>
         <Wrapper>
-          {items.length === 0 ? (
+          {list.length === 0 ? (
             <Text size="25px">
               {t(`no_apps`)}
             </Text>
           ) : null}
-          {items.map((el) => (
+          {list.map((el) => (
             <Link
               key={el.url}
               href={`/explorer/${router.query.category}/${el.owner}`}
@@ -123,11 +117,23 @@ export const CategoryPage: NextPage = () => {
   );
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-  props: {
-    ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
-  },
-});
+export const getStaticProps = async (props: GetServerSidePropsContext) => {
+  let list = [];
+
+  try {
+    const res = await fetch(`${LOCAL_URL}/apps/${props.params && props.params.category}`);
+
+    list = await res.json();
+  } catch {
+    //
+  }
+  return {
+    props: {
+      list,
+      ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
+    },
+  };
+};
 
 export async function getStaticPaths() {
   return {
