@@ -12,7 +12,7 @@ import { Button } from 'components/button';
 import { Banner } from 'mixins/explorer';
 import { Categories } from 'config/categories';
 import { IPFS } from 'config/ipfs';
-import { LOCAL_URL } from 'config/api';
+import { LOCAL_URL, PUBLIC_URL } from 'config/api';
  
 const Slider = dynamic(import(`react-slick`));
 const AppCard = dynamic(import(`components/app-card`));
@@ -69,6 +69,13 @@ export const ExplorerMainPage: NextPage<Prop> = ({
   adsList = []
 }) => {
   const { t } = useTranslation(`explorer`);
+  const [adsItems, setAdsItems] = React.useState(adsList);
+
+  React.useEffect(() => {
+    fetch(`${PUBLIC_URL}/ads`)
+      .then((res) => res.json())
+      .then((e) => setAdsItems(e));
+  }, []);
 
   return (
     <>
@@ -83,7 +90,7 @@ export const ExplorerMainPage: NextPage<Prop> = ({
       <Container>
         <div>
           <Slider>
-            {adsList.map((el) => (
+            {adsItems.map((el) => (
               <div key={el.hash}>
                 <BannerLink
                   href={el.url}
