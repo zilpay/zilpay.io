@@ -112,7 +112,7 @@ export const SubmitAppPage: NextPage = () => {
     }
 
     if (hashs.includes(ipfsHash)) {
-      setError('Hash Already existing');
+      setError(`Hash Already existing`);
 
       return null;
     }
