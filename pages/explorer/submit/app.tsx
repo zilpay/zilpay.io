@@ -107,6 +107,12 @@ export const SubmitAppPage: NextPage = () => {
   const hanldeUploadedBanner = React.useCallback((ipfsHash: string) => {
     const hashList = hashs;
 
+    if (hashs.includes(ipfsHash)) {
+      setError('Hash Already existing');
+
+      return null;
+    }
+
     setError(``);
     hashList.push(ipfsHash);
     window.localStorage.setItem(StorageFields.AppHashSet, JSON.stringify(hashs));
