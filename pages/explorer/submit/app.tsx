@@ -122,7 +122,7 @@ export const SubmitAppPage: NextPage = () => {
     window.localStorage.setItem(StorageFields.AppHashSet, JSON.stringify(hashs));
 
     setHashs(hashList);
-  }, []);
+  }, [hashs]);
   const hanldeAddIPFS = React.useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     hanldeUploadedBanner(e.target.value);
     e.target.value = ``;
