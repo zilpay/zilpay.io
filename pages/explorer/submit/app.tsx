@@ -105,8 +105,6 @@ export const SubmitAppPage: NextPage = () => {
   ];
 
   const hanldeUploadedBanner = React.useCallback((ipfsHash: string) => {
-    const hashList = hashs;
-
     if (!ipfsHash) {
       return null;
     }
@@ -118,10 +116,9 @@ export const SubmitAppPage: NextPage = () => {
     }
 
     setError(``);
-    hashList.push(ipfsHash);
     window.localStorage.setItem(StorageFields.AppHashSet, JSON.stringify(hashs));
 
-    setHashs(hashList);
+    setHashs([...hashs, ipfsHash]);
   }, [hashs]);
   const hanldeAddIPFS = React.useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     hanldeUploadedBanner(e.target.value);
