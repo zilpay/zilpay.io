@@ -57,6 +57,7 @@ const WrapperDropZOne = styled.line`
     width: auto;
   }
 `;
+const hashImagesList = new Set();
 export const SubmitAppPage: NextPage = () => {
   const { t } = useTranslation(`explorer`);
   const zilpay = useZilPay();
@@ -115,10 +116,14 @@ export const SubmitAppPage: NextPage = () => {
       return null;
     }
 
-    setError(``);
-    window.localStorage.setItem(StorageFields.AppHashSet, JSON.stringify(hashs));
+    hashImagesList.add(ipfsHash);
 
-    setHashs([...hashs, ipfsHash]);
+    const hashListImages = JSON.stringify(Array.from(hashImagesList));
+
+    setError(``);
+    window.localStorage.setItem(StorageFields.AppHashSet, hashListImages);
+
+    setHashs(JSON.parse(hashListImages));
   }, [hashs]);
   const hanldeAddIPFS = React.useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     hanldeUploadedBanner(e.target.value);
