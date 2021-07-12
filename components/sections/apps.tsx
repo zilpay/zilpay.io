@@ -86,7 +86,7 @@ export const AppsSection: React.FC = () => {
         <ZoomCard
           url="/images/graph-1024x682.webp"
           href="https://zilswap.io/swap"
-          title="Zilswap"
+          title="ZilSwap"
           onClick={(url) => hanldeClick(url, false)}
         >
           {t(`app5`)}
