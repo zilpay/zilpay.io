@@ -365,6 +365,7 @@ export const SubmitBannerPage: NextPage = () => {
                       type="number"
                       required
                       min="1"
+                      max="5000"
                       onChange={(e) => handleChangeBlocks(Number(e.target.value))}
                     />
                   </label>
