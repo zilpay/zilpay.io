@@ -47,6 +47,7 @@ class ZilPayDocument extends Document {
           <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="/favicon/apple-icon-32x32.png" />
           <link rel="apple-touch-icon" type="image/png" sizes="96x96" href="/favicon/apple-icon-96x96.png" />
           <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="/favicon/apple-icon-16x16.png" />
+          <link rel="apple-touch-icon" type="image/png" sizes="200x200" href="/favicon/ms-icon-200x200.png" />
           <link rel="manifest" href="/favicon/manifest.json" />
         </Head>
         <body>
