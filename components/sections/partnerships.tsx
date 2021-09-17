@@ -48,6 +48,10 @@ const list = [
     href: `https://dragonzil.xyz/`
   },
   {
+    img: `demons.svg`,
+    href: `https://demons.world/`
+  },
+  {
     img: `partners_Switcheo.svg`,
     href: `https://www.switcheo.com`
   },
