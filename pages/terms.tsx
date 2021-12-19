@@ -5,10 +5,10 @@ import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Text } from 'components/text';
+import { Container, Dummy, Wrapper} from 'components/wrappers/terms-policy';
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
-import { Container, Dummy, Wrapper} from 'components/wrappers/terms-policy';
 
 export const TermsPage: NextPage = () => {
   const { t } = useTranslation(`terms`);

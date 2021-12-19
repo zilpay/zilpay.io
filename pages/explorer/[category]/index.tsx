@@ -10,9 +10,9 @@ import Link from 'next/link';
 import { Text } from 'components/text';
 
 import { AnApp } from 'mixins/explorer';
+import { IPFS } from 'config/ipfs';
 import { StyleFonts } from '@/config/fonts';
 import { Colors } from '@/config/colors';
-import { IPFS } from 'config/ipfs';
 import { LOCAL_URL } from '@/config/api';
 
 const Container = styled.div`

@@ -15,10 +15,10 @@ import { useZilPay } from 'mixins/zilpay';
 
 import { sliderProps } from 'config/slider';
 import { INFURA } from 'config/ipfs';
+import { ExplorerBanner } from 'mixins/place-banner';
 import { StorageFields } from '@/config/storage-fields';
 import { Button } from '@/components/button';
 
-import { ExplorerBanner } from 'mixins/place-banner';
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 import { VIEW_BLOCK } from '@/config/explorer';

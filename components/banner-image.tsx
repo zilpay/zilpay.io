@@ -1,6 +1,5 @@
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
-import { Colors } from '@/config/colors';
 import React from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'next-i18next';
@@ -8,6 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { Button } from 'components/button';
 
 import { IPFS } from 'config/ipfs';
+import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
 type ContainerProp = {

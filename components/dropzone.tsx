@@ -1,4 +1,3 @@
-import { Colors } from '@/config/colors';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { useDropzone } from 'react-dropzone';
@@ -6,9 +5,10 @@ import styled from 'styled-components';
 
 import Loader from 'react-loader-spinner';
 import { Text } from 'components/text';
+import { UPLOAD_API } from 'config/ipfs';
 import { StyleFonts } from '@/config/fonts';
 
-import { UPLOAD_API } from 'config/ipfs';
+import { Colors } from '@/config/colors';
 
 const Container = styled.div`
   display: flex;

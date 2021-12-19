@@ -11,11 +11,11 @@ import { Button } from 'components/button';
 import { PreviewImg } from 'components/preview-img';
 
 import { AnApp } from 'mixins/explorer';
-import { StyleFonts } from '@/config/fonts';
-import { Colors } from '@/config/colors';
 import { IPFS } from 'config/ipfs';
 import { sliderProps } from 'config/slider';
 import { LOCAL_URL } from 'config/api';
+import { Colors } from '@/config/colors';
+import { StyleFonts } from '@/config/fonts';
 
 const Slider = dynamic(import(`react-slick`));
 

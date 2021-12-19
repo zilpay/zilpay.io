@@ -99,13 +99,11 @@ export const ExplorerMainPage: NextPage<Prop> = () => {
   );
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => {
-  return {
+export const getStaticProps = async (props: GetServerSidePropsContext) => ({
     props: {
       ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
     },
-  };
-}
+  })
 
 
 export default ExplorerMainPage;

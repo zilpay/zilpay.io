@@ -19,10 +19,10 @@ import { ExplorerBanner } from 'mixins/place-banner';
 import { Explorer } from 'mixins/explorer';
 import { ZLPExplorer } from 'mixins/zlp';
 
-import { StyleFonts } from '@/config/fonts';
-import { Colors } from '@/config/colors';
 import { VIEW_BLOCK } from 'config/explorer';
 import { StorageFields } from 'config/storage-fields';
+import { StyleFonts } from '@/config/fonts';
+import { Colors } from '@/config/colors';
 
 const Dropzone = dynamic(import(`components/dropzone`));
 const BannerImage = dynamic(import(`components/banner-image`));
