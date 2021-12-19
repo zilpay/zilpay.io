@@ -201,6 +201,15 @@ export const Footer: React.FC = () => {
               {t(`privacy`)}
             </Text>
           </Link>
+          <Link href="/extension-policy">
+            <Text
+              fontVariant={StyleFonts.Light}
+              size="14px"
+              pointer
+            >
+              {t(`extension-policy`)}
+            </Text>
+          </Link>
         </Legal>
       </Wrapper>
     </Container>

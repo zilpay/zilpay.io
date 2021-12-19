@@ -11,10 +11,7 @@ import { Button } from 'components/button';
 
 import { Banner } from 'mixins/explorer';
 import { Categories } from 'config/categories';
-import { IPFS } from 'config/ipfs';
-import { LOCAL_URL, PUBLIC_URL } from 'config/api';
  
-const Slider = dynamic(import(`react-slick`));
 const AppCard = dynamic(import(`components/app-card`));
 
 const Container = styled.main`
@@ -26,15 +23,6 @@ const Container = styled.main`
     width: 90vw;
     max-width: initial;
   }
-`;
-const BannerImage = styled.img`
-  width: 300px;
-  height: auto;
-  border-radius: 8px;
-`;
-const BannerLink = styled.a`
-  display: flex;
-  justify-content: center;
 `;
 const AppsWrapper = styled.div`
   display: flex;
@@ -65,17 +53,8 @@ const list = [
   Categories.Exchange,
   Categories.Gambling
 ];
-export const ExplorerMainPage: NextPage<Prop> = ({
-  adsList = []
-}) => {
+export const ExplorerMainPage: NextPage<Prop> = () => {
   const { t } = useTranslation(`explorer`);
-  const [adsItems, setAdsItems] = React.useState(adsList);
-
-  React.useEffect(() => {
-    fetch(`${PUBLIC_URL}/ads`)
-      .then((res) => res.json())
-      .then((e) => setAdsItems(e));
-  }, []);
 
   return (
     <>
@@ -88,23 +67,6 @@ export const ExplorerMainPage: NextPage<Prop> = ({
         />
       </Head>
       <Container>
-        <div>
-          <Slider>
-            {adsItems.map((el) => (
-              <div key={el.hash}>
-                <BannerLink
-                  href={el.url}
-                  target="_blank"
-                >
-                  <BannerImage
-                    src={`${IPFS}/${el.hash}`}
-                    alt="banner"
-                  />
-                </BannerLink>
-              </div>
-            ))}
-          </Slider>
-        </div>
         <AppsWrapper>
           {list.map((el) => (
             <Link
@@ -138,18 +100,8 @@ export const ExplorerMainPage: NextPage<Prop> = ({
 }
 
 export const getStaticProps = async (props: GetServerSidePropsContext) => {
-  let adsList = [];
-
-  try {
-    const res = await fetch(`${LOCAL_URL}/ads`);
-    adsList = await res.json();
-  } catch (err) {
-    //
-  }
-
   return {
     props: {
-      adsList,
       ...await serverSideTranslations(props.locale || `en`, [`explorer`, `common`]),
     },
   };

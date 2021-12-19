@@ -21,6 +21,10 @@ export const Wrapper = styled.div`
   padding-left: 5px;
   padding-right: 5px;
 
+  ul > li {
+    text-indent: 30px;
+  }
+
   @media (max-width: 1000px) {
     text-align: center;
   }
