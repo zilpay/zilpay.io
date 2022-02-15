@@ -36,4 +36,4 @@ deploy:
   script:
     - ./scripts/ci_build.sh
   on:
-    branch: feat/cicd_refactor
+    branch: master
