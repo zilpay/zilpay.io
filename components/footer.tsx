@@ -210,6 +210,15 @@ export const Footer: React.FC = () => {
               {t(`extension-policy`)}
             </Text>
           </Link>
+          <Link href="/dex-policy">
+            <Text
+              fontVariant={StyleFonts.Light}
+              size="14px"
+              pointer
+            >
+              {t(`dex-policy`)}
+            </Text>
+          </Link>
         </Legal>
       </Wrapper>
     </Container>
