@@ -1,7 +1,7 @@
 import 'react-rangeslider/lib/index.css';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
-import BN from 'bn.js';
+import Big from 'big.js';
 import dynamic from 'next/dynamic';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
@@ -106,12 +106,12 @@ export const SubmitBannerPage: NextPage = () => {
   const [amount, setAmount] = React.useState(500);
   const [blocks, setBlocks] = React.useState(1);
   const [reserve, setReserve] = React.useState(`0`);
-  const [approved, setApproved] = React.useState(new BN(0));
+  const [approved, setApproved] = React.useState(Big(0));
   const [balance, setBalance] = React.useState(0);
   const [txId, setTxId] = React.useState(``);
 
   const bnAmount = React.useMemo(() => {
-    const _value = new BN(Math.round(amount));
+    const _value = Big(Math.round(amount));
     return _value.mul(ZLPExplorer.DECIMAL);
   }, [amount]);
 
@@ -238,7 +238,7 @@ export const SubmitBannerPage: NextPage = () => {
         explorer.getReserve().then((r) => {
           setReserve(r);
           const result = ExplorerBanner.estimateBlocks(amount, r);
-          const _price = new BN(result.price);
+          const _price = Big(result.price);
           const max = ExplorerBanner.MAX_BLOCKS.mul(_price).div(ZLPExplorer.DECIMAL);
 
           setAmount(Number(max));

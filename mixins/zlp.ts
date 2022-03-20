@@ -1,10 +1,11 @@
 import { ZilPayBase } from './zilpay-base';
 import { ZilPayType } from '@/types';
-import BN from 'bn.js';
+import Big from 'big.js';
+
 
 export class ZLPExplorer extends ZilPayBase {
 
-  public static DECIMAL = new BN('1000000000000000000');
+  public static DECIMAL = Big('1000000000000000000');
 
   private _contract: {
     [key: string]: string;
@@ -21,7 +22,7 @@ export class ZLPExplorer extends ZilPayBase {
     };
   }
 
-  public async getAllowances(address: string): Promise<BN> {
+  public async getAllowances(address: string): Promise<Big> {
     const owner = String(this.zilpay.wallet.defaultAccount.base16).toLowerCase();
     const approvel = String(address).toLowerCase();
     const allowances = await this.getSubState(
@@ -31,10 +32,10 @@ export class ZLPExplorer extends ZilPayBase {
     );
 
     if (!allowances) {
-      return new BN(0);
+      return Big(0);
     }
 
-    return new BN(allowances[owner][approvel]);
+    return Big(allowances[owner][approvel]);
   }
 
   public async getBalance(address: string) {

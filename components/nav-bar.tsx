@@ -68,30 +68,9 @@ export const Navbar: React.FC = () => (
       </Link>
       <Ul>
         <Li>
-          <Link href="/#services">
+          <Link href="/swap">
             <Anchor>
-              Features
-            </Anchor>
-          </Link>
-        </Li>
-        <Li>
-          <Link href="/#partnerships">
-            <Anchor>
-              Partnerships
-            </Anchor>
-          </Link>
-        </Li>
-        <Li>
-          <Link href="/#team">
-            <Anchor>
-              Our Team
-            </Anchor>
-          </Link>
-        </Li>
-        <Li>
-          <Link href="/#contact">
-            <Anchor>
-              Contact Us
+              Swap
             </Anchor>
           </Link>
         </Li>

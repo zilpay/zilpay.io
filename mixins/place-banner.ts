@@ -1,6 +1,6 @@
 import { ZilPayBase } from './zilpay-base';
 import { ZilPayType } from '@/types';
-import BN from 'bn.js';
+import Big from 'big.js';
 
 import { ZLPExplorer } from './zlp';
 
@@ -15,32 +15,32 @@ export interface UploadApp {
 
 export class ExplorerBanner extends ZilPayBase {
 
-  public static CUSTOMIZATION = new BN('100000000');
-  public static EXPONENT = new BN('2');
-  public static ONE = new BN('1');
-  public static MAX_BLOCKS = new BN('5000');
+  public static CUSTOMIZATION = Big('100000000');
+  public static EXPONENT = Big('2');
+  public static ONE = Big('1');
+  public static MAX_BLOCKS = Big('5000');
 
-  public static getPoolBalance(s: BN) {
+  public static getPoolBalance(s: Big) {
     const _n = ExplorerBanner.EXPONENT.add(ExplorerBanner.ONE);
     const _mn = ExplorerBanner.CUSTOMIZATION.div(_n);
     const _ts = s.add(ExplorerBanner.ONE);
-    const _s_pow = _ts.pow(_n);
+    const _s_pow = _ts.pow(Number(_n));
   
     return _mn.mul(_s_pow);
   }
 
-  public static getPrice(s: BN, b: BN) {
+  public static getPrice(s: Big, b: Big) {
     const _n = ExplorerBanner.EXPONENT.add(ExplorerBanner.ONE);
     const _mn = ExplorerBanner.CUSTOMIZATION.div(_n);
     const _ts = s.add(ExplorerBanner.ONE);
     const _sk = _ts.add(ExplorerBanner.ONE);
-    const _sk_exp = _sk.pow(_n);
+    const _sk_exp = _sk.pow(_n.toNumber());
     const _v = _mn.mul(_sk_exp);
   
     return _v.sub(b);
   }
 
-  public static zlpToBlocks(amount: BN, blockDecimal: BN) {
+  public static zlpToBlocks(amount: Big, blockDecimal: Big) {
     const _value = amount.div(blockDecimal);
   
     if (_value.gt(ExplorerBanner.MAX_BLOCKS)) {
@@ -51,8 +51,8 @@ export class ExplorerBanner extends ZilPayBase {
   }
 
   public static estimateBlocks(amount: number, reserve: string) {
-    const _reserve = new BN(reserve);
-    const _amount = new BN(amount).mul(ZLPExplorer.DECIMAL);
+    const _reserve = Big(reserve);
+    const _amount = Big(amount).mul(ZLPExplorer.DECIMAL);
     const _b = ExplorerBanner.getPoolBalance(_reserve);
     const _price = ExplorerBanner.getPrice(_reserve, _b);
     const _blocks = ExplorerBanner.zlpToBlocks(_amount, _price);
@@ -83,7 +83,7 @@ export class ExplorerBanner extends ZilPayBase {
   }
 
   public async placeBanner(amount: number, url: string, ipfs: string) {
-    const _amount = new BN(amount).mul(ZLPExplorer.DECIMAL);
+    const _amount = Big(amount).mul(ZLPExplorer.DECIMAL);
     const params = [
       {
         vname: 'amount',
