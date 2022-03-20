@@ -10,6 +10,14 @@ enum SwapDirection {
   TokenToZil
 }
 
+export interface TokenState {
+  pool: Array<bigint>;
+  decimals: number;
+  balance: {
+    [owner: string]: bigint;
+  };
+}
+
 export class DragonDex {
   public static CONTRACT = '0xe849b9bf534c99b85e09a0241b3581022f76b9e6';
   public static REWARDS_DECIMALS = BigInt('100000000000');
@@ -20,15 +28,21 @@ export class DragonDex {
   public lp = BigInt(0);
   public fee = [BigInt(0), BigInt(0)];
   public pools: {
-    [key: string]: Array<bigint>
+    [token: string]: TokenState
   } = {};
 
-  public async updateState(token: string) {
+  public async updateState(token: string, owner: string) {
     const contract = String(DragonDex.CONTRACT).toLowerCase().replace('0x', '');
-    const { pool, fee, lp } = await this._provider.fetchDexState(contract, token);
+    const { pool, fee, lp, balance, init } = await this._provider.fetchDexState(contract, token, owner);
 
     this.lp = lp;
-    this.pools[token] = pool;
+    this.pools[token] = {
+      pool,
+      balance: {
+        [owner]: balance
+      },
+      decimals: init.decimals
+    };
     this.fee = fee;
 
     // const amount = this.calcAmount(BigInt(9000000000), token, SwapDirection.TokenToZil);
@@ -36,7 +50,7 @@ export class DragonDex {
   }
 
   public calcAmount(amount: bigint, token: string, direction: SwapDirection) {
-    const [zilReserve, tokenReserve] = this.pools[token];
+    const [zilReserve, tokenReserve] = this.pools[token].pool;
     const [zilFee, tokensFee] = this.fee;
     const exactSide = ExactSide.ExactInput;
     const calculated = this._amountFor(

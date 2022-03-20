@@ -22,8 +22,9 @@ export const PageSwap: NextPage = () => {
 
   React.useEffect(() => {
     const token = '0x5c98730c74e9c12725798a77be8b29c624d89cb3';
+    const owner = '0x8617b72e22090f0c13167865147ec48a6db788ff';
 
-    dex.updateState(token);
+    dex.updateState(token, owner);
   }, []);
 
   return (

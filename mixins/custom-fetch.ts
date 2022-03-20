@@ -1,8 +1,9 @@
-import { ZilPayBase } from './zilpay-base';
+import { initParser } from "@/lib/parse-init";
 
 export enum RPCMethods {
   GetSmartContractSubState = 'GetSmartContractSubState',
-  GetTransaction = 'GetTransaction'
+  GetTransaction = 'GetTransaction',
+  GetSmartContractInit = 'GetSmartContractInit'
 }
 
 export class Blockchain {
@@ -18,10 +19,11 @@ export class Blockchain {
     return this._send(batch);
   }
 
-  public async fetchDexState(contrat: string, token: string) {
+  public async fetchDexState(contrat: string, token: string, owner: string) {
     const poolsFiled = 'pools';
     const feeFiled = 'swap_fee';
     const minLPField = 'min_lp';
+    const balancesField = 'balances';
 
     const batch = [
       {
@@ -53,17 +55,39 @@ export class Blockchain {
         ],
         id: 1,
         jsonrpc: `2.0`,
+      },
+      {
+        method: RPCMethods.GetSmartContractSubState,
+        params: [
+          String(token).toLowerCase().replace('0x', ''),
+          balancesField,
+          [owner]
+        ],
+        id: 1,
+        jsonrpc: `2.0`,
+      },
+      {
+        method: RPCMethods.GetSmartContractInit,
+        params: [
+          String(token).toLowerCase().replace('0x', '')
+        ],
+        id: 1,
+        jsonrpc: `2.0`,
       }
     ];
-    const [pool, fee, minLPRes] = await this._send(batch);
+    const [pool, fee, minLPRes, balances, resInit] = await this._send(batch);
     const [zilReserve, tokenReserve] = pool.result[poolsFiled][token].arguments;
     const [zilFee, tokensFee] = fee.result[feeFiled].arguments;
     const minLP = minLPRes.result[minLPField];
+    const balance = balances.result ? balances.result[balancesField][owner] : 0;
+    const init = initParser(resInit.result);
 
     return {
       fee: [BigInt(zilFee), BigInt(tokensFee)],
       pool: [BigInt(zilReserve), BigInt(tokenReserve)],
-      lp: BigInt(minLP)
+      lp: BigInt(minLP),
+      balance: BigInt(balance),
+      init
     };
   }
 
