@@ -1,3 +1,4 @@
+import { toHex } from '@/lib/to-hex';
 import { Blockchain } from './custom-fetch';
 
 enum ExactSide {
@@ -32,7 +33,7 @@ export class DragonDex {
   } = {};
 
   public async updateState(token: string, owner: string) {
-    const contract = String(DragonDex.CONTRACT).toLowerCase().replace('0x', '');
+    const contract = toHex(DragonDex.CONTRACT);
     const { pool, fee, lp, balance, init } = await this._provider.fetchDexState(contract, token, owner);
 
     this.lp = lp;

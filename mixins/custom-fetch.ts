@@ -1,4 +1,5 @@
 import { initParser } from "@/lib/parse-init";
+import { toHex } from "@/lib/to-hex";
 
 export enum RPCMethods {
   GetSmartContractSubState = 'GetSmartContractSubState',
@@ -59,7 +60,7 @@ export class Blockchain {
       {
         method: RPCMethods.GetSmartContractSubState,
         params: [
-          String(token).toLowerCase().replace('0x', ''),
+          toHex(token),
           balancesField,
           [owner]
         ],
@@ -69,7 +70,7 @@ export class Blockchain {
       {
         method: RPCMethods.GetSmartContractInit,
         params: [
-          String(token).toLowerCase().replace('0x', '')
+          toHex(token)
         ],
         id: 1,
         jsonrpc: `2.0`,
