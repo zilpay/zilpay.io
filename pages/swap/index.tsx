@@ -10,10 +10,21 @@ import { Text } from 'components/text';
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
+import { DragonDex } from '@/mixins/dex';
+
+const dex = new DragonDex();
+
 export const PageSwap: NextPage = () => {
   const { t } = useTranslation(`main`);
 
   const [tab, setTab] = React.useState(0);
+
+
+  React.useEffect(() => {
+    const token = '0x5c98730c74e9c12725798a77be8b29c624d89cb3';
+
+    dex.updateState(token);
+  }, []);
 
   return (
     <Container>
