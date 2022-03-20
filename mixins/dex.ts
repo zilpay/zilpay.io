@@ -30,12 +30,14 @@ export class DragonDex {
     this.lp = lp;
     this.pools[token] = pool;
     this.fee = fee;
+
+    // const amount = this.calcAmount(BigInt(9000000000), token, SwapDirection.TokenToZil);
+    // console.log(amount);
   }
 
-  public calcExactZILForTokens(amount: bigint, token: string) {
+  public calcAmount(amount: bigint, token: string, direction: SwapDirection) {
     const [zilReserve, tokenReserve] = this.pools[token];
     const [zilFee, tokensFee] = this.fee;
-    const direction = SwapDirection.ZilToToken;
     const exactSide = ExactSide.ExactInput;
     const calculated = this._amountFor(
       direction,
