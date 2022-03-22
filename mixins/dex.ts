@@ -129,6 +129,45 @@ export class DragonDex {
     });
   }
 
+  public swapExactTokensForZIL(tokens: Big, max: Big, recipient: string, token: string) {
+    const params = [
+      {
+        vname: 'token_address',
+        type: 'ByStr20',
+        value: token
+      },
+      {
+        vname: 'token_amount',
+        type: 'Uint128',
+        value: String(tokens)
+      },
+      {
+        vname: 'min_zil_amount',
+        type: 'Uint128',
+        value: String(max)
+      },
+      {
+        vname: 'deadline_block',
+        type: 'BNum',
+        value: String(4354343543543)
+      },
+      {
+        vname: 'recipient_address',
+        type: 'ByStr20',
+        value: recipient
+      }
+    ];
+    const contractAddress = DragonDex.CONTRACT;
+    const transition = 'SwapExactTokensForZIL';
+
+    return this.zilpay.call({
+      params,
+      contractAddress,
+      transition,
+      amount: '0'
+    });
+  }
+
   public toDecimails(decimals: number) {
     return Big(10**decimals);
   }
