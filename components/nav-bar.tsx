@@ -84,16 +84,6 @@ export const Navbar: React.FC = () => (
             </Text>
           </Link>
         </Li>
-        {/* <Li>
-          <a
-            href="https://zilpay.github.io/zilpay-docs/"
-            target="_blanck"
-          >
-            <Anchor>
-              Documentation
-            </Anchor>
-          </a>
-        </Li> */}
       </Ul>
       <ConnectZIlPay />
     </Container>

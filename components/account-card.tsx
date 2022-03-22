@@ -19,8 +19,8 @@ const AccountContainer = styled.div`
   margin: 16px;
   padding: 5px 30px;
 
-  border: 1px solid ${Colors.Muted};
-  border-radius: 20px;
+  border: 1px solid ${Colors.Secondary};
+  border-radius: 16px;
 `;
 const Row = styled.div`
   display: flex;
@@ -41,10 +41,10 @@ const CopyContainer = styled.a`
 
   :hover {
     svg {
-      stroke: #a1a1b5;
+      stroke: ${Colors.White};
     }
     div {
-      color: #a1a1b5;
+      color: ${Colors.White};
     }
   }
 `;

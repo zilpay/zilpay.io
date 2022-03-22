@@ -112,6 +112,7 @@ export var ConnectZIlPay: React.FC = function () {
       observerBlock = zp.wallet
         .observableBlock()
         .subscribe(async (block: Block) => {
+          console.log(block);
           let list = $transactions.getState();
 
           const params = list
