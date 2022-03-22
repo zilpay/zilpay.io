@@ -168,6 +168,50 @@ export class DragonDex {
     });
   }
 
+  public swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string,) {
+    const params = [
+      {
+        vname: 'token0_address',
+        type: 'ByStr20',
+        value: token0
+      },
+      {
+        vname: 'token1_address',
+        type: 'ByStr20',
+        value: token1
+      },
+      {
+        vname: 'token0_amount',
+        type: 'Uint128',
+        value: String(tokens)
+      },
+      {
+        vname: 'min_token1_amount',
+        type: 'Uint128',
+        value: String(max)
+      },
+      {
+        vname: 'deadline_block',
+        type: 'BNum',
+        value: String(4354343543543)
+      },
+      {
+        vname: 'recipient_address',
+        type: 'ByStr20',
+        value: recipient
+      }
+    ];
+    const contractAddress = DragonDex.CONTRACT;
+    const transition = 'SwapExactTokensForTokens';
+
+    return this.zilpay.call({
+      params,
+      contractAddress,
+      transition,
+      amount: '0'
+    });
+  }
+
   public toDecimails(decimals: number) {
     return Big(10**decimals);
   }
