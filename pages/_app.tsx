@@ -5,7 +5,6 @@ import NextNprogress from "nextjs-progressbar";
 
 import { Footer } from 'components/footer';
 import { Navbar } from 'components/nav-bar';
-import { MobileNavBar } from 'components/mobile-nav-bar';
 
 import { isMobile, isDesktop, isAndroid, isIOS } from 'react-device-detect';
 import { BaseStyles } from '@/styles';
@@ -25,7 +24,8 @@ const App = ({ Component, pageProps }: AppProps) => (
         <Navbar />
       ) : null}
       {isMobile || isAndroid || isIOS ? (
-        <MobileNavBar />
+        // <MobileNavBar />
+        null
       ) : null}
       <Component {...pageProps} />
       <Footer />
