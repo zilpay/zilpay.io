@@ -1,12 +1,15 @@
 import { toHex } from '@/lib/to-hex';
+import Big from 'big.js';
 import { Blockchain } from './custom-fetch';
 
-enum ExactSide {
+Big.PE = 999;
+
+export enum ExactSide {
   ExactInput,
   ExactOutput
 }
 
-enum SwapDirection {
+export enum SwapDirection {
   ZilToToken,
   TokenToZil
 }
@@ -20,7 +23,7 @@ export interface TokenState {
 }
 
 export class DragonDex {
-  public static CONTRACT = '0xe849b9bf534c99b85e09a0241b3581022f76b9e6';
+  public static CONTRACT = '0x34020700f887cee68e984177ecefff9b2f1574cd';
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 
@@ -45,9 +48,6 @@ export class DragonDex {
       decimals: init.decimals
     };
     this.fee = fee;
-
-    // const amount = this.calcAmount(BigInt(9000000000), token, SwapDirection.TokenToZil);
-    // console.log(amount);
   }
 
   public calcAmount(amount: bigint, token: string, direction: SwapDirection) {
@@ -70,6 +70,31 @@ export class DragonDex {
     }
   }
 
+  public zilToTokens(value: string | Big, token: string): Big {
+    const amount = Big(value);
+
+    const decimals = this.toDecimails(this.pools[token].decimals);
+    const zilDecimails = this.toDecimails(12);
+    const qa = amount.mul(zilDecimails).round().toString();
+    const { tokens } = this.calcAmount(BigInt(qa), token, SwapDirection.ZilToToken);
+
+    return Big(String(tokens)).div(decimals);
+  }
+
+  public tokensToZil(value: string | Big, token: string) {
+    const amount = Big(value);
+
+    const decimals = this.toDecimails(this.pools[token].decimals);
+    const zilDecimails = this.toDecimails(12);
+    const qa = amount.mul(decimals).round().toString();
+    const { zils } = this.calcAmount(BigInt(qa), token, SwapDirection.TokenToZil);
+
+    return Big(String(zils)).div(zilDecimails);
+  }
+
+  public toDecimails(decimals: number) {
+    return Big(10**decimals);
+  }
 
   private _fraction(d: bigint, x: bigint, y: bigint) {
     return (d * y) / x;

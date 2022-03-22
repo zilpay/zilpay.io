@@ -76,37 +76,16 @@ export const MobileNavBar: React.FC = () => {
       >
         <Ul>
           <Li>
-            <Link href="/#services">
+            <Link href="/swap">
               <Anchor>
-                Features
+                SWAP
               </Anchor>
             </Link>
           </Li>
           <Li>
-            <Link href="/#partnerships">
+            <Link href="/pool">
               <Anchor>
-                Partnerships
-              </Anchor>
-            </Link>
-          </Li>
-          <Li>
-            <Link href="/#team">
-              <Anchor>
-                Our Team
-              </Anchor>
-            </Link>
-          </Li>
-          <Li>
-            <Link href="/#contact">
-              <Anchor>
-                Contact Us
-              </Anchor>
-            </Link>
-          </Li>
-          <Li>
-            <Link href="/explorer">
-              <Anchor>
-                Explorer
+                POOL
               </Anchor>
             </Link>
           </Li>
@@ -121,14 +100,14 @@ export const MobileNavBar: React.FC = () => {
             </a>
           </Li>
         </Ul>
-        <a
+        {/* <a
           href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
           target="_blanck"
         >
           <Button css="margin-left: 30px;margin-right: 30px;">
             WHITE PAPER
           </Button>
-        </a>
+        </a> */}
       </MobileModal>
     </>
   );

@@ -70,14 +70,14 @@ export const Navbar: React.FC = () => (
         <Li>
           <Link href="/swap">
             <Anchor>
-              Swap
+              SWAP
             </Anchor>
           </Link>
         </Li>
         <Li>
-          <Link href="/explorer">
+          <Link href="/pool">
             <Anchor>
-              Explorer
+              POOL
             </Anchor>
           </Link>
         </Li>
@@ -91,14 +91,14 @@ export const Navbar: React.FC = () => (
             </Anchor>
           </a>
         </Li>
-        <a
+        {/* <a
           href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
           target="_blanck"
         >
           <Button css="margin-left: 30px;margin-right: 30px;">
             WHITE PAPER
           </Button>
-        </a>
+        </a> */}
       </Ul>
     </Container>
   );
