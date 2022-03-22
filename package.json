@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "big.js": "^6.1.1",
+    "clipboard-copy": "^4.0.1",
     "effector": "^22.2.0",
     "effector-react": "^22.0.6",
     "next": "12.1.0",

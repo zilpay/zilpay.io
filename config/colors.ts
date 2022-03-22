@@ -7,5 +7,8 @@ export enum Colors {
   Black = '#000',
   White = '#fff',
   Danger = '#FE3338',
-  Warning = '#FFAD00'
+  Warning = '#FFAD00',
+  Muted = `#7777A3`,
+  Success = `#06C190`,
+  LightBlue = `#A272FF`
 }

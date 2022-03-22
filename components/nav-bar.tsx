@@ -7,6 +7,7 @@ import { Button } from 'components/button';
 
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
+import { ConnectZIlPay } from './zilpay/connect-zilpay';
 
 const Container = styled.div`
   display: flex;
@@ -91,14 +92,7 @@ export const Navbar: React.FC = () => (
             </Anchor>
           </a>
         </Li>
-        {/* <a
-          href="https://drive.google.com/file/d/1X-z5AHBp2cOwyXo4ZuVCCBuk7MIX-r6k/view"
-          target="_blanck"
-        >
-          <Button css="margin-left: 30px;margin-right: 30px;">
-            WHITE PAPER
-          </Button>
-        </a> */}
+        <ConnectZIlPay />
       </Ul>
     </Container>
   );
