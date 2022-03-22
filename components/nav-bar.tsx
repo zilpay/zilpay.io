@@ -31,7 +31,9 @@ const Li = styled.li`
   padding-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;
+  min-width: 100px;
 
+  text-align: center;
   border-bottom: solid 2px transparent;
   color: ${Colors.White};
 
@@ -70,19 +72,19 @@ export const Navbar: React.FC = () => (
       <Ul>
         <Li>
           <Link href="/swap">
-            <Anchor>
+            <Text fontColors={Colors.Secondary}>
               SWAP
-            </Anchor>
+            </Text>
           </Link>
         </Li>
         <Li>
           <Link href="/pool">
-            <Anchor>
+            <Text fontColors={Colors.Secondary}>
               POOL
-            </Anchor>
+            </Text>
           </Link>
         </Li>
-        <Li>
+        {/* <Li>
           <a
             href="https://zilpay.github.io/zilpay-docs/"
             target="_blanck"
@@ -91,8 +93,8 @@ export const Navbar: React.FC = () => (
               Documentation
             </Anchor>
           </a>
-        </Li>
-        <ConnectZIlPay />
+        </Li> */}
       </Ul>
+      <ConnectZIlPay />
     </Container>
   );

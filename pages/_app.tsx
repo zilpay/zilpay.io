@@ -10,6 +10,8 @@ import { isMobile, isDesktop, isAndroid, isIOS } from 'react-device-detect';
 import { BaseStyles } from '@/styles';
 import { Colors } from '@/config/colors';
 
+import { ConnectZIlPay } from '@/components/zilpay/connect-zilpay';
+
 const App = ({ Component, pageProps }: AppProps) => (
     <>
       <BaseStyles />
@@ -24,8 +26,7 @@ const App = ({ Component, pageProps }: AppProps) => (
         <Navbar />
       ) : null}
       {isMobile || isAndroid || isIOS ? (
-        // <MobileNavBar />
-        null
+        null//<ConnectZIlPay />
       ) : null}
       <Component {...pageProps} />
       <Footer />

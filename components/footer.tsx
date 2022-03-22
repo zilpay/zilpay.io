@@ -219,6 +219,18 @@ export const Footer: React.FC = () => {
               {t(`dex-policy`)}
             </Text>
           </Link>
+          <a
+            href="https://zilpay.github.io/zilpay-docs/"
+            target="_blanck"
+          >
+            <Text
+              fontVariant={StyleFonts.Light}
+              size="14px"
+              pointer
+            >
+              Documentation
+            </Text>
+          </a>
         </Legal>
       </Wrapper>
     </Container>

@@ -22,7 +22,6 @@ import {
   writeNewList,
 } from "store/transactions";
 import { updateNet, $net } from "store/wallet-netwrok";
-import { Blockchain } from "@/mixins/custom-fetch";
 
 import { Block, Net } from "@/types/zilpay";
 
@@ -38,12 +37,14 @@ const ConnectZIlPayButton = styled.button`
   align-items: center;
   justify-content: center;
 
-  padding: 10px 22px;
-  border-radius: 16px;
-  border: 1px solid ${Colors.Accent};
+  padding: 17px 22px;
+  border-radius: 8px;
+  border: 1px solid ${Colors.Secondary};
   background: ${(p: ConnectZIlPayButtonProp) => p.color};
   user-select: none;
-  min-width: 100px;
+  min-width: 140px;
+  min-width: 140px;
+  min-height: 56px;
   text-align: center;
 
   :hover {
@@ -54,7 +55,6 @@ const ConnectZIlPayButton = styled.button`
 let observer: any = null;
 let observerNet: any = null;
 let observerBlock: any = null;
-const blockchain = new Blockchain();
 export var ConnectZIlPay: React.FC = function () {
   const address = useStore($wallet);
   const net = useStore($net);
@@ -220,7 +220,7 @@ export var ConnectZIlPay: React.FC = function () {
       {address ? (
         <React.Fragment>
           <ConnectZIlPayButton
-            color={btnColor}
+            color={Colors.Black}
             onClick={() => setShowModal(true)}
           >
             {isLoading ? (
@@ -236,7 +236,7 @@ export var ConnectZIlPay: React.FC = function () {
           </ConnectZIlPayButton>
         </React.Fragment>
       ) : (
-        <ConnectZIlPayButton color={btnColor} onClick={handleConnect}>
+        <ConnectZIlPayButton color={Colors.Black} onClick={handleConnect}>
           {loading ? (
             <ThreeDots color="#fff" height={10} width={20} />
           ) : (
