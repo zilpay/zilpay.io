@@ -21,45 +21,66 @@ const owner = '0xb72966338CDd4ed23a4E11C160dDBd060366F9ad';
 export const PagePool: NextPage = () => {
   const { t } = useTranslation(`main`);
 
-  const [direction, setDirection] = React.useState(SwapDirection.ZilToToken);
-  const [firstAmount, setFirstAmount] = React.useState(Big(0));
-  const [secondAmount, setSecondAmount] = React.useState(Big(0));
+  const [topAmount, setTopAmount] = React.useState(Big(0));
+  const [bottomAmoubnt, setBottomAmoubnt] = React.useState(Big(0));
 
-  const hanldeChangeFirst = React.useCallback((event) => {
+  const hanldeOnChangeTop = React.useCallback((event) => {
     try {
-      setDirection(SwapDirection.ZilToToken);
       const amount = Big(event.target.value);
-      setFirstAmount(amount);
+      const circular = dex.zilToTokens(amount, token);
 
-      const decimals = Big(10**dex.pools[token].decimals);
-      const zilDecimails = Big(10**12);
-      const qa = amount.mul(zilDecimails).round().toString();
-      const { tokens } = dex.calcAmount(BigInt(qa), token, SwapDirection.ZilToToken);
-      const circular = Big(String(tokens)).div(decimals);
-
-      setSecondAmount(circular);
+      setTopAmount(amount);
+      setBottomAmoubnt(circular);
     } catch {
-      /// skip
+      ///
     }
   }, []);
-  const hanldeChangeSecond = React.useCallback((event) => {
+  const hanldeOnChangeBottom = React.useCallback((event) => {
     try {
-      setDirection(SwapDirection.TokenToZil);
       const amount = Big(event.target.value);
-      setSecondAmount(amount);
+      const circular = dex.tokensToZil(amount, token);
 
-      const decimals = Big(10**dex.pools[token].decimals);
-      const zilDecimails = Big(10**12);
-      const qa = amount.mul(decimals).round().toString();
-      const { zils } = dex.calcAmount(BigInt(qa), token, SwapDirection.TokenToZil);
-      const circular = Big(String(zils)).div(zilDecimails);
-
-      setFirstAmount(circular);
+      setTopAmount(circular);
+      setBottomAmoubnt(amount);
     } catch {
-      /// skip
+      ///
     }
   }, []);
+  const hanldeAddPool = React.useCallback(async() => {
+    try {
+      const decimals = dex.toDecimails(dex.pools[token].decimals);
+      const zildecimals = dex.toDecimails(12);
+      const zil = topAmount.mul(zildecimals).round();
+      const maxTokens = bottomAmoubnt.mul(decimals).round();
+      const res0 = await dex.addLiquidity(
+        zil,
+        maxTokens,
+        zil,
+        token
+      );
+      console.log(res0);
+    } catch {
+      ////
+    }
+  }, [topAmount, bottomAmoubnt]);
+  const hanldeRemovePool = React.useCallback(async() => {
+    try {
+      const decimals = dex.toDecimails(dex.pools[token].decimals);
+      const zildecimals = dex.toDecimails(12);
+      const zil = topAmount.mul(zildecimals).round();
+      const minTokens = bottomAmoubnt.mul(decimals).round();
 
+      const res0 = await dex.removeLiquidity(
+        zil,
+        minTokens,
+        zil,
+        token
+      );
+      console.log(res0);
+    } catch {
+      ////
+    }
+  }, [topAmount, bottomAmoubnt]);
 
   React.useEffect(() => {
     dex.updateState(token, owner);
@@ -79,18 +100,21 @@ export const PagePool: NextPage = () => {
         <div>
           <input
             type="text"
-            value={String(firstAmount)}
-            onChange={hanldeChangeFirst}
+            value={String(topAmount)}
+            onChange={hanldeOnChangeTop}
           />
           <br />
           <input
             type="text"
-            value={String(secondAmount)}
-            onChange={hanldeChangeSecond}
+            value={String(bottomAmoubnt)}
+            onChange={hanldeOnChangeBottom}
           />
           <br />
-          <button>
+          <button onClick={hanldeAddPool}>
             Add Pool
+          </button>
+          <button onClick={hanldeRemovePool}>
+            Remove Pool
           </button>
         </div>
       </Wrapper>

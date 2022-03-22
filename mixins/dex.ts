@@ -212,6 +212,79 @@ export class DragonDex {
     });
   }
 
+  public addLiquidity(min: Big, max: Big, amount: Big, token: string) {
+    const params = [
+      {
+        vname: 'token_address',
+        type: 'ByStr20',
+        value: token
+      },
+      {
+        vname: 'min_contribution_amount',
+        type: 'Uint128',
+        value: String(min)
+      },
+      {
+        vname: 'max_token_amount',
+        type: 'Uint128',
+        value: String(max)
+      },
+      {
+        vname: 'deadline_block',
+        type: 'BNum',
+        value: String(max)
+      }
+    ];
+    const contractAddress = DragonDex.CONTRACT;
+    const transition = 'AddLiquidity';
+
+    return this.zilpay.call({
+      params,
+      contractAddress,
+      transition,
+      amount: String(amount)
+    });
+  }
+
+  public removeLiquidity(minzil: Big, minzrc: Big, contribution: Big, token: string) {
+    const params = [
+      {
+        vname: 'token_address',
+        type: 'ByStr20',
+        value: token
+      },
+      {
+        vname: 'contribution_amount',
+        type: 'Uint128',
+        value: String(contribution)
+      },
+      {
+        vname: 'min_zil_amount',
+        type: 'Uint128',
+        value: String(minzil)
+      },
+      {
+        vname: 'min_token_amount',
+        type: 'Uint128',
+        value: String(minzrc)
+      },
+      {
+        vname: 'deadline_block',
+        type: 'BNum',
+        value: String(contribution)
+      }
+    ];
+    const contractAddress = DragonDex.CONTRACT;
+    const transition = 'RemoveLiquidity';
+
+    return this.zilpay.call({
+      params,
+      contractAddress,
+      transition,
+      amount: '0'
+    });
+  }
+
   public toDecimails(decimals: number) {
     return Big(10**decimals);
   }

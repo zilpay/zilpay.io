@@ -51,7 +51,6 @@ export const PageSwap: NextPage = () => {
   }, []);
   const hanldeOnSwap = React.useCallback(async() => {
     try {
-      const contract = new DragonDex();
       const decimals = dex.toDecimails(dex.pools[token].decimals);
       const zildecimals = dex.toDecimails(12);
 
@@ -59,7 +58,7 @@ export const PageSwap: NextPage = () => {
         case SwapDirection.ZilToToken:
           const zil = topAmount.mul(zildecimals).round();
           const max_tokens = bottomAmoubnt.mul(decimals).round();
-          const res0 = await contract.swapExactZILForTokens(
+          const res0 = await dex.swapExactZILForTokens(
             zil,
             max_tokens,
             owner,
@@ -70,7 +69,7 @@ export const PageSwap: NextPage = () => {
         case SwapDirection.TokenToZil:
           const tokens = bottomAmoubnt.mul(decimals).round();
           const max_zil = topAmount.mul(zildecimals).round();
-          const res = await contract.swapExactTokensForZIL(
+          const res = await dex.swapExactTokensForZIL(
             tokens,
             max_zil,
             owner,
