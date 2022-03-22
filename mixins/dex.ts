@@ -1,6 +1,7 @@
 import { toHex } from '@/lib/to-hex';
 import Big from 'big.js';
 import { Blockchain } from './custom-fetch';
+import { ZilPayBase } from './zilpay-base';
 
 Big.PE = 999;
 
@@ -28,6 +29,8 @@ export class DragonDex {
   public static FEE_DEMON = BigInt('10000');
 
   private _provider = new Blockchain();
+
+  public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
   public fee = [BigInt(0), BigInt(0)];
@@ -90,6 +93,40 @@ export class DragonDex {
     const { zils } = this.calcAmount(BigInt(qa), token, SwapDirection.TokenToZil);
 
     return Big(String(zils)).div(zilDecimails);
+  }
+
+  public swapExactZILForTokens(zil: Big, max: Big, recipient: string, token: string) {
+    const params = [
+      {
+        vname: 'token_address',
+        type: 'ByStr20',
+        value: token
+      },
+      {
+        vname: 'min_token_amount',
+        type: 'Uint128',
+        value: String(max)
+      },
+      {
+        vname: 'deadline_block',
+        type: 'BNum',
+        value: String(4354343543543)
+      },
+      {
+        vname: 'recipient_address',
+        type: 'ByStr20',
+        value: recipient
+      }
+    ];
+    const contractAddress = DragonDex.CONTRACT;
+    const transition = 'SwapExactZILForTokens';
+
+    return this.zilpay.call({
+      params,
+      contractAddress,
+      transition,
+      amount: String(zil)
+    });
   }
 
   public toDecimails(decimals: number) {
