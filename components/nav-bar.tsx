@@ -13,7 +13,18 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 16px;
+  height: 55px;
+  padding: 10px;
+  background-color: ${Colors.Black};
+`;
+const ContainerCenter = styled.div`
+  display: flex;
+
+  div {
+    cursor: pointer;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 `;
 const Logo = styled.div`
   cursor: pointer;
@@ -21,70 +32,38 @@ const Logo = styled.div`
   display: flex;
   align-items: center;
 `;
-const Ul = styled.ul`
-  display: flex;
-  align-items: center;
-`;
-const Li = styled.li`
-  cursor: pointer;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
-  min-width: 100px;
-
-  text-align: center;
-  border-bottom: solid 2px transparent;
-  color: ${Colors.White};
-
-  :hover {
-    color: ${Colors.Secondary};
-    border-bottom: solid 2px ${Colors.Secondary};
-  }
-`;
-export const Anchor = styled.span`
-  font-family: ${StyleFonts.SemiBold}, Sans-serif;
-  font-size: 15px;
-  font-weight: 500;
-  padding-top: 20px;
-  padding-bottom: 20px;
-`;
 
 export const Navbar: React.FC = () => (
-    <Container>
-      <Link href="/">
-        <Logo>
-          <img
-            src="/icons/zilpay.svg"
-            height="30"
-            width-="30"
-            alt="Logo"
-          />
-          <Text
-            fontColors={Colors.White}
-            fontVariant={StyleFonts.Bold}
-            css="margin: 5px;"
-          >
-            ZilPay
-          </Text>
-        </Logo>
+  <Container>
+    <Link href="/">
+      <Logo>
+        <img
+          src="/icons/zilpay.svg"
+          height="30"
+          width-="30"
+          alt="Logo"
+        />
+        <Text
+          fontColors={Colors.White}
+          fontVariant={StyleFonts.Bold}
+          css="margin: 5px;"
+        >
+          ZilPay
+        </Text>
+      </Logo>
+    </Link>
+    <ContainerCenter>
+      <Link href="/swap">
+        <Text fontColors={Colors.Secondary}>
+          SWAP
+        </Text>
       </Link>
-      <Ul>
-        <Li>
-          <Link href="/swap">
-            <Text fontColors={Colors.Secondary}>
-              SWAP
-            </Text>
-          </Link>
-        </Li>
-        <Li>
-          <Link href="/pool">
-            <Text fontColors={Colors.Secondary}>
-              POOL
-            </Text>
-          </Link>
-        </Li>
-      </Ul>
-      <ConnectZIlPay />
-    </Container>
-  );
+      <Link href="/pool">
+        <Text fontColors={Colors.Secondary}>
+          POOL
+        </Text>
+      </Link>
+    </ContainerCenter>
+    <ConnectZIlPay />
+  </Container>
+);

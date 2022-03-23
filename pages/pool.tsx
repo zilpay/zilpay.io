@@ -2,15 +2,34 @@ import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React from 'react';
 import Big from 'big.js';
+import styled from 'styled-components';
 
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Container, Wrapper } from 'components/wrappers/terms-policy';
+
+import { Background } from 'components/sections/main';
 
 import { Text } from 'components/text';
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 import { SwapDirection, DragonDex } from '@/mixins/dex';
+
+const Container = styled.div`
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-image: url(/images/bg.webp);
+  background-position: center center;
+  background-size: 150%;
+`;
+const Wrapper = styled.div`
+`;
+const ContainerForm = styled.form`
+  padding: 36px;
+  background-color: #18191D;
+`;
 
 Big.PE = 999;
 const dex = new DragonDex();
@@ -97,26 +116,7 @@ export const PagePool: NextPage = () => {
         />
       </Head>
       <Wrapper>
-        <div>
-          <input
-            type="text"
-            value={String(topAmount)}
-            onChange={hanldeOnChangeTop}
-          />
-          <br />
-          <input
-            type="text"
-            value={String(bottomAmoubnt)}
-            onChange={hanldeOnChangeBottom}
-          />
-          <br />
-          <button onClick={hanldeAddPool}>
-            Add Pool
-          </button>
-          <button onClick={hanldeRemovePool}>
-            Remove Pool
-          </button>
-        </div>
+        <ContainerForm></ContainerForm>
       </Wrapper>
     </Container>
   );

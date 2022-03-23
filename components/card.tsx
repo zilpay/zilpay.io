@@ -24,6 +24,7 @@ const Container = styled.div`
 
   border-style: solid;
   border-width: 2px 2px 2px 2px;
+  border-color: transparent;
   ${(p: ContainerProp) => p.selected ? `border-color: ${Colors.Secondary};` : ``}
 
   :hover {

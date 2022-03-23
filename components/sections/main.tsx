@@ -14,6 +14,13 @@ const Container = styled.section`
 
   height: 90vh;
   width: 100%;
+`;
+export const Background = styled.div`
+  position: absolute;
+
+  height: 195vh;
+  width: 100%;
+  z-index: -1;
 
   background-image: url(/images/bg.webp);
   background-position: center center;
@@ -43,6 +50,7 @@ export const MainSection: React.FC = () => {
 
   return (
     <Container>
+      <Background />
       <Wrapper>
         <Text
           fontColors={Colors.Secondary}
