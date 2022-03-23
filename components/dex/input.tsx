@@ -1,8 +1,22 @@
+import type { TokenState } from "@/types/token";
+
+import React from "react";
 import { Colors } from "@/config/colors";
 import styled from "styled-components";
+import Big from "big.js";
+
 
 import { Text } from 'components/text';
 import { StyleFonts } from "@/config/fonts";
+import { ViewIcon } from "../icons/view";
+import { getIconURL } from "@/lib/viewblock";
+
+type Prop = {
+  token: TokenState;
+  value: Big;
+  onInput: (value: Big) => void;
+  onSelect: () => void
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,6 +30,7 @@ const Container = styled.div`
   padding-top: 10px;
   padding-left: 16px;
   padding-right: 16px;
+  margin: 10px;
 
   :hover {
     border: 2px solid ${Colors.Muted};
@@ -46,15 +61,34 @@ const Input = styled.input`
   }
 `;
 
-export const FormInput: React.FC = () => {
+export const FormInput: React.FC<Prop> = ({
+  value,
+  token,
+  onInput,
+  onSelect
+}) => {
+  const hanldeOnInput = React.useCallback((event) => {
+    if (event.target.value.endsWith(',')) {
+      return;
+    }
+    if (event.target.value) {
+      onInput(Big(event.target.value));
+    } else {
+      onInput(Big(0));
+    }
+  }, []);
+
   return (
     <label>
       <Container>
         <Wrapper>
-          <Input />
-          <DropDown>
+          <Input
+            value={String(value)}
+            onInput={hanldeOnInput}
+          />
+          <DropDown onClick={onSelect}>
             <img
-              src="https://meta.viewblock.io/zilliqa.zil1zu72vac254htqpg3mtywdcfm84l3dfd9qzww8t/logo?t=light"
+              src={getIconURL(token.bech32)}
               alt="tokens-logo"
               height="40"
             />
@@ -63,7 +97,7 @@ export const FormInput: React.FC = () => {
               fontVariant={StyleFonts.Bold}
               css="font-size: 20px;padding-left: 5px;padding-right: 5px;"
             >
-              XSGD
+              {token.symbol}
             </Text>
             <svg width="16" height="17" viewBox="0 0 16 17" fill="none">
               <path

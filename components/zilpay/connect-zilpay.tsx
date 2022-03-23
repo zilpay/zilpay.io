@@ -38,7 +38,6 @@ const ConnectZIlPayButton = styled.button`
   justify-content: center;
 
   padding: 17px 22px;
-  border-radius: 8px;
   border: 1px solid ${Colors.Secondary};
   background: ${(p: ConnectZIlPayButtonProp) => p.color};
   user-select: none;

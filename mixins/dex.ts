@@ -1,3 +1,4 @@
+import { ZERO_ADDR } from '@/config/conts';
 import { toHex } from '@/lib/to-hex';
 import Big from 'big.js';
 import { Blockchain } from './custom-fetch';
@@ -18,6 +19,8 @@ export enum SwapDirection {
 export interface TokenState {
   pool: Array<bigint>;
   decimals: number;
+  name: string;
+  symbol: string;
   balance: {
     [owner: string]: bigint;
   };
@@ -38,9 +41,26 @@ export class DragonDex {
     [token: string]: TokenState
   } = {};
 
+  constructor() {
+    this.pools[ZERO_ADDR] = {
+      pool: [BigInt(0), BigInt(0)],
+      decimals: 12,
+      symbol: 'ZIL',
+      name: 'Zilliqa',
+      balance: {}
+    };
+  }
+
   public async updateState(token: string, owner: string) {
     const contract = toHex(DragonDex.CONTRACT);
-    const { pool, fee, lp, balance, init } = await this._provider.fetchDexState(contract, token, owner);
+    const {
+      pool,
+      fee,
+      lp,
+      balance,
+      init,
+      balancesZIL
+    } = await this._provider.fetchDexState(contract, token, owner);
 
     this.lp = lp;
     this.pools[token] = {
@@ -48,9 +68,12 @@ export class DragonDex {
       balance: {
         [owner]: balance
       },
-      decimals: init.decimals
+      decimals: init.decimals,
+      symbol: init.symbol,
+      name: init.name
     };
     this.fee = fee;
+    this.pools[ZERO_ADDR].balance[owner] = balancesZIL;
   }
 
   public calcAmount(amount: bigint, token: string, direction: SwapDirection) {

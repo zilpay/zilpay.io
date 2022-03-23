@@ -4,7 +4,8 @@ import { toHex } from "@/lib/to-hex";
 export enum RPCMethods {
   GetSmartContractSubState = 'GetSmartContractSubState',
   GetTransaction = 'GetTransaction',
-  GetSmartContractInit = 'GetSmartContractInit'
+  GetSmartContractInit = 'GetSmartContractInit',
+  GetBalance = 'GetBalance'
 }
 
 export class Blockchain {
@@ -74,16 +75,26 @@ export class Blockchain {
         ],
         id: 1,
         jsonrpc: `2.0`,
-      }
+      },
+      {
+        method: RPCMethods.GetBalance,
+        params: [
+          toHex(owner)
+        ],
+        id: 1,
+        jsonrpc: `2.0`,
+      },
     ];
-    const [pool, fee, minLPRes, balances, resInit] = await this._send(batch);
+    const [pool, fee, minLPRes, balances, resInit, zilBalance] = await this._send(batch);
     const [zilReserve, tokenReserve] = pool.result[poolsFiled][token].arguments;
     const [zilFee, tokensFee] = fee.result[feeFiled].arguments;
     const minLP = minLPRes.result[minLPField];
     const balance = balances.result ? balances.result[balancesField][owner] : 0;
     const init = initParser(resInit.result);
+    const balancesZIL = zilBalance.error ? BigInt(0) : BigInt(zilBalance.result.balance);
 
     return {
+      balancesZIL,
       fee: [BigInt(zilFee), BigInt(tokensFee)],
       pool: [BigInt(zilReserve), BigInt(tokenReserve)],
       lp: BigInt(minLP),

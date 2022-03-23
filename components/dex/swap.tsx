@@ -1,3 +1,4 @@
+import { TokenState } from '@/types/token';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Big from 'big.js';
@@ -13,6 +14,7 @@ import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
 import { DragonDex, SwapDirection } from '@/mixins/dex';
+import { ZilPayBase } from 'mixins/zilpay-base';
 
 
 const Wrapper = styled.div`
@@ -30,9 +32,9 @@ const ContainerForm = styled.form`
   align-items: center;
 
   padding-bottom: 32px;
-  padding-top: 22px;
-  padding-left: 36px;
-  padding-right: 36px;
+  padding-top: 20px;
+  padding-left: 26px;
+  padding-right: 26px;
 `;
 const IconWrapper = styled.span`
   cursor: pointer;
@@ -57,18 +59,42 @@ const Button = styled.button`
 
 Big.PE = 999;
 const dex = new DragonDex();
+const zilpay = new ZilPayBase();
 
 const token = '0xd858528d4926ec6d17ff7cdde9c4cf1720806c2e';
 const owner = '0xb72966338CDd4ed23a4E11C160dDBd060366F9ad';
 
 export const SwapForm: React.FC = () => {
+  const [token0, setToken0] = React.useState<TokenState>({
+    bech32: '',
+    base16: '',
+    decimals: 12,
+    name: 'ZIlliqa',
+    symbol: 'ZIL'
+  });
+  const [token1, setToken1] = React.useState<TokenState>({
+    bech32: 'dasdsa',
+    base16: '',
+    decimals: 9,
+    name: 'TEST',
+    symbol: 'TST'
+  });
+  const [modal0, setModal0] = React.useState(false);
+  const [modal1, setModal1] = React.useState(false);
+
   const [topAmount, setTopAmount] = React.useState(Big(0));
   const [bottomAmoubnt, setBottomAmoubnt] = React.useState(Big(0));
   const [direction, setDirection] = React.useState(SwapDirection.ZilToToken);
 
-  const hanldeOnChangeTop = React.useCallback((event) => {
+  const hanldeUpdate = React.useCallback(async() => {
+    const zp = await zilpay.zilpay();
+    if (zp.wallet.defaultAccount) {
+      await dex.updateState(token, zp.wallet.defaultAccount.base16);
+    }
+  }, []);
+
+  const hanldeOnChangeTop = React.useCallback((amount: Big) => {
     try {
-      const amount = Big(event.target.value);
       const circular = dex.zilToTokens(amount, token);
 
       setTopAmount(amount);
@@ -78,9 +104,8 @@ export const SwapForm: React.FC = () => {
       ///
     }
   }, []);
-  const hanldeOnChangeBottom = React.useCallback((event) => {
+  const hanldeOnChangeBottom = React.useCallback((amount: Big) => {
     try {
-      const amount = Big(event.target.value);
       const circular = dex.tokensToZil(amount, token);
 
       setTopAmount(circular);
@@ -90,7 +115,19 @@ export const SwapForm: React.FC = () => {
       ///
     }
   }, []);
-  const hanldeOnSwap = React.useCallback(async() => {
+  const hanldeOnSwapForms = React.useCallback(() => {
+    const fst = token0;
+    const second = token1;
+    const amount0 = topAmount;
+    const amount1 = bottomAmoubnt;
+
+    setToken1(fst);
+    setToken0(second);
+    setBottomAmoubnt(amount0);
+    setTopAmount(amount1);
+  }, [token0, token1, topAmount, bottomAmoubnt]);
+  const hanldeOnSwap = React.useCallback(async(event) => {
+    event.preventDefault();
     try {
       const decimals = dex.toDecimails(dex.pools[token].decimals);
       const zildecimals = dex.toDecimails(12);
@@ -126,11 +163,11 @@ export const SwapForm: React.FC = () => {
   }, [topAmount, bottomAmoubnt, direction]);
 
   React.useEffect(() => {
-    // dex.updateState(token, owner);
+    hanldeUpdate();
   }, []);
 
   return (
-    <ContainerForm>
+    <ContainerForm onSubmit={hanldeOnSwap}>
       <Wrapper>
         <Text
           fontColors={Colors.White}
@@ -146,9 +183,13 @@ export const SwapForm: React.FC = () => {
           />
         </svg>
       </Wrapper>
-      <FormInput />
-      <br />
-      <IconWrapper>
+      <FormInput
+        value={topAmount}
+        token={token0}
+        onInput={hanldeOnChangeTop}
+        onSelect={() => setModal0(true)}
+      />
+      <IconWrapper onClick={hanldeOnSwapForms}>
         <svg width="32" height="33" viewBox="0 0 32 33" fill="none">
           <rect
             width="32"
@@ -166,7 +207,12 @@ export const SwapForm: React.FC = () => {
           />
         </svg>
       </IconWrapper>
-      <FormInput />
+      <FormInput
+        value={bottomAmoubnt}
+        token={token1}
+        onInput={hanldeOnChangeBottom}
+        onSelect={() => setModal1(true)}
+      />
       <Wrapper>
         <Text>
           1 TINCH = 0.0005395 ETH ($1.55824)

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Link from 'next/link';
 
 import { Text } from 'components/text';
-import { Button } from 'components/button';
 
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
