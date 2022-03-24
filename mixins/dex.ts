@@ -4,6 +4,7 @@ import { ListedTokensState } from '@/types/token';
 import Big from 'big.js';
 import { Blockchain } from './custom-fetch';
 import { ZilPayBase } from './zilpay-base';
+import { $pools, updatePools } from 'store/pools';
 
 Big.PE = 999;
 
@@ -28,47 +29,26 @@ export class DragonDex {
 
   public lp = BigInt(0);
   public fee = [BigInt(0), BigInt(0)];
-  public pools: {
-    [token: string]: ListedTokensState
-  } = {};
 
-  constructor() {
-    this.pools[ZERO_ADDR] = {
-      pool: [BigInt(0), BigInt(0)],
-      bech32: '',
-      base16: '',
-      decimals: 12,
-      symbol: 'ZIL',
-      name: 'Zilliqa',
-      balance: {}
-    };
+  public get pools() {
+    return $pools.getState();
   }
 
   public async updateState(token: string, owner: string) {
     const contract = toHex(DragonDex.CONTRACT);
-    const {
-      pool,
-      fee,
-      lp,
-      balance,
-      init,
-      balancesZIL
-    } = await this._provider.fetchDexState(contract, token, owner);
+    const pools = this.pools;
+    const tokens = Object.keys(this.pools);
+    const { state, fee, minLP } = await this._provider.fetchPoolsBalances(contract, owner, tokens);
 
-    this.lp = lp;
-    this.pools[token] = {
-      pool,
-      balance: {
-        [owner]: balance
-      },
-      bech32: '',
-      base16: '',
-      decimals: init.decimals,
-      symbol: init.symbol,
-      name: init.name
-    };
+    this.lp = minLP;
     this.fee = fee;
-    this.pools[ZERO_ADDR].balance[owner] = balancesZIL;
+
+    for (const key in state) {
+      pools[key].pool = state[key].pool;
+      pools[key].balance[owner] = state[key].balance;
+    }
+
+    updatePools(pools);
   }
 
   public calcAmount(amount: bigint, token: string, direction: SwapDirection) {
@@ -94,7 +74,7 @@ export class DragonDex {
   public zilToTokens(value: string | Big, token: string): Big {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[token].decimals);
+    const decimals = this.toDecimails(this.pools[token].meta.decimals);
     const zilDecimails = this.toDecimails(12);
     const qa = amount.mul(zilDecimails).round().toString();
     const { tokens } = this.calcAmount(BigInt(qa), token, SwapDirection.ZilToToken);
@@ -105,7 +85,7 @@ export class DragonDex {
   public tokensToZil(value: string | Big, token: string) {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[token].decimals);
+    const decimals = this.toDecimails(this.pools[token].meta.decimals);
     const zilDecimails = this.toDecimails(12);
     const qa = amount.mul(decimals).round().toString();
     const { zils } = this.calcAmount(BigInt(qa), token, SwapDirection.TokenToZil);

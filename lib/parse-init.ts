@@ -19,7 +19,7 @@ export function initParser(init: ParamItem[]) {
   const decimals = Number(findParam(init, InitFields.Decimals));
   const initSupply = findParam(init, InitFields.InitSupply);
   const contractOwner = findParam(init, InitFields.ContractOwner) || findParam(init, 'contract_owner');
-  const address = findParam(init, InitFields.Address);
+  const address = findParam(init, InitFields.Address) || '';
 
   return {
     name,

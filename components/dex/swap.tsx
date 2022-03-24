@@ -136,7 +136,7 @@ export const SwapForm: React.FC = () => {
   const hanldeOnSwap = React.useCallback(async(event) => {
     event.preventDefault();
     try {
-      const decimals = dex.toDecimails(dex.pools[token].decimals);
+      const decimals = dex.toDecimails(dex.pools[token].meta.decimals);
       const zildecimals = dex.toDecimails(12);
 
       switch (direction) {

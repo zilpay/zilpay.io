@@ -1,5 +1,12 @@
+import type { RPCResponse } from "@/types/zilliqa";
+
+import { compact } from "@/lib/compact";
 import { initParser } from "@/lib/parse-init";
 import { toHex } from "@/lib/to-hex";
+import { chunk } from "@/lib/chunk";
+import { ZERO_ADDR } from "@/config/conts";
+
+type Params = string[] | number[] | (string | string[] | number[])[];
 
 export enum RPCMethods {
   GetSmartContractSubState = 'GetSmartContractSubState',
@@ -8,8 +15,58 @@ export enum RPCMethods {
   GetBalance = 'GetBalance'
 }
 
+export enum DexFields {
+  Pools = 'pools',
+  Fee = 'swap_fee',
+  MinLP = 'min_lp'
+}
+
+export enum ZRC2Fields {
+  Balances = 'balances'
+}
+
+const EMPTY_FEE = {
+  "argtypes": [
+      "Uint256",
+      "Uint256"
+  ],
+  "arguments": [
+      "10000",
+      "10000"
+  ],
+  "constructor": "Pair"
+};
+
+const EMPTY_LP = {
+  "argtypes": [
+      "Uint256",
+      "Uint256"
+  ],
+  "arguments": [
+      "1",
+      "1"
+  ],
+  "constructor": "Pair"
+};
+
+const EMPTY_POOL = {
+  "argtypes": [
+      "Uint256",
+      "Uint256"
+  ],
+  "arguments": [
+      "1",
+      "1"
+  ],
+  "constructor": "Pair"
+};
+
 export class Blockchain {
   private _http = `https://zilliqa-isolated-server.zilliqa.com`;
+  readonly #rpc = {
+    id: 1,
+    jsonrpc: '2.0'
+  };
 
   public async getTransaction(...hash: string[]) {
     const batch = hash.map((hash) => ({
@@ -19,6 +76,79 @@ export class Blockchain {
       jsonrpc: `2.0`,
     }));
     return this._send(batch);
+  }
+
+  public async fetchPoolsBalances(dex: string, owner: string, list: string[]) {
+    const tokens = list.slice(1).map((token) => ([
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Pools, [token]]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [toHex(token), ZRC2Fields.Balances, [owner]]
+      )
+    ]));
+    const tokensBatch = compact(tokens);
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Fee, []]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.MinLP, []]
+      ),
+      {
+        method: RPCMethods.GetBalance,
+        params: [
+          toHex(owner)
+        ],
+        id: 1,
+        jsonrpc: `2.0`,
+      },
+      ...tokensBatch,
+    ];
+    const batchRes = await this._send(batch);
+    const [resFee, minLPRes, zilsRes] = batchRes.slice(0, 3);
+    const tokensRes = batchRes.slice(3);
+
+    const [zilFee, tokensFee] = this._unpack(resFee, DexFields.Fee, EMPTY_FEE).arguments;
+    const minLP = this._unpack(minLPRes, DexFields.MinLP, '0');
+    const zilBalance = this._unpack(zilsRes, 'balance', '0');
+    const chunks = chunk<RPCResponse>(tokensRes, 2);
+    const state: {
+      [key: string]: {
+        balance: bigint;
+        pool: Array<bigint>;
+      }
+    } = {};
+
+    for (let index = 0; index < list.length; index++) {
+      const token = list[index];
+
+      if (token === ZERO_ADDR) {
+        state[token] = {
+          balance: BigInt(zilBalance),
+          pool: [BigInt(0), BigInt(0)]
+        };
+        continue;
+      }
+
+      const chunk = chunks[index - 1];
+      const [zilReserve, tokensReserve] = this._unpack(chunk[0], DexFields.Pools, EMPTY_POOL)[token].arguments;
+      const blk = this._unpack(chunk[1], ZRC2Fields.Balances, '0');
+      state[token] = {
+        balance: BigInt(blk),
+        pool: [BigInt(zilReserve), BigInt(tokensReserve)]
+      };
+    }
+
+    return {
+      state,
+      fee: [BigInt(zilFee), BigInt(tokensFee)],
+      minLP: minLP
+    };
   }
 
   public async fetchDexState(contrat: string, token: string, owner: string) {
@@ -100,6 +230,26 @@ export class Blockchain {
       lp: BigInt(minLP),
       balance: BigInt(balance),
       init
+    };
+  }
+
+  private _unpack<T>(res: RPCResponse, field: string, defaultValue: T) {
+    if (res.error || !res.result) {
+      return defaultValue;
+    }
+
+    if (res.result && res.result[field]) {
+      return res.result[field];
+    }
+
+    return defaultValue;
+  }
+
+  private _buildBody(method: string, params: Params) {
+    return {
+      ...this.#rpc,
+      method,
+      params
     };
   }
 

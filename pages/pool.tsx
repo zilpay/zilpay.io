@@ -63,7 +63,7 @@ export const PagePool: NextPage = () => {
   }, []);
   const hanldeAddPool = React.useCallback(async() => {
     try {
-      const decimals = dex.toDecimails(dex.pools[token].decimals);
+      const decimals = dex.toDecimails(dex.pools[token].meta.decimals);
       const zildecimals = dex.toDecimails(12);
       const zil = topAmount.mul(zildecimals).round();
       const maxTokens = bottomAmoubnt.mul(decimals).round();
@@ -80,7 +80,7 @@ export const PagePool: NextPage = () => {
   }, [topAmount, bottomAmoubnt]);
   const hanldeRemovePool = React.useCallback(async() => {
     try {
-      const decimals = dex.toDecimails(dex.pools[token].decimals);
+      const decimals = dex.toDecimails(dex.pools[token].meta.decimals);
       const zildecimals = dex.toDecimails(12);
       const zil = topAmount.mul(zildecimals).round();
       const minTokens = bottomAmoubnt.mul(decimals).round();
