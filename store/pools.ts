@@ -1,22 +1,22 @@
-import type { Pool, PoolsState } from 'types/token';
+import type { Pool } from 'types/token';
 
 import { createDomain } from "effector";
 import { StorageFields } from '@/config/fileds';
 import { ZERO_ADDR } from '@/config/conts';
 
-const initState: PoolsState = {
-  [ZERO_ADDR]: {
+const initState: Pool[] = [
+  {
     pool: [BigInt(0), BigInt(0)],
     balance: {},
     meta: {
       bech32: 'zil1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9yf6pz',
-      base16: '0x0000000000000000000000000000000000000000',
+      base16: ZERO_ADDR,
       decimals: 12,
       symbol: 'ZIL',
       name: 'Zilliqa'
     }
   },
-  ['0x487ba992c55c7fe55e1f784f78278364a4ef495c']: {
+  {
     pool: [BigInt(0), BigInt(0)],
     balance: {},
     meta: {
@@ -27,7 +27,7 @@ const initState: PoolsState = {
       name: 'tst'
     }
   },
-  ['0xd858528d4926ec6d17ff7cdde9c4cf1720806c2e']: {
+  {
     pool: [BigInt(0), BigInt(0)],
     balance: {},
     meta: {
@@ -38,14 +38,14 @@ const initState: PoolsState = {
       name: 'ttt'
     }
   }
-};
+];
 const poolsDomain = createDomain();
 
-export const updatePools = poolsDomain.createEvent<PoolsState>();
+export const updatePools = poolsDomain.createEvent<Pool[]>();
 export const clearPools = poolsDomain.createEvent();
 
 export const $pools = poolsDomain
-  .createStore<PoolsState>(initState)
+  .createStore<Pool[]>(initState)
   .on(clearPools, () => initState)
   .on(updatePools, (_, payload) => {
     // window.localStorage.setItem(StorageFields.Pools, JSON.stringify(payload));

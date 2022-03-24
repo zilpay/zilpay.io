@@ -36,23 +36,26 @@ export class DragonDex {
 
   public async updateState(token: string, owner: string) {
     const contract = toHex(DragonDex.CONTRACT);
-    const pools = this.pools;
     const tokens = Object.keys(this.pools);
     const { state, fee, minLP } = await this._provider.fetchPoolsBalances(contract, owner, tokens);
 
     this.lp = minLP;
     this.fee = fee;
 
-    for (const key in state) {
-      pools[key].pool = state[key].pool;
-      pools[key].balance[owner] = state[key].balance;
-    }
+    const pools = this.pools.map((value) => ({
+      ...value,
+      balance: {
+        ...value.balance,
+        [owner]: state[value.meta.base16].balance
+      },
+      pool: state[value.meta.base16].pool
+    }));
 
     updatePools(pools);
   }
 
-  public calcAmount(amount: bigint, token: string, direction: SwapDirection) {
-    const [zilReserve, tokenReserve] = this.pools[token].pool;
+  public calcAmount(amount: bigint, index: number, direction: SwapDirection) {
+    const [zilReserve, tokenReserve] = this.pools[index].pool;
     const [zilFee, tokensFee] = this.fee;
     const exactSide = ExactSide.ExactInput;
     const calculated = this._amountFor(
@@ -71,24 +74,24 @@ export class DragonDex {
     }
   }
 
-  public zilToTokens(value: string | Big, token: string): Big {
+  public zilToTokens(value: string | Big, index: number): Big {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[token].meta.decimals);
+    const decimals = this.toDecimails(this.pools[index].meta.decimals);
     const zilDecimails = this.toDecimails(12);
     const qa = amount.mul(zilDecimails).round().toString();
-    const { tokens } = this.calcAmount(BigInt(qa), token, SwapDirection.ZilToToken);
+    const { tokens } = this.calcAmount(BigInt(qa), index, SwapDirection.ZilToToken);
 
     return Big(String(tokens)).div(decimals);
   }
 
-  public tokensToZil(value: string | Big, token: string) {
+  public tokensToZil(value: string | Big, index: number) {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[token].meta.decimals);
+    const decimals = this.toDecimails(this.pools[index].meta.decimals);
     const zilDecimails = this.toDecimails(12);
     const qa = amount.mul(decimals).round().toString();
-    const { zils } = this.calcAmount(BigInt(qa), token, SwapDirection.TokenToZil);
+    const { zils } = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
 
     return Big(String(zils)).div(zilDecimails);
   }

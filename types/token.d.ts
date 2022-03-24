@@ -27,7 +27,3 @@ export interface Pool {
   };
   meta: TokenState;
 }
-
-export interface PoolsState {
-  [addr: string]: Pool;
-}
