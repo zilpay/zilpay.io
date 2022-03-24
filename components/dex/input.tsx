@@ -53,7 +53,8 @@ const Input = styled.input`
   color: ${Colors.White};
   font-size: 50px;
 
-  width: 350px;
+  max-width: 400px;
+  width: 100%;
   height: 48px;
 
   :focus {

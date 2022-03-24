@@ -1,11 +1,13 @@
-import { TokenState } from '@/types/token';
+import type { TokenState } from '@/types/token';
+
+import { GetServerSidePropsContext, NextPage } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Big from 'big.js';
 import styled from 'styled-components';
 import React from 'react';
-import { GetServerSidePropsContext, NextPage } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
 
 import { Text } from 'components/text';
 import { FormInput } from './input';
@@ -60,6 +62,11 @@ const Button = styled.button`
 Big.PE = 999;
 const dex = new DragonDex();
 const zilpay = new ZilPayBase();
+
+const list = [
+  '0x487ba992c55c7fe55e1f784f78278364a4ef495c',
+  '0xd858528d4926ec6d17ff7cdde9c4cf1720806c2e'
+];
 
 const token = '0xd858528d4926ec6d17ff7cdde9c4cf1720806c2e';
 const owner = '0xb72966338CDd4ed23a4E11C160dDBd060366F9ad';

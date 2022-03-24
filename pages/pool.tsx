@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Background } from 'components/sections/main';
+import { NewPool } from 'components/dex/new-pool';
 
 import { Text } from 'components/text';
 import { Colors } from '@/config/colors';
@@ -25,10 +25,6 @@ const Container = styled.div`
   background-size: 150%;
 `;
 const Wrapper = styled.div`
-`;
-const ContainerForm = styled.form`
-  padding: 36px;
-  background-color: #18191D;
 `;
 
 Big.PE = 999;
@@ -116,7 +112,7 @@ export const PagePool: NextPage = () => {
         />
       </Head>
       <Wrapper>
-        <ContainerForm></ContainerForm>
+        <NewPool />
       </Wrapper>
     </Container>
   );

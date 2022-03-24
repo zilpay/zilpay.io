@@ -1,5 +1,6 @@
 import { ZERO_ADDR } from '@/config/conts';
 import { toHex } from '@/lib/to-hex';
+import { ListedTokensState } from '@/types/token';
 import Big from 'big.js';
 import { Blockchain } from './custom-fetch';
 import { ZilPayBase } from './zilpay-base';
@@ -16,16 +17,6 @@ export enum SwapDirection {
   TokenToZil
 }
 
-export interface TokenState {
-  pool: Array<bigint>;
-  decimals: number;
-  name: string;
-  symbol: string;
-  balance: {
-    [owner: string]: bigint;
-  };
-}
-
 export class DragonDex {
   public static CONTRACT = '0x34020700f887cee68e984177ecefff9b2f1574cd';
   public static REWARDS_DECIMALS = BigInt('100000000000');
@@ -38,12 +29,14 @@ export class DragonDex {
   public lp = BigInt(0);
   public fee = [BigInt(0), BigInt(0)];
   public pools: {
-    [token: string]: TokenState
+    [token: string]: ListedTokensState
   } = {};
 
   constructor() {
     this.pools[ZERO_ADDR] = {
       pool: [BigInt(0), BigInt(0)],
+      bech32: '',
+      base16: '',
       decimals: 12,
       symbol: 'ZIL',
       name: 'Zilliqa',
@@ -68,6 +61,8 @@ export class DragonDex {
       balance: {
         [owner]: balance
       },
+      bech32: '',
+      base16: '',
       decimals: init.decimals,
       symbol: init.symbol,
       name: init.name

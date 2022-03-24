@@ -12,3 +12,22 @@ export interface TokenState {
   name: string;
   symbol: string;
 }
+
+export interface ListedTokensState extends TokenState {
+  pool: Array<bigint>;
+  balance: {
+    [owner: string]: bigint;
+  };
+}
+
+export interface Pool {
+  pool: Array<bigint>;
+  balance: {
+    [owner: string]: bigint;
+  };
+  meta: TokenState;
+}
+
+export interface PoolsState {
+  [addr: string]: Pool;
+}
