@@ -86,7 +86,7 @@ export class Blockchain {
       ),
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
-        [toHex(token), ZRC2Fields.Balances, [owner]]
+        [toHex(token), ZRC2Fields.Balances, [owner.toLowerCase()]]
       )
     ]));
     const tokensBatch = compact(tokens);
@@ -112,7 +112,6 @@ export class Blockchain {
     const batchRes = await this._send(batch);
     const [resFee, minLPRes, zilsRes] = batchRes.slice(0, 3);
     const tokensRes = batchRes.slice(3);
-
     const [zilFee, tokensFee] = this._unpack(resFee, DexFields.Fee, EMPTY_FEE).arguments;
     const minLP = this._unpack(minLPRes, DexFields.MinLP, '0');
     const zilBalance = this._unpack(zilsRes, 'balance', '0');
@@ -127,6 +126,11 @@ export class Blockchain {
     for (let index = 0; index < list.length; index++) {
       const token = list[index];
 
+      state[token] = {
+        balance: BigInt(0),
+        pool: [BigInt(0), BigInt(0)]
+      }
+
       if (token === ZERO_ADDR) {
         state[token] = {
           balance: BigInt(zilBalance),
@@ -136,12 +140,19 @@ export class Blockchain {
       }
 
       const chunk = chunks[index - 1];
-      const [zilReserve, tokensReserve] = this._unpack(chunk[0], DexFields.Pools, EMPTY_POOL)[token].arguments;
-      const blk = this._unpack(chunk[1], ZRC2Fields.Balances, '0');
-      state[token] = {
-        balance: BigInt(blk),
-        pool: [BigInt(zilReserve), BigInt(tokensReserve)]
-      };
+
+      if (chunk[0] && chunk[0].result && chunk[0].result[DexFields.Pools]) {
+        const [zilReserve, tokensReserve] = chunk[0].result[DexFields.Pools][token].arguments;
+
+        state[token]['pool'] = [BigInt(zilReserve), BigInt(tokensReserve)];
+      }
+
+      if (chunk[1] && chunk[1].result && chunk[1].result[ZRC2Fields.Balances]) {
+        const zils = chunk[1].result[ZRC2Fields.Balances][owner.toLowerCase()];
+        state[token].balance = BigInt(zils);
+      } else {
+        state[token].balance = BigInt(0);
+      }
     }
 
     return {

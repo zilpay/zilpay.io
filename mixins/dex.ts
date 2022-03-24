@@ -34,9 +34,9 @@ export class DragonDex {
     return $pools.getState();
   }
 
-  public async updateState(token: string, owner: string) {
+  public async updateState(owner: string) {
     const contract = toHex(DragonDex.CONTRACT);
-    const tokens = Object.keys(this.pools);
+    const tokens = this.pools.map((t) => t.meta.base16);
     const { state, fee, minLP } = await this._provider.fetchPoolsBalances(contract, owner, tokens);
 
     this.lp = minLP;

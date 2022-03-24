@@ -1,9 +1,3 @@
-import type { TokenState } from '@/types/token';
-
-import { GetServerSidePropsContext, NextPage } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import Head from 'next/head';
 import Big from 'big.js';
 import styled from 'styled-components';
 import React from 'react';
@@ -65,11 +59,6 @@ Big.PE = 999;
 const dex = new DragonDex();
 const zilpay = new ZilPayBase();
 
-const list = [
-  '0x487ba992c55c7fe55e1f784f78278364a4ef495c',
-  '0xd858528d4926ec6d17ff7cdde9c4cf1720806c2e'
-];
-
 export const SwapForm: React.FC = () => {
   const pools = useStore($pools);
   const wallet = useStore($wallet);
@@ -86,7 +75,7 @@ export const SwapForm: React.FC = () => {
   const hanldeUpdate = React.useCallback(async() => {
     const token = pools[token1];
     if (wallet) {
-      await dex.updateState(token.meta.base16, wallet.base16);
+      await dex.updateState(wallet.base16);
     }
   }, [wallet, token1, pools]);
 

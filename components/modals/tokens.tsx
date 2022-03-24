@@ -1,3 +1,5 @@
+import type { TokenState } from "@/types/token";
+
 import React from "react";
 import { useStore } from "effector-react";
 import { useTranslation } from "next-i18next";
@@ -6,17 +8,16 @@ import styled from "styled-components";
 import { Modal } from "components/modal";
 import { Text } from "components/text";
 import { CloseIcon } from "components/icons/close";
-import { TxCard } from "components/tx-card";
 import { Colors } from "config/colors";
-import { $transactions, resetTxList } from "store/transactions";
-import { AccountCard } from "@/components/account-card";
+import { TokenCard } from "components/token-card";
 
-import { StyleFonts } from "@/config/fonts";
-import { Wallet } from "@/store/wallet";
+import { $pools } from "@/store/pools";
+import { $wallet } from "@/store/wallet";
 
 type Prop = {
   show: boolean;
   onClose: () => void;
+  onSelect: (token: TokenState) => void;
 };
 
 const Between = styled.div`
@@ -38,9 +39,13 @@ const Between = styled.div`
 
 export var TokensModal: React.FC<Prop> = function ({
   show,
-  onClose
+  onClose,
+  onSelect
 }) {
   const common = useTranslation(`common`);
+
+  const pools = useStore($pools);
+  const wallet = useStore($wallet);
 
   return (
     <Modal
@@ -56,7 +61,14 @@ export var TokensModal: React.FC<Prop> = function ({
       width="450px"
       onClose={onClose}
     >
-      dasdasdas
+      {pools.slice(1).map((pool) => (
+        <TokenCard
+          token={pool.meta}
+          balance={pool.balance[wallet?.base16 || '']}
+          key={pool.meta.bech32}
+          onClick={onSelect}
+        />
+      ))}
     </Modal>
   );
 };

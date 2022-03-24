@@ -28,6 +28,12 @@ const Container = styled.div`
 
 export const NewPool: React.FC = () => {
   const [modal, setModal] = React.useState(false);
+  const [token, setToken] = React.useState<TokenState>();
+
+  const hanldeSelectToken = React.useCallback((token: TokenState) => {
+    setToken(token);
+    setModal(false);
+  }, []);
 
   return (
     <>
@@ -50,6 +56,7 @@ export const NewPool: React.FC = () => {
       <TokensModal
         show={modal}
         onClose={() => setModal(false)}
+        onSelect={hanldeSelectToken}
       />
     </>
   );

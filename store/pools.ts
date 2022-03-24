@@ -37,8 +37,20 @@ const initState: Pool[] = [
       symbol: 'www',
       name: 'ttt'
     }
+  },
+  {
+    pool: [BigInt(0), BigInt(0)],
+    balance: {},
+    meta: {
+      bech32: 'zil1tjv8xrr5a8qjwfte3fmmazefccjd389ns9fd3m',
+      base16: '0x5c98730c74e9c12725798a77be8b29c624d89cb3',
+      decimals: 18,
+      symbol: 'ZLP',
+      name: 'Zilapy'
+    }
   }
 ];
+
 const poolsDomain = createDomain();
 
 export const updatePools = poolsDomain.createEvent<Pool[]>();

@@ -47,7 +47,7 @@ export const PagePool: NextPage = () => {
   const hanldeUpdate = React.useCallback(async() => {
     const t = pools[token];
     if (wallet) {
-      await dex.updateState(t.meta.base16, wallet.base16);
+      await dex.updateState(wallet.base16);
     }
   }, [wallet, token, pools]);
 
