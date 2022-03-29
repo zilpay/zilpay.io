@@ -16,6 +16,7 @@ import { StyleFonts } from "@/config/fonts";
 import { Wallet } from "@/store/wallet";
 import { $pools } from "@/store/pools";
 import { getIconURL } from "lib/viewblock";
+import { formatNumber } from "@/filters/n-format";
 
 type Prop = {
   token: TokenState;
@@ -55,7 +56,9 @@ export const TokenCard: React.FC<Prop> = function ({
   const amount = React.useMemo(() => {
     const qa = Big(String(balance));
     const decimal = Big(10**token.decimals);
-    return qa.div(decimal);
+    const value = qa.div(decimal);
+
+    return formatNumber(Number(value));
   }, [token, balance]);
 
   return (

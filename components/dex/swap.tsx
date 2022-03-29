@@ -86,23 +86,23 @@ export const SwapForm: React.FC = () => {
 
   const exactAmount = React.useMemo(() => {
     if (exactType === Exact.Top) {
-      const decimals0 = dex.toDecimails(dex.pools[token0].meta.decimals);
+      const decimals0 = dex.toDecimails(pools[tokenIndex0].meta.decimals);
       return topAmount.mul(decimals0);
     }
 
-    const decimals1 = dex.toDecimails(dex.pools[token1].meta.decimals);
+    const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, token1, token0, pools]);
+  }, [topAmount, bottomAmount, pools]);
   const limitAmount = React.useMemo(() => {
     if (exactType === Exact.Bottom) {
-      const decimals0 = dex.toDecimails(dex.pools[token0].meta.decimals);
+      const decimals0 = dex.toDecimails(pools[tokenIndex0].meta.decimals);
       return topAmount.mul(decimals0);
     }
-    const decimals1 = dex.toDecimails(dex.pools[token1].meta.decimals);
+    const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, token1, token0, pools]);
+  }, [topAmount, bottomAmount, pools]);
 
   const hanldeUpdate = React.useCallback(async() => {
     if (wallet) {
@@ -191,12 +191,14 @@ export const SwapForm: React.FC = () => {
           console.log(res);
           break;
         case SwapDirection.TokenToTokens:
+          const inputToken = exactType === Exact.Bottom ? tokenIndex1 : tokenIndex0;
+          const outputToken = exactType === Exact.Top ? tokenIndex1 : tokenIndex0;
           const res1 = await dex.swapExactTokensForTokens(
             exactAmount,
             limitAmount,
             wallet.base16,
-            pools[token0].meta.base16,
-            pools[token1].meta.base16
+            pools[inputToken].meta.base16,
+            pools[outputToken].meta.base16
           );
           console.log(res1);
           break;
@@ -204,7 +206,7 @@ export const SwapForm: React.FC = () => {
     } catch {
       ///
     }
-  }, [exactAmount, limitAmount, direction, wallet, token0, token1]);
+  }, [exactAmount, limitAmount, direction, wallet]);
   const hanldeSelectToken0 = React.useCallback((token) => {
     const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
 
