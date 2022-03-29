@@ -15,7 +15,8 @@ export enum ExactSide {
 
 export enum SwapDirection {
   ZilToToken,
-  TokenToZil
+  TokenToZil,
+  TokenToTokens
 }
 
 export class DragonDex {
@@ -78,7 +79,7 @@ export class DragonDex {
     const amount = Big(value);
 
     const decimals = this.toDecimails(this.pools[index].meta.decimals);
-    const zilDecimails = this.toDecimails(12);
+    const zilDecimails = this.toDecimails(this.pools[0].meta.decimals);
     const qa = amount.mul(zilDecimails).round().toString();
     const { tokens } = this.calcAmount(BigInt(qa), index, SwapDirection.ZilToToken);
 
@@ -89,11 +90,22 @@ export class DragonDex {
     const amount = Big(value);
 
     const decimals = this.toDecimails(this.pools[index].meta.decimals);
-    const zilDecimails = this.toDecimails(12);
+    const zilDecimails = this.toDecimails(this.pools[0].meta.decimals);
     const qa = amount.mul(decimals).round().toString();
     const { zils } = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
 
     return Big(String(zils)).div(zilDecimails);
+  }
+
+  public tokensToTokens(value: string | Big, index0: number, index1: number) {
+    const amount = Big(value);
+    const decimals0 = this.toDecimails(this.pools[index0].meta.decimals);
+    const decimals1 = this.toDecimails(this.pools[index1].meta.decimals);
+    const qa0 = amount.mul(decimals0).round().toString();
+    const { zils } = this.calcAmount(BigInt(qa0), index0, SwapDirection.TokenToZil);
+    const { tokens } = this.calcAmount(zils, index1, SwapDirection.ZilToToken);
+
+    return Big(String(tokens)).div(decimals1);
   }
 
   public swapExactZILForTokens(zil: Big, max: Big, recipient: string, token: string) {

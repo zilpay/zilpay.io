@@ -14,6 +14,7 @@ import { DragonDex, SwapDirection } from '@/mixins/dex';
 import { ZilPayBase } from 'mixins/zilpay-base';
 import { $pools } from '@/store/pools';
 import { $wallet } from '@/store/wallet';
+import { ZERO_ADDR } from '@/config/conts';
 
 
 const Wrapper = styled.div`
@@ -60,12 +61,15 @@ Big.PE = 999;
 const dex = new DragonDex();
 const zilpay = new ZilPayBase();
 
+let tokenIndex0 = 0;
+let tokenIndex1 = 1;
+
 export const SwapForm: React.FC = () => {
   const pools = useStore($pools);
   const wallet = useStore($wallet);
 
-  const [token0, setToken0] = React.useState(0);
-  const [token1, setToken1] = React.useState(1);
+  const [token0, setToken0] = React.useState(tokenIndex0);
+  const [token1, setToken1] = React.useState(tokenIndex1);
   const [modal0, setModal0] = React.useState(false);
   const [modal1, setModal1] = React.useState(false);
 
@@ -79,8 +83,24 @@ export const SwapForm: React.FC = () => {
     }
   }, [wallet, token1, pools]);
 
-  const hanldeOnChangeTop = React.useCallback((amount: Big) => {
-  }, [token1]);
+  const hanldeOnChangeTop = (amount: Big) => {
+    let result = Big(0);
+
+    if (pools[tokenIndex0].meta.base16 === ZERO_ADDR) {
+      result = dex.zilToTokens(amount, tokenIndex1);
+      setDirection(SwapDirection.ZilToToken);
+    } else if (pools[tokenIndex1].meta.base16 === ZERO_ADDR) {
+      result = dex.tokensToZil(amount, tokenIndex0);
+      setDirection(SwapDirection.TokenToZil);
+    } else {
+      setDirection(SwapDirection.TokenToTokens);
+      result = dex.tokensToTokens(amount, tokenIndex0, tokenIndex1);
+      console.log(String(result));
+    }
+
+    setTopAmount(amount);
+    setBottomAmoubnt(result);
+  };
   const hanldeOnChangeBottom = React.useCallback((amount: Big) => {
   }, [token1]);
   const hanldeOnSwapForms = React.useCallback(() => {
@@ -117,15 +137,27 @@ export const SwapForm: React.FC = () => {
           console.log(res0);
         case SwapDirection.TokenToZil:
           const tokens = bottomAmoubnt.mul(decimals1).round();
-          const max_zil = topAmount.mul(decimals0).round();
+          const maxZil = topAmount.mul(decimals0).round();
           const res = await dex.swapExactTokensForZIL(
             tokens,
-            max_zil,
+            maxZil,
             wallet.base16,
             dex.pools[token1].meta.base16
           );
     
           console.log(res);
+          break;
+        case SwapDirection.TokenToTokens:
+          const amount0 = topAmount.mul(decimals0).round();
+          const minAmount1 = bottomAmoubnt.mul(decimals1).round();
+          const res1 = await dex.swapExactTokensForTokens(
+            amount0,
+            minAmount1,
+            wallet.base16,
+            pools[token0].meta.base16,
+            pools[token1].meta.base16
+          );
+          console.log(res1);
           break;
       }
     } catch {
@@ -136,6 +168,7 @@ export const SwapForm: React.FC = () => {
     const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
+      tokenIndex0 = foundIndex;
       setToken0(foundIndex);
       setModal0(false);
     }
@@ -144,6 +177,7 @@ export const SwapForm: React.FC = () => {
     const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
+      tokenIndex1 = foundIndex;
       setToken1(foundIndex);
       setModal1(false);
     }
@@ -151,7 +185,7 @@ export const SwapForm: React.FC = () => {
 
   React.useEffect(() => {
     hanldeUpdate();
-  }, []);
+  }, [wallet]);
 
   return (
     <>

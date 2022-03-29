@@ -23,7 +23,7 @@ const Container = styled.div`
       margin: 10% auto 50px;
       max-width: 635px;
       width: 95%;
-      background: ${Colors.Dark};
+      background: #fff;
       padding: 0;
       z-index: 100;
       border-radius: 16px;
