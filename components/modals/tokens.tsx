@@ -1,4 +1,4 @@
-import type { TokenState } from "@/types/token";
+import type { Pool, TokenState } from "@/types/token";
 
 import React from "react";
 import { useStore } from "effector-react";
@@ -16,6 +16,7 @@ import { $wallet } from "@/store/wallet";
 
 type Prop = {
   show: boolean;
+  pools: Pool[];
   onClose: () => void;
   onSelect: (token: TokenState) => void;
 };
@@ -39,12 +40,11 @@ const Between = styled.div`
 
 export var TokensModal: React.FC<Prop> = function ({
   show,
+  pools = [],
   onClose,
   onSelect
 }) {
   const common = useTranslation(`common`);
-
-  const pools = useStore($pools);
   const wallet = useStore($wallet);
 
   return (
@@ -61,7 +61,7 @@ export var TokensModal: React.FC<Prop> = function ({
       width="450px"
       onClose={onClose}
     >
-      {pools.slice(1).map((pool) => (
+      {pools.map((pool) => (
         <TokenCard
           token={pool.meta}
           balance={pool.balance[wallet?.base16 || '']}

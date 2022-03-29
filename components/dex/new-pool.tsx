@@ -1,5 +1,6 @@
 import type { TokenState } from '@/types/token';
 
+import { useStore } from 'effector-react';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -8,6 +9,7 @@ import { Button } from 'components/button';
 import { TokensModal } from 'components/modals/tokens';
 
 import { Colors } from '@/config/colors';
+import { $pools } from '@/store/pools';
 
 const Wrapper = styled.div`
   padding: 36px;
@@ -27,6 +29,8 @@ const Container = styled.div`
 `;
 
 export const NewPool: React.FC = () => {
+  const pools = useStore($pools);
+
   const [modal, setModal] = React.useState(false);
   const [token, setToken] = React.useState<TokenState>();
 
@@ -55,6 +59,7 @@ export const NewPool: React.FC = () => {
       </Container>
       <TokensModal
         show={modal}
+        pools={pools.slice(1)}
         onClose={() => setModal(false)}
         onSelect={hanldeSelectToken}
       />

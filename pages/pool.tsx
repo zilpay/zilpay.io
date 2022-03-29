@@ -25,7 +25,7 @@ const Container = styled.div`
 
   background-image: url(/images/bg.webp);
   background-position: center center;
-  background-size: 150%;
+  background-size: 100%;
 `;
 const Wrapper = styled.div`
 `;
