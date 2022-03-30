@@ -54,6 +54,12 @@ export const BaseStyles = createGlobalStyle`
     border-radius: 14px;
 
     transition: background-color 250ms linear;
+
+    :disabled {
+      pointer-events: none;
+      cursor: default;
+      opacity: 0.8;
+    }
   }
 
   html {

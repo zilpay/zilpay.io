@@ -26,7 +26,7 @@ const Wrapper = styled.div`
 `;
 const Container = styled.div`
   background: ${Colors.Button};
-  border: 2px solid transparent;
+  border: 1px solid transparent;
   border-radius: 16px;
 
   padding-top: 10px;
@@ -34,7 +34,7 @@ const Container = styled.div`
   padding-right: 16px;
 
   :hover {
-    border: 2px solid ${Colors.Border};
+    border: 1px solid ${Colors.Primary};
   }
 `;
 const DropDown = styled.div`

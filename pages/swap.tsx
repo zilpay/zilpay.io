@@ -15,14 +15,13 @@ const Container = styled.div`
 
   background-image: url(/images/bg.webp);
   background-position: center center;
-  background-size: 100%;
+  background-size: 120%;
 `;
 const Wrapper = styled.div`
 `;
 
 export const PageSwap: NextPage = () => {
   const { t } = useTranslation(`main`);
-
   return (
     <Container>
        <Head>

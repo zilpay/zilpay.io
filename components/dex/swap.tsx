@@ -4,19 +4,21 @@ import React from 'react';
 import { useStore } from "effector-react";
 
 import { Text } from 'components/text';
-import { TokensModal } from '../modals/tokens';
-import { FormInput } from './input';
+import { TokensModal } from 'components/modals/tokens';
+import { FormInput } from 'components/dex/input';
+import { ConfirmSwapModal } from 'components/modals/confirm-swap';
+import { SwapSettings } from 'components/dex/settings';
+import SwapIcon from 'components/icons/swap';
 
 import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
 import { DragonDex, SwapDirection } from '@/mixins/dex';
 import { ZilPayBase } from 'mixins/zilpay-base';
+
 import { $pools } from '@/store/pools';
 import { $wallet } from '@/store/wallet';
 import { ZERO_ADDR } from '@/config/conts';
-import { SwapSettings } from './settings';
-import SwapIcon from '../icons/swap';
 
 
 const Wrapper = styled.div`
@@ -45,11 +47,13 @@ const ContainerForm = styled.form`
 const Button = styled.button`
   width: 100%;
   padding: 25px;
-  margin-block-start: 15px;
 
   font-family: ${StyleFonts.Bold};
   font-size: 16px;
   text-transform: uppercase;
+
+  margin-block-end: 0.6em;
+  margin-block-start: 0.6em;
 
   :hover {
     color: ${Colors.Button};
@@ -79,6 +83,7 @@ export const SwapForm: React.FC = () => {
   const [token1, setToken1] = React.useState(tokenIndex1);
   const [modal0, setModal0] = React.useState(false);
   const [modal1, setModal1] = React.useState(false);
+  const [confirmModal, setConfirmModal] = React.useState(false);
 
   const [topAmount, setTopAmount] = React.useState(Big(0));
   const [bottomAmount, setBottomAmount] = React.useState(Big(0));
@@ -103,6 +108,10 @@ export const SwapForm: React.FC = () => {
 
     return bottomAmount.mul(decimals1);
   }, [topAmount, bottomAmount, pools]);
+
+  const disabled = React.useMemo(() => {
+    return exactAmount.eq(0) || !(wallet?.base16);
+  }, [exactAmount, wallet]);
 
   const hanldeUpdate = React.useCallback(async() => {
     if (wallet) {
@@ -207,6 +216,10 @@ export const SwapForm: React.FC = () => {
       ///
     }
   }, [exactAmount, limitAmount, direction, wallet]);
+  const hanldeSubmit = React.useCallback((event) => {
+    event.preventDefault();
+    setConfirmModal(true);
+  }, []);
   const hanldeSelectToken0 = React.useCallback((token) => {
     const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
 
@@ -238,6 +251,10 @@ export const SwapForm: React.FC = () => {
 
   return (
     <>
+      <ConfirmSwapModal
+        show={confirmModal}
+        onClose={() => setConfirmModal(false)}
+      />
       <TokensModal
         show={modal0}
         pools={pools}
@@ -250,7 +267,7 @@ export const SwapForm: React.FC = () => {
         onClose={() => setModal1(false)}
         onSelect={hanldeSelectToken1}
       />
-      <ContainerForm onSubmit={hanldeOnSwap}>
+      <ContainerForm onSubmit={hanldeSubmit}>
         <Wrapper>
           <Text
             fontColors={Colors.Text}
@@ -284,7 +301,7 @@ export const SwapForm: React.FC = () => {
             <path d="M4.93193 14.1366C4.54256 14.5283 4.54442 15.1615 4.93609 15.5508C5.32777 15.9402 5.96093 15.9384 6.3503 15.5467L4.93193 14.1366ZM17.7423 15.1523C18.1328 15.5428 18.766 15.5428 19.1565 15.1523C19.547 14.7617 19.547 14.1286 19.1565 13.7381L17.7423 15.1523ZM12.2241 8.21985L12.9312 7.51275C12.7433 7.32485 12.4883 7.21946 12.2226 7.21985C11.9569 7.22025 11.7022 7.32638 11.5149 7.51483L12.2241 8.21985ZM19.1565 13.7381L12.9312 7.51275L11.517 8.92696L17.7423 15.1523L19.1565 13.7381ZM11.5149 7.51483L4.93193 14.1366L6.3503 15.5467L12.9332 8.92488L11.5149 7.51483Z" fill="#8A8A8F"/>
           </svg>
         </Wrapper>
-        <Button>
+        <Button disabled={disabled}>
           Exchange
         </Button>
       </ContainerForm>
