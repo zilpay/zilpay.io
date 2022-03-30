@@ -14,10 +14,12 @@ const Container = styled.div`
   align-content: flex-start;
   align-items: flex-start;
 
+  border-radius: 16px;
+
   width: 250px;
   height: 300px;
 
-  background-color: ${Colors.Border};
+  background-color: ${Colors.Card};
 
   margin: 5px;
   padding: 35px 35px 35px 35px;

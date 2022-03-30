@@ -28,13 +28,12 @@ const Container = styled.div`
   overflow: hidden;
   transition: all 0.4s;
 
-  background-color: ${Colors.Dark};
+  background-color: ${Colors.Card};
   background-image: url(${(p: ContainerProp) => p.image});
   background-size: cover;
   background-position: 50%;
 
   :hover {
-    border-color: ${Colors.Secondary};
     background-size: 700px;
     background-position: 40%;
   }
@@ -63,14 +62,14 @@ export const ZoomCard: React.FC<Prop> = ({
       onClick={() => onClick(href)}
     >
       <Text
-        fontColors={Colors.Primary}
+        fontColors={Colors.Text}
         fontVariant={StyleFonts.Bold}
         size="24px"
       >
         {title}
       </Text>
       <Text
-        fontColors={Colors.Primary}
+        fontColors={Colors.Text}
         fontVariant={StyleFonts.SemiBold}
         size="14px"
       >

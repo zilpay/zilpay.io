@@ -38,6 +38,24 @@ export const BaseStyles = createGlobalStyle`
     color: inherit;
   }
 
+  button {
+    cursor: pointer;
+    color: ${Colors.Primary};
+    font-family: ${StyleFonts.Bold};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    background: ${Colors.Button};
+    user-select: none;
+    text-align: center;
+
+    border-radius: 14px;
+
+    transition: background-color 250ms linear;
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -46,6 +64,12 @@ export const BaseStyles = createGlobalStyle`
     background: ${Colors.Background};
     margin: 0;
     padding: 0;
+  }
+
+  * {
+    text-rendering: optimizeLegibility;
+    font-kerning: normal;
+    text-shadow:0 0 1px var(${Colors.Muted});
   }
 
   @keyframes fade {

@@ -29,14 +29,14 @@ export const AppsSection: React.FC = () => {
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
+          fontColors={Colors.Text}
           size="40px"
         >
           {t(`apps_title`)}
         </Text>
         <Text
           fontVariant={StyleFonts.Medium}
-          fontColors={Colors.Secondary}
+          fontColors={Colors.Muted}
           size="12px"
         >
           {t(`apps_sub_title`)}

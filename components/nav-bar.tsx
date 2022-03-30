@@ -14,7 +14,7 @@ const Container = styled.div`
   justify-content: space-between;
   height: 55px;
   padding: 10px;
-  background-color: ${Colors.Border};
+  background-color: ${Colors.Background};
 `;
 const ContainerCenter = styled.div`
   display: flex;
@@ -31,6 +31,11 @@ const Logo = styled.div`
   display: flex;
   align-items: center;
 `;
+const LinkText = styled(Text)`
+  :hover {
+    color: ${Colors.Primary};
+  }
+`;
 
 export const Navbar: React.FC = () => (
   <Container>
@@ -43,7 +48,7 @@ export const Navbar: React.FC = () => (
           alt="Logo"
         />
         <Text
-          fontColors={Colors.Border}
+          fontColors={Colors.Text}
           fontVariant={StyleFonts.Bold}
           css="margin: 5px;"
         >
@@ -53,14 +58,14 @@ export const Navbar: React.FC = () => (
     </Link>
     <ContainerCenter>
       <Link href="/swap">
-        <Text fontColors={Colors.Secondary}>
+        <LinkText fontColors={Colors.Text}>
           SWAP
-        </Text>
+        </LinkText>
       </Link>
       <Link href="/pool">
-        <Text fontColors={Colors.Secondary}>
+        <LinkText fontColors={Colors.Text}>
           POOL
-        </Text>
+        </LinkText>
       </Link>
     </ContainerCenter>
     <ConnectZIlPay />

@@ -15,14 +15,14 @@ export const FeaturesSection: React.FC = () => {
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
+          fontColors={Colors.Text}
           size="40px"
         >
           {t(`features_title`)}
         </Text>
         <Text
           fontVariant={StyleFonts.Medium}
-          fontColors={Colors.Secondary}
+          fontColors={Colors.Muted}
           size="12px"
         >
           {t(`features_sub_title`)}

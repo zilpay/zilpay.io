@@ -56,7 +56,7 @@ export const TeamCard: React.FC<Prop> = ({
         height="200"
       />
       <Text
-        fontColors={Colors.Hover}
+        fontColors={Colors.Text}
         fontVariant={StyleFonts.Bold}
         size="25px"
       >

@@ -18,36 +18,21 @@ import { $wallet, updateAddress, Wallet } from "store/wallet";
 import {
   $transactions,
   updateTxList,
-  clearTxList,
-  writeNewList,
+  clearTxList
 } from "store/transactions";
 import { updateNet, $net } from "store/wallet-netwrok";
 
 import { Block, Net } from "@/types/zilpay";
 
-type ConnectZIlPayButtonProp = {
-  color: Colors | string;
-};
-
 const ConnectZIlPayButton = styled.button`
-  cursor: pointer;
-  color: ${Colors.Primary};
-  font-family: ${StyleFonts.Bold};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 17px 22px;
-  border: 1px solid ${Colors.Secondary};
-  background: ${(p: ConnectZIlPayButtonProp) => p.color};
-  user-select: none;
-  min-width: 140px;
-  min-width: 140px;
-  min-height: 56px;
-  text-align: center;
+  min-width: 120px;
+  min-height: 47px;
+  padding: 13px;
+  margin: 14px;
 
   :hover {
-    border: 1px solid ${Colors.Text};
+    color: ${Colors.Button};
+    background: ${Colors.Primary};
   }
 `;
 
@@ -63,10 +48,6 @@ export var ConnectZIlPay: React.FC = function () {
   const [showModal, setShowModal] = React.useState(false);
   const [error, setError] = React.useState(``);
 
-  const btnColor = React.useMemo(
-    () => (net === `mainnet` ? Colors.Black : Colors.Danger),
-    [net],
-  );
   const isLoading = React.useMemo(
     () => transactions.filter((tx) => !tx.confirmed).length === 0,
     [transactions],
@@ -219,10 +200,7 @@ export var ConnectZIlPay: React.FC = function () {
     <>
       {address ? (
         <React.Fragment>
-          <ConnectZIlPayButton
-            color={Colors.Black}
-            onClick={() => setShowModal(true)}
-          >
+          <ConnectZIlPayButton onClick={() => setShowModal(true)}>
             {isLoading ? (
               trim(address.bech32)
             ) : (
@@ -236,7 +214,7 @@ export var ConnectZIlPay: React.FC = function () {
           </ConnectZIlPayButton>
         </React.Fragment>
       ) : (
-        <ConnectZIlPayButton color={Colors.Black} onClick={handleConnect}>
+        <ConnectZIlPayButton onClick={handleConnect}>
           {loading ? (
             <ThreeDots color="#fff" height={10} width={20} />
           ) : (

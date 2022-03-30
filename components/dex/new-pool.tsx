@@ -5,7 +5,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Text } from 'components/text';
-import { Button } from 'components/button';
 import { TokensModal } from 'components/modals/tokens';
 
 import { Colors } from '@/config/colors';
@@ -49,12 +48,12 @@ export const NewPool: React.FC = () => {
           <Text>
             Your active liquidity positions will ppear here.
           </Text>
-          <Button
+          <button
             color={Colors.Secondary}
             onClick={() => setModal(true)}
           >
             New position
-          </Button>
+          </button>
         </Wrapper>
       </Container>
       <TokensModal

@@ -9,12 +9,18 @@ import {
   isIOS
 } from 'react-device-detect';
 
-import { Button } from 'components/button';
-
 import { Colors } from '@/config/colors';
 
-const GetButton = styled(Button)`
+const GetButton = styled.button`
   padding: 20px 30px;
+
+  color: ${Colors.Button};
+  background: ${Colors.Primary};
+
+  :hover {
+    color: ${Colors.Primary};
+    background: ${Colors.Button};
+  }
 `;
 
 export const InstallButton: React.FC = () => {
@@ -23,10 +29,7 @@ export const InstallButton: React.FC = () => {
  if (isAndroid) {
     return (
       <a href="https://play.google.com/store/apps/details?id=com.zilpaymobile">
-        <GetButton
-          color={Colors.Secondary}
-          fontColors={Colors.Secondary}
-        >
+        <GetButton>
           {t(`get_android`)}
         </GetButton>
       </a>
@@ -34,10 +37,7 @@ export const InstallButton: React.FC = () => {
   } if (isIOS) {
     return (
       <a href="https://apps.apple.com/ru/app/zilpay/id1547105860">
-        <GetButton
-          color="#bfe2e8"
-          fontColors="#bfe2e8"
-        >
+        <GetButton>
           {t(`get_ios`)}
         </GetButton>
       </a>
@@ -45,10 +45,7 @@ export const InstallButton: React.FC = () => {
   } if (isChrome) {
     return (
       <a href="https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd">
-        <GetButton
-          color={Colors.Secondary}
-          fontColors={Colors.Secondary}
-        >
+        <GetButton>
           {t(`get_chrome`)}
         </GetButton>
       </a>
@@ -56,10 +53,7 @@ export const InstallButton: React.FC = () => {
   } if (isEdge) {
     return (
       <a href="https://microsoftedge.microsoft.com/addons/detail/zilpay/fbekallmnjoeggkefjkbebpineneilec">
-        <GetButton
-          color="#0067b8"
-          fontColors="#0067b8"
-        >
+        <GetButton>
           {t(`get_edge`)}
         </GetButton>
       </a>
@@ -67,10 +61,7 @@ export const InstallButton: React.FC = () => {
   } if (isFirefox) {
     return (
       <a href="https://addons.mozilla.org/en-GB/firefox/addon/zilpay/">
-        <GetButton
-          color="#CC2993"
-          fontColors="#CC2993"
-        >
+        <GetButton>
           {t(`get_firefox`)}
         </GetButton>
       </a>

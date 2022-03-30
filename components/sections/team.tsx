@@ -16,7 +16,7 @@ export const TeamSection: React.FC = () => {
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
+          fontColors={Colors.Text}
           size="40px"
         >
           Our Team
