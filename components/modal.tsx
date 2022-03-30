@@ -34,7 +34,7 @@ const Container = styled.div`
 
   &.show-dialog {
     display: block;
-    background: rgb(0 0 0 / 0.30);
+    background: rgb(0 0 0 / 0.50);
 
     .modal-md {
       right: 0;
