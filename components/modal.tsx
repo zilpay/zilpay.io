@@ -34,7 +34,7 @@ const Container = styled.div`
 
   &.show-dialog {
     display: block;
-    background: rgb(0 0 0 / 59%);
+    background: rgb(0 0 0 / 0.30);
 
     .modal-md {
       right: 0;
@@ -46,7 +46,7 @@ const Container = styled.div`
       padding: 0;
       z-index: 100;
       border-radius: 16px;
-      box-shadow: 0 0 20px #61006fbf;
+      // box-shadow: 0 0 10px #61006fbf;
       animation: dialog-scale-start 0.3s ease-in-out forwards;
     }
   }

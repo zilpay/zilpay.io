@@ -67,10 +67,6 @@ const DropDown = styled.div`
   }
 `;
 const Input = styled.input`
-  outline: none;
-  border: 0;
-  background: transparent;
-  color: ${Colors.Primary};
   font-size: 30px;
 
   max-width: 400px;

@@ -38,6 +38,14 @@ export const BaseStyles = createGlobalStyle`
     color: inherit;
   }
 
+  input {
+    outline: none;
+    border: 0;
+    background: transparent;
+    font-family: ${StyleFonts.Light};
+    color: ${Colors.Primary};
+  }
+
   button {
     cursor: pointer;
     color: ${Colors.Primary};
