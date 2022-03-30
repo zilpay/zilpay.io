@@ -27,7 +27,7 @@ const Container = styled.div`
       padding: 0;
       z-index: 100;
       border-radius: 16px;
-      box-shadow: 0 0 8px ${Colors.Black};
+      box-shadow: 0 0 8px ${Colors.Border};
       animation: dialog-scale-start 0.3s ease-in-out forwards;
     }
   }

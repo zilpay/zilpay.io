@@ -61,7 +61,7 @@ export const MainSection: React.FC = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="65px"
           css="line-height: 1.2em;ont-weight: 900;"
         >

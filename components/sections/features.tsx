@@ -15,7 +15,7 @@ export const FeaturesSection: React.FC = () => {
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="40px"
         >
           {t(`features_title`)}

@@ -8,7 +8,7 @@ type Prop = {
 };
 
 export var CloseIcon: React.FC<Prop> = function ({
-  color = Colors.White,
+  color = Colors.Primary,
   width = 26,
   height = 26,
 }) {

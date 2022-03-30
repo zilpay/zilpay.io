@@ -32,14 +32,14 @@ export const TestimonialsCard: React.FC<Prop> = ({ img, info, title, children })
         height="80"
       />
       <Text
-        fontColors={Colors.White}
+        fontColors={Colors.Primary}
         fontVariant={StyleFonts.Light}
         size="16px"
       >
         {children}
       </Text>
       <Text
-        fontColors={Colors.White}
+        fontColors={Colors.Primary}
         fontVariant={StyleFonts.Bold}
         size="25px"
       >

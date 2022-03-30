@@ -31,7 +31,7 @@ type ConnectZIlPayButtonProp = {
 
 const ConnectZIlPayButton = styled.button`
   cursor: pointer;
-  color: ${Colors.White};
+  color: ${Colors.Primary};
   font-family: ${StyleFonts.Bold};
   display: flex;
   align-items: center;
@@ -199,7 +199,7 @@ export var ConnectZIlPay: React.FC = function () {
           <svg width="32" height="26" viewBox="0 0 32 26" fill="none">
             <path
               d="M0 1H32M0 13H32M0 25H32"
-              stroke={Colors.White}
+              stroke={Colors.Primary}
               strokeWidth="2"
             />
           </svg>
@@ -227,7 +227,7 @@ export var ConnectZIlPay: React.FC = function () {
               trim(address.bech32)
             ) : (
               <>
-                <Puff color={Colors.White} height={10} width={10} />
+                <Puff color={Colors.Primary} height={10} width={10} />
                 <Text size="16px" css="text-indent: 5px;margin: 0;">
                   Pending...
                 </Text>

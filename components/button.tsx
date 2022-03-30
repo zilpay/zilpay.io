@@ -28,8 +28,8 @@ export const Button = styled.button`
   user-select: none;
 
   :hover {
-    color: ${Colors.White};
-    border: solid 1px ${Colors.White};
+    color: ${Colors.Text};
+    border: solid 1px ${Colors.Text};
   }
 
   :disabled {

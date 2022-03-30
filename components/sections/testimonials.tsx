@@ -16,7 +16,7 @@ export const TestimonialsSection: React.FC = () => {
       <HeaderWrapper>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="40px"
         >
           {t(`testimonials_title`)}

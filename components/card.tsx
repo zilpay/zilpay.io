@@ -17,7 +17,7 @@ const Container = styled.div`
   width: 250px;
   height: 300px;
 
-  background-color: ${Colors.Dark};
+  background-color: ${Colors.Border};
 
   margin: 5px;
   padding: 35px 35px 35px 35px;
@@ -54,7 +54,7 @@ export const Card: React.FC<Prop> = ({ url, selected, title, children }) => (
         alt="Icon"
       />
       <Text
-        fontColors={Colors.White}
+        fontColors={Colors.Text}
         fontVariant={StyleFonts.SemiBold}
         size="22px"
       >

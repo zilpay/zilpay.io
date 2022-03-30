@@ -25,14 +25,14 @@ export const PageNotFound: NextPage = () => {
       <Wrapper>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="80px"
           css="text-align: center;"
         >
           {t(`title`)}
         </Text>
         <Text
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           css="text-align: center;"
         >
           {t(`sub_title`)}

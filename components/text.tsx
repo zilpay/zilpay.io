@@ -28,7 +28,7 @@ export const Text = styled.div`
   margin-block-end: 0.6em;
 
   :hover {
-    ${(props: Prop) => props.pointer ? `color: ${Colors.White}` : ``}
+    ${(props: Prop) => props.pointer ? `color: ${Colors.Primary}` : ``}
   }
   ${(props: Prop) => props.css}
 `;

@@ -42,7 +42,7 @@ export const NewPool: React.FC = () => {
   return (
     <>
       <Container>
-        <Text fontColors={Colors.White}>
+        <Text fontColors={Colors.Primary}>
           Pools Overview
         </Text>
         <Wrapper>

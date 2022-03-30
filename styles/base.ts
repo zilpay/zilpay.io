@@ -43,26 +43,9 @@ export const BaseStyles = createGlobalStyle`
   }
 
   body {
-    background: ${Colors.Black};
+    background: ${Colors.Background};
     margin: 0;
     padding: 0;
-  }
-
-  .slick-slider {
-    width: 100%;
-    height: 100%;
-  }
-
-  .slick-dots li button:before {
-    color: ${Colors.White};
-  }
-  .slick-dots li.slick-active button:before {
-    color: ${Colors.White};
-  }
-  .slick-slide => div => a {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
   }
 
   @keyframes fade {

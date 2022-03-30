@@ -70,7 +70,7 @@ export const TokenCard: React.FC<Prop> = function ({
       />
       <Wrapper>
         <Text
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           css="margin: 0;font-weight: 500;"
         >
           {token.symbol}

@@ -56,7 +56,7 @@ export const TeamCard: React.FC<Prop> = ({
         height="200"
       />
       <Text
-        fontColors={Colors.White}
+        fontColors={Colors.Hover}
         fontVariant={StyleFonts.Bold}
         size="25px"
       >
@@ -76,7 +76,7 @@ export const TeamCard: React.FC<Prop> = ({
             target="_blank" rel="noreferrer"
           >
             <GitHubIcon
-              color={Colors.White}
+              color={Colors.Hover}
               height="15"
               width="15"
             />
@@ -88,7 +88,7 @@ export const TeamCard: React.FC<Prop> = ({
             target="_blank" rel="noreferrer"
           >
             <LinkedinIcon
-              color={Colors.White}
+              color={Colors.Hover}
               height="15"
               width="15"
             />
@@ -100,7 +100,7 @@ export const TeamCard: React.FC<Prop> = ({
             target="_blank" rel="noreferrer"
           >
             <TwitterIcon
-              color={Colors.White}
+              color={Colors.Hover}
               height="15"
               width="15"
             />

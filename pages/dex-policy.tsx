@@ -32,7 +32,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`head_title`)}
@@ -57,7 +57,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part1.title`)}
@@ -70,7 +70,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part2.title`)}
@@ -89,7 +89,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part3.title`)}
@@ -102,7 +102,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part4.title`)}
@@ -115,7 +115,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part5.title`)}
@@ -140,7 +140,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part6.title`)}
@@ -201,7 +201,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part7.title`)}
@@ -220,7 +220,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part8.title`)}
@@ -233,7 +233,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part9.title`)}
@@ -246,7 +246,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part10.title`)}
@@ -259,7 +259,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part11.title`)}
@@ -278,7 +278,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part12.title`)}
@@ -291,7 +291,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part13.title`)}
@@ -304,7 +304,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part14.title`)}
@@ -317,7 +317,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part15.title`)}
@@ -330,7 +330,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part16.title`)}
@@ -343,7 +343,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`part17.title`)}

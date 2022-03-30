@@ -13,7 +13,7 @@ const FireFoxIcon: React.FC<Prop> = ({
   width,
   height,
   color,
-  hoverColor = Colors.White
+  hoverColor = Colors.Primary
 }) => {
   const [hoverd, setHover] = React.useState(false);
   return (

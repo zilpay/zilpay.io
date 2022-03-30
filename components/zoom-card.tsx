@@ -63,14 +63,14 @@ export const ZoomCard: React.FC<Prop> = ({
       onClick={() => onClick(href)}
     >
       <Text
-        fontColors={Colors.White}
+        fontColors={Colors.Primary}
         fontVariant={StyleFonts.Bold}
         size="24px"
       >
         {title}
       </Text>
       <Text
-        fontColors={Colors.White}
+        fontColors={Colors.Primary}
         fontVariant={StyleFonts.SemiBold}
         size="14px"
       >

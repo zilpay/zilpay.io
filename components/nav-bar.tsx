@@ -14,7 +14,7 @@ const Container = styled.div`
   justify-content: space-between;
   height: 55px;
   padding: 10px;
-  background-color: ${Colors.Black};
+  background-color: ${Colors.Border};
 `;
 const ContainerCenter = styled.div`
   display: flex;
@@ -43,7 +43,7 @@ export const Navbar: React.FC = () => (
           alt="Logo"
         />
         <Text
-          fontColors={Colors.White}
+          fontColors={Colors.Border}
           fontVariant={StyleFonts.Bold}
           css="margin: 5px;"
         >

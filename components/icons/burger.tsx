@@ -37,7 +37,7 @@ type Prop = {
 const BurgerIcon: React.FC<Prop> = ({
   width,
   height,
-  color = Colors.White,
+  color = Colors.Primary,
   onClick
 }) => (
     <Container

@@ -254,7 +254,7 @@ export const SwapForm: React.FC = () => {
       <ContainerForm onSubmit={hanldeOnSwap}>
         <Wrapper>
           <Text
-            fontColors={Colors.White}
+            fontColors={Colors.Primary}
             fontVariant={StyleFonts.Bold}
             css="font-size: 25px;line-height: 1;"
           >

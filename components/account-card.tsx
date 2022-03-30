@@ -41,10 +41,10 @@ const CopyContainer = styled.a`
 
   :hover {
     svg {
-      stroke: ${Colors.White};
+      stroke: ${Colors.Background};
     }
     div {
-      color: ${Colors.White};
+      color: ${Colors.Background};
     }
   }
 `;

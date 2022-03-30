@@ -32,7 +32,7 @@ export const ExtensionPolicyPage: NextPage = () => {
         </Text>
         <Text
           fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
+          fontColors={Colors.Primary}
           size="45px"
         >
           {t(`head_title`)}

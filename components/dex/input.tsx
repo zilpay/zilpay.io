@@ -50,7 +50,7 @@ const Input = styled.input`
   outline: none;
   border: 0;
   background: ${Colors.Black};
-  color: ${Colors.White};
+  color: ${Colors.Primary};
   font-size: 50px;
 
   max-width: 400px;
@@ -94,7 +94,7 @@ export const FormInput: React.FC<Prop> = ({
               height="40"
             />
             <Text
-              fontColors={Colors.White}
+              fontColors={Colors.Primary}
               fontVariant={StyleFonts.Bold}
               css="font-size: 20px;padding-left: 5px;padding-right: 5px;"
             >

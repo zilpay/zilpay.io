@@ -20,7 +20,7 @@ const GitHubIcon = dynamic(import(`components/icons/github`));
 const MediumIcon = dynamic(import(`components/icons/medium`));
 
 const Container = styled.div`
-  background-color: ${Colors.Dark};
+  background-color: ${Colors.Background};
   transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
   padding: 90px 0px 90px 0px;
 `;
@@ -61,7 +61,7 @@ export const Footer: React.FC = () => {
       <Wrapper>
         <Office>
           <Text
-            fontColors={Colors.White}
+            fontColors={Colors.Text}
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
@@ -76,7 +76,7 @@ export const Footer: React.FC = () => {
         </Office>
         <Involved>
           <Text
-            fontColors={Colors.White}
+            fontColors={Colors.Text}
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
@@ -177,7 +177,7 @@ export const Footer: React.FC = () => {
         </Involved>
         <Legal>
           <Text
-            fontColors={Colors.White}
+            fontColors={Colors.Text}
             fontVariant={StyleFonts.Bold}
             size="18px"
           >
