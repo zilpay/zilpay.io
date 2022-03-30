@@ -26,29 +26,21 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 const ContainerForm = styled.form`
-  background-color: #18191D;
+  background-color: ${Colors.Card};
+  padding: 1rem 1.25rem 0.5rem;
+
+  border-radius: 16px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  padding-bottom: 32px;
-  padding-top: 20px;
-  padding-left: 26px;
-  padding-right: 26px;
 `;
 const IconWrapper = styled.span`
   cursor: pointer;
   position: absolute;
-  transform: translate(0, 420%);
+  transform: translate(0, 140px);
 `;
 const Button = styled.button`
-  cursor: pointer;
-  outline: none;
-  border: 0;
-
-  background-color: ${Colors.Secondary};
-
   width: 100%;
   padding: 25px;
   margin-block-start: 15px;
@@ -254,9 +246,9 @@ export const SwapForm: React.FC = () => {
       <ContainerForm onSubmit={hanldeOnSwap}>
         <Wrapper>
           <Text
-            fontColors={Colors.Primary}
+            fontColors={Colors.Text}
             fontVariant={StyleFonts.Bold}
-            css="font-size: 25px;line-height: 1;"
+            css="font-size: 18px;line-height: 1;"
           >
             Swap
           </Text>
@@ -274,7 +266,7 @@ export const SwapForm: React.FC = () => {
               width="32"
               height="32"
               transform="translate(0 0.5)"
-              fill="#23282E"
+              fill={Colors.Button}
             />
             <path
               d="M23.1595 13.2071L22.0151 12.0628L22.0151 21.1685L20.0151 21.1685L20.0151 11.8904L18.6984 13.2071L17.2842 11.7929L20.9289 8.14813L24.5737 11.7929L23.1595 13.2071Z"

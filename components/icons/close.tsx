@@ -9,8 +9,8 @@ type Prop = {
 
 export var CloseIcon: React.FC<Prop> = function ({
   color = Colors.Primary,
-  width = 26,
-  height = 26,
+  width = 20,
+  height = 20
 }) {
   return (
     <svg width={width} height={height} viewBox="0 0 26 26" fill="none">

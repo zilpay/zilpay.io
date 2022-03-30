@@ -2,11 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import Image from "next/image";
 
-import { Modal } from "components/modal";
+import { Modal, ModalHeader } from "components/modal";
 import { Text } from "components/text";
-import { CloseIcon } from "components/icons/close";
-
-import { Colors } from "config/colors";
 
 type Prop = {
   show: boolean;
@@ -22,41 +19,20 @@ const Container = styled.div`
   padding: 30px;
   text-align: center;
 `;
-const Between = styled.div`
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  align-items: center;
 
-  span {
-    cursor: pointer;
-    padding: 16px;
-
-    :hover {
-      svg > path {
-        stroke: ${Colors.Muted};
-      }
-    }
-  }
-`;
 
 export var WalletErrorModal: React.FC<Prop> = function ({
   show,
   message,
-  onClose,
+  onClose
 }) {
   return (
     <Modal
       show={show}
       title={(
-        <Between>
-          <Text fontColors={Colors.Warning} css="padding: 0 16px;">
-            {message}
-          </Text>
-          <span onClick={onClose}>
-            <CloseIcon color={Colors.Warning} />
-          </span>
-        </Between>
+        <ModalHeader onClose={onClose}>
+          {message}
+        </ModalHeader>
       )}
       onClose={onClose}
     >

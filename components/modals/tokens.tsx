@@ -5,13 +5,11 @@ import { useStore } from "effector-react";
 import { useTranslation } from "next-i18next";
 import styled from "styled-components";
 
-import { Modal } from "components/modal";
+import { Modal, ModalHeader } from "components/modal";
 import { Text } from "components/text";
-import { CloseIcon } from "components/icons/close";
 import { Colors } from "config/colors";
 import { TokenCard } from "components/token-card";
 
-import { $pools } from "@/store/pools";
 import { $wallet } from "@/store/wallet";
 
 type Prop = {
@@ -20,23 +18,6 @@ type Prop = {
   onClose: () => void;
   onSelect: (token: TokenState) => void;
 };
-
-const Between = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  span {
-    cursor: pointer;
-    padding: 16px;
-
-    :hover {
-      svg > path {
-        stroke: ${Colors.Muted};
-      }
-    }
-  }
-`;
 
 export var TokensModal: React.FC<Prop> = function ({
   show,
@@ -51,12 +32,9 @@ export var TokensModal: React.FC<Prop> = function ({
     <Modal
       show={show}
       title={(
-        <Between>
-          <Text css="padding: 0 16px;">{common.t(`account`)}</Text>
-          <span onClick={onClose}>
-            <CloseIcon />
-          </span>
-        </Between>
+        <ModalHeader onClose={onClose}>
+          {common.t(`account`)}
+        </ModalHeader>
       )}
       width="450px"
       onClose={onClose}

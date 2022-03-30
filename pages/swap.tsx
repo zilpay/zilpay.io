@@ -1,16 +1,10 @@
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
-import Big from 'big.js';
 import styled from 'styled-components';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Text } from 'components/text';
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
-
-import { DragonDex, SwapDirection } from '@/mixins/dex';
 import { SwapForm } from '@/components/dex/swap';
 
 const Container = styled.div`

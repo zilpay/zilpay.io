@@ -29,6 +29,7 @@ const ConnectZIlPayButton = styled.button`
   min-height: 47px;
   padding: 13px;
   margin: 14px;
+  border-radius: 8px;
 
   :hover {
     color: ${Colors.Button};

@@ -1,8 +1,27 @@
 import React from "react";
 import styled from "styled-components";
 
+import { Text } from "components/text";
+import { CloseIcon } from "components/icons/close";
+
 import { Colors } from "config/colors";
 
+const Between = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  span {
+    cursor: pointer;
+    padding: 16px;
+
+    :hover {
+      svg > path {
+        stroke: ${Colors.Muted};
+      }
+    }
+  }
+`;
 const Container = styled.div`
   position: fixed;
   display: none;
@@ -23,11 +42,11 @@ const Container = styled.div`
       margin: 10% auto 50px;
       max-width: 635px;
       width: 95%;
-      background: #fff;
+      background: ${Colors.Modal};
       padding: 0;
       z-index: 100;
       border-radius: 16px;
-      box-shadow: 0 0 8px ${Colors.Border};
+      box-shadow: 0 0 41px ${Colors.Hover};
       animation: dialog-scale-start 0.3s ease-in-out forwards;
     }
   }
@@ -37,6 +56,10 @@ type Prop = {
   title?: React.ReactNode;
   show: boolean;
   width?: string;
+  onClose: () => void;
+};
+
+type HeadProp = {
   onClose: () => void;
 };
 
@@ -76,3 +99,15 @@ export var Modal: React.FC<Prop> = function ({
     </Container>
   );
 };
+
+export const ModalHeader: React.FC<HeadProp> = ({
+  children,
+  onClose
+}) => (
+  <Between>
+    <Text css="padding: 0 16px;">{children}</Text>
+    <span onClick={onClose}>
+      <CloseIcon />
+    </span>
+  </Between>
+);

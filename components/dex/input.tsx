@@ -24,8 +24,9 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 const Container = styled.div`
-  background: ${Colors.Black};
+  background: ${Colors.Button};
   border: 2px solid transparent;
+  border-radius: 16px;
 
   padding-top: 10px;
   padding-left: 16px;
@@ -33,7 +34,7 @@ const Container = styled.div`
   margin: 10px;
 
   :hover {
-    border: 2px solid ${Colors.Muted};
+    border: 2px solid ${Colors.Border};
   }
 `;
 const DropDown = styled.div`
@@ -44,18 +45,18 @@ const DropDown = styled.div`
   justify-content: space-between;
 
   min-width: 100px;
-  height: 48px;
+  height: 38px;
 `;
 const Input = styled.input`
   outline: none;
   border: 0;
-  background: ${Colors.Black};
+  background: transparent;
   color: ${Colors.Primary};
-  font-size: 50px;
+  font-size: 30px;
 
   max-width: 400px;
   width: 100%;
-  height: 48px;
+  height: 38px;
 
   :focus {
     outline: none;
