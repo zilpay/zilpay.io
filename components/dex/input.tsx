@@ -15,8 +15,9 @@ type Prop = {
   token: TokenState;
   value: Big;
   balance?: bigint;
-  onInput: (value: Big) => void;
-  onSelect: () => void
+  disabled?: boolean;
+  onInput?: (value: Big) => void;
+  onSelect?: () => void
 };
 
 const Wrapper = styled.div`
@@ -33,7 +34,12 @@ const Container = styled.div`
   padding-left: 16px;
   padding-right: 16px;
 
-  :hover {
+  .disabled:hover {
+    border: 1px solid transparent;
+    pointer-events: none;
+  }
+
+  :hover :not(.disabled) {
     border: 1px solid ${Colors.Primary};
   }
 `;
@@ -51,7 +57,12 @@ const DropDown = styled.div`
 
   border-radius: 8px;
 
-  :hover {
+  .disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  :hover :not(.disabled) {
     background-color: ${Colors.Hover};
   }
 `;
@@ -69,16 +80,25 @@ const Input = styled.input`
   :focus {
     outline: none;
   }
+
+  :disabled {
+    pointer-events: none;
+  }
 `;
 
 export const FormInput: React.FC<Prop> = ({
   value,
   token,
-  balance = BigInt(0),
-  onInput,
-  onSelect
+  balance,
+  disabled = false,
+  onInput = () => null,
+  onSelect = () => null
 }) => {
   const amount = React.useMemo(() => {
+    if (!balance) {
+      return '';
+    }
+
     const qa = Big(String(balance));
     const decimal = Big(10**token.decimals);
     const value = qa.div(decimal);
@@ -99,13 +119,17 @@ export const FormInput: React.FC<Prop> = ({
 
   return (
     <label>
-      <Container>
+      <Container className={disabled ? 'disabled' : ''}>
         <Wrapper>
           <Input
             value={String(value)}
+            disabled={disabled}
             onInput={hanldeOnInput}
           />
-          <DropDown onClick={onSelect}>
+          <DropDown
+            className={disabled ? 'disabled' : ''}
+            onClick={onSelect}
+          >
             <img
               src={getIconURL(token.bech32)}
               alt="tokens-logo"

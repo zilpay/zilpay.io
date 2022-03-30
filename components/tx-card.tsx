@@ -31,14 +31,14 @@ const Wrapper = styled.div`
   border-radius: 0.5rem;
   font-weight: 500;
   font-size: 0.825rem;
-  color: ${Colors.LightBlue};
+  color: ${Colors.Primary};
   text-decoration-thickness: 0.125em;
   text-underline-offset: 1.5px;
   text-decoration: none;
 
   :hover {
     text-decoration: underline;
-    color: ${Colors.LightBlue};
+    color: ${Colors.Primary};
   }
 `;
 const TextWrapper = styled.div`
@@ -54,7 +54,7 @@ const StatusIcon: React.FC<StatusIconProp> = function ({ rejected, loading }) {
     return <SuccessIcon />;
   }
 
-  return <Puff color={Colors.LightBlue} height={16} width={16} />;
+  return <Puff color={Colors.Primary} height={16} width={16} />;
 };
 
 export var TxCard: React.FC<Prop> = function ({ tx }) {

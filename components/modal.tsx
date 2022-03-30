@@ -46,7 +46,7 @@ const Container = styled.div`
       padding: 0;
       z-index: 100;
       border-radius: 16px;
-      box-shadow: 0 0 41px ${Colors.Hover};
+      box-shadow: 0 0 20px #61006fbf;
       animation: dialog-scale-start 0.3s ease-in-out forwards;
     }
   }

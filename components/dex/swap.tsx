@@ -48,7 +48,6 @@ const Button = styled.button`
   width: 100%;
   padding: 25px;
 
-  font-family: ${StyleFonts.Bold};
   font-size: 16px;
   text-transform: uppercase;
 
@@ -68,7 +67,6 @@ enum Exact {
 
 Big.PE = 999;
 const dex = new DragonDex();
-const zilpay = new ZilPayBase();
 
 let tokenIndex0 = 0;
 let tokenIndex1 = 1;
@@ -173,49 +171,6 @@ export const SwapForm: React.FC = () => {
     setBottomAmount(amount0);
     setTopAmount(amount1);
   }, [token0, token1, topAmount, bottomAmount, pools]);
-  const hanldeOnSwap = React.useCallback(async(event) => {
-    event.preventDefault();
-    if (!wallet) {
-      return;
-    }
-    try {
-      switch (direction) {
-        case SwapDirection.ZilToToken:
-          const res0 = await dex.swapExactZILForTokens(
-            exactAmount,
-            limitAmount,
-            wallet.base16,
-            dex.pools[token1].meta.base16
-          );
-    
-          console.log(res0);
-        case SwapDirection.TokenToZil:
-          const res = await dex.swapExactTokensForZIL(
-            exactAmount,
-            limitAmount,
-            wallet.base16,
-            dex.pools[token1].meta.base16
-          );
-    
-          console.log(res);
-          break;
-        case SwapDirection.TokenToTokens:
-          const inputToken = exactType === Exact.Bottom ? tokenIndex1 : tokenIndex0;
-          const outputToken = exactType === Exact.Top ? tokenIndex1 : tokenIndex0;
-          const res1 = await dex.swapExactTokensForTokens(
-            exactAmount,
-            limitAmount,
-            wallet.base16,
-            pools[inputToken].meta.base16,
-            pools[outputToken].meta.base16
-          );
-          console.log(res1);
-          break;
-      }
-    } catch {
-      ///
-    }
-  }, [exactAmount, limitAmount, direction, wallet]);
   const hanldeSubmit = React.useCallback((event) => {
     event.preventDefault();
     setConfirmModal(true);
@@ -253,6 +208,11 @@ export const SwapForm: React.FC = () => {
     <>
       <ConfirmSwapModal
         show={confirmModal}
+        exact={exactAmount}
+        limit={limitAmount}
+        direction={direction}
+        limitToken={exactType === Exact.Top ? pools[tokenIndex1].meta : pools[tokenIndex0].meta}
+        exactToken={exactType === Exact.Bottom ? pools[tokenIndex1].meta : pools[tokenIndex0].meta}
         onClose={() => setConfirmModal(false)}
       />
       <TokensModal
