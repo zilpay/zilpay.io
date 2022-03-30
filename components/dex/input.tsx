@@ -1,19 +1,20 @@
 import type { TokenState } from "@/types/token";
 
 import React from "react";
-import { Colors } from "@/config/colors";
 import styled from "styled-components";
 import Big from "big.js";
 
-
 import { Text } from 'components/text';
 import { StyleFonts } from "@/config/fonts";
-import { ViewIcon } from "../icons/view";
 import { getIconURL } from "@/lib/viewblock";
+
+import { Colors } from "@/config/colors";
+import { formatNumber } from "@/filters/n-format";
 
 type Prop = {
   token: TokenState;
   value: Big;
+  balance?: bigint;
   onInput: (value: Big) => void;
   onSelect: () => void
 };
@@ -31,7 +32,6 @@ const Container = styled.div`
   padding-top: 10px;
   padding-left: 16px;
   padding-right: 16px;
-  margin: 10px;
 
   :hover {
     border: 2px solid ${Colors.Border};
@@ -46,6 +46,14 @@ const DropDown = styled.div`
 
   min-width: 100px;
   height: 38px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  border-radius: 8px;
+
+  :hover {
+    background-color: ${Colors.Hover};
+  }
 `;
 const Input = styled.input`
   outline: none;
@@ -66,9 +74,18 @@ const Input = styled.input`
 export const FormInput: React.FC<Prop> = ({
   value,
   token,
+  balance = BigInt(0),
   onInput,
   onSelect
 }) => {
+  const amount = React.useMemo(() => {
+    const qa = Big(String(balance));
+    const decimal = Big(10**token.decimals);
+    const value = qa.div(decimal);
+
+    return formatNumber(Number(value));
+  }, [token, balance]);
+
   const hanldeOnInput = React.useCallback((event) => {
     if (event.target.value.endsWith(',')) {
       return;
@@ -92,12 +109,13 @@ export const FormInput: React.FC<Prop> = ({
             <img
               src={getIconURL(token.bech32)}
               alt="tokens-logo"
-              height="40"
+              height="30"
+              width="30"
             />
             <Text
               fontColors={Colors.Primary}
               fontVariant={StyleFonts.Bold}
-              css="font-size: 20px;padding-left: 5px;padding-right: 5px;"
+              css="font-size: 18px;padding-left: 3px;padding-right: 3px;"
             >
               {token.symbol}
             </Text>
@@ -114,7 +132,7 @@ export const FormInput: React.FC<Prop> = ({
             $73.569
           </Text>
           <Text>
-            Balance: 0
+            {amount}
           </Text>
         </Wrapper>
       </Container>
