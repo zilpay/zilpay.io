@@ -17,7 +17,8 @@ type Prop = {
   balance?: bigint;
   disabled?: boolean;
   onInput?: (value: Big) => void;
-  onSelect?: () => void
+  onSelect?: () => void;
+  onMax?: (b: Big) => void;
 };
 
 const Wrapper = styled.div`
@@ -81,6 +82,13 @@ const Input = styled.input`
     pointer-events: none;
   }
 `;
+const Balance = styled(Text)`
+  cursor: pointer;
+
+  :hover {
+    color: ${Colors.Primary};
+  }
+`;
 
 export const FormInput: React.FC<Prop> = ({
   value,
@@ -88,18 +96,18 @@ export const FormInput: React.FC<Prop> = ({
   balance,
   disabled = false,
   onInput = () => null,
-  onSelect = () => null
+  onSelect = () => null,
+  onMax = () => null
 }) => {
   const amount = React.useMemo(() => {
     if (!balance) {
-      return '';
+      return Big(0);
     }
 
     const qa = Big(String(balance));
     const decimal = Big(10**token.decimals);
-    const value = qa.div(decimal);
 
-    return formatNumber(Number(value));
+    return qa.div(decimal);
   }, [token, balance]);
 
   const hanldeOnInput = React.useCallback((event) => {
@@ -151,9 +159,9 @@ export const FormInput: React.FC<Prop> = ({
           <Text>
             $73.569
           </Text>
-          <Text>
-            {amount}
-          </Text>
+          <Balance onClick={() => onMax(amount)}>
+            {formatNumber(Number(amount))}
+          </Balance>
         </Wrapper>
       </Container>
     </label>

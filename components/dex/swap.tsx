@@ -242,6 +242,7 @@ export const SwapForm: React.FC = () => {
           token={pools[token0].meta}
           balance={pools[token0].balance[wallet?.base16 || '']}
           onInput={hanldeOnChangeTop}
+          onMax={hanldeOnChangeTop}
           onSelect={() => setModal0(true)}
         />
           <SwapIcon onClick={hanldeOnSwapForms}/>
@@ -250,6 +251,7 @@ export const SwapForm: React.FC = () => {
           token={pools[token1].meta}
           balance={pools[token1].balance[wallet?.base16 || '']}
           onInput={hanldeOnChangeBottom}
+          onMax={hanldeOnChangeBottom}
           onSelect={() => setModal1(true)}
         />
         <Wrapper>
