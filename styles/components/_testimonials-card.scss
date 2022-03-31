@@ -1,0 +1,21 @@
+.testimonials-card {
+  width: 559px;
+  margin: 16px;
+
+  & > img {
+    border-radius: 100%;
+  }
+
+  & > p {
+    font-family: "Light";
+    font-size: 15px;
+  }
+
+  & > h3 {
+    font-size: 25px;
+  }
+
+  @media (max-width: 400px) {
+    width: 250px;
+  }
+}

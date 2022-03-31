@@ -1,0 +1,27 @@
+@import "../mixins";
+
+p {
+  color: var(--muted-color);
+  line-height: 1rem;
+  font-variant-ligatures: common-ligatures;
+
+  display: block;
+  margin-block-start: 0.7em;
+  margin-block-end: 0.7em;
+
+  font-family: Regular;
+  font-size: 14px;
+}
+
+h1, h2, h3 {
+  font-family: Bold;
+  color: var(--text-color);
+
+  text-shadow:0 0 1px var(--muted-color);
+}
+
+b {
+  font-family: Demi;
+  color: var(--muted-color);
+  letter-spacing: -0.01em;
+}

@@ -1,5 +1,6 @@
+import "@/styles/components/get-btn";
+
 import React from 'react';
-import styled from 'styled-components';
 import { useTranslation } from 'next-i18next';
 import {
   isChrome,
@@ -9,62 +10,47 @@ import {
   isIOS
 } from 'react-device-detect';
 
-import { Colors } from '@/config/colors';
-
-const GetButton = styled.button`
-  padding: 20px 30px;
-  border-radius: 8px;
-
-  color: ${Colors.Button};
-  background: ${Colors.Primary};
-
-  :hover {
-    color: ${Colors.Primary};
-    background: ${Colors.Button};
-  }
-`;
-
 export const InstallButton: React.FC = () => {
   const { t } = useTranslation(`main`);
 
  if (isAndroid) {
     return (
       <a href="https://play.google.com/store/apps/details?id=com.zilpaymobile">
-        <GetButton>
+        <button className="get-btn">
           {t(`get_android`)}
-        </GetButton>
+        </button>
       </a>
     );
   } if (isIOS) {
     return (
       <a href="https://apps.apple.com/ru/app/zilpay/id1547105860">
-        <GetButton>
+        <button className="get-btn">
           {t(`get_ios`)}
-        </GetButton>
+        </button>
       </a>
     );
   } if (isChrome) {
     return (
       <a href="https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd">
-        <GetButton>
+        <button className="get-btn">
           {t(`get_chrome`)}
-        </GetButton>
+        </button>
       </a>
     );
   } if (isEdge) {
     return (
       <a href="https://microsoftedge.microsoft.com/addons/detail/zilpay/fbekallmnjoeggkefjkbebpineneilec">
-        <GetButton>
+        <button className="get-btn">
           {t(`get_edge`)}
-        </GetButton>
+        </button>
       </a>
     );
   } if (isFirefox) {
     return (
       <a href="https://addons.mozilla.org/en-GB/firefox/addon/zilpay/">
-        <GetButton>
+        <button className="get-btn">
           {t(`get_firefox`)}
-        </GetButton>
+        </button>
       </a>
     );
   }

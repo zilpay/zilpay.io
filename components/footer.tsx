@@ -1,13 +1,10 @@
+import "@/styles/components/footer";
+
 import { useTranslation } from 'next-i18next';
 import React from 'react';
-import styled from 'styled-components';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-import { Text } from 'components/text';
-
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
 
 const AppleIcon = dynamic(import(`components/icons/apple`));
 const GoogleIcon = dynamic(import(`components/icons/google`));
@@ -19,76 +16,31 @@ const EmailIcon = dynamic(import(`components/icons/email`));
 const GitHubIcon = dynamic(import(`components/icons/github`));
 const MediumIcon = dynamic(import(`components/icons/medium`));
 
-const Container = styled.div`
-  background-color: ${Colors.Background};
-  transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
-  padding: 90px 0px 90px 0px;
-`;
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  padding-left: 30px;
-  padding-right: 30px;
-`;
-const Office = styled.div`
-  width: 180px;
-`;
-const Involved = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-const InvolvedWrapper = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  a {
-    margin: 10px;
-  }
-`;
-const Legal = styled.div`
-  width: 180px;
-`;
 
 export const Footer: React.FC = () => {
   const { t } = useTranslation(`common`);
   return (
-    <Container id="contact">
-      <Wrapper>
-        <Office>
-          <Text
-            fontColors={Colors.Text}
-            fontVariant={StyleFonts.Bold}
-            size="18px"
-          >
+    <div className="footer">
+      <div className="wrapper">
+        <div className="office">
+          <h3>
             {t(`office`)}
-          </Text>
-          <Text
-            fontVariant={StyleFonts.Light}
-            size="14px"
-          >
+          </h3>
+          <p>
             {t(`office_value`)}
-          </Text>
-        </Office>
-        <Involved>
-          <Text
-            fontColors={Colors.Text}
-            fontVariant={StyleFonts.Bold}
-            size="18px"
-          >
+          </p>
+        </div>
+        <div className="involved">
+          <h3>
             {t(`footer_icons`)}
-          </Text>
-          <InvolvedWrapper>
+          </h3>
+          <div className="involved-wrapper">
             <a
               href="https://apps.apple.com/ru/app/zilpay/id1547105860"
               target="_blank" rel="noreferrer"
             >
               <AppleIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -98,7 +50,7 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <GoogleIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -108,7 +60,7 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <FireFoxIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -118,7 +70,7 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <ChromeIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -128,7 +80,7 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <TelegramIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -138,7 +90,7 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <TwitterIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -148,7 +100,7 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <EmailIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -158,7 +110,7 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <GitHubIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
@@ -168,71 +120,47 @@ export const Footer: React.FC = () => {
               target="_blank" rel="noreferrer"
             >
               <MediumIcon
-                color={Colors.Text}
+                color="var(--text-color)"
                 height="30"
                 width="30"
               />
             </a>
-          </InvolvedWrapper>
-        </Involved>
-        <Legal>
-          <Text
-            fontColors={Colors.Text}
-            fontVariant={StyleFonts.Bold}
-            size="18px"
-          >
+          </div>
+        </div>
+        <div className="legal">
+          <h3>
             {t(`legal`)}
-          </Text>
+          </h3>
           <Link href="/terms">
-            <Text
-              fontVariant={StyleFonts.Light}
-              size="14px"
-              pointer
-            >
+            <p>
               {t(`terms`)}
-            </Text>
+            </p>
           </Link>
           <Link href="/policy">
-            <Text
-              fontVariant={StyleFonts.Light}
-              size="14px"
-              pointer
-            >
+            <p>
               {t(`privacy`)}
-            </Text>
+            </p>
           </Link>
           <Link href="/extension-policy">
-            <Text
-              fontVariant={StyleFonts.Light}
-              size="14px"
-              pointer
-            >
+            <p>
               {t(`extension-policy`)}
-            </Text>
+            </p>
           </Link>
           <Link href="/dex-policy">
-            <Text
-              fontVariant={StyleFonts.Light}
-              size="14px"
-              pointer
-            >
+            <p>
               {t(`dex-policy`)}
-            </Text>
+            </p>
           </Link>
           <a
             href="https://zilpay.github.io/zilpay-docs/"
             target="_blanck"
           >
-            <Text
-              fontVariant={StyleFonts.Light}
-              size="14px"
-              pointer
-            >
+            <p>
               Documentation
-            </Text>
+            </p>
           </a>
-        </Legal>
-      </Wrapper>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 };

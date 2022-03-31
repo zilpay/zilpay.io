@@ -1,37 +1,13 @@
+import "@/styles/components/team-card";
+
 import React from 'react';
-import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 
-import { Text } from 'components/text';
-
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
 
 const GitHubIcon = dynamic(import(`components/icons/github`));
 const TwitterIcon = dynamic(import(`components/icons/twitter`));
 const LinkedinIcon = dynamic(import(`components/icons/linkedin`));
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 50px;
-`;
-const Avatar = styled.img`
-  border-radius: 100%;
-`;
-const Span = styled.span`
-  width: 30px;
-  border: solid 1px ${Colors.Secondary};
-`;
-const IconsWrapper = styled.div`
-  margin: 10px;
-  min-width: 100px;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-`;
 
 type Prop = {
   img: string;
@@ -49,34 +25,27 @@ export const TeamCard: React.FC<Prop> = ({
   linkedin,
   twitter
 }) => (
-    <Container>
-      <Avatar
+    <div className="team-card">
+      <img
         src={img}
         width="200"
         height="200"
       />
-      <Text
-        fontColors={Colors.Text}
-        fontVariant={StyleFonts.Bold}
-        size="25px"
-      >
+      <h3>
         {title}
-      </Text>
-      <Text
-        fontVariant={StyleFonts.Light}
-        size="15px"
-      >
+      </h3>
+      <p>
         {children}
-      </Text>
-      <Span />
-      <IconsWrapper>
+      </p>
+      <span />
+      <div className="wrapper">
         {github ? (
           <a
             href={github}
             target="_blank" rel="noreferrer"
           >
             <GitHubIcon
-              color={Colors.Hover}
+              color="var(--hover-color)"
               height="15"
               width="15"
             />
@@ -88,7 +57,7 @@ export const TeamCard: React.FC<Prop> = ({
             target="_blank" rel="noreferrer"
           >
             <LinkedinIcon
-              color={Colors.Hover}
+              color="var(--hover-color)"
               height="15"
               width="15"
             />
@@ -100,12 +69,12 @@ export const TeamCard: React.FC<Prop> = ({
             target="_blank" rel="noreferrer"
           >
             <TwitterIcon
-              color={Colors.Hover}
+              color="var(--hover-color)"
               height="15"
               width="15"
             />
           </a>
         ) : null}
-      </IconsWrapper>
-    </Container>
+      </div>
+    </div>
   );

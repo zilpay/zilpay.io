@@ -1,0 +1,37 @@
+@import "../mixins";
+
+.team-card {
+  @include flex-center-vert;
+  flex-direction: column;
+
+  text-align: center;
+  margin: 50px;
+
+  & > img {
+    @include border-radius(100%);
+  }
+
+  & > h3 {
+    font-family: "Bold";
+    color: var(--text-color);
+    font-size: 25px;
+  }
+
+  & > p {
+    font-family: "Light";
+    font-size: 15px;
+  }
+
+  & > span {
+    width: 30px;
+    border: solid 1px var(--secondary-color);
+  }
+
+  & > .wrapper {
+    margin: 10px;
+    min-width: 100px;
+    justify-content: space-evenly;
+
+    @include flex-center-vert;
+  }
+}

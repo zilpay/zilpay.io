@@ -1,47 +1,6 @@
+import "@/styles/components/zoom-card";
+
 import React from 'react';
-import styled from 'styled-components';
-
-import { Text } from 'components/text';
-
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
-
-type ContainerProp = {
-  image: string;
-};
-
-const Container = styled.div`
-  cursor: pointer;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-
-  width: 290px;
-  height: 290px;
-
-  margin: 16px;
-
-  float: left;
-  overflow: hidden;
-  transition: all 0.4s;
-
-  background-color: ${Colors.Card};
-  background-image: url(${(p: ContainerProp) => p.image});
-  background-size: cover;
-  background-position: 50%;
-
-  :hover {
-    background-size: 700px;
-    background-position: 40%;
-  }
-
-  @media (max-width: 1000px) {
-    width: 80vw;
-  }
-`;
 
 type Prop = {
   url: string;
@@ -57,23 +16,18 @@ export const ZoomCard: React.FC<Prop> = ({
   children,
   onClick = () => null
 }) => (
-    <Container
-      image={url}
-      onClick={() => onClick(href)}
-    >
-      <Text
-        fontColors={Colors.Text}
-        fontVariant={StyleFonts.Bold}
-        size="24px"
-      >
-        {title}
-      </Text>
-      <Text
-        fontColors={Colors.Text}
-        fontVariant={StyleFonts.SemiBold}
-        size="14px"
-      >
-        {children}
-      </Text>
-    </Container>
-  );
+  <div
+    className="zoom-card"
+    style={{
+      backgroundImage: `url(${url})`
+    }}
+    onClick={() => onClick(href)}
+  >
+    <h3>
+      {title}
+    </h3>
+    <p>
+      {children}
+    </p>
+  </div>
+);

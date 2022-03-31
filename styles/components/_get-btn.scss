@@ -1,0 +1,12 @@
+.get-btn {
+  padding: 20px 30px;
+  border-radius: 8px;
+
+  color: var(--button-color);
+  background: var(--primary-color);
+
+  :hover {
+    color: var(--primary-color);
+    background: var(--button-color);
+  }
+}
