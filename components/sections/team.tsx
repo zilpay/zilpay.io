@@ -1,28 +1,21 @@
+import "@/styles/components/_apps.scss";
+
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { Text } from 'components/text';
 import { TeamCard } from 'components/team-card';
 
-import { StyleFonts } from '@/config/fonts';
-import { Colors } from '@/config/colors';
-
-import { Container, HeaderWrapper, Wrapper } from './styles';
 
 export const TeamSection: React.FC = () => {
   const { t } = useTranslation(`main`);
   return (
-    <Container id="team">
-      <HeaderWrapper>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Text}
-          size="40px"
-        >
+    <div className="team">
+      <div className="header-wrapper">
+        <h2>
           Our Team
-        </Text>
-      </HeaderWrapper>
-      <Wrapper>
+        </h2>
+      </div>
+      <div className="wrapper">
         <TeamCard
           img="/images/rinat.webp"
           title={t(`rinat_name`)}
@@ -48,8 +41,8 @@ export const TeamSection: React.FC = () => {
         >
           {t(`madhav_type`)}
         </TeamCard>
-      </Wrapper>
-    </Container>
+      </div>
+    </div>
   );
 };
 

@@ -6,12 +6,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import Big from 'big.js';
-import styled from 'styled-components';
 
 import { Text } from 'components/text';
 import { FormInput } from './input';
 
-import { Colors } from '@/config/colors';
 import { StyleFonts } from '@/config/fonts';
 
 import { DragonDex, SwapDirection } from '@/mixins/dex';

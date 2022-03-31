@@ -1,4 +1,4 @@
-import "@/styles/base";
+import "@/styles/_base.scss";
 import { AppProps } from 'next/app';
 import { appWithTranslation } from 'next-i18next'
 import React from 'react';
@@ -8,12 +8,11 @@ import { Footer } from 'components/footer';
 import { Navbar } from 'components/nav-bar';
 
 import { isDesktop, isAndroid, isIOS } from 'react-device-detect';
-import { Colors } from '@/config/colors';
 
 const App = ({ Component, pageProps }: AppProps) => (
     <>
       <NextNprogress
-        color={Colors.Primary}
+        color="var(--primary-color)"
         startPosition={0.3}
         stopDelayMs={200}
         height={3}
@@ -25,6 +24,6 @@ const App = ({ Component, pageProps }: AppProps) => (
       <Component {...pageProps} />
       <Footer />
     </>
-  )
+  );
 
 export default appWithTranslation(App);

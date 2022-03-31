@@ -1,15 +1,16 @@
+import "@/styles/components/_apps.scss";
+
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Card } from 'components/card';
 
-import { Container, Wrapper } from './styles';
 
 export const InfoSection: React.FC = () => {
   const { t } = useTranslation(`main`);
   return (
-    <Container>
-      <Wrapper>
+    <div className="info">
+      <div className="wrapper">
         <Card
           url="/icons/info-0.svg"
           title={t(`section_title_card0`)}
@@ -29,8 +30,8 @@ export const InfoSection: React.FC = () => {
         >
           {t(`section_info_card2`)}
         </Card>
-      </Wrapper>
-    </Container>
+      </div>
+    </div>
   );
 };
 

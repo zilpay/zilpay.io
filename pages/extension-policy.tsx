@@ -1,19 +1,17 @@
+import "@/styles/components/pages/_terms.scss";
+
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import Head from 'next/head';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Container, Dummy, Wrapper} from 'components/wrappers/terms-policy';
 
-import { Text } from 'components/text';
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
 
 export const ExtensionPolicyPage: NextPage = () => {
   const { t } = useTranslation(`extension-policy`);
 
   return (
-    <Container>
+    <div className="extension-policy">
       <Head>
         <title>{t(`head_title`)}</title>
         <meta
@@ -22,237 +20,155 @@ export const ExtensionPolicyPage: NextPage = () => {
           key="title"
         />
       </Head>
-      <Dummy />
-      <Wrapper>
-        <Text
-          fontVariant={StyleFonts.Light}
-          size="15px"
-        >
+      <div className="dummy"/>
+      <div className="wrapper">
+        <p className="light">
           {t(`last_update`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h1>
           {t(`head_title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </h1>
+        <p>
           <strong>
             {t(`title0`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p1`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p2`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p3`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </p>
+        <p>
           <strong>
             {t(`title1`)}
           </strong>
-        </Text>
+        </p>
         <ul>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`collections0`)}
-            </Text>
+            </p>
           </li>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`collections1`)}
-            </Text>
+            </p>
           </li>
         </ul>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        <p>
           <strong>
             {t(`title2`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p4`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </p>
+        <p>
           <strong>
             {t(`title3`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p5`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p6`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p7`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p8`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </p>
+        <p>
           <strong>
             {t(`title4`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p9`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`p10`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </p>
+        <p>
           <strong>
             {t(`title5`)}
           </strong>
-        </Text>
+        </p>
         <ul>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`stores0`)}
-            </Text>
+            </p>
           </li>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`stores1`)}
-            </Text>
+            </p>
           </li>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`stores2`)}
-            </Text>
+            </p>
           </li>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`stores3`)}
-            </Text>
+            </p>
           </li>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`stores4`)}
-            </Text>
+            </p>
           </li>
           <li>
-            <Text fontVariant={StyleFonts.Light}>
+            <p className="light">
               {t(`stores5`)}
-            </Text>
+            </p>
           </li>
         </ul>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        <p>
           <strong>
             {t(`title6`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p11`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </p>
+        <p>
           <strong>
             {t(`title7`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p12`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </p>
+        <p>
           <strong>
             {t(`title8`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p13`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          size="25px"
-        >
+        </p>
+        <p>
           <strong>
             {t(`title9`)}
           </strong>
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p className="light">
           {t(`p14`)}
-        </Text>
-      </Wrapper>
-    </Container>
+        </p>
+      </div>
+    </div>
   );
 };
 

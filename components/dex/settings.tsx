@@ -1,7 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
-
-import { Colors } from '@/config/colors';
 
 import { SwapSettingsModal } from '../modals/settings';
 

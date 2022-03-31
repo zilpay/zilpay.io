@@ -16,6 +16,19 @@ button {
 
   transition: background-color 250ms linear;
 
+  &.connect {
+    min-width: 120px;
+    min-height: 47px;
+    padding: 13px;
+    margin: 14px;
+    border-radius: 8px;
+  
+    :hover {
+      color: var(--button-color);
+      background: var(--primary-color);
+    }
+  }
+
   :disabled {
     pointer-events: none;
     cursor: default;

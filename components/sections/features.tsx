@@ -1,34 +1,24 @@
+import "@/styles/components/_apps.scss";
+
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Card } from 'components/card';
-import { Text } from 'components/text';
-import { StyleFonts } from '@/config/fonts';
-import { Colors } from '@/config/colors';
 
-import { Container, Wrapper, HeaderWrapper } from './styles';
 
 export const FeaturesSection: React.FC = () => {
   const { t } = useTranslation(`main`);
   return (
-    <Container id="services">
-      <HeaderWrapper>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Text}
-          size="40px"
-        >
+    <div className="features">
+      <div className="header-wrapper">
+        <h2>
           {t(`features_title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Medium}
-          fontColors={Colors.Muted}
-          size="12px"
-        >
+        </h2>
+        <p>
           {t(`features_sub_title`)}
-        </Text>
-      </HeaderWrapper>
-      <Wrapper>
+        </p>
+      </div>
+      <div className="wrapper">
         <Card
           url="/icons/wallet.svg"
           title={t(`features_title_card0`)}
@@ -65,8 +55,8 @@ export const FeaturesSection: React.FC = () => {
         >
           {t(`features_sub_title_card5`)}
         </Card>
-      </Wrapper>
-    </Container>
+      </div>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import "@/styles/components/footer";
+import "@/styles/components/_footer.scss";
 
 import { useTranslation } from 'next-i18next';
 import React from 'react';

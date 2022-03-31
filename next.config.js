@@ -30,6 +30,7 @@ module.exports = {
   sassOptions: {
     includePaths: [path.join(__dirname, 'styles')],
   },
+  cssModules: true,
   async headers() {
     return [
       {
@@ -39,4 +40,4 @@ module.exports = {
       },
     ]
   },
-}
+};

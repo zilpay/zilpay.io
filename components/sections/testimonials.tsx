@@ -1,28 +1,21 @@
+import "@/styles/components/_apps.scss";
+
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { Text } from 'components/text';
 import { TestimonialsCard } from 'components/testimonials-card';
 
-import { StyleFonts } from '@/config/fonts';
-import { Colors } from '@/config/colors';
-
-import { Container, HeaderWrapper, Wrapper } from './styles';
 
 export const TestimonialsSection: React.FC = () => {
   const { t } = useTranslation(`main`);
   return (
-    <Container>
-      <HeaderWrapper>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Text}
-          size="40px"
-        >
+    <div className="testimonials">
+      <div className="header-wrapper">
+        <h2>
           {t(`testimonials_title`)}
-        </Text>
-      </HeaderWrapper>
-      <Wrapper>
+        </h2>
+      </div>
+      <div className="wrapper">
         <TestimonialsCard
           img="/images/hanwen.webp"
           title={t(`testimonials_title0`)}
@@ -37,8 +30,8 @@ export const TestimonialsSection: React.FC = () => {
         >
           {t(`testimonials_info1`)}
         </TestimonialsCard>
-      </Wrapper>
-    </Container>
+      </div>
+    </div>
   );
 };
 

@@ -2,12 +2,10 @@ import type { TokenState } from '@/types/token';
 
 import { useStore } from 'effector-react';
 import React from 'react';
-import styled from 'styled-components';
 
 import { Text } from 'components/text';
 import { TokensModal } from 'components/modals/tokens';
 
-import { Colors } from '@/config/colors';
 import { $pools } from '@/store/pools';
 
 const Wrapper = styled.div`

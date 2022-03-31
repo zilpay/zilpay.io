@@ -1,14 +1,11 @@
+import "@/styles/components/_apps.scss";
+
 import React from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
-import { Text } from 'components/text';
 import { ZoomCard } from 'components/zoom-card';
 
-import { StyleFonts } from '@/config/fonts';
-import { Colors } from '@/config/colors';
-
-import { Container, Wrapper, HeaderWrapper } from './styles';
 
 export const AppsSection: React.FC = () => {
   const router = useRouter();
@@ -25,24 +22,16 @@ export const AppsSection: React.FC = () => {
   }, [router]);
 
   return (
-    <Container>
-      <HeaderWrapper>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Text}
-          size="40px"
-        >
+    <div className="apps">
+      <div className="header-wrapper">
+        <h2>
           {t(`apps_title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Medium}
-          fontColors={Colors.Muted}
-          size="12px"
-        >
+        </h2>
+        <p>
           {t(`apps_sub_title`)}
-        </Text>
-      </HeaderWrapper>
-      <Wrapper>
+        </p>
+      </div>
+      <div className="wrapper">
         <ZoomCard
           url="/images/vlx-konstantinov-02-1-1024x576.webp"
           href="https://dragonzil.xyz/"
@@ -91,8 +80,8 @@ export const AppsSection: React.FC = () => {
         >
           {t(`app5`)}
         </ZoomCard>
-      </Wrapper>
-    </Container>
+      </div>
+    </div>
   );
 };
 

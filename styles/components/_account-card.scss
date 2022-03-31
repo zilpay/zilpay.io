@@ -1,0 +1,51 @@
+@import "../mixins";
+
+.account-card {
+  margin: 16px;
+  padding: 5px 30px;
+
+  border: 1px solid var(--secondary-color);
+
+  @include border-radius(16px);
+
+  & > h3 {
+    margin: 0;
+    font-size: 16px;
+    font-family: "Regular";
+  }
+
+  & > .row {
+    @include flex-center-vert;
+    justify-content: start;
+  
+    & > .second {
+      margin-left: 16px;
+    }
+
+    & > .copy {
+      @include flex-center-vert;
+
+      cursor: pointer;
+      width: fit-content;
+    
+      user-select: none;
+
+      & > p {
+        font-family: "Regular";
+        color: var(--muted-color);
+        font-size: 16px;
+        margin: 0;
+        text-indent: 5px;
+      }
+    
+      :hover {
+        svg {
+          stroke: var(--background-color);
+        }
+        div {
+          color: var(--background-color);
+        }
+      }
+    }
+  }
+}

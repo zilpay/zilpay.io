@@ -1,19 +1,17 @@
+import "@/styles/components/pages/_terms.scss";
+
 import { useTranslation } from 'next-i18next';
 import React from 'react';
 import Head from 'next/head';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Container, Dummy, Wrapper} from 'components/wrappers/terms-policy';
 
-import { Text } from 'components/text';
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
 
 export const ExtensionPolicyPage: NextPage = () => {
   const { t } = useTranslation(`dex-policy`);
 
   return (
-    <Container>
+    <div className="dex-policy">
       <Head>
         <title>{t(`head_title`)}</title>
         <meta
@@ -22,340 +20,166 @@ export const ExtensionPolicyPage: NextPage = () => {
           key="title"
         />
       </Head>
-      <Dummy />
-      <Wrapper>
-        <Text
-          fontVariant={StyleFonts.Light}
-          size="15px"
-        >
+      <div className="dummy"/>
+      <div className="wrapper">
+        <p>
           {t(`last_update`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h1>
           {t(`head_title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h1>
+        <p>
           {t(`part0.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part0.p1`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part0.p2`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h1>
           {t(`part1.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h1>
+        <p>
           {t(`part1.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h1>
           {t(`part2.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h1>
+        <p>
           {t(`part2.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part2.p1`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h1>
           {t(`part3.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h1>
+        <p>
           {t(`part3.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part4.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part4.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part5.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part5.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part5.p1`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part5.p2`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part6.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part6.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p1`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p2`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p3`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p4`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p5`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p6`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p7`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part6.p8`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part7.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part7.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part7.p1`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part8.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part8.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part9.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part9.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part10.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part10.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part11.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part11.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </p>
+        <p>
           {t(`part11.p1`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part12.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part12.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part13.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part13.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part14.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part14.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part15.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part15.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part16.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part16.p0`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="45px"
-        >
+        </p>
+        <h2>
           {t(`part17.title`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Light}
-          css="margin-left: 15px;"
-        >
+        </h2>
+        <p>
           {t(`part17.p0`)}
-        </Text>
-      </Wrapper>
-    </Container>
+        </p>
+      </div>
+    </div>
   );
 };
 

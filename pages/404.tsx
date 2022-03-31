@@ -1,19 +1,17 @@
+import "@/styles/components/pages/_terms.scss";
+
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Container, Wrapper } from 'components/wrappers/terms-policy';
 
-import { Text } from 'components/text';
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
 
 export const PageNotFound: NextPage = () => {
   const { t } = useTranslation(`404`);
 
   return (
-    <Container>
+    <div className="nofound">
       <Head>
         <title>{t(`head_title`)}</title>
         <meta
@@ -22,23 +20,15 @@ export const PageNotFound: NextPage = () => {
           key="title"
         />
       </Head>
-      <Wrapper>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.Primary}
-          size="80px"
-          css="text-align: center;"
-        >
+      <div className="wrapper">
+        <h1>
           {t(`title`)}
-        </Text>
-        <Text
-          fontColors={Colors.Primary}
-          css="text-align: center;"
-        >
+        </h1>
+        <h2>
           {t(`sub_title`)}
-        </Text>
-      </Wrapper>
-    </Container>
+        </h2>
+      </div>
+    </div>
   );
 }
 

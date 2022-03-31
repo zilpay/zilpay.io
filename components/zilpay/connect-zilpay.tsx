@@ -1,6 +1,5 @@
 import React from "react";
 import { useStore } from "effector-react";
-import styled from "styled-components";
 import { isMobile } from "react-device-detect";
 
 import { Puff, ThreeDots } from "react-loader-spinner";
@@ -10,8 +9,6 @@ import { AccountModal } from "components/modals/account";
 import { Text } from "components/text";
 import { WalletErrorModal } from "components/modals/no-wallet";
 
-import { StyleFonts } from "config/fonts";
-import { Colors } from "config/colors";
 import { ZilPayBase } from "@/mixins/zilpay-base";
 import { trim } from "lib/trim";
 import { $wallet, updateAddress, Wallet } from "store/wallet";
@@ -24,18 +21,6 @@ import { updateNet } from "store/wallet-netwrok";
 
 import { Block, Net } from "@/types/zilpay";
 
-const ConnectZIlPayButton = styled.button`
-  min-width: 120px;
-  min-height: 47px;
-  padding: 13px;
-  margin: 14px;
-  border-radius: 8px;
-
-  :hover {
-    color: ${Colors.Button};
-    background: ${Colors.Primary};
-  }
-`;
 
 let observer: any = null;
 let observerNet: any = null;
@@ -180,7 +165,7 @@ export var ConnectZIlPay: React.FC = function () {
           <svg width="32" height="26" viewBox="0 0 32 26" fill="none">
             <path
               d="M0 1H32M0 13H32M0 25H32"
-              stroke={Colors.Primary}
+              stroke="var(--primary-color)"
               strokeWidth="2"
             />
           </svg>
@@ -200,27 +185,41 @@ export var ConnectZIlPay: React.FC = function () {
     <>
       {address ? (
         <React.Fragment>
-          <ConnectZIlPayButton onClick={() => setShowModal(true)}>
+          <button
+            className="connect"
+            onClick={() => setShowModal(true)}
+          >
             {isLoading ? (
               trim(address.bech32)
             ) : (
               <>
-                <Puff color={Colors.Primary} height={10} width={10} />
+                <Puff
+                  color="var(--primary-color)"
+                  height={10}
+                  width={10}
+                />
                 <Text size="16px" css="text-indent: 5px;margin: 0;">
                   Pending...
                 </Text>
               </>
             )}
-          </ConnectZIlPayButton>
+          </button>
         </React.Fragment>
       ) : (
-        <ConnectZIlPayButton onClick={handleConnect}>
+        <button
+          className="connect"
+          onClick={handleConnect}
+        >
           {loading ? (
-            <ThreeDots color="#fff" height={10} width={20} />
+            <ThreeDots
+              color="var(--text-color)"
+              height={10}
+              width={20}
+            />
           ) : (
             `Connect`
           )}
-        </ConnectZIlPayButton>
+        </button>
       )}
       <AccountModal
         show={showModal}
