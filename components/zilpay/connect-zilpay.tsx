@@ -20,7 +20,7 @@ import {
   updateTxList,
   clearTxList
 } from "store/transactions";
-import { updateNet, $net } from "store/wallet-netwrok";
+import { updateNet } from "store/wallet-netwrok";
 
 import { Block, Net } from "@/types/zilpay";
 
@@ -42,7 +42,6 @@ let observerNet: any = null;
 let observerBlock: any = null;
 export var ConnectZIlPay: React.FC = function () {
   const address = useStore($wallet);
-  const net = useStore($net);
   const transactions = useStore($transactions);
 
   const [loading, setLoading] = React.useState(true);

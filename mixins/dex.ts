@@ -1,10 +1,14 @@
-import { ZERO_ADDR } from '@/config/conts';
-import { toHex } from '@/lib/to-hex';
-import { ListedTokensState } from '@/types/token';
 import Big from 'big.js';
+
 import { Blockchain } from './custom-fetch';
 import { ZilPayBase } from './zilpay-base';
+
 import { $pools, updatePools } from 'store/pools';
+import { pushToList } from '@/store/transactions';
+
+import { toHex } from '@/lib/to-hex';
+import { formatNumber } from '@/filters/n-format';
+
 
 Big.PE = 999;
 
@@ -108,7 +112,7 @@ export class DragonDex {
     return Big(String(tokens)).div(decimals1);
   }
 
-  public swapExactZILForTokens(zil: Big, max: Big, recipient: string, token: string) {
+  public async swapExactZILForTokens(zil: Big, max: Big, recipient: string, token: string) {
     const params = [
       {
         vname: 'token_address',
@@ -133,16 +137,29 @@ export class DragonDex {
     ];
     const contractAddress = DragonDex.CONTRACT;
     const transition = 'SwapExactZILForTokens';
-
-    return this.zilpay.call({
+    const res = await this.zilpay.call({
       params,
       contractAddress,
       transition,
       amount: String(zil)
     });
+
+    const found = this.pools.find((p) => p.meta.base16 === token);
+    if (found) {
+      const amount = zil.div(this.toDecimails(this.pools[0].meta.decimals));
+      pushToList({
+        timestamp: new Date().getTime(),
+        name: `Swap ${formatNumber(String(amount))} ZIL to ${found.meta.symbol}`,
+        confirmed: false,
+        hash: res.ID,
+        from: res.from
+      });
+    }
+
+    return res;
   }
 
-  public swapExactTokensForZIL(tokens: Big, max: Big, recipient: string, token: string) {
+  public async swapExactTokensForZIL(tokens: Big, max: Big, recipient: string, token: string) {
     const params = [
       {
         vname: 'token_address',
@@ -172,16 +189,30 @@ export class DragonDex {
     ];
     const contractAddress = DragonDex.CONTRACT;
     const transition = 'SwapExactTokensForZIL';
-
-    return this.zilpay.call({
+    const res = await this.zilpay.call({
       params,
       contractAddress,
       transition,
       amount: '0'
     });
+
+    const foundIndex = this.pools.findIndex((p) => p.meta.base16 === token);
+    if (foundIndex >= 0) {
+      const tokenMeta = this.pools[foundIndex].meta;
+      const amount = tokens.div(this.toDecimails(tokenMeta.decimals));
+      pushToList({
+        timestamp: new Date().getTime(),
+        name: `Swap ${formatNumber(String(amount))} ${tokenMeta.symbol} to ZIL`,
+        confirmed: false,
+        hash: res.ID,
+        from: res.from
+      });
+    }
+
+    return res;
   }
 
-  public swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string,) {
+  public async swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string,) {
     const params = [
       {
         vname: 'token0_address',
@@ -216,13 +247,29 @@ export class DragonDex {
     ];
     const contractAddress = DragonDex.CONTRACT;
     const transition = 'SwapExactTokensForTokens';
-
-    return this.zilpay.call({
+    const res = await this.zilpay.call({
       params,
       contractAddress,
       transition,
       amount: '0'
     });
+    const foundIndex0 = this.pools.findIndex((p) => p.meta.base16 === token0);
+    const foundIndex1 = this.pools.findIndex((p) => p.meta.base16 === token1);
+
+    if (foundIndex0 >= 0 && foundIndex1 >= 0) {
+      const tokenMeta0 = this.pools[foundIndex0].meta;
+      const tokenMeta1 = this.pools[foundIndex1].meta;
+      const amount = tokens.div(this.toDecimails(tokenMeta0.decimals));
+      pushToList({
+        timestamp: new Date().getTime(),
+        name: `Swap ${formatNumber(String(amount))} ${tokenMeta0.symbol} to ${tokenMeta1.symbol}`,
+        confirmed: false,
+        hash: res.ID,
+        from: res.from
+      });
+    }
+
+    return res;
   }
 
   public addLiquidity(min: Big, max: Big, amount: Big, token: string) {

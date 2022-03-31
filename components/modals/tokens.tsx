@@ -3,11 +3,8 @@ import type { Pool, TokenState } from "@/types/token";
 import React from "react";
 import { useStore } from "effector-react";
 import { useTranslation } from "next-i18next";
-import styled from "styled-components";
 
 import { Modal, ModalHeader } from "components/modal";
-import { Text } from "components/text";
-import { Colors } from "config/colors";
 import { TokenCard } from "components/token-card";
 
 import { $wallet } from "@/store/wallet";
@@ -36,7 +33,7 @@ export var TokensModal: React.FC<Prop> = function ({
           {common.t(`account`)}
         </ModalHeader>
       )}
-      width="450px"
+      width="400px"
       onClose={onClose}
     >
       {pools.map((pool) => (

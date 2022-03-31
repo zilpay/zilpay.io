@@ -108,7 +108,7 @@ export const SwapForm: React.FC = () => {
   }, [topAmount, bottomAmount, pools]);
 
   const disabled = React.useMemo(() => {
-    return exactAmount.eq(0) || !(wallet?.base16);
+    return Boolean(exactAmount.eq(0) || !(wallet?.base16)) && process.browser;
   }, [exactAmount, wallet]);
 
   const hanldeUpdate = React.useCallback(async() => {

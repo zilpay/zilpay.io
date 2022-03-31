@@ -13,6 +13,7 @@ import { Colors } from '@/config/colors';
 
 const GetButton = styled.button`
   padding: 20px 30px;
+  border-radius: 8px;
 
   color: ${Colors.Button};
   background: ${Colors.Primary};
