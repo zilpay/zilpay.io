@@ -93,7 +93,7 @@ const Balance = styled(Text)`
 export const FormInput: React.FC<Prop> = ({
   value,
   token,
-  balance,
+  balance = BigInt(0),
   disabled = false,
   onInput = () => null,
   onSelect = () => null,

@@ -26,6 +26,7 @@ const securityHeaders = [
 module.exports = {
   i18n,
   reactStrictMode: true,
+  styledComponent: true,
   async headers() {
     return [
       {

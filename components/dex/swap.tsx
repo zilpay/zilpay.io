@@ -165,11 +165,18 @@ export const SwapForm: React.FC = () => {
       exactType = Exact.Top;
     }
 
+    if (direction === SwapDirection.TokenToZil) {
+      setDirection(SwapDirection.ZilToToken);
+    }
+    if (direction === SwapDirection.ZilToToken) {
+      setDirection(SwapDirection.TokenToZil);
+    }
+
     setToken1(fst);
     setToken0(second);
     setBottomAmount(amount0);
     setTopAmount(amount1);
-  }, [token0, token1, topAmount, bottomAmount, pools]);
+  }, [token0, token1, topAmount, bottomAmount, direction]);
   const hanldeSubmit = React.useCallback((event) => {
     event.preventDefault();
     setConfirmModal(true);
