@@ -2,7 +2,7 @@
 @import "./variables";
 @import "./mixins";
 
-:global(:root) {
+:root {
   --background-color: #{inspect(map-get($light , "Background"))};
   --border-color:  #{inspect(map-get($light , "Border"))};
   --notification-color:  #{inspect(map-get($light , "Notification"))};
@@ -20,7 +20,7 @@
   --hover-color: #{inspect(map-get($light , "Hover"))};
 }
 
-:global(body[theme="dark"]) {
+body[theme-color="dark"] {
   --background-color:  #{inspect(map-get($dark , "Background"))};
   --border-color:  #{inspect(map-get($dark , "Border"))};
   --notification-color:  #{inspect(map-get($dark , "Notification"))};
