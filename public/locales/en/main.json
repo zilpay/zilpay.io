@@ -16,5 +16,33 @@
       "title": "Interoperability",
       "sub_title": "Make payments to anyone, anywhere with the ability to import accounts from any external wallet on the chain."
     }
+  },
+  "features": {
+    "title": "Our features",
+    "sub_title": "LEARN WHAT SETS US APART",
+    "card_0": {
+      "title": "Decentralised wallet",
+      "sub_title": "You will have full ownership over all your assets."
+    },
+    "card_1": {
+      "title": "A portal to DApps",
+      "sub_title": "You will be able to access all the main dApps on the Zilliqa blockchain"
+    },
+    "card_2": {
+      "title": "Own your data",
+      "sub_title": "You will always be able to access your account."
+    },
+    "card_3": {
+      "title": "Multi-layer security",
+      "sub_title": "Your assets will always be safe."
+    },
+    "card_4": {
+      "title": "Transaction resetting",
+      "sub_title": "You can reset your nounce at any given time"
+    },
+    "card_5": {
+      "title": "Seamless experience",
+      "sub_title": "You will always have a stable and reliable experience"
+    }
   }
 }

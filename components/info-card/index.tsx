@@ -1,6 +1,7 @@
 
 import styles from "./index.module.scss";
 
+import Image from "next/image";
 import React from 'react';
 
 
@@ -10,13 +11,18 @@ type Prop = {
   selected?: boolean;
 };
 
-export const InfoCard: React.FC<Prop> = ({ url, selected, title, children }) => (
-  <div className={styles.card}>
-    <img
+export const InfoCard: React.FC<Prop> = ({ url, title, selected, children }) => (
+  <div
+    className={styles.card}
+    style={{
+      borderColor: selected ? 'var(--secondary-color)' : undefined
+    }}
+  >
+    <Image
       src={url}
-      height="60"
-      width="60"
       alt="Icon"
+      height={50}
+      width={50}
     />
     <h3>
       {title}

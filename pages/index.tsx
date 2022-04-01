@@ -34,29 +34,76 @@ const MainPage: NextPage = () => {
       </div>
     </section>
     <section>
-    <div className={styles.cards}>
-      <InfoCard
-          url="/icons/info-0.svg"
-          title={t(`info.card_0.title`)}
-        >
-          {t(`info.card_0.sub_title`)}
-        </InfoCard>
+      <div className={styles.cards}>
         <InfoCard
-          url="/icons/info-1.svg"
-          title={t(`info.card_1.title`)}
-          selected
-        >
-          {t(`info.card_1.sub_title`)}
-        </InfoCard>
-        <InfoCard
-          url="/icons/info-2.svg"
-          title={t(`info.card_2.title`)}
-        >
-          {t(`info.card_2.sub_title`)}
-        </InfoCard>
-    </div>
+            url="/icons/info-0.svg"
+            title={t(`info.card_0.title`)}
+          >
+            {t(`info.card_0.sub_title`)}
+          </InfoCard>
+          <InfoCard
+            url="/icons/info-1.svg"
+            title={t(`info.card_1.title`)}
+            selected
+          >
+            {t(`info.card_1.sub_title`)}
+          </InfoCard>
+          <InfoCard
+            url="/icons/info-2.svg"
+            title={t(`info.card_2.title`)}
+          >
+            {t(`info.card_2.sub_title`)}
+          </InfoCard>
+      </div>
     </section>
-    <section></section>
+    <section className={styles.features}>
+      <div className={styles.header}>
+        <h1>
+          {t(`features.title`)}
+        </h1>
+        <p>
+          {t(`features.sub_title`)}
+        </p>
+      </div>
+      <div className={styles.cards}>
+        <InfoCard
+          url="/icons/wallet.svg"
+          title={t(`features.card_0.title`)}
+        >
+          {t(`features.card_0.sub_title`)}
+        </InfoCard>
+        <InfoCard
+          url="/icons/location.svg"
+          title={t(`features.card_1.title`)}
+        >
+          {t(`features.card_1.sub_title`)}
+        </InfoCard>
+        <InfoCard
+          url="/icons/key.svg"
+          title={t(`features.card_2.title`)}
+        >
+          {t(`features.card_2.sub_title`)}
+        </InfoCard>
+        <InfoCard
+          url="/icons/lock.svg"
+          title={t(`features.card_3.title`)}
+        >
+          {t(`features.card_3.sub_title`)}
+        </InfoCard>
+        <InfoCard
+          url="/icons/settings.svg"
+          title={t(`features.card_4.title`)}
+        >
+          {t(`features.card_4.sub_title`)}
+        </InfoCard>
+        <InfoCard
+          url="/icons/rokket.svg"
+          title={t(`features.card_5.title`)}
+        >
+          {t(`features.card_5.sub_title`)}
+        </InfoCard>
+      </div>
+    </section>
     <section></section>
     </>
   )
