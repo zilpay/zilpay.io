@@ -16,7 +16,7 @@
 
   border-style: solid;
   border-width: 2px 2px 2px 2px;
-  border-color: transparent;
+  border-color: var(--card-color);
 
   box-shadow: 0px 0px 25px 0px rgb(0 0 0 / 9%);
   transition: background 0.3s, border 0.5s, border-radius 0.5s, box-shadow 0.5s;
