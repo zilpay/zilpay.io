@@ -7,4 +7,20 @@ p,
 b,
 strong {
   color: var(--text-color);
+  font-family: Bold;
+
+  text-shadow:0 0 1px var(--muted-color);
+}
+
+p {
+  color: var(--text-color);
+  line-height: 1rem;
+  font-variant-ligatures: common-ligatures;
+
+  display: block;
+  margin-block-start: 0.7em;
+  margin-block-end: 0.7em;
+
+  font-family: Regular;
+  font-size: 14px;
 }

@@ -5,7 +5,7 @@ import type { AppProps } from 'next/app'
 import { appWithTranslation } from 'next-i18next'
 import NextNprogress from "nextjs-progressbar"
 import { Footer } from '@/components/footer';
-import { NavBar } from '@/components/nav-bar';
+import { NavBar } from '@/components/nav-bar/index';
 
 const App = ({ Component, pageProps }: AppProps) => (
   <>

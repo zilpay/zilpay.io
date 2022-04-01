@@ -1,0 +1,47 @@
+@import "@/styles/mixins";
+
+.container {
+  background-color: var(--background-color);
+  transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 0.3s;
+  padding: 90px 0px 90px 0px;
+}
+
+.wrapper {
+  @include flex-between-row;
+  align-items: flex-start;
+
+  flex-wrap: wrap;
+
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.office,
+.legal {
+  width: 180px;
+
+  & > h3 {
+    font-size: 18px;
+  }
+
+  & > p {
+    font-size: 14px;
+    font-family: "Light";
+  }
+}
+
+.involved {
+  @include flex-center-column;
+
+  & > div > a {
+    margin: 3px;
+  }
+}
+
+.pointer {
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-color);
+  }
+}
