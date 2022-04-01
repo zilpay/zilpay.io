@@ -1,0 +1,66 @@
+@import "../mixins.scss";
+
+.main {
+  height: 70vh;
+
+  @include flex-center-top-column;
+
+  // background-image: url(/images/bg.webp);
+  background-position: center center;
+  background-size: 130%;
+
+  padding-top: 5vh;
+  padding-left: 10vw;
+  padding-right: 10vw;
+}
+
+.wrapper {
+  width: 100%;
+
+  & > h1 {
+    margin: 0;
+    font-size: 65px;
+    max-width: 519px;
+  }
+}
+
+.cards {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  width: 100%;
+  height: 100%;
+}
+
+.btns {
+  @include flex-center-vert;
+
+  width: 100%;
+
+  & > a {
+    margin: 5px;
+  }
+}
+
+.iosbtn,
+.googlebtn,
+.apkbtn {
+  width: 160px;
+  height: 50px;
+  display: block;
+  margin: 10px auto;
+}
+
+.iosbtn {
+  background: url(/images/download_buttons.svg) 0 -50px;
+}
+
+.googlebtn {
+  background: url(/images/download_buttons.svg) 0 -101px;
+}
+
+.apkbtn {
+  background: url(/images/download_buttons.svg) 0 0;
+}
