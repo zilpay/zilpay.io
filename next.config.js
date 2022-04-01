@@ -1,4 +1,3 @@
-const path = require('path');
 const { i18n } = require('./next-i18next.config');
 
 const securityHeaders = [
@@ -24,14 +23,11 @@ const securityHeaders = [
   }
 ];
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   i18n,
   reactStrictMode: true,
-  sassOptions: {
-    includePaths: [path.join(__dirname, 'styles')],
-  },
-  cssModules: true,
-  async headers() {
+  headers() {
     return [
       {
         // Apply these headers to all routes in your application.
@@ -39,5 +35,7 @@ module.exports = {
         headers: securityHeaders,
       },
     ]
-  },
-};
+  }
+}
+
+module.exports = nextConfig

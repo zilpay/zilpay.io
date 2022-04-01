@@ -1,46 +1,66 @@
-import React from 'react';
-import { useTranslation } from 'next-i18next';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import { GetServerSidePropsContext, NextPage } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+import styles from '../styles/Home.module.scss'
 
-const MainSection = dynamic(import(`components/sections/main`));
-const InfoSection = dynamic(import(`components/sections/info`));
-const FeaturesSection = dynamic(import(`components/sections/features`));
-const AppsSection = dynamic(import(`components/sections/apps`));
-const TestimonialsSection = dynamic(import(`components/sections/testimonials`));
-const TeamSection = dynamic(import(`components/sections/team`));
-
-export const MainPage: NextPage = () => {
-  const { t } = useTranslation(`main`);
-
+const Home: NextPage = () => {
   return (
-    <>
-      <Head>
-        <title>
-          {t(`head_title`)}
-        </title>
-        <meta
-          property="og:title"
-          content={t(`head_title`)}
-          key="title"
-        />
-      </Head>
-      <MainSection />
-      <InfoSection />
-      <FeaturesSection />
-      <AppsSection />
-      <TestimonialsSection />
-      <TeamSection />
-    </>
-  );
+    <div className={styles.container}>
+      <main className={styles.main}>
+        <h1 className={styles.title}>
+          Welcome to <a href="https://nextjs.org">Next.js!</a>
+        </h1>
+
+        <p className={styles.description}>
+          Get started by editing{' '}
+          <code className={styles.code}>pages/index.tsx</code>
+        </p>
+
+        <div className={styles.grid}>
+          <a href="https://nextjs.org/docs" className={styles.card}>
+            <h2>Documentation &rarr;</h2>
+            <p>Find in-depth information about Next.js features and API.</p>
+          </a>
+
+          <a href="https://nextjs.org/learn" className={styles.card}>
+            <h2>Learn &rarr;</h2>
+            <p>Learn about Next.js in an interactive course with quizzes!</p>
+          </a>
+
+          <a
+            href="https://github.com/vercel/next.js/tree/canary/examples"
+            className={styles.card}
+          >
+            <h2>Examples &rarr;</h2>
+            <p>Discover and deploy boilerplate example Next.js projects.</p>
+          </a>
+
+          <a
+            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+            className={styles.card}
+          >
+            <h2>Deploy &rarr;</h2>
+            <p>
+              Instantly deploy your Next.js site to a public URL with Vercel.
+            </p>
+          </a>
+        </div>
+      </main>
+
+      <footer className={styles.footer}>
+        <a
+          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Powered by{' '}
+          <span className={styles.logo}>
+            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+          </span>
+        </a>
+      </footer>
+    </div>
+  )
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-    props: {
-      ...await serverSideTranslations(props.locale || `en`, [`main`, `common`]),
-    },
-  });
-
-export default MainPage;
+export default Home
