@@ -44,5 +44,34 @@
       "title": "Seamless experience",
       "sub_title": "You will always have a stable and reliable experience"
     }
+  },
+  "apps": {
+    "title": "dApps",
+    "sub_title": "EXPLORE DAPPS USING ZILPAY",
+
+    "card_0": {
+      "title": "DragonZIL",
+      "sub_title": "Buy and trade dragons."
+    },
+    "card_1": {
+      "title": "UnstoppableDomains",
+      "sub_title": "Buy and manage domains"
+    },
+    "card_2": {
+      "title": "Signature Verification",
+      "sub_title": "Verify transactions signatures."
+    },
+    "card_3": {
+      "title": "Stake",
+      "sub_title": "Delegate validators."
+    },
+    "card_4": {
+      "title": "Scilla Editor",
+      "sub_title": "Edit and deploy a smart contract on scilla language"
+    },
+    "card_5": {
+      "title": "ZIlSwap DEX",
+      "sub_title": "Swap or provide liquidity to ZRC2 tokens"
+    }
   }
 }

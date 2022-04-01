@@ -104,7 +104,16 @@ const MainPage: NextPage = () => {
         </InfoCard>
       </div>
     </section>
-    <section></section>
+    <section className={styles.features}>
+      <div className={styles.header}>
+        <h1>
+          {t(`apps.title`)}
+        </h1>
+        <p>
+          {t(`apps.sub_title`)}
+        </p>
+      </div>
+    </section>
     </>
   )
 }
