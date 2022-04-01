@@ -1,3 +1,5 @@
+import styles from '@/styles/pages/main.module.scss';
+
 import type { NextPage } from 'next'
 
 import { GetServerSidePropsContext } from 'next';
@@ -5,7 +7,11 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const MainPage: NextPage = () => {
   return (
-    <div></div>
+    <div>
+      <br />
+      <br />
+      <br />
+    </div>
   )
 }
 
