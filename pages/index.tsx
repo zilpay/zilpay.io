@@ -34,7 +34,7 @@ const MainPage: NextPage = () => {
           </a>
         </div>
       </section>
-      <section>
+      <section className={styles.features}>
         <div className={styles.cards}>
           <InfoCard
               url="/icons/info-0.svg"
