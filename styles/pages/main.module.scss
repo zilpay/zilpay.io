@@ -21,6 +21,18 @@
     margin: 0;
     font-size: 65px;
     max-width: 519px;
+
+    @media (max-width: 700px) {
+      font-size: 35px;
+    }
+  }
+
+  & > h2 {
+    font-size: 40px;
+
+    @media (max-width: 700px) {
+      font-size: 20px;
+    }
   }
 }
 
@@ -60,6 +72,8 @@
 
 .btns {
   @include flex-center-vert;
+  justify-content: center;
+  flex-wrap: wrap;
 
   width: 100%;
 
