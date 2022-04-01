@@ -1,24 +1,16 @@
+import "@/styles/components/modals/_no-wallet.scss";
+
 import React from "react";
-import styled from "styled-components";
 import Image from "next/image";
 
 import { Modal, ModalHeader } from "components/modal";
-import { Text } from "components/text";
+
 
 type Prop = {
   show: boolean;
   message: string;
   onClose: () => void;
 };
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  padding: 30px;
-  text-align: center;
-`;
 
 
 export var WalletErrorModal: React.FC<Prop> = function ({
@@ -36,11 +28,11 @@ export var WalletErrorModal: React.FC<Prop> = function ({
       )}
       onClose={onClose}
     >
-      <Container>
-        <Text>
+      <div className="no-wallet">
+        <p>
           For playing this NFT game, you need install the best ZIlliqa wallet
           (ZIlPay).
-        </Text>
+        </p>
         <a href="https://zilpay.io/" target="_blank" rel="noreferrer">
           <Image
             src="/imgs/zil-pay-logo.png"
@@ -49,7 +41,7 @@ export var WalletErrorModal: React.FC<Prop> = function ({
             alt="ZIlPay Logo"
           />
         </a>
-      </Container>
+      </div>
     </Modal>
   );
 };

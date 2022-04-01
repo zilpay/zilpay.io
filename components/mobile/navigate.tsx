@@ -1,14 +1,12 @@
+import "@/styles/components/_navigate.scss";
+
 import React from "react";
 import { useStore } from "effector-react";
 import { useRouter } from "next/router";
 import { useTranslation } from "next-i18next";
-import styled from "styled-components";
-
-import { Text } from "components/text";
 
 import { ThreeDots } from "react-loader-spinner";
 import { $transactions } from "store/transactions";
-import { Colors } from "@/config/colors";
 import { trim } from "@/lib/trim";
 import { Wallet } from "@/store/wallet";
 import { ScreenModal } from "@/components/screen-modal";
@@ -21,25 +19,6 @@ type Prop = {
   onClose: () => void;
 };
 
-const Container = styled.div`
-  background: #14161c;
-  justify-content: space-between;
-  padding-bottom: 30px;
-`;
-const ConnectButton = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 0;
-  background: transparent;
-  color: ${Colors.Muted};
-  border-radius: 16px;
-  padding: 17px 68px;
-  min-width: 230px;
-  cursor: pointer;
-  border: 1px solid ${Colors.Muted};
-`;
 
 export var MobileNavigate: React.FC<Prop> = function ({
   show,
@@ -80,20 +59,20 @@ export var MobileNavigate: React.FC<Prop> = function ({
 
   return (
     <ScreenModal show={show} onClose={() => null}>
-      <Container className="modal-content">
-        <ConnectButton onClick={hanldeMenuOrConnect}>
+      <div className="navigate modal-content">
+        <button onClick={hanldeMenuOrConnect}>
           {loading ? (
             <>
-              <ThreeDots color="#fff" height={10} width={20} />
-              <Text css="text-indent: 5px;margin: 0;">
+              <ThreeDots color="var(--text-color)" height={10} width={20} />
+              <p>
                 {common.t(`pending`)}
-              </Text>
+              </p>
             </>
           ) : (
             connectText
           )}
-        </ConnectButton>
-      </Container>
+        </button>
+      </div>
     </ScreenModal>
   );
 };

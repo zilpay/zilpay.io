@@ -1,0 +1,24 @@
+@import "../mixins";
+
+.navigate {
+  background: #14161c;
+  justify-content: space-between;
+  padding-bottom: 30px;
+
+  & > button {
+    @include flex-center;
+  
+    border: 0;
+    background: transparent;
+    color: var(--muted-color);
+    border-radius: 16px;
+    padding: 17px 68px;
+    min-width: 230px;
+    cursor: pointer;
+    border: 1px solid var(--muted-color);
+
+    & > p {
+      text-indent: 5px;margin: 0;
+    }
+  }
+}

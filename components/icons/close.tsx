@@ -1,14 +1,13 @@
 import React from "react";
-import { Colors } from "config/colors";
 
 type Prop = {
-  color?: string | Colors;
+  color?: string;
   width?: number | string;
   height?: number | string;
 };
 
 export var CloseIcon: React.FC<Prop> = function ({
-  color = Colors.Primary,
+  color = 'var(--primary-color)',
   width = 20,
   height = 20
 }) {

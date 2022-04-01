@@ -1,19 +1,18 @@
 import React from 'react';
 
-import { Colors } from '@/config/colors';
 
 type Prop = {
   width: number | string;
   height: number | string;
-  color: Colors;
-  hoverColor?: Colors;
+  color: string;
+  hoverColor?: string;
 };
 
 const TelegramIcon: React.FC<Prop> = ({
   width,
   height,
   color,
-  hoverColor = Colors.Primary
+  hoverColor = 'var(--primary-color)'
 }) => {
   const [hoverd, setHover] = React.useState(false);
   return (

@@ -1,5 +1,6 @@
+import "@/styles/pages/_swap.scss";
+
 import Big from 'big.js';
-import styled from 'styled-components';
 import React from 'react';
 import { useStore } from "effector-react";
 
@@ -10,54 +11,12 @@ import { ConfirmSwapModal } from 'components/modals/confirm-swap';
 import { SwapSettings } from 'components/dex/settings';
 import SwapIcon from 'components/icons/swap';
 
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
-
 import { DragonDex, SwapDirection } from '@/mixins/dex';
 
 import { $pools } from '@/store/pools';
 import { $wallet } from '@/store/wallet';
 import { ZERO_ADDR } from '@/config/conts';
 
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  width: 100%;
-`;
-const ContainerForm = styled.form`
-  background-color: ${Colors.Card};
-  padding: 1rem 1.25rem 0.5rem;
-
-  border-radius: 16px;
-
-  max-width: 500px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  svg {
-    cursor: pointer;
-  }
-`;
-const Button = styled.button`
-  width: 100%;
-  padding: 25px;
-
-  font-size: 16px;
-  text-transform: uppercase;
-
-  margin-block-end: 0.6em;
-  margin-block-start: 0.6em;
-
-  :hover {
-    color: ${Colors.Button};
-    background: ${Colors.Primary};
-  }
-`;
 
 enum Exact {
   Top,
@@ -233,17 +192,16 @@ export const SwapForm: React.FC = () => {
         onClose={() => setModal1(false)}
         onSelect={hanldeSelectToken1}
       />
-      <ContainerForm onSubmit={hanldeSubmit}>
-        <Wrapper>
-          <Text
-            fontColors={Colors.Text}
-            fontVariant={StyleFonts.Bold}
-            css="font-size: 18px;line-height: 1;"
-          >
+      <div
+        className="swap-form"
+        onSubmit={hanldeSubmit}
+      >
+        <div className="wrapper">
+          <h3>
             Swap
-          </Text>
+          </h3>
           <SwapSettings />
-        </Wrapper>
+        </div>
         <FormInput
           value={topAmount}
           token={pools[token0].meta}
@@ -261,18 +219,18 @@ export const SwapForm: React.FC = () => {
           onMax={hanldeOnChangeBottom}
           onSelect={() => setModal1(true)}
         />
-        <Wrapper>
+        <div className="wrapper">
           <Text>
             1 TINCH = 0.0005395 ETH ($1.55824)
           </Text>
           <svg width="24" height="25" viewBox="0 0 24 25" fill="none">
             <path d="M4.93193 14.1366C4.54256 14.5283 4.54442 15.1615 4.93609 15.5508C5.32777 15.9402 5.96093 15.9384 6.3503 15.5467L4.93193 14.1366ZM17.7423 15.1523C18.1328 15.5428 18.766 15.5428 19.1565 15.1523C19.547 14.7617 19.547 14.1286 19.1565 13.7381L17.7423 15.1523ZM12.2241 8.21985L12.9312 7.51275C12.7433 7.32485 12.4883 7.21946 12.2226 7.21985C11.9569 7.22025 11.7022 7.32638 11.5149 7.51483L12.2241 8.21985ZM19.1565 13.7381L12.9312 7.51275L11.517 8.92696L17.7423 15.1523L19.1565 13.7381ZM11.5149 7.51483L4.93193 14.1366L6.3503 15.5467L12.9332 8.92488L11.5149 7.51483Z" fill="#8A8A8F"/>
           </svg>
-        </Wrapper>
-        <Button disabled={Boolean(disabled)}>
+        </div>
+        <button disabled={Boolean(disabled)}>
           Exchange
-        </Button>
-      </ContainerForm>
+        </button>
+      </div>
     </>
   );
 }

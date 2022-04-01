@@ -1,3 +1,5 @@
+import "@/styles/components/_new-pool.scss";
+
 import type { TokenState } from '@/types/token';
 
 import { useStore } from 'effector-react';
@@ -8,22 +10,6 @@ import { TokensModal } from 'components/modals/tokens';
 
 import { $pools } from '@/store/pools';
 
-const Wrapper = styled.div`
-  padding: 36px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='3' stroke-dasharray='10' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
-`;
-const Container = styled.div`
-  background-color: #18191D;
-
-  padding-bottom: 32px;
-  padding-top: 20px;
-  padding-left: 26px;
-  padding-right: 26px;
-`;
 
 export const NewPool: React.FC = () => {
   const pools = useStore($pools);
@@ -38,22 +24,19 @@ export const NewPool: React.FC = () => {
 
   return (
     <>
-      <Container>
-        <Text fontColors={Colors.Primary}>
+      <div className="new-pool">
+        <p>
           Pools Overview
-        </Text>
-        <Wrapper>
+        </p>
+        <div className="wrapper">
           <Text>
             Your active liquidity positions will ppear here.
           </Text>
-          <button
-            color={Colors.Secondary}
-            onClick={() => setModal(true)}
-          >
+          <button onClick={() => setModal(true)}>
             New position
           </button>
-        </Wrapper>
-      </Container>
+        </div>
+      </div>
       <TokensModal
         show={modal}
         pools={pools.slice(1)}

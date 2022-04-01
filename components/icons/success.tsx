@@ -1,14 +1,13 @@
 import React from "react";
-import { Colors } from "config/colors";
 
 type Prop = {
-  color?: string | Colors;
+  color?: string;
   width?: number | string;
   height?: number | string;
 };
 
 export var SuccessIcon: React.FC<Prop> = function ({
-  color = Colors.Success,
+  color = 'var(--success-color)',
   width = 16,
   height = 16,
 }) {

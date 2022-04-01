@@ -1,0 +1,17 @@
+.confirm-swap {
+  padding: 10px;
+
+  & > button {
+    width: 100%;
+    padding: 20px;
+  
+    font-size: 16px;
+    text-transform: uppercase;
+  
+    margin-block-end: 0.6em;
+    margin-block-start: 0.6em;
+  
+    background: var(--primary-color);
+    color: var(--button-color);
+  }
+}

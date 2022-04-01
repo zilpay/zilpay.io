@@ -1,3 +1,5 @@
+import "@/styles/components/modals/_confirm-swap.scss";
+
 import type { TokenState } from "@/types/token";
 
 import { ThreeDots } from "react-loader-spinner";
@@ -5,16 +7,14 @@ import Big from "big.js";
 import React from "react";
 import { useStore } from "effector-react";
 import { useTranslation } from "next-i18next";
-import styled from "styled-components";
 
 import { Modal, ModalHeader } from "components/modal";
 import { FormInput } from "components/dex/input";
 
 import { DragonDex, SwapDirection } from "@/mixins/dex";
 
-import { Colors } from "@/config/colors";
-
 import { $wallet } from "@/store/wallet";
+
 
 type Prop = {
   show: boolean;
@@ -26,22 +26,6 @@ type Prop = {
   onClose: () => void;
 };
 
-const Container = styled.div`
-  padding: 10px;
-`;
-const Button = styled.button`
-  width: 100%;
-  padding: 20px;
-
-  font-size: 16px;
-  text-transform: uppercase;
-
-  margin-block-end: 0.6em;
-  margin-block-start: 0.6em;
-
-  background: ${Colors.Primary};
-  color: ${Colors.Button};
-`;
 
 const dex = new DragonDex();
 export var ConfirmSwapModal: React.FC<Prop> = function ({
@@ -114,7 +98,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
       width="450px"
       onClose={onClose}
     >
-      <Container>
+      <div className="confirm-swap">
         <FormInput
           value={exact.div(dex.toDecimails(exactToken.decimals))}
           token={exactToken}
@@ -126,19 +110,19 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           token={limitToken}
           disabled
         />
-        <Button
+        <button
           onClick={hanldeOnSwap}
           disabled={loading}
         >
           {loading ? (
             <ThreeDots
-              color={Colors.Button}
+              color="var(--button-color)"
               height={25}
               width={50}
             />
           ) : 'Confirm Swap'}
-        </Button>
-      </Container>
+        </button>
+      </div>
     </Modal>
   );
 };
