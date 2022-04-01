@@ -2,7 +2,7 @@ import "@/styles/components/_settings.scss";
 
 import React from 'react';
 
-import { SwapSettingsModal } from '../modals/settings';
+// import { SwapSettingsModal } from '../modals/settings';
 
 
 export const SwapSettings: React.FC = () => {
@@ -21,10 +21,10 @@ export const SwapSettings: React.FC = () => {
           />
         </svg>
       </div>
-      <SwapSettingsModal
+      {/* <SwapSettingsModal
         show={show}
         onClose={() => setShow(false)}
-      />
+      /> */}
     </>
   );
 };
