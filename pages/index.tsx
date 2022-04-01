@@ -8,6 +8,8 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { InfoCard } from '@/components/info-card';
 
+import { AppLinks } from '@/config/links';
+
 const MainPage: NextPage = () => {
   const { t } = useTranslation(`main`);
 
@@ -23,13 +25,13 @@ const MainPage: NextPage = () => {
           </h2>
         </div>
         <div className={styles.btns}>
-          <a href="">
+          <a href={AppLinks.IOS}>
             <div className={styles.iosbtn}/>
           </a>
-          <a href="">
+          <a href={AppLinks.GOOGLE}>
             <div className={styles.googlebtn}/>
           </a>
-          <a href="">
+          <a href={AppLinks.APK}>
             <div className={styles.apkbtn}/>
           </a>
         </div>

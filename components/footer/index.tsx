@@ -1,8 +1,8 @@
 import styles from "./index.module.scss";
 
-import { useTranslation } from 'next-i18next'
-import React from 'react'
-import Link from 'next/link'
+import { useTranslation } from 'next-i18next';
+import React from 'react';
+import Link from 'next/link';
 
 import AppleIcon from "@/components/icons/apple";
 import ChromeIcon from "@/components/icons/chrome";
@@ -13,6 +13,8 @@ import GoogleIcon from "@/components/icons/google";
 import MediumIcon from "@/components/icons/medium";
 import TelegramIcon from "@/components/icons/telegram";
 import TwitterIcon from "@/components/icons/twitter";
+import SafariIcon from "../icons/safari";
+import { AppLinks } from "@/config/links";
 
 export const Footer: React.FC = () => {
   const { t } = useTranslation(`common`);
@@ -34,8 +36,20 @@ export const Footer: React.FC = () => {
           </h3>
           <div>
             <a
-              href="https://apps.apple.com/ru/app/zilpay/id1547105860"
-              target="_blank" rel="noreferrer"
+              href={AppLinks.SAFARI}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <SafariIcon
+                color="var(--text-color)"
+                height="27"
+                width="27"
+              />
+            </a>
+            <a
+              href={AppLinks.IOS}
+              target="_blank"
+              rel="noreferrer"
             >
               <AppleIcon
                 color="var(--text-color)"
@@ -44,8 +58,9 @@ export const Footer: React.FC = () => {
               />
             </a>
             <a
-              href="https://play.google.com/store/apps/details?id=com.zilpaymobile"
-              target="_blank" rel="noreferrer"
+              href={AppLinks.GOOGLE}
+              target="_blank"
+              rel="noreferrer"
             >
               <GoogleIcon
                 color="var(--text-color)"
@@ -54,8 +69,9 @@ export const Footer: React.FC = () => {
               />
             </a>
             <a
-              href="https://addons.mozilla.org/en-GB/firefox/addon/zilpay/"
-              target="_blank" rel="noreferrer"
+              href={AppLinks.FIREFOX}
+              target="_blank"
+              rel="noreferrer"
             >
               <FireFoxIcon
                 color="var(--text-color)"
@@ -64,8 +80,9 @@ export const Footer: React.FC = () => {
               />
             </a>
             <a
-              href="https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd"
-              target="_blank" rel="noreferrer"
+              href={AppLinks.CHROME}
+              target="_blank"
+              rel="noreferrer"
             >
               <ChromeIcon
                 color="var(--text-color)"
@@ -75,7 +92,8 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://t.me/zilpaychat"
-              target="_blank" rel="noreferrer"
+              target="_blank"
+              rel="noreferrer"
             >
               <TelegramIcon
                 color="var(--text-color)"
@@ -85,7 +103,8 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://twitter.com/pay_zil"
-              target="_blank" rel="noreferrer"
+              target="_blank"
+              rel="noreferrer"
             >
               <TwitterIcon
                 color="var(--text-color)"
@@ -95,7 +114,8 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="mailto:contact@zilpay.io"
-              target="_blank" rel="noreferrer"
+              target="_blank"
+              rel="noreferrer"
             >
               <EmailIcon
                 color="var(--text-color)"
@@ -105,7 +125,8 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://github.com/zilpay/zil-pay"
-              target="_blank" rel="noreferrer"
+              target="_blank"
+              rel="noreferrer"
             >
               <GitHubIcon
                 color="var(--text-color)"
@@ -115,7 +136,8 @@ export const Footer: React.FC = () => {
             </a>
             <a
               href="https://medium.com/@lich666black"
-              target="_blank" rel="noreferrer"
+              target="_blank"
+              rel="noreferrer"
             >
               <MediumIcon
                 color="var(--text-color)"
