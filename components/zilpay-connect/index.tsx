@@ -23,14 +23,14 @@ let observerNet: any = null;
 let observerBlock: any = null;
 export const ConnectZIlPay: React.FC = function () {
   const wallet = useStore($wallet);
-  const { transactions } = useStore($transactions);
+  const transactionsStore = useStore($transactions);
 
   const [accountModal, setAccountModal] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
   const isLoading = React.useMemo(
-    () => transactions.filter((tx) => !tx.confirmed).length === 0,
-    [transactions],
+    () => transactionsStore.transactions.filter((tx) => !tx.confirmed).length === 0,
+    [transactionsStore],
   );
 
   const transactionsCheck = async() => {
