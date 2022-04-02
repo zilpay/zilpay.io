@@ -8,3 +8,12 @@ export interface RPCResponse {
     message: string;
   };
 };
+
+export interface Tx {
+  hash: string;
+  name: string;
+  from: string;
+  timestamp: number;
+  confirmed: boolean;
+  error?: boolean;
+}

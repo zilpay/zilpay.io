@@ -1,0 +1,33 @@
+.txlist {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 80px;
+  height: fit-content;
+  padding: 16px;
+  background: var(--card-color);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  &:global(.header) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  p {
+    font-size: 16px;
+    font-family: "Regular";
+
+    &.here {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    &.clear {
+      cursor: pointer;
+      user-select: none;
+      color: var(--border-color);
+    }
+  }
+}

@@ -1,5 +1,3 @@
-import { ZIlPayInject } from "types/zilpay";
-
 type Params = {
   contractAddress: string;
   transition: string;
@@ -13,7 +11,7 @@ const DEFAUL_GAS = {
   gaslimit: `5000`,
 };
 export class ZilPayBase {
-  public zilpay: () => Promise<ZIlPayInject>;
+  public zilpay: () => Promise<any>;
 
   constructor() {
     this.zilpay = () => new Promise((resolve, reject) => {
