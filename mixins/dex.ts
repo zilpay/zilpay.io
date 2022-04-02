@@ -8,6 +8,7 @@ import { $pools } from 'store/pools';
 
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
+import { addTransactions } from '@/store/transactions';
 
 
 Big.PE = 999;
@@ -149,13 +150,13 @@ export class DragonDex {
     const found = this.pools.find((p) => p.meta.base16 === token);
     if (found) {
       const amount = zil.div(this.toDecimails(this.pools[0].meta.decimals));
-      // pushToList({
-      //   timestamp: new Date().getTime(),
-      //   name: `Swap ${formatNumber(String(amount))} ZIL to ${found.meta.symbol}`,
-      //   confirmed: false,
-      //   hash: res.ID,
-      //   from: res.from
-      // });
+      addTransactions({
+        timestamp: new Date().getTime(),
+        name: `Swap ${formatNumber(String(amount))} ZIL to ${found.meta.symbol}`,
+        confirmed: false,
+        hash: res.ID,
+        from: res.from
+      });
     }
 
     return res;
@@ -202,13 +203,13 @@ export class DragonDex {
     if (foundIndex >= 0) {
       const tokenMeta = this.pools[foundIndex].meta;
       const amount = tokens.div(this.toDecimails(tokenMeta.decimals));
-      // pushToList({
-      //   timestamp: new Date().getTime(),
-      //   name: `Swap ${formatNumber(String(amount))} ${tokenMeta.symbol} to ZIL`,
-      //   confirmed: false,
-      //   hash: res.ID,
-      //   from: res.from
-      // });
+      addTransactions({
+        timestamp: new Date().getTime(),
+        name: `Swap ${formatNumber(String(amount))} ${tokenMeta.symbol} to ZIL`,
+        confirmed: false,
+        hash: res.ID,
+        from: res.from
+      });
     }
 
     return res;
@@ -262,13 +263,13 @@ export class DragonDex {
       const tokenMeta0 = this.pools[foundIndex0].meta;
       const tokenMeta1 = this.pools[foundIndex1].meta;
       const amount = tokens.div(this.toDecimails(tokenMeta0.decimals));
-      // pushToList({
-      //   timestamp: new Date().getTime(),
-      //   name: `Swap ${formatNumber(String(amount))} ${tokenMeta0.symbol} to ${tokenMeta1.symbol}`,
-      //   confirmed: false,
-      //   hash: res.ID,
-      //   from: res.from
-      // });
+      addTransactions({
+        timestamp: new Date().getTime(),
+        name: `Swap ${formatNumber(String(amount))} ${tokenMeta0.symbol} to ${tokenMeta1.symbol}`,
+        confirmed: false,
+        hash: res.ID,
+        from: res.from
+      });
     }
 
     return res;

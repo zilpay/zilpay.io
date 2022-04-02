@@ -40,16 +40,16 @@ export var AccountModal: React.FC<Prop> = function ({
       <AccountCard wallet={address} />
       <div className={styles.txlist}>
         {transactions.length === 0 ? (
-          <p className="here">
+          <p className={styles.here}>
             {common.t(`tx_appear_here`)}
           </p>
         ) : (
           <div>
-            <div className="header">
+            <div className={styles.header}>
               <p>
                 {common.t(`recent_txns`)}
               </p>
-              <p className="clear">
+              <p className={styles.clear}>
                 (
                 {common.t(`clear_all`)}
                 )

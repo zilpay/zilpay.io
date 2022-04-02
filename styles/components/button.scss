@@ -16,7 +16,7 @@ button {
 
   transition: background-color 250ms linear;
 
-  :disabled {
+  &:disabled {
     pointer-events: none;
     cursor: default;
     opacity: 0.8;

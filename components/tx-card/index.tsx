@@ -29,7 +29,7 @@ const StatusIcon: React.FC<StatusIconProp> = function ({ rejected, loading }) {
   }
 
   return <Puff
-    color="var(--primary-color)"
+    color="var(--text-color)"
     height={16}
     width={16}
   />;
