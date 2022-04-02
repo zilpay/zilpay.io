@@ -1,3 +1,3 @@
 export * from './form';
 export * from './input';
-export * from './settings';
+export * from './settings/index';

@@ -1,3 +1,5 @@
+import styles from './index.module.scss';
+
 import React from 'react';
 
 // import { SwapSettingsModal } from '../modals/settings';
@@ -9,7 +11,7 @@ export const SwapSettings: React.FC = () => {
   return (
     <>
       <div
-        className="settings"
+        className={styles.container}
         onClick={() => setShow(true)}
       >
         <svg width="22" height="27" viewBox="0 0 26 27" fill="none">

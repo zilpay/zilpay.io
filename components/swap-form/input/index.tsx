@@ -7,6 +7,7 @@ import Big from "big.js";
 
 import { getIconURL } from "@/lib/viewblock";
 import { formatNumber } from "@/filters/n-format";
+import classNames from 'classnames';
 
 type Prop = {
   token: TokenState;
@@ -52,15 +53,21 @@ export const FormInput: React.FC<Prop> = ({
 
   return (
     <label>
-      <div className={'dex-input-container ' + disabled ? 'disabled' : ''}>
-        <div className="wrapper">
+      <div
+        className={classNames(styles.container, {
+          disabled
+        })}
+      >
+        <div className={styles.wrapper}>
           <input
             value={String(value)}
             disabled={disabled}
             onInput={hanldeOnInput}
           />
           <div
-            className={'drop-down ' + disabled ? 'disabled' : ''}
+            className={classNames(styles.dropdown, {
+              disabled
+            })}
             onClick={onSelect}
           >
             <img
@@ -85,12 +92,12 @@ export const FormInput: React.FC<Prop> = ({
             </svg>
           </div>
         </div>
-        <div className="wrapper">
+        <div className={styles.wrapper}>
           <p>
             $73.569
           </p>
           <p
-            className="balance"
+            className={styles.balance}
             onClick={() => onMax(amount)}
           >
             {formatNumber(Number(amount))}

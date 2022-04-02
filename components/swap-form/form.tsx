@@ -1,3 +1,5 @@
+import styles from './index.module.scss';
+
 import Big from 'big.js';
 import React from 'react';
 import { useStore } from 'react-stores';
@@ -190,10 +192,10 @@ export const SwapForm: React.FC = () => {
         onSelect={hanldeSelectToken1}
       /> */}
       <div
-        className="swap-form"
+        className={styles.container}
         onSubmit={hanldeSubmit}
       >
-        <div className="wrapper">
+        <div className={styles.wrapper}>
           <h3>
             Swap
           </h3>
@@ -207,7 +209,7 @@ export const SwapForm: React.FC = () => {
           onMax={hanldeOnChangeTop}
           onSelect={() => setModal0(true)}
         />
-          <SwapIcon onClick={hanldeOnSwapForms}/>
+        <SwapIcon onClick={hanldeOnSwapForms}/>
         <FormInput
           value={bottomAmount}
           token={pools[token1].meta}
@@ -216,7 +218,7 @@ export const SwapForm: React.FC = () => {
           onMax={hanldeOnChangeBottom}
           onSelect={() => setModal1(true)}
         />
-        <div className="wrapper">
+        <div className={styles.wrapper}>
           <p>
             1 TINCH = 0.0005395 ETH ($1.55824)
           </p>
