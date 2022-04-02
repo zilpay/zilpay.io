@@ -11,6 +11,8 @@ import { ViewIcon } from "components/icons/view";
 
 import { trim } from "@/lib/trim";
 import { viewAddress } from "@/lib/viewblock";
+import { useStore } from "react-stores";
+import { $net } from "@/store/netwrok";
 
 
 type Prop = {
@@ -20,17 +22,19 @@ type Prop = {
 export var AccountCard: React.FC<Prop> = function ({ wallet }) {
   const common = useTranslation(`common`);
 
+  const { net } = useStore($net);
+
   return (
     <div className={styles.container}>
       <p>
         {common.t(`connected_via`)}
         {` `}
-        {'netwrok'}
+        {net}
         .
       </p>
-      <p>
-        {wallet ? trim(wallet.bech32, 8) : ``}
-      </p>
+      <h4>
+        {wallet ? trim(wallet.bech32, 15) : ``}
+      </h4>
       <div className={styles.row}>
         <div className={styles.copy} onClick={() => copy(String(wallet?.bech32))}>
           <CopyIcon />
