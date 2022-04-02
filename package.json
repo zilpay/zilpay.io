@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "big.js": "^6.1.1",
+    "classnames": "^2.3.1",
     "next": "12.1.4",
     "next-i18next": "^10.5.0",
     "nextjs-progressbar": "^0.0.14",
