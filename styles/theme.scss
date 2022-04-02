@@ -3,6 +3,7 @@
 @import "./mixins";
 
 :root {
+  // --background-gradient: linear-gradient(90deg, rgba(34,250,148,1) 0%, rgba(0,212,255,0.22591043253238796) 100%);
   --background-color: #{inspect(map-get($light , "Background"))};
   --border-color:  #{inspect(map-get($light , "Border"))};
   --notification-color:  #{inspect(map-get($light , "Notification"))};
@@ -21,6 +22,7 @@
 }
 
 body[theme-color="dark"] {
+  // --background-gradient: linear-gradient(90deg, rgba(34,250,148,1) 0%, rgba(0,212,255,1) 100%);
   --background-color:  #{inspect(map-get($dark , "Background"))};
   --border-color:  #{inspect(map-get($dark , "Border"))};
   --notification-color:  #{inspect(map-get($dark , "Notification"))};

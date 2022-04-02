@@ -6,10 +6,11 @@ import { useTranslation } from "next-i18next";
 
 import { Modal, ModalHeader } from "components/modal";
 import { TxCard } from "components/tx-card";
-import { $transactions } from "store/transactions";
+import { $transactions, resetTransactions } from "store/transactions";
 import { AccountCard } from "@/components/account-card";
 
 import type { Wallet } from "@/types/wallet";
+import { $wallet } from "@/store/wallet";
 
 type Prop = {
   show: boolean;
@@ -25,6 +26,7 @@ export var AccountModal: React.FC<Prop> = function ({
 }) {
   const common = useTranslation(`common`);
   const { transactions } = useStore($transactions);
+  const wallet = useStore($wallet);
 
   return (
     <Modal
@@ -49,7 +51,10 @@ export var AccountModal: React.FC<Prop> = function ({
               <p>
                 {common.t(`recent_txns`)}
               </p>
-              <p className={styles.clear}>
+              <p
+                className={styles.clear}
+                onClick={() => resetTransactions(String(wallet?.bech32))}
+              >
                 (
                 {common.t(`clear_all`)}
                 )

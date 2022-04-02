@@ -59,6 +59,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             limitToken.base16
           );    
           console.log(res0);
+          onClose();
         case SwapDirection.TokenToZil:
           const res = await dex.swapExactTokensForZIL(
             exact,
@@ -67,6 +68,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             exactToken.base16
           );
           console.log(res);
+          onClose();
           break;
         case SwapDirection.TokenToTokens:
           const res1 = await dex.swapExactTokensForTokens(
@@ -77,9 +79,9 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             limitToken.base16
           );
           console.log(res1);
+          onClose();
           break;
       }
-      onClose();
     } catch {
       ///
     }

@@ -93,6 +93,14 @@ export const ConnectZIlPay: React.FC = function () {
       if (zp.wallet.defaultAccount) {
         $wallet.setState(zp.wallet.defaultAccount);
       }
+
+      const cache = window.localStorage.getItem(
+        String(zp.wallet.defaultAccount?.bech32),
+      );
+
+      if (cache) {
+        $transactions.setState(JSON.parse(cache));
+      }
     },
     [transactions],
   );
@@ -166,14 +174,14 @@ export const ConnectZIlPay: React.FC = function () {
             trim(wallet.bech32)
           ) : (
             <>
+              <b>
+                Pending 
+              </b>
               <ThreeDots
                 color="var(--text-color)"
                 height={10}
-                width={20}
+                width={15}
               />
-              <b>
-                Pending...
-              </b>
             </>
           )}
         </button>

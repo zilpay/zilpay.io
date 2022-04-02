@@ -111,7 +111,7 @@ const MainPage: NextPage = () => {
       </section>
     </>
   )
-}
+};
 
 export const getStaticProps = async (props: GetServerSidePropsContext) => ({
   props: {

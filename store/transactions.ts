@@ -23,5 +23,10 @@ export function addTransactions(payload: Tx) {
     transactions: newState
   });
 
-  window.localStorage.setItem(payload.from, JSON.stringify(newState));
+  window.localStorage.setItem(payload.from, JSON.stringify($transactions.state));
+}
+
+export function resetTransactions(from: string) {
+  window.localStorage.removeItem(from);
+  $transactions.resetState();
 }
