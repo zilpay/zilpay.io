@@ -2,17 +2,17 @@ import styles from './index.module.scss';
 
 import React from 'react';
 
-// import { SwapSettingsModal } from '../modals/settings';
+type Prop = {
+  onClick: () => void;
+}
 
 
-export const SwapSettings: React.FC = () => {
-  const [show, setShow] = React.useState(false);
-
+export const SwapSettings: React.FC<Prop> = ({ onClick }) => {
   return (
     <>
       <div
         className={styles.container}
-        onClick={() => setShow(true)}
+        onClick={() => onClick()}
       >
         <svg width="22" height="27" viewBox="0 0 26 27" fill="none">
           <path
@@ -21,10 +21,6 @@ export const SwapSettings: React.FC = () => {
           />
         </svg>
       </div>
-      {/* <SwapSettingsModal
-        show={show}
-        onClose={() => setShow(false)}
-      /> */}
     </>
   );
 };

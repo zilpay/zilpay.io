@@ -1,0 +1,53 @@
+@import "@/styles/mixins";
+
+.container {
+  padding: 10px;
+}
+
+.wrapper {
+}
+
+.row {
+  @include flex-between-row;
+
+  & > label {
+    font-family: "Light";
+    background: var(--button-color);
+    color: var(--text-color);
+    border-radius: 16px;
+    border: 1px solid transparent;
+    padding: 7px;
+  
+    width: 200px;
+    display: flex;
+    justify-content: flex-end;
+  
+    margin: 5px;
+  
+    input {
+      padding-right: 10px;
+      text-align: right;
+      width: 180px;
+    }
+  
+    &:hover {
+      border: 1px solid var(--text-color);
+    }
+  }
+
+  & > button {
+    cursor: pointer;
+    background: var(--button-color);
+    border-radius: 16px;
+    padding: 7px;
+    margin: 5px;
+  
+    color: var(--primary-color);
+    font-family:"Light";
+  
+    &:hover {
+      color: var(--button-color);
+      background: var(--primary-color);
+    }
+  }
+}

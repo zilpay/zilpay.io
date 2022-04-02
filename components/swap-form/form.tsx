@@ -9,6 +9,7 @@ import { FormInput } from './input';
 import SwapIcon from 'components/icons/swap';
 import { ConfirmSwapModal } from '@/components/modals/confirm-swap';
 import { TokensModal } from '@/components/modals/tokens';
+import { SwapSettingsModal } from '@/components/modals/settings';
 
 import { DragonDex, SwapDirection } from '@/mixins/dex';
 
@@ -38,6 +39,7 @@ export const SwapForm: React.FC = () => {
   const [token1, setToken1] = React.useState(tokenIndex1);
   const [modal0, setModal0] = React.useState(false);
   const [modal1, setModal1] = React.useState(false);
+  const [modal3, setModal3] = React.useState(false);
   const [confirmModal, setConfirmModal] = React.useState(false);
 
   const [topAmount, setTopAmount] = React.useState(Big(0));
@@ -170,6 +172,10 @@ export const SwapForm: React.FC = () => {
 
   return (
     <>
+      <SwapSettingsModal
+        show={modal3}
+        onClose={() => setModal3(false)}
+      />
       <ConfirmSwapModal
         show={confirmModal}
         exact={exactAmount}
@@ -199,7 +205,7 @@ export const SwapForm: React.FC = () => {
           <h3>
             Swap
           </h3>
-          <SwapSettings />
+          <SwapSettings onClick={() => setModal3(true)}/>
         </div>
         <FormInput
           value={topAmount}
