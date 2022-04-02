@@ -240,7 +240,7 @@ export class Blockchain {
     };
   }
 
-  private async _send(batch: object[]) {
+  private async _send(batch: object[]): Promise<RPCResponse[]> {
     const res = await fetch(this._http, {
       method: `POST`,
       headers: {

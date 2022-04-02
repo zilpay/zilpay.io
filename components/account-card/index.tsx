@@ -36,7 +36,10 @@ export var AccountCard: React.FC<Prop> = function ({ wallet }) {
         {wallet ? trim(wallet.bech32, 15) : ``}
       </h4>
       <div className={styles.row}>
-        <div className={styles.copy} onClick={() => copy(String(wallet?.bech32))}>
+        <div
+          className={styles.copy}
+          onClick={() => copy(String(wallet?.bech32))}
+        >
           <CopyIcon />
           <p>
             {common.t(`copy_adr`)}
@@ -46,6 +49,7 @@ export var AccountCard: React.FC<Prop> = function ({ wallet }) {
           className={styles.second}
           href={wallet ? viewAddress(String(wallet?.bech32)) : ``}
           target="_blank"
+          rel="noopener noreferrer"
         >
           <ViewIcon />
           <p>

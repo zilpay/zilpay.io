@@ -4,6 +4,7 @@ import type { TokenState } from "@/types/token";
 
 import React from "react";
 import { Big } from "big.js";
+import Image from 'next/image';
 
 import { getIconURL } from "lib/viewblock";
 import { formatNumber } from "@/filters/n-format";
@@ -35,7 +36,7 @@ export const TokenCard: React.FC<Prop> = function ({
       className={styles.container}
       onClick={() => onClick(token)}
     >
-      <img
+      <Image
         src={getIconURL(token.bech32)}
         alt={token.symbol}
         height="30"

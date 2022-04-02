@@ -87,7 +87,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     }
 
     setLoading(false);
-  }, [exact, limit, direction, wallet, exactToken, limitToken]);
+  }, [exact, limit, direction, wallet, exactToken, limitToken, onClose]);
 
   return (
     <Modal

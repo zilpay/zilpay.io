@@ -29,6 +29,8 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ['meta.viewblock.io'],
+    disableStaticImages: true,
+    dangerouslyAllowSVG: true
   },
   headers() {
     return [

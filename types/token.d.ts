@@ -13,3 +13,9 @@ export interface Pool {
   };
   meta: TokenState;
 }
+
+export interface ParamItem {
+  type: string;
+  value: string | unknown[];
+  vname: string;
+}

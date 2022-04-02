@@ -12,15 +12,17 @@ import { $wallet } from "@/store/wallet";
 type Prop = {
   show: boolean;
   pools: Pool[];
+  warn?: boolean;
   onClose: () => void;
   onSelect: (token: TokenState) => void;
 };
 
 export var TokensModal: React.FC<Prop> = function ({
   show,
-  pools = [],
   onClose,
-  onSelect
+  onSelect,
+  pools = [],
+  warn = false
 }) {
   const common = useTranslation(`common`);
   const wallet = useStore($wallet);
@@ -36,6 +38,9 @@ export var TokensModal: React.FC<Prop> = function ({
       width="400px"
       onClose={onClose}
     >
+      {warn ? (
+        <div></div>
+      ) : null}
       {pools.map((pool) => (
         <TokenCard
           token={pool.meta}

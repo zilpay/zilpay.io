@@ -40,7 +40,7 @@ export var TxCard: React.FC<Prop> = function ({ tx }) {
     <a
       className={styles.txcard}
       href={viewTransaction(tx.hash)}
-      target="_blank"
+      target="_blank" rel="noreferrer"
     >
       <div className={styles.wrapper}>
         <p>

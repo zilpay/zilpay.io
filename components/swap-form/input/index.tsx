@@ -4,6 +4,7 @@ import type { TokenState } from "@/types/token";
 
 import React from "react";
 import Big from "big.js";
+import Image from 'next/image';
 
 import { getIconURL } from "@/lib/viewblock";
 import { formatNumber } from "@/filters/n-format";
@@ -49,7 +50,7 @@ export const FormInput: React.FC<Prop> = ({
     } else {
       onInput(Big(0));
     }
-  }, []);
+  }, [onInput]);
 
   return (
     <label>
@@ -70,7 +71,7 @@ export const FormInput: React.FC<Prop> = ({
             })}
             onClick={onSelect}
           >
-            <img
+            <Image
               src={getIconURL(token.bech32)}
               alt="tokens-logo"
               height="30"

@@ -38,7 +38,7 @@ export const Footer: React.FC = () => {
             <a
               href={AppLinks.SAFARI}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <SafariIcon
                 color="var(--text-color)"
@@ -49,7 +49,7 @@ export const Footer: React.FC = () => {
             <a
               href={AppLinks.IOS}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <AppleIcon
                 color="var(--text-color)"
@@ -60,7 +60,7 @@ export const Footer: React.FC = () => {
             <a
               href={AppLinks.GOOGLE}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <GoogleIcon
                 color="var(--text-color)"
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
             <a
               href={AppLinks.FIREFOX}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <FireFoxIcon
                 color="var(--text-color)"
@@ -82,7 +82,7 @@ export const Footer: React.FC = () => {
             <a
               href={AppLinks.CHROME}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <ChromeIcon
                 color="var(--text-color)"
@@ -93,7 +93,7 @@ export const Footer: React.FC = () => {
             <a
               href="https://t.me/zilpaychat"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <TelegramIcon
                 color="var(--text-color)"
@@ -104,7 +104,7 @@ export const Footer: React.FC = () => {
             <a
               href="https://twitter.com/pay_zil"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <TwitterIcon
                 color="var(--text-color)"
@@ -115,7 +115,7 @@ export const Footer: React.FC = () => {
             <a
               href="mailto:contact@zilpay.io"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <EmailIcon
                 color="var(--text-color)"
@@ -126,7 +126,7 @@ export const Footer: React.FC = () => {
             <a
               href="https://github.com/zilpay/zil-pay"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <GitHubIcon
                 color="var(--text-color)"
@@ -137,7 +137,7 @@ export const Footer: React.FC = () => {
             <a
               href="https://medium.com/@lich666black"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
             >
               <MediumIcon
                 color="var(--text-color)"
@@ -151,22 +151,22 @@ export const Footer: React.FC = () => {
           <h3>
             {t(`legal`)}
           </h3>
-          <Link href="/terms">
+          <Link href="/terms" passHref>
             <p className={styles.pointer}>
               {t(`terms`)}
             </p>
           </Link>
-          <Link href="/policy">
+          <Link href="/policy" passHref>
             <p className={styles.pointer}>
               {t(`privacy`)}
             </p>
           </Link>
-          <Link href="/extension-policy">
+          <Link href="/extension-policy" passHref>
             <p className={styles.pointer}>
               {t(`extension-policy`)}
             </p>
           </Link>
-          <Link href="/dex-policy">
+          <Link href="/dex-policy" passHref>
             <p className={styles.pointer}>
               {t(`dex-policy`)}
             </p>

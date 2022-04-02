@@ -11,7 +11,7 @@ export const NavBar: React.FC = () => {
 
   return (
     <nav className={styles.navbar}>
-      <Link href="/">
+      <Link href="/" passHref>
         <div className={styles.logo}>
           <Image
             src="/icons/zilpay.svg"
@@ -25,12 +25,12 @@ export const NavBar: React.FC = () => {
         </div>
       </Link>
       <div className={styles.center}>
-        <Link href="/swap">
+        <Link href="/swap" passHref>
           <h3>
             SWAP
           </h3>
         </Link>
-        <Link href="/pool">
+        <Link href="/pool" passHref>
           <h3>
             POOL
           </h3>

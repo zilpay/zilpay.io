@@ -29,8 +29,6 @@ const dex = new DragonDex();
 let tokenIndex0 = 0;
 let tokenIndex1 = 1;
 
-let exactType = Exact.Top;
-
 export const SwapForm: React.FC = () => {
   const { pools } = useStore($pools);
   const wallet = useStore($wallet);
@@ -45,6 +43,7 @@ export const SwapForm: React.FC = () => {
   const [topAmount, setTopAmount] = React.useState(Big(0));
   const [bottomAmount, setBottomAmount] = React.useState(Big(0));
   const [direction, setDirection] = React.useState(SwapDirection.ZilToToken);
+  const [exactType, setExactType] = React.useState(Exact.Top);
 
   const exactAmount = React.useMemo(() => {
     if (exactType === Exact.Top) {
@@ -55,7 +54,7 @@ export const SwapForm: React.FC = () => {
     const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, pools]);
+  }, [topAmount, bottomAmount, pools, exactType]);
   const limitAmount = React.useMemo(() => {
     if (exactType === Exact.Bottom) {
       const decimals0 = dex.toDecimails(pools[tokenIndex0].meta.decimals);
@@ -64,7 +63,7 @@ export const SwapForm: React.FC = () => {
     const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, pools]);
+  }, [topAmount, bottomAmount, pools, exactType]);
 
   const disabled = React.useMemo(() => {
     return exactAmount.eq(0) || !(wallet?.base16);
@@ -74,9 +73,9 @@ export const SwapForm: React.FC = () => {
     if (wallet) {
       await dex.updateState(wallet.base16);
     }
-  }, [wallet, token1, pools]);
+  }, [wallet]);
 
-  const hanldeOnChangeTop = (amount: Big) => {
+  const hanldeOnChangeTop = React.useCallback((amount: Big) => {
     let result = Big(0);
 
     if (pools[tokenIndex0].meta.base16 === ZERO_ADDR) {
@@ -90,11 +89,11 @@ export const SwapForm: React.FC = () => {
       result = dex.tokensToTokens(amount, tokenIndex0, tokenIndex1);
     }
 
-    exactType = Exact.Top;
+    setExactType(Exact.Top);
     setTopAmount(amount);
     setBottomAmount(result);
-  };
-  const hanldeOnChangeBottom = (amount: Big) => {
+  }, [pools]);
+  const hanldeOnChangeBottom = React.useCallback((amount: Big) => {
     let result = Big(0);
 
     if (pools[tokenIndex1].meta.base16 === ZERO_ADDR) {
@@ -108,10 +107,10 @@ export const SwapForm: React.FC = () => {
       result = dex.tokensToTokens(amount, tokenIndex1, tokenIndex0);
     }
 
-    exactType = Exact.Bottom;
+    setExactType(Exact.Bottom);
     setTopAmount(result);
     setBottomAmount(amount);
-  };
+  }, [pools]);
 
   const hanldeOnSwapForms = React.useCallback(() => {
     const fst = token0
@@ -119,16 +118,18 @@ export const SwapForm: React.FC = () => {
     const amount0 = topAmount;
     const amount1 = bottomAmount;
 
+    tokenIndex0 = second;
+    tokenIndex1 = fst;
+
     if (exactType === Exact.Top) {
-      exactType = Exact.Bottom;
+      setExactType(Exact.Bottom);
     } else {
-      exactType = Exact.Top;
+      setExactType(Exact.Top);
     }
 
     if (direction === SwapDirection.TokenToZil) {
       setDirection(SwapDirection.ZilToToken);
-    }
-    if (direction === SwapDirection.ZilToToken) {
+    } else if (direction === SwapDirection.ZilToToken) {
       setDirection(SwapDirection.TokenToZil);
     }
 
@@ -136,7 +137,7 @@ export const SwapForm: React.FC = () => {
     setToken0(second);
     setBottomAmount(amount0);
     setTopAmount(amount1);
-  }, [token0, token1, topAmount, bottomAmount, direction]);
+  }, [token0, token1, topAmount, bottomAmount, direction, exactType]);
   const hanldeSubmit = React.useCallback((event) => {
     event.preventDefault();
     setConfirmModal(true);
@@ -168,7 +169,7 @@ export const SwapForm: React.FC = () => {
 
   React.useEffect(() => {
     hanldeUpdate();
-  }, [wallet]);
+  }, [wallet, hanldeUpdate]);
 
   return (
     <>

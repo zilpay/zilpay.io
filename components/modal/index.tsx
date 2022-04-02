@@ -32,7 +32,7 @@ export var Modal: React.FC<Prop> = function ({
         onClose();
       }
     },
-    [node],
+    [node, onClose],
   );
 
   return (

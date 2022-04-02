@@ -12,9 +12,11 @@ import { $wallet } from '@/store/wallet';
 import { $transactions } from '@/store/transactions';
 import { $net } from '@/store/netwrok';
 
+import { Blockchain } from '@/mixins/custom-fetch';
 import { ZilPayBase } from '@/mixins/zilpay-base';
 import { trim } from '@/lib/trim';
 
+const chainFetcher = new Blockchain();
 const zilPayWallet = new ZilPayBase();
 let observer: any = null;
 let observerNet: any = null;
@@ -25,12 +27,45 @@ export const ConnectZIlPay: React.FC = function () {
 
   const [accountModal, setAccountModal] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(``);
 
   const isLoading = React.useMemo(
     () => transactions.filter((tx) => !tx.confirmed).length === 0,
     [transactions],
   );
+
+  const transactionsCheck = async() => {
+    let { transactions } = $transactions.state;
+
+    const params = transactions
+      .filter((tx) => !tx.confirmed)
+      .map((tx) => tx.hash);
+
+    if (params.length === 0) {
+      return null;
+    }
+
+    const resList = await chainFetcher.getTransaction(...params);
+
+    for (let index = 0; index < transactions.length; index++) {
+      try {
+        const tx = transactions[index];
+        const found = resList.find((res) => res.result.ID === tx.hash);
+
+        if (!found) {
+          continue;
+        }
+
+        transactions[index].confirmed = true;
+        transactions[index].error = !found.result.receipt.success;
+      } catch {
+        //
+      }
+    }
+
+    $transactions.setState({
+      transactions
+    });
+  };
 
   const hanldeObserverState = React.useCallback(
     (zp) => {
@@ -72,23 +107,9 @@ export const ConnectZIlPay: React.FC = function () {
         }
       });
 
-      // observerBlock = zp.wallet
-      //   .observableBlock()
-      //   .subscribe(async (block: Block) => {
-      //     console.log(block);
-      //     let list = $transactions.getState();
-
-      //     const params = list
-      //       .filter((tx) => !tx.confirmed)
-      //       .map((tx) => tx.hash);
-
-      //     if (params.length === 0) {
-      //       return null;
-      //     }
-
-      //     // const res = await blockchain.getTransaction(...params);
-      //     // writeNewList(list);
-      //   });
+      observerBlock = zp.wallet
+        .observableBlock()
+        .subscribe(() => transactionsCheck());
 
       if (zp.wallet.defaultAccount) {
         $wallet.setState(zp.wallet.defaultAccount);
@@ -101,8 +122,10 @@ export const ConnectZIlPay: React.FC = function () {
       if (cache) {
         $transactions.setState(JSON.parse(cache));
       }
+
+      transactionsCheck();
     },
-    [transactions],
+    [],
   );
 
   const handleConnect = async() => {
@@ -128,7 +151,7 @@ export const ConnectZIlPay: React.FC = function () {
         $transactions.setState(JSON.parse(cache));
       }
     } catch (err) {
-      setError(String((err as any).message));
+      console.warn(err);
     }
 
     setLoading(false);
@@ -156,7 +179,7 @@ export const ConnectZIlPay: React.FC = function () {
         observerBlock.unsubscribe();
       }
     };
-  }, []);
+  }, [hanldeObserverState]);
 
   return (
     <>
