@@ -1,5 +1,3 @@
-import "@/styles/pages/_swap.scss";
-
 import Big from 'big.js';
 import React from 'react';
 import { useStore } from 'react-stores';
@@ -31,7 +29,7 @@ let tokenIndex1 = 1;
 let exactType = Exact.Top;
 
 export const SwapForm: React.FC = () => {
-  const pools = useStore($pools);
+  const { pools } = useStore($pools);
   const wallet = useStore($wallet);
 
   const [token0, setToken0] = React.useState(tokenIndex0);

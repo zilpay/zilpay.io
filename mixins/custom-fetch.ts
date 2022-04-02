@@ -37,30 +37,6 @@ const EMPTY_FEE = {
   "constructor": "Pair"
 };
 
-const EMPTY_LP = {
-  "argtypes": [
-      "Uint256",
-      "Uint256"
-  ],
-  "arguments": [
-      "1",
-      "1"
-  ],
-  "constructor": "Pair"
-};
-
-const EMPTY_POOL = {
-  "argtypes": [
-      "Uint256",
-      "Uint256"
-  ],
-  "arguments": [
-      "1",
-      "1"
-  ],
-  "constructor": "Pair"
-};
-
 export class Blockchain {
   private _http = `https://zilliqa-isolated-server.zilliqa.com`;
   readonly #rpc = {

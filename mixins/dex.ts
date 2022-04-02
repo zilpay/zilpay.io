@@ -36,7 +36,7 @@ export class DragonDex {
   public fee = [BigInt(0), BigInt(0)];
 
   public get pools() {
-    return $pools.state;
+    return $pools.state.pools;
   }
 
   public async updateState(owner: string) {
@@ -56,7 +56,9 @@ export class DragonDex {
       pool: state[value.meta.base16].pool
     }));
 
-    $pools.setState(pools);
+    $pools.setState({
+      pools
+    });
   }
 
   public calcAmount(amount: bigint, index: number, direction: SwapDirection) {

@@ -1,5 +1,3 @@
-import "@/styles/components/_settings.scss";
-
 import React from 'react';
 
 // import { SwapSettingsModal } from '../modals/settings';

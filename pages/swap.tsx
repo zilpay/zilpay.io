@@ -6,7 +6,7 @@ import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-// import { SwapForm } from '@/components/dex/swap';
+import { SwapForm } from '@/components/swap-form';
 
 
 export const PageSwap: NextPage = () => {
@@ -22,7 +22,7 @@ export const PageSwap: NextPage = () => {
         />
       </Head>
       <div>
-        {/* <SwapForm /> */}
+        <SwapForm />
       </div>
     </div>
   );
