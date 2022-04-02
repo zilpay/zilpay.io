@@ -189,12 +189,16 @@ export const SwapForm: React.FC = () => {
       <TokensModal
         show={modal0}
         pools={pools}
+        warn
+        include
         onClose={() => setModal0(false)}
         onSelect={hanldeSelectToken0}
       />
       <TokensModal
         show={modal1}
         pools={pools}
+        warn
+        include
         onClose={() => setModal1(false)}
         onSelect={hanldeSelectToken1}
       />
