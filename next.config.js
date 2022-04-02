@@ -27,6 +27,9 @@ const securityHeaders = [
 const nextConfig = {
   i18n,
   reactStrictMode: true,
+  images: {
+    domains: ['meta.viewblock.io'],
+  },
   headers() {
     return [
       {

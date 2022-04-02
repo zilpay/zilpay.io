@@ -1,0 +1,39 @@
+@import "@/styles/mixins";
+
+.container {
+  cursor: pointer;
+
+  padding-left: 10px;
+  padding-right: 10px;
+
+  padding-block-start: 5px;
+  padding-block-end: 5px;
+
+  @include flex-between-row;
+
+  & > p {
+    width: 100%;
+    text-align: right;
+  }
+
+  &:hover {
+    background-color: rgb(44, 47, 54);
+  }
+}
+
+.wrapper {
+  text-indent: 10px;
+
+  & > p {
+    margin: 0;
+  }
+}
+
+.left {
+  font-weight: 500;
+}
+
+.right {
+  font-weight: 300;
+  font-size: 12px;
+}

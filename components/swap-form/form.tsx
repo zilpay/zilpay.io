@@ -4,11 +4,11 @@ import Big from 'big.js';
 import React from 'react';
 import { useStore } from 'react-stores';
 
-// import { TokensModal } from 'components/modals/tokens';
-// import { ConfirmSwapModal } from 'components/modals/confirm-swap';
 import { SwapSettings } from './settings';
 import { FormInput } from './input';
 import SwapIcon from 'components/icons/swap';
+import { ConfirmSwapModal } from '@/components/modals/confirm-swap';
+import { TokensModal } from '@/components/modals/tokens';
 
 import { DragonDex, SwapDirection } from '@/mixins/dex';
 
@@ -170,7 +170,7 @@ export const SwapForm: React.FC = () => {
 
   return (
     <>
-      {/* <ConfirmSwapModal
+      <ConfirmSwapModal
         show={confirmModal}
         exact={exactAmount}
         limit={limitAmount}
@@ -190,8 +190,8 @@ export const SwapForm: React.FC = () => {
         pools={pools}
         onClose={() => setModal1(false)}
         onSelect={hanldeSelectToken1}
-      /> */}
-      <div
+      />
+      <form
         className={styles.container}
         onSubmit={hanldeSubmit}
       >
@@ -237,7 +237,7 @@ export const SwapForm: React.FC = () => {
         <button disabled={Boolean(disabled)}>
           Exchange
         </button>
-      </div>
+      </form>
     </>
   );
 }
