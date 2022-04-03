@@ -33,7 +33,13 @@
 
   width: 100%;
 
-  & > svg {
+  &:global(.border) {
+    padding-top: 20px;
+    border-top: 1px solid var(--button-color);;
+  }
+
+  & > svg,
+  & > div > svg {
     cursor: pointer;
   }
 
@@ -41,6 +47,13 @@
     font-size: 18px;
     line-height: 1;
     font-family: "Bold";
+  }
+
+  & > svg,
+  & > div > svg {
+    &:hover {
+      stroke: var(--primary-color);
+    }
   }
 }
 
