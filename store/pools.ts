@@ -2,7 +2,7 @@ import type { Pool } from 'types/token';
 
 import { Store } from 'react-stores';
 
-import { ZERO_ADDR } from '@/config/conts';
+import { ZERO_ADDR, ZERO_BECH32 } from '@/config/conts';
 
 const initState: {
   pools: Pool[]
@@ -12,7 +12,7 @@ const initState: {
       pool: [BigInt(0), BigInt(0)],
       balance: {},
       meta: {
-        bech32: 'zil1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq9yf6pz',
+        bech32: ZERO_BECH32,
         base16: ZERO_ADDR,
         decimals: 12,
         symbol: 'ZIL',
