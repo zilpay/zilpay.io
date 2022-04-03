@@ -10,7 +10,7 @@ import { SwapForm } from '@/components/swap-form';
 
 
 export const PageSwap: NextPage = () => {
-  const { t } = useTranslation(`main`);
+  const { t } = useTranslation(`swap`);
   return (
     <div className={styles.container}>
        <Head>

@@ -28,10 +28,15 @@ export const ConnectZIlPay: React.FC = function () {
   const [accountModal, setAccountModal] = React.useState(false);
   const [loading, setLoading] = React.useState(true);
 
-  const isLoading = React.useMemo(
-    () => transactionsStore.transactions.filter((tx) => !tx.confirmed).length === 0,
-    [transactionsStore],
-  );
+  const isLoading = React.useMemo(() => {
+    const { transactions } = transactionsStore;
+
+    if (transactions.length === 0) {
+      return true;
+    }
+    
+    return transactions.filter((tx) => !tx.confirmed).length === 0;
+  }, [transactionsStore]);
 
   const transactionsCheck = async() => {
     let { transactions } = $transactions.state;

@@ -1,0 +1,46 @@
+@import "@/styles/mixins";
+
+.container {
+  @include flex-center;
+  flex-direction: column;
+}
+
+.wrapper {
+  background-color: var(--card-color);
+
+  padding: 1rem 1.25rem 0.5rem;
+
+  @include border-radius(16px);
+  @include flex-center;
+  flex-direction: column;
+
+  max-width: 500px;
+  
+  width: 60vw;
+  height: 30vh;
+
+  & > p {
+    color: var(--muted-color);
+  }
+}
+
+.row {
+  width: 100%;
+
+  @include flex-between-row;
+
+  & > button {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 16px;
+    padding-right: 16px;
+
+    color: var(--button-color);
+    background-color: var(--primary-color);
+
+    &:hover {
+      color: var(--primary-color);
+      background-color: var(--button-color);
+    }
+  }
+}
