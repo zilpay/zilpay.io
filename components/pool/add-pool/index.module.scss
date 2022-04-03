@@ -43,27 +43,33 @@
     cursor: pointer;
   }
 
-  & > h3 {
-    font-size: 18px;
-    line-height: 1;
-    font-family: "Bold";
-  }
-
-  & > svg,
-  & > div > svg {
+  & > svg {
     &:hover {
       stroke: var(--primary-color);
     }
   }
 }
 
-.column {
-  @include flex-center-column;
+.hoverd {
+  &:hover {
+    & > svg {
+      stroke: var(--primary-color);
+    }
+  }
+}
 
-  & > h4 {
-    font-size: 14px;
+.column {
+  @include flex-column;
+  justify-content: space-between;
+
+  min-height: 211px;
+
+  & > p {
+    width: 100%;
     text-transform: uppercase;
     margin: 0;
-    width: 100%;
+    text-indent: 12px;
+    color: var(--muted-color);
+    margin-block-end: 5px;
   }
 }

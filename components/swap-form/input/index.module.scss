@@ -10,12 +10,12 @@
   padding-left: 16px;
   padding-right: 16px;
 
-  &.disabled:hover {
+  &:global(.disabled):hover {
     border: 1px solid transparent;
     pointer-events: none;
   }
 
-  &:hover &:not(.disabled) {
+  &:hover  {
     border: 1px solid var(--primary-color);
   }
 }
