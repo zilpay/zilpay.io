@@ -1,25 +1,21 @@
 import styles from './index.module.scss';
 
 import React from 'react';
+import Link from 'next/link';
 
 
-type Prop = {
-  onAdd: () => void;
-}
-
-export const PoolOverview: React.FC<Prop> = ({ onAdd }) => {
-  const [token0, setToken0] = React.useState(0);
-  const [token1, setToken1] = React.useState(1);
-
+export const PoolOverview: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.row}>
         <h3>
           Pools Overview
         </h3>
-        <button onClick={onAdd}>
-          + New pool
-        </button>
+        <Link href="/pool/add" passHref>
+          <button>
+            + New pool
+          </button>
+        </Link>
       </div>
       <div className={styles.wrapper}>
         <svg

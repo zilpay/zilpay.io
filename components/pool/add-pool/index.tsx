@@ -12,7 +12,7 @@ import { $wallet } from '@/store/wallet';
 
 import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
 
-export const PoolForm: React.FC = () => {
+export const AddPoolForm: React.FC = () => {
   const { pools } = useStore($pools);
   const wallet = useStore($wallet);
 

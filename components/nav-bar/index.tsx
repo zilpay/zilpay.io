@@ -1,8 +1,8 @@
 import styles from "./index.module.scss";
 
 import { useTranslation } from 'next-i18next'
-import React from 'react'
-import Link from 'next/link'
+import React from 'react';
+import Link from 'next/link';
 import Image from "next/image";
 import { ConnectZIlPay } from "../zilpay-connect";
 
