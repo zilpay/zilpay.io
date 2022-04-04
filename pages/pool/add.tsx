@@ -12,19 +12,8 @@ import { DragonDex } from '@/mixins/dex';
 import { $wallet } from '@/store/wallet';
 
 const dex = new DragonDex();
+dex.updateState();
 export const PageAddPool: NextPage = () => {
-  const wallet = useStore($wallet);
-
-  const hanldeUpdate = React.useCallback(async() => {
-    if (wallet) {
-      await dex.updateState(wallet.base16);
-    }
-  }, [wallet]);
-
-  React.useEffect(() => {
-    hanldeUpdate();
-  }, [wallet, hanldeUpdate]);
-
   return (
     <div className={styles.container}>
       <Head>

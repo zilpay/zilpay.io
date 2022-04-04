@@ -3,7 +3,9 @@ import type { FieldTotalContributions, FiledBalances, FiledPools, RPCResponse } 
 import { compact } from "@/lib/compact";
 import { toHex } from "@/lib/to-hex";
 import { chunk } from "@/lib/chunk";
-import { ZERO_ADDR } from "@/config/conts";
+import { initParser } from "@/lib/parse-init";
+import { Pool } from "@/types/token";
+import { ZilPayBase } from "./zilpay-base";
 
 type Params = string[] | number[] | (string | string[] | number[])[];
 
@@ -26,18 +28,6 @@ export enum ZRC2Fields {
   Balances = 'balances'
 }
 
-const EMPTY_FEE = {
-  "argtypes": [
-      "Uint256",
-      "Uint256"
-  ],
-  "arguments": [
-      "10000",
-      "10000"
-  ],
-  "constructor": "Pair"
-};
-
 export class Blockchain {
   private _http = `https://zilliqa-isolated-server.zilliqa.com`;
   readonly #rpc = {
@@ -53,90 +43,6 @@ export class Blockchain {
       jsonrpc: `2.0`,
     }));
     return this._send(batch);
-  }
-
-  public async fetchPoolsBalances(dex: string, owner: string, list: string[]) {
-    const tokens = list.slice(1).map((token) => ([
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.Pools, [token]]
-      ),
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [toHex(token), ZRC2Fields.Balances, [owner.toLowerCase()]]
-      )
-    ]));
-    const tokensBatch = compact(tokens);
-    const batch = [
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.Fee, []]
-      ),
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.MinLP, []]
-      ),
-      {
-        method: RPCMethods.GetBalance,
-        params: [
-          toHex(owner)
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      ...tokensBatch,
-    ];
-    const batchRes = await this._send(batch);
-    const [resFee, minLPRes, zilsRes] = batchRes.slice(0, 3);
-    const tokensRes = batchRes.slice(3);
-    const [zilFee, tokensFee] = this._unpack(resFee, DexFields.Fee, EMPTY_FEE).arguments;
-    const minLP = this._unpack(minLPRes, DexFields.MinLP, '0');
-    const zilBalance = this._unpack(zilsRes, 'balance', '0');
-    const chunks = chunk<RPCResponse>(tokensRes, 2);
-    const state: {
-      [key: string]: {
-        balance: bigint;
-        pool: Array<bigint>;
-      }
-    } = {};
-
-    for (let index = 0; index < list.length; index++) {
-      const token = list[index];
-
-      state[token] = {
-        balance: BigInt(0),
-        pool: [BigInt(0), BigInt(0)]
-      }
-
-      if (token === ZERO_ADDR) {
-        state[token] = {
-          balance: BigInt(zilBalance),
-          pool: [BigInt(0), BigInt(0)]
-        };
-        continue;
-      }
-
-      const chunk = chunks[index - 1];
-
-      if (chunk[0] && chunk[0].result && chunk[0].result[DexFields.Pools]) {
-        const [zilReserve, tokensReserve] = chunk[0].result[DexFields.Pools][token].arguments;
-
-        state[token]['pool'] = [BigInt(zilReserve), BigInt(tokensReserve)];
-      }
-
-      if (chunk[1] && chunk[1].result && chunk[1].result[ZRC2Fields.Balances]) {
-        const zils = chunk[1].result[ZRC2Fields.Balances][owner.toLowerCase()];
-        state[token].balance = BigInt(zils);
-      } else {
-        state[token].balance = BigInt(0);
-      }
-    }
-
-    return {
-      state,
-      fee: [BigInt(zilFee), BigInt(tokensFee)],
-      minLP: minLP
-    };
   }
 
   public async fetchFullState(dex: string) {
@@ -164,6 +70,85 @@ export class Blockchain {
       totalContributions,
       pools
     };
+  }
+
+  public async fetchTokens(owner: string, tokens: string[], pools: Pool[]) {
+    const reqList = tokens.map((token) => ([
+      this._buildBody(
+        RPCMethods.GetSmartContractInit,
+        [toHex(token)]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [toHex(token), ZRC2Fields.Balances, [owner.toLowerCase()]]
+      )
+    ]));
+    const tokensBatch = compact(reqList);
+    const batch = [
+      {
+        method: RPCMethods.GetBalance,
+        params: [
+          toHex(owner)
+        ],
+        id: 1,
+        jsonrpc: `2.0`,
+      },
+      ...tokensBatch
+    ];
+    const batchRes = await this._send(batch);
+    const tokensRes = batchRes.slice(1);
+    const chunks = chunk<RPCResponse>(tokensRes, 2);
+    const zp = await new ZilPayBase().zilpay();
+
+    for (const iterator of chunks) {
+      const [init, balancesRes] = iterator;
+      const meta = initParser(init.result);
+      const balances = balancesRes.result ? balancesRes.result[ZRC2Fields.Balances] : {};
+      const foundIndex = pools.findIndex((t) => t.meta.base16 === meta.address);
+
+      for (const key in balances) {
+        balances[key] = BigInt(balances[key]);
+      }
+
+      if (foundIndex >= 0) {
+        pools[foundIndex].meta = {
+          decimals: meta.decimals,
+          bech32: zp.crypto.toBech32Address(meta.address),
+          base16: meta.address,
+          name: meta.name,
+          symbol: meta.symbol
+        };
+        pools[foundIndex].balance = {
+          ...pools[foundIndex].balance,
+          ...balances
+        };
+      } else {
+        pools.push({
+          meta: {
+            decimals: meta.decimals,
+            bech32: zp.crypto.toBech32Address(meta.address),
+            base16: meta.address,
+            name: meta.name,
+            symbol: meta.symbol
+          },
+          balance: balances
+        });
+      }
+    }
+
+    if (batchRes[0].result) {
+      pools[0].balance = {
+        ...pools[0].balance,
+        [owner]: BigInt(batchRes[0].result.balance)
+      };
+    } else {
+      pools[0].balance = {
+        ...pools[0].balance,
+        [owner]: BigInt(0)
+      };
+    }
+
+    return pools;
   }
 
 

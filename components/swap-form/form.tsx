@@ -70,9 +70,7 @@ export const SwapForm: React.FC = () => {
   }, [exactAmount, wallet]);
 
   const hanldeUpdate = React.useCallback(async() => {
-    if (wallet) {
-      await dex.updateState(wallet.base16);
-    }
+    await dex.updateState();
   }, [wallet]);
 
   const hanldeOnChangeTop = React.useCallback((amount: Big) => {

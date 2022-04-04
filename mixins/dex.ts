@@ -11,7 +11,8 @@ import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
 import { SHARE_PERCENT } from '@/config/conts';
-import { updateLiquidity } from '@/store/shares';
+import { $liquidity, updateLiquidity } from '@/store/shares';
+import { $wallet } from '@/store/wallet';
 
 
 Big.PE = 999;
@@ -40,42 +41,36 @@ export class DragonDex {
   public fee = [BigInt(0), BigInt(0)];
 
   public get pools() {
+    return $liquidity.state.pools;
+  }
+
+  public get tokens() {
     return $pools.state.pools;
   }
 
-  public async fullUpdate() {
+  public async updateState() {
     const contract = toHex(DragonDex.CONTRACT);
     const { pools, balances, totalContributions } = await this._provider.fetchFullState(contract);
     const shares = this._getShares(balances, totalContributions);
     const dexPools = this._getPools(pools);
 
     updateLiquidity(shares, dexPools);
-  }
 
-  public async updateState(owner: string) {
-    const contract = toHex(DragonDex.CONTRACT);
-    const tokens = this.pools.map((t) => t.meta.base16);
-    const { state, fee, minLP } = await this._provider.fetchPoolsBalances(contract, owner, tokens);
+    const listedTokens = Object.keys(pools);
 
-    this.lp = minLP;
-    this.fee = fee;
-
-    const pools = this.pools.map((value) => ({
-      ...value,
-      balance: {
-        ...value.balance,
-        [owner]: state[value.meta.base16].balance
-      },
-      pool: state[value.meta.base16].pool
-    }));
-
-    $pools.setState({
-      pools
-    });
+    if ($wallet.state?.base16) {
+      const newPool = await this._provider.fetchTokens(
+        $wallet.state?.base16,
+        listedTokens,
+        $pools.state.pools
+      );
+      console.log(newPool);
+    }
   }
 
   public calcAmount(amount: bigint, index: number, direction: SwapDirection) {
-    const [zilReserve, tokenReserve] = this.pools[index].pool;
+    const token = this.tokens[index].meta;
+    const [zilReserve, tokenReserve] = this.pools[token.base16];
     const [zilFee, tokensFee] = this.fee;
     const exactSide = ExactSide.ExactInput;
     const calculated = this._amountFor(
@@ -97,8 +92,8 @@ export class DragonDex {
   public zilToTokens(value: string | Big, index: number): Big {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[index].meta.decimals);
-    const zilDecimails = this.toDecimails(this.pools[0].meta.decimals);
+    const decimals = this.toDecimails(this.tokens[index].meta.decimals);
+    const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
     const qa = amount.mul(zilDecimails).round().toString();
     const { tokens } = this.calcAmount(BigInt(qa), index, SwapDirection.ZilToToken);
 
@@ -108,8 +103,8 @@ export class DragonDex {
   public tokensToZil(value: string | Big, index: number) {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[index].meta.decimals);
-    const zilDecimails = this.toDecimails(this.pools[0].meta.decimals);
+    const decimals = this.toDecimails(this.tokens[index].meta.decimals);
+    const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
     const qa = amount.mul(decimals).round().toString();
     const { zils } = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
 
@@ -118,8 +113,8 @@ export class DragonDex {
 
   public tokensToTokens(value: string | Big, index0: number, index1: number) {
     const amount = Big(value);
-    const decimals0 = this.toDecimails(this.pools[index0].meta.decimals);
-    const decimals1 = this.toDecimails(this.pools[index1].meta.decimals);
+    const decimals0 = this.toDecimails(this.tokens[index0].meta.decimals);
+    const decimals1 = this.toDecimails(this.tokens[index1].meta.decimals);
     const qa0 = amount.mul(decimals0).round().toString();
     const { zils } = this.calcAmount(BigInt(qa0), index0, SwapDirection.TokenToZil);
     const { tokens } = this.calcAmount(zils, index1, SwapDirection.ZilToToken);
@@ -159,9 +154,9 @@ export class DragonDex {
       amount: String(zil)
     });
 
-    const found = this.pools.find((p) => p.meta.base16 === token);
+    const found = this.tokens.find((p) => p.meta.base16 === token);
     if (found) {
-      const amount = zil.div(this.toDecimails(this.pools[0].meta.decimals));
+      const amount = zil.div(this.toDecimails(this.tokens[0].meta.decimals));
       addTransactions({
         timestamp: new Date().getTime(),
         name: `Swap ${formatNumber(String(amount))} ZIL to ${found.meta.symbol}`,
@@ -211,9 +206,9 @@ export class DragonDex {
       amount: '0'
     });
 
-    const foundIndex = this.pools.findIndex((p) => p.meta.base16 === token);
+    const foundIndex = this.tokens.findIndex((p) => p.meta.base16 === token);
     if (foundIndex >= 0) {
-      const tokenMeta = this.pools[foundIndex].meta;
+      const tokenMeta = this.tokens[foundIndex].meta;
       const amount = tokens.div(this.toDecimails(tokenMeta.decimals));
       addTransactions({
         timestamp: new Date().getTime(),
@@ -268,12 +263,12 @@ export class DragonDex {
       transition,
       amount: '0'
     });
-    const foundIndex0 = this.pools.findIndex((p) => p.meta.base16 === token0);
-    const foundIndex1 = this.pools.findIndex((p) => p.meta.base16 === token1);
+    const foundIndex0 = this.tokens.findIndex((p) => p.meta.base16 === token0);
+    const foundIndex1 = this.tokens.findIndex((p) => p.meta.base16 === token1);
 
     if (foundIndex0 >= 0 && foundIndex1 >= 0) {
-      const tokenMeta0 = this.pools[foundIndex0].meta;
-      const tokenMeta1 = this.pools[foundIndex1].meta;
+      const tokenMeta0 = this.tokens[foundIndex0].meta;
+      const tokenMeta1 = this.tokens[foundIndex1].meta;
       const amount = tokens.div(this.toDecimails(tokenMeta0.decimals));
       addTransactions({
         timestamp: new Date().getTime(),

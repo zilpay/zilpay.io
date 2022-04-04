@@ -24,14 +24,20 @@ try {
 
 export const $liquidity = new Store(init);
 
+function cacheState() {
+  if (typeof window !== 'undefined') {
+    const serialized = JSON.stringify($liquidity.state, (_, v) => typeof v === 'bigint' ? v.toString() : v);
+    window.localStorage.setItem(StorageFields.Liquidity, serialized);
+  }
+}
+
 export function updateLiquidity(shares: Share, pools: DexPool) {
   $liquidity.setState({
     pools,
     shares
   });
 
-  const serialized = JSON.stringify($liquidity.state, (_, v) => typeof v === 'bigint' ? v.toString() : v);
-  window.localStorage.setItem(StorageFields.Liquidity, serialized);
+  cacheState();
 }
 
 export function updateShares(shares: Share) {
@@ -40,8 +46,7 @@ export function updateShares(shares: Share) {
     shares
   });
 
-  const serialized = JSON.stringify($liquidity.state, (_, v) => typeof v === 'bigint' ? v.toString() : v);
-  window.localStorage.setItem(StorageFields.Liquidity, serialized);
+  cacheState();
 }
 
 export function updateDexPools(pools: DexPool) {
@@ -50,6 +55,5 @@ export function updateDexPools(pools: DexPool) {
     pools
   });
 
-  const serialized = JSON.stringify($liquidity.state, (_, v) => typeof v === 'bigint' ? v.toString() : v);
-  window.localStorage.setItem(StorageFields.Liquidity, serialized);
+  cacheState();
 }

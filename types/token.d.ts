@@ -7,7 +7,6 @@ export interface TokenState {
 }
 
 export interface Pool {
-  pool: Array<bigint>;
   balance: {
     [owner: string]: bigint;
   };
