@@ -1,3 +1,5 @@
+import type { FieldTotalContributions, FiledBalances, Share } from '@/types/zilliqa';
+
 import Big from 'big.js';
 
 import { Blockchain } from './custom-fetch';
@@ -9,6 +11,8 @@ import { $pools } from 'store/pools';
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
+import { SHARE_PERCENT } from '@/config/conts';
+import { updateShares } from '@/store/shares';
 
 
 Big.PE = 999;
@@ -38,6 +42,14 @@ export class DragonDex {
 
   public get pools() {
     return $pools.state.pools;
+  }
+
+  public async fullUpdate() {
+    const contract = toHex(DragonDex.CONTRACT);
+    const { pools, balances, totalContributions } = await this._provider.fetchFullState(contract);
+    const shares = this._getShares(balances, totalContributions);
+
+    updateShares(shares);
   }
 
   public async updateState(owner: string) {
@@ -390,6 +402,26 @@ export class DragonDex {
       default:
         throw new Error("Incorect SwapDirection");
     }
+  }
+
+  private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions) {
+    const shares: Share = {};
+
+    for (const token in balances) {
+      const contribution = BigInt(totalContributions[token]);
+
+      for (const owner in balances[token]) {
+        const balance = BigInt(balances[token][owner]);
+
+        if (!shares[token]) {
+          shares[token] = {};
+        }
+
+        shares[token][owner] = (contribution * SHARE_PERCENT) / balance;
+      }
+    }
+
+    return shares;
   }
 
   private _getFee(value: bigint, fee: bigint) {

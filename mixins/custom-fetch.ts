@@ -1,7 +1,6 @@
-import type { RPCResponse } from "@/types/zilliqa";
+import type { FieldTotalContributions, FiledBalances, FiledPools, RPCResponse } from "@/types/zilliqa";
 
 import { compact } from "@/lib/compact";
-import { initParser } from "@/lib/parse-init";
 import { toHex } from "@/lib/to-hex";
 import { chunk } from "@/lib/chunk";
 import { ZERO_ADDR } from "@/config/conts";
@@ -18,7 +17,9 @@ export enum RPCMethods {
 export enum DexFields {
   Pools = 'pools',
   Fee = 'swap_fee',
-  MinLP = 'min_lp'
+  MinLP = 'min_lp',
+  Balances = 'balances',
+  TotalContributions = 'total_contributions'
 }
 
 export enum ZRC2Fields {
@@ -138,87 +139,33 @@ export class Blockchain {
     };
   }
 
-  public async fetchDexState(contrat: string, token: string, owner: string) {
-    const poolsFiled = 'pools';
-    const feeFiled = 'swap_fee';
-    const minLPField = 'min_lp';
-    const balancesField = 'balances';
-
+  public async fetchFullState(dex: string) {
     const batch = [
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          contrat,
-          poolsFiled,
-          [token]
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          contrat,
-          feeFiled,
-          []
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          contrat,
-          minLPField,
-          []
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          toHex(token),
-          balancesField,
-          [owner]
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractInit,
-        params: [
-          toHex(token)
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetBalance,
-        params: [
-          toHex(owner)
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Balances, []]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.TotalContributions, []]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Pools, []]
+      )
     ];
-    const [pool, fee, minLPRes, balances, resInit, zilBalance] = await this._send(batch);
-    const [zilReserve, tokenReserve] = pool.result[poolsFiled][token].arguments;
-    const [zilFee, tokensFee] = fee.result[feeFiled].arguments;
-    const minLP = minLPRes.result[minLPField];
-    const balance = balances.result ? balances.result[balancesField][owner] : 0;
-    const init = initParser(resInit.result);
-    const balancesZIL = zilBalance.error ? BigInt(0) : BigInt(zilBalance.result.balance);
+    const [resBalances, resTotalContributions, resPools] = await this._send(batch);
+    const balances: FiledBalances = resBalances.result[DexFields.Balances];
+    const totalContributions: FieldTotalContributions = resTotalContributions.result[DexFields.TotalContributions];
+    const pools: FiledPools = resPools.result[DexFields.Pools];
 
     return {
-      balancesZIL,
-      fee: [BigInt(zilFee), BigInt(tokensFee)],
-      pool: [BigInt(zilReserve), BigInt(tokenReserve)],
-      lp: BigInt(minLP),
-      balance: BigInt(balance),
-      init
+      balances,
+      totalContributions,
+      pools
     };
   }
+
 
   private _unpack<T>(res: RPCResponse, field: string, defaultValue: T) {
     if (res.error || !res.result) {
