@@ -5,5 +5,13 @@
   "legal": "Legal",
   "terms": "Terms of Service",
   "privacy": "Privacy Policy",
-  "extension-policy": "Extension Policy"
+  "dex-policy": "Dex Policy",
+  "extension-policy": "Extension Policy",
+  "clear_all": "Clear all",
+  "recent_txns": "Recent Transactions",
+  "tx_appear_here": "Your transactions will appear here...",
+  "copy_adr": "Copy address",
+  "view_explorer": "View on Explorer",
+  "account": "Account",
+  "connected_via": "Connectet with ZilPay wallet to"
 }

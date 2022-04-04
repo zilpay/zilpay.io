@@ -1,29 +1,25 @@
-import 'slick-carousel/slick/slick.css'; 
-import 'slick-carousel/slick/slick-theme.css';
+import '../styles/globals.scss'
 
-import { AppProps } from 'next/app';
+import type { AppProps } from 'next/app'
+
 import { appWithTranslation } from 'next-i18next'
-import React from 'react';
-
-import { Footer } from 'components/footer';
-import { Navbar } from 'components/nav-bar';
-import { MobileNavBar } from 'components/mobile-nav-bar';
-
-import { isMobile, isDesktop, isAndroid, isIOS } from 'react-device-detect';
-import { BaseStyles } from '@/styles';
+import NextNprogress from "nextjs-progressbar"
+import { Footer } from '@/components/footer';
+import { NavBar } from '@/components/nav-bar/index';
 
 const App = ({ Component, pageProps }: AppProps) => (
-    <>
-      <BaseStyles />
-      {isDesktop && !isAndroid && !isIOS ? (
-        <Navbar />
-      ) : null}
-      {isMobile || isAndroid || isIOS ? (
-        <MobileNavBar />
-      ) : null}
-      <Component {...pageProps} />
-      <Footer />
-    </>
-  )
+  <>
+    <NextNprogress
+      color="var(--primary-color)"
+      startPosition={0.3}
+      stopDelayMs={200}
+      height={3}
+      showOnShallow
+    />
+    <NavBar />
+    <Component {...pageProps} />
+    <Footer />
+  </>
+);
 
 export default appWithTranslation(App);

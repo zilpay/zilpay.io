@@ -1,21 +1,18 @@
+import styles from '@/styles/pages/policy.module.scss';
+
 import React from 'react';
 import Head from 'next/head';
+
 import { useTranslation } from 'next-i18next';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
-import { Text } from 'components/text';
-import { Container, Dummy, Wrapper} from 'components/wrappers/terms-policy';
-import { Colors } from '@/config/colors';
-import { StyleFonts } from '@/config/fonts';
-
 
 export const TermsPage: NextPage = () => {
   const { t } = useTranslation(`terms`);
 
   return (
-    <Container>
-      <Dummy />
+    <div className={styles.terms}>
+      <div className={styles.dummy} />
       <Head>
         <title>{t(`head_title`)}</title>
         <meta
@@ -24,321 +21,314 @@ export const TermsPage: NextPage = () => {
           key="title"
         />
       </Head>
-      <Wrapper>
-        <Text
-          fontVariant={StyleFonts.Light}
-          size="15px"
-        >
+      <div className={styles.wrapper}>
+        <p className={styles.muted}>
           {t(`last_update`)}
-        </Text>
-        <Text
-          fontVariant={StyleFonts.Bold}
-          fontColors={Colors.White}
-          size="45px"
-        >
+        </p>
+        <h1>
           {t(`title`)}
-        </Text>
-        <Text>
+        </h1>
+        <p>
           <strong>
             {t(`sub_title0`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p0`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p1`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p2`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p3`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p4`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title1`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p5`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p6`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title2`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p6`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p7`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p8`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p9`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p10`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title3`)}
           </strong>
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title4`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p11`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title5`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p12`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title6`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p13`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title7`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p14`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title8`)}
           </strong>
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title9`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p15`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p16`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p17`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title10`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p18`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title11`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p19`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title12`)}
           </strong>
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title13`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p20`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p21`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title14`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p22`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p23`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title15`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p24`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p25`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p26`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title16`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p27`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title17`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p28`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p29`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title18`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p30`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title19`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p31`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title20`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p32`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title21`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p33`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title22`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p34`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title23`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p35`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title24`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p36`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p37`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p38`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title25`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p39`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p40`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title26`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p41`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p42`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title27`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           <strong>
             {t(`subt_title28`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p43`)}
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p44`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title29`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p45`)}
-        </Text>
-        <Text>
+        </p>
+        <p>
           <strong>
             {t(`subt_title30`)}
           </strong>
-        </Text>
-        <Text fontVariant={StyleFonts.Light}>
+        </p>
+        <p className={styles.muted}>
           {t(`p46`)}
-        </Text>
-      </Wrapper>
-    </Container>
+        </p>
+      </div>
+    </div>
   );
 };
 

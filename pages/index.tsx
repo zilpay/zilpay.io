@@ -1,48 +1,122 @@
+import styles from '@/styles/pages/main.module.scss';
+
+import type { NextPage } from 'next';
+
 import React from 'react';
+import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { InfoCard } from '@/components/info-card';
 
-const MainSection = dynamic(import(`components/sections/main`));
-const InfoSection = dynamic(import(`components/sections/info`));
-const FeaturesSection = dynamic(import(`components/sections/features`));
-const AppsSection = dynamic(import(`components/sections/apps`));
-const PartnershipsSection = dynamic(import(`components/sections/partnerships`));
-const TestimonialsSection = dynamic(import(`components/sections/testimonials`));
-const TeamSection = dynamic(import(`components/sections/team`));
+import { AppLinks } from '@/config/links';
 
-export const MainPage: NextPage = () => {
+const MainPage: NextPage = () => {
   const { t } = useTranslation(`main`);
 
   return (
     <>
-      <Head>
-        <title>
-          {t(`head_title`)}
-        </title>
-        <meta
-          property="og:title"
-          content={t(`head_title`)}
-          key="title"
-        />
-      </Head>
-      <MainSection />
-      <InfoSection />
-      <FeaturesSection />
-      <AppsSection />
-      <PartnershipsSection />
-      <TestimonialsSection />
-      <TeamSection />
+      <section className={styles.main}>
+        <div className={styles.wrapper}>
+          <h1>
+            {t('main.title')}
+          </h1>
+          <h2>
+            {t('main.sub_title')}
+          </h2>
+        </div>
+        <div className={styles.btns}>
+          <a href={AppLinks.IOS}>
+            <div className={styles.iosbtn}/>
+          </a>
+          <a href={AppLinks.GOOGLE}>
+            <div className={styles.googlebtn}/>
+          </a>
+          <a href={AppLinks.APK}>
+            <div className={styles.apkbtn}/>
+          </a>
+        </div>
+      </section>
+      <section className={styles.features}>
+        <div className={styles.cards}>
+          <InfoCard
+              url="/icons/info-0.svg"
+              title={t(`info.card_0.title`)}
+            >
+              {t(`info.card_0.sub_title`)}
+            </InfoCard>
+            <InfoCard
+              url="/icons/info-1.svg"
+              title={t(`info.card_1.title`)}
+              selected
+            >
+              {t(`info.card_1.sub_title`)}
+            </InfoCard>
+            <InfoCard
+              url="/icons/info-2.svg"
+              title={t(`info.card_2.title`)}
+            >
+              {t(`info.card_2.sub_title`)}
+            </InfoCard>
+        </div>
+      </section>
+      <section className={styles.features}>
+        <div className={styles.header}>
+          <h1>
+            {t(`features.title`)}
+          </h1>
+          <p>
+            {t(`features.sub_title`)}
+          </p>
+        </div>
+        <div className={styles.cards}>
+          <InfoCard
+            url="/icons/wallet.svg"
+            title={t(`features.card_0.title`)}
+          >
+            {t(`features.card_0.sub_title`)}
+          </InfoCard>
+          <InfoCard
+            url="/icons/location.svg"
+            title={t(`features.card_1.title`)}
+          >
+            {t(`features.card_1.sub_title`)}
+          </InfoCard>
+          <InfoCard
+            url="/icons/key.svg"
+            title={t(`features.card_2.title`)}
+          >
+            {t(`features.card_2.sub_title`)}
+          </InfoCard>
+          <InfoCard
+            url="/icons/lock.svg"
+            title={t(`features.card_3.title`)}
+          >
+            {t(`features.card_3.sub_title`)}
+          </InfoCard>
+          <InfoCard
+            url="/icons/settings.svg"
+            title={t(`features.card_4.title`)}
+          >
+            {t(`features.card_4.sub_title`)}
+          </InfoCard>
+          <InfoCard
+            url="/icons/rokket.svg"
+            title={t(`features.card_5.title`)}
+          >
+            {t(`features.card_5.sub_title`)}
+          </InfoCard>
+        </div>
+      </section>
+      <section className={styles.features}>
+      </section>
     </>
-  );
-}
+  )
+};
 
 export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-    props: {
-      ...await serverSideTranslations(props.locale || `en`, [`main`, `common`]),
-    },
-  });
+  props: {
+    ...await serverSideTranslations(props.locale || `en`, [`main`, `common`]),
+  },
+});
 
 export default MainPage;

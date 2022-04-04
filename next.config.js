@@ -23,10 +23,16 @@ const securityHeaders = [
   }
 ];
 
-module.exports = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   i18n,
   reactStrictMode: true,
-  async headers() {
+  images: {
+    domains: ['meta.viewblock.io'],
+    disableStaticImages: true,
+    dangerouslyAllowSVG: true
+  },
+  headers() {
     return [
       {
         // Apply these headers to all routes in your application.
@@ -34,5 +40,7 @@ module.exports = {
         headers: securityHeaders,
       },
     ]
-  },
+  }
 }
+
+module.exports = nextConfig

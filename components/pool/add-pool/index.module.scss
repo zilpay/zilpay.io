@@ -1,0 +1,75 @@
+@import "@/styles/mixins";
+
+.container {
+  background-color: var(--card-color);
+  padding: 1rem 1.25rem 0.5rem;
+
+  @include border-radius(16px);
+
+  max-width: 500px;
+
+  @include flex-center-vert;
+  flex-direction: column;
+
+  & > button {
+    width: 100%;
+    padding: 25px;
+  
+    font-size: 16px;
+    text-transform: uppercase;
+  
+    margin-block-end: 0.6em;
+    margin-block-start: 0.6em;
+  
+    &:hover {
+      color: var(--button-color);
+      background: var(--primary-color);
+    }
+  }
+}
+
+.row {
+  @include flex-between-row;
+
+  width: 100%;
+
+  &:global(.border) {
+    padding-top: 20px;
+    border-top: 1px solid var(--button-color);;
+  }
+
+  & > svg,
+  & > div > svg {
+    cursor: pointer;
+  }
+
+  & > svg {
+    &:hover {
+      stroke: var(--primary-color);
+    }
+  }
+}
+
+.hoverd {
+  &:hover {
+    & > svg {
+      stroke: var(--primary-color);
+    }
+  }
+}
+
+.column {
+  @include flex-column;
+  justify-content: space-between;
+
+  min-height: 211px;
+
+  & > p {
+    width: 100%;
+    text-transform: uppercase;
+    margin: 0;
+    text-indent: 12px;
+    color: var(--muted-color);
+    margin-block-end: 5px;
+  }
+}

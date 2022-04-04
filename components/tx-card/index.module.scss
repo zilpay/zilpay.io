@@ -1,0 +1,38 @@
+@import "@/styles/mixins";
+
+.txcard {
+  cursor: pointer;
+
+  @include flex-between-row;
+
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-top: 5px;
+}
+
+.wrapper {
+  cursor: pointer;
+
+  border-radius: 0.5rem;
+  font-weight: 500;
+  font-size: 0.825rem;
+  text-decoration-thickness: 0.125em;
+  text-underline-offset: 1.5px;
+  text-decoration: none;
+
+  & > p {
+    font-size: 0.825rem;
+  }
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--primary-color);
+
+    & > p {
+      color: var(--primary-color);
+    }
+    & > div > svg {
+      stroke: var(--primary-color);
+    }
+  }
+}
