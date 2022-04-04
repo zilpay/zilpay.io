@@ -1,24 +1,53 @@
 import styles from './index.module.scss';
 
 import React from 'react';
+import { useStore } from 'react-stores';
 import Image from 'next/image';
-import Link from 'next/link';
-import { getIconURL } from '@/lib/viewblock';
-import { ZERO_BECH32 } from '@/config/conts';
 import classNames from 'classnames';
+import Link from 'next/link';
 
+import { $wallet } from '@/store/wallet';
+import { $liquidity } from '@/store/shares';
+import { $pools } from '@/store/pools';
 
-const list = [
-  {
-    token: {
-      symbol: 'WTF',
-      bech32: 'zil1l0g8u6f9g0fsvjuu74ctyla2hltefrdyt7k5f4'
-    },
-    share: 0.3
-  }
-];
+import { nPool } from '@/filters/n-pool';
+import { formatNumber } from '@/filters/n-format';
+import { getIconURL } from '@/lib/viewblock';
+
+import { SHARE_PERCENT_DECIMALS, ZERO_BECH32 } from '@/config/conts';
+
 
 export const PoolOverview: React.FC = () => {
+  const wallet = useStore($wallet);
+  const liquidity = useStore($liquidity);
+  const pool = useStore($pools);
+
+  const ownerLising = React.useMemo(() => {
+    if (!wallet) {
+      return [];
+    }
+
+    const { pools, shares } = liquidity;
+    const tokens = [];
+    const owner = String(wallet.base16).toLowerCase();
+
+    for (const token in shares) {
+      if (shares[token][owner]) {
+        const found = pool.pools.find((p) => p.meta.base16 === token);
+
+        if (found) {
+          tokens.push({
+            meta: found.meta,
+            pool: nPool(pools[token], shares[token][owner]),
+            share: Number(shares[token][owner]) / SHARE_PERCENT_DECIMALS
+          });
+        }
+      }
+    }
+
+    return tokens;
+  }, [wallet, liquidity, pool]);
+
   return (
     <div className={styles.container}>
       <div className={styles.row}>
@@ -31,7 +60,7 @@ export const PoolOverview: React.FC = () => {
           </button>
         </Link>
       </div>
-      {list.length === 0 ? (
+      {ownerLising.length === 0 ? (
         <div className={styles.wrapper}>
           <svg
             width="48"
@@ -52,10 +81,10 @@ export const PoolOverview: React.FC = () => {
         </div>
       ) : (
         <div className={classNames(styles.wrapper, styles.cardwrapper)}>
-          {list.map((el) => (
+          {ownerLising.map((el) => (
             <div
               className={styles.poolcard}
-              key={el.token.bech32}
+              key={el.meta.base16}
             >
               <div className={styles.cardrow}>
                 <div className={styles.imgwrap}>
@@ -67,7 +96,7 @@ export const PoolOverview: React.FC = () => {
                     className={styles.symbol}
                   />
                   <Image
-                    src={getIconURL(el.token.bech32)}
+                    src={getIconURL(el.meta.bech32)}
                     alt="tokens-logo"
                     height="30"
                     width="30"
@@ -75,14 +104,14 @@ export const PoolOverview: React.FC = () => {
                   />
                 </div>
                 <p>
-                  ZIL / {el.token.symbol} - <span>
+                  ZIL / {el.meta.symbol} - <span>
                     {el.share}%
                   </span>
                 </p>
               </div>
               <div className={styles.cardrow}>
                 <p className={styles.amount}>
-                  321321 ZIL / 232132 {el.token.symbol} ≈ $32
+                  {formatNumber(el.pool[0])} / {formatNumber(el.pool[1])} ≈ $32
                 </p>
               </div>
             </div>

@@ -1,3 +1,3 @@
 export enum StorageFields {
-  Shares = 'shares'
+  Liquidity = 'liquidity'
 }

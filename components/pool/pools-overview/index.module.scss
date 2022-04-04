@@ -73,6 +73,8 @@
   cursor: pointer;
 
   padding: 15px;
+  margin-top: 3px;
+  margin-bottom: 3px;
   width: 100%;
   @include border-radius(16px);
   background-color: var(--background-color);

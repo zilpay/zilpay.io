@@ -1,4 +1,4 @@
-import type { FieldTotalContributions, FiledBalances, Share } from '@/types/zilliqa';
+import type { DexPool, FieldTotalContributions, FiledBalances, FiledPools, Share } from '@/types/zilliqa';
 
 import Big from 'big.js';
 
@@ -6,13 +6,12 @@ import { Blockchain } from './custom-fetch';
 import { ZilPayBase } from './zilpay-base';
 
 import { $pools } from 'store/pools';
-// import { pushToList } from '@/store/transactions';
 
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
 import { SHARE_PERCENT } from '@/config/conts';
-import { updateShares } from '@/store/shares';
+import { updateLiquidity } from '@/store/shares';
 
 
 Big.PE = 999;
@@ -48,8 +47,9 @@ export class DragonDex {
     const contract = toHex(DragonDex.CONTRACT);
     const { pools, balances, totalContributions } = await this._provider.fetchFullState(contract);
     const shares = this._getShares(balances, totalContributions);
+    const dexPools = this._getPools(pools);
 
-    updateShares(shares);
+    updateLiquidity(shares, dexPools);
   }
 
   public async updateState(owner: string) {
@@ -422,6 +422,18 @@ export class DragonDex {
     }
 
     return shares;
+  }
+
+  private _getPools(pools: FiledPools) {
+    const newPools: DexPool = {};
+
+    for (const token in pools) {
+      const [x, y] = pools[token].arguments;
+
+      newPools[token] = [BigInt(x), BigInt(y)];
+    }
+
+    return newPools;
   }
 
   private _getFee(value: bigint, fee: bigint) {

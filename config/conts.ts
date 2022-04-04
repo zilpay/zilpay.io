@@ -6,3 +6,4 @@ export const SLIPPAGE = 0.3;
 export const BLOCKS = 2;
 export const DEFAULT_TOKEN_INDEX = 1;
 export const SHARE_PERCENT = BigInt(10000);
+export const SHARE_PERCENT_DECIMALS = 100;

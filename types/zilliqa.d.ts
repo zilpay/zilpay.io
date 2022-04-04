@@ -30,6 +30,10 @@ export interface Share {
   }
 }
 
+export interface DexPool {
+  [token: string]: bigint[];
+}
+
 export interface FiledPools {
   [token: string]: {
     argtypes: string[];
