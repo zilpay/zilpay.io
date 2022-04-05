@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 import { $wallet } from '@/store/wallet';
 import { $liquidity } from '@/store/shares';
-import { $pools } from '@/store/pools';
+import { $tokens } from '@/store/tokens';
 
 import { nPool } from '@/filters/n-pool';
 import { formatNumber } from '@/filters/n-format';
@@ -20,7 +20,7 @@ import { SHARE_PERCENT_DECIMALS, ZERO_BECH32 } from '@/config/conts';
 export const PoolOverview: React.FC = () => {
   const wallet = useStore($wallet);
   const liquidity = useStore($liquidity);
-  const pool = useStore($pools);
+  const tokensStore = useStore($tokens);
 
   const ownerLising = React.useMemo(() => {
     if (!wallet) {
@@ -33,7 +33,7 @@ export const PoolOverview: React.FC = () => {
 
     for (const token in shares) {
       if (shares[token][owner]) {
-        const found = pool.pools.find((p) => p.meta.base16 === token);
+        const found = tokensStore.tokens.find((p) => p.meta.base16 === token);
 
         if (found) {
           tokens.push({
@@ -46,7 +46,7 @@ export const PoolOverview: React.FC = () => {
     }
 
     return tokens;
-  }, [wallet, liquidity, pool]);
+  }, [wallet, liquidity, tokensStore]);
 
   return (
     <div className={styles.container}>

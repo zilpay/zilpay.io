@@ -5,7 +5,7 @@ import Big from 'big.js';
 import { Blockchain } from './custom-fetch';
 import { ZilPayBase } from './zilpay-base';
 
-import { $pools } from 'store/pools';
+import { $tokens, updateTokens } from '@/store/tokens';
 
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
@@ -13,6 +13,7 @@ import { addTransactions } from '@/store/transactions';
 import { SHARE_PERCENT } from '@/config/conts';
 import { $liquidity, updateLiquidity } from '@/store/shares';
 import { $wallet } from '@/store/wallet';
+import { StorageFields } from '@/config/storage-fields';
 
 
 Big.PE = 999;
@@ -45,7 +46,7 @@ export class DragonDex {
   }
 
   public get tokens() {
-    return $pools.state.pools;
+    return $tokens.state.tokens;
   }
 
   public async updateState() {
@@ -58,13 +59,24 @@ export class DragonDex {
 
     const listedTokens = Object.keys(pools);
 
-    if ($wallet.state?.base16) {
-      const newPool = await this._provider.fetchTokens(
+    try {
+      const fromStorage = window.localStorage.getItem(StorageFields.Tokens);
+    
+      if (fromStorage) {
+        $tokens.setState(JSON.parse(fromStorage));
+      }
+    } catch {
+      ///
+    }
+
+    if ($wallet.state?.base16 && listedTokens.length > $tokens.state.tokens.length) {
+      const newTokens = await this._provider.fetchTokens(
         $wallet.state?.base16,
         listedTokens,
-        $pools.state.pools
+        $tokens.state.tokens
       );
-      console.log(newPool);
+
+      updateTokens(newTokens);
     }
   }
 

@@ -1,12 +1,11 @@
 import styles from './index.module.scss';
 
-import type { Pool, TokenState } from "@/types/token";
+import type { Token, TokenState } from "@/types/token";
 
 import { useStore } from "react-stores";
 import React from "react";
 import { useTranslation } from "next-i18next";
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { Modal, ModalHeader } from "components/modal";
 
@@ -17,7 +16,7 @@ import Big from 'big.js';
 
 type Prop = {
   show: boolean;
-  pools: Pool[];
+  tokens: Token[];
   warn?: boolean;
   include?: boolean;
   onClose: () => void;
@@ -42,7 +41,7 @@ export var TokensModal: React.FC<Prop> = function ({
   show,
   onClose,
   onSelect,
-  pools = [],
+  tokens = [],
   warn = false,
   include = false
 }) {
@@ -73,29 +72,29 @@ export var TokensModal: React.FC<Prop> = function ({
         className={styles.container}
         ref={lazyRoot}
       >
-        {pools.map((pool) => (
+        {tokens.map((token) => (
           <div
-            key={pool.meta.base16}
+            key={token.meta.base16}
             className={styles.tokencard}
-            onClick={() => onSelect(pool.meta)}
+            onClick={() => onSelect(token.meta)}
           >
             <Image
-              src={getIconURL(pool.meta.bech32)}
-              alt={pool.meta.symbol}
+              src={getIconURL(token.meta.bech32)}
+              alt={token.meta.symbol}
               lazyRoot={lazyRoot}
               height="30"
               width="30"
             />
             <div className={styles.tokenwrapper}>
               <p className={styles.left}>
-                {pool.meta.symbol}
+                {token.meta.symbol}
               </p>
               <p className={styles.right}>
-                {pool.meta.name}
+                {token.meta.name}
               </p>
             </div>
             <p>
-              {String(getAmount(pool.meta.decimals, pool.balance[wallet?.base16 || '']))}
+              {String(getAmount(token.meta.decimals, token.balance[wallet?.base16 || '']))}
             </p>
           </div>
         ))}

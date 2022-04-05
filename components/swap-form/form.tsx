@@ -13,7 +13,7 @@ import { SwapSettingsModal } from '@/components/modals/settings';
 
 import { DragonDex, SwapDirection } from '@/mixins/dex';
 
-import { $pools } from '@/store/pools';
+import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
 import { ZERO_ADDR } from '@/config/conts';
 
@@ -30,7 +30,7 @@ let tokenIndex0 = 0;
 let tokenIndex1 = 1;
 
 export const SwapForm: React.FC = () => {
-  const { pools } = useStore($pools);
+  const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
 
   const [token0, setToken0] = React.useState(tokenIndex0);
@@ -47,23 +47,23 @@ export const SwapForm: React.FC = () => {
 
   const exactAmount = React.useMemo(() => {
     if (exactType === Exact.Top) {
-      const decimals0 = dex.toDecimails(pools[tokenIndex0].meta.decimals);
+      const decimals0 = dex.toDecimails(tokensStore.tokens[tokenIndex0].meta.decimals);
       return topAmount.mul(decimals0);
     }
 
-    const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
+    const decimals1 = dex.toDecimails(tokensStore.tokens[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, pools, exactType]);
+  }, [topAmount, bottomAmount, tokensStore, exactType]);
   const limitAmount = React.useMemo(() => {
     if (exactType === Exact.Bottom) {
-      const decimals0 = dex.toDecimails(pools[tokenIndex0].meta.decimals);
+      const decimals0 = dex.toDecimails(tokensStore.tokens[tokenIndex0].meta.decimals);
       return topAmount.mul(decimals0);
     }
-    const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
+    const decimals1 = dex.toDecimails(tokensStore.tokens[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, pools, exactType]);
+  }, [topAmount, bottomAmount, tokensStore, exactType]);
 
   const disabled = React.useMemo(() => {
     return exactAmount.eq(0) || !(wallet?.base16);
@@ -76,10 +76,10 @@ export const SwapForm: React.FC = () => {
   const hanldeOnChangeTop = React.useCallback((amount: Big) => {
     let result = Big(0);
 
-    if (pools[tokenIndex0].meta.base16 === ZERO_ADDR) {
+    if (tokensStore.tokens[tokenIndex0].meta.base16 === ZERO_ADDR) {
       result = dex.zilToTokens(amount, tokenIndex1);
       setDirection(SwapDirection.ZilToToken);
-    } else if (pools[tokenIndex1].meta.base16 === ZERO_ADDR) {
+    } else if (tokensStore.tokens[tokenIndex1].meta.base16 === ZERO_ADDR) {
       result = dex.tokensToZil(amount, tokenIndex0);
       setDirection(SwapDirection.TokenToZil);
     } else {
@@ -90,14 +90,14 @@ export const SwapForm: React.FC = () => {
     setExactType(Exact.Top);
     setTopAmount(amount);
     setBottomAmount(result);
-  }, [pools]);
+  }, [tokensStore]);
   const hanldeOnChangeBottom = React.useCallback((amount: Big) => {
     let result = Big(0);
 
-    if (pools[tokenIndex1].meta.base16 === ZERO_ADDR) {
+    if (tokensStore.tokens[tokenIndex1].meta.base16 === ZERO_ADDR) {
       result = dex.zilToTokens(amount, tokenIndex0);
       setDirection(SwapDirection.ZilToToken);
-    } else if (pools[tokenIndex0].meta.base16 === ZERO_ADDR) {
+    } else if (tokensStore.tokens[tokenIndex0].meta.base16 === ZERO_ADDR) {
       result = dex.tokensToZil(amount, tokenIndex1);
       setDirection(SwapDirection.TokenToZil);
     } else {
@@ -108,7 +108,7 @@ export const SwapForm: React.FC = () => {
     setExactType(Exact.Bottom);
     setTopAmount(result);
     setBottomAmount(amount);
-  }, [pools]);
+  }, [tokensStore]);
 
   const hanldeOnSwapForms = React.useCallback(() => {
     const fst = token0
@@ -141,7 +141,7 @@ export const SwapForm: React.FC = () => {
     setConfirmModal(true);
   }, []);
   const hanldeSelectToken0 = React.useCallback((token) => {
-    const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
+    const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
       tokenIndex0 = foundIndex;
@@ -151,9 +151,9 @@ export const SwapForm: React.FC = () => {
       setBottomAmount(Big(0));
       setTopAmount(Big(0));
     }
-  }, [pools]);
+  }, [tokensStore]);
   const hanldeSelectToken1 = React.useCallback((token) => {
-    const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
+    const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
       tokenIndex1 = foundIndex;
@@ -163,7 +163,7 @@ export const SwapForm: React.FC = () => {
       setBottomAmount(Big(0));
       setTopAmount(Big(0));
     }
-  }, [pools]);
+  }, [tokensStore]);
 
   React.useEffect(() => {
     hanldeUpdate();
@@ -180,13 +180,13 @@ export const SwapForm: React.FC = () => {
         exact={exactAmount}
         limit={limitAmount}
         direction={direction}
-        limitToken={exactType === Exact.Top ? pools[tokenIndex1].meta : pools[tokenIndex0].meta}
-        exactToken={exactType === Exact.Bottom ? pools[tokenIndex1].meta : pools[tokenIndex0].meta}
+        limitToken={exactType === Exact.Top ? tokensStore.tokens[tokenIndex1].meta : tokensStore.tokens[tokenIndex0].meta}
+        exactToken={exactType === Exact.Bottom ? tokensStore.tokens[tokenIndex1].meta : tokensStore.tokens[tokenIndex0].meta}
         onClose={() => setConfirmModal(false)}
       />
       <TokensModal
         show={modal0}
-        pools={pools}
+        tokens={tokensStore.tokens}
         warn
         include
         onClose={() => setModal0(false)}
@@ -194,7 +194,7 @@ export const SwapForm: React.FC = () => {
       />
       <TokensModal
         show={modal1}
-        pools={pools}
+        tokens={tokensStore.tokens}
         warn
         include
         onClose={() => setModal1(false)}
@@ -212,8 +212,8 @@ export const SwapForm: React.FC = () => {
         </div>
         <FormInput
           value={topAmount}
-          token={pools[token0].meta}
-          balance={pools[token0].balance[wallet?.base16 || '']}
+          token={tokensStore.tokens[token0].meta}
+          balance={tokensStore.tokens[token0].balance[wallet?.base16 || '']}
           onInput={hanldeOnChangeTop}
           onMax={hanldeOnChangeTop}
           onSelect={() => setModal0(true)}
@@ -221,8 +221,8 @@ export const SwapForm: React.FC = () => {
         <SwapIcon onClick={hanldeOnSwapForms}/>
         <FormInput
           value={bottomAmount}
-          token={pools[token1].meta}
-          balance={pools[token1].balance[wallet?.base16 || '']}
+          token={tokensStore.tokens[token1].meta}
+          balance={tokensStore.tokens[token1].balance[wallet?.base16 || '']}
           onInput={hanldeOnChangeBottom}
           onMax={hanldeOnChangeBottom}
           onSelect={() => setModal1(true)}

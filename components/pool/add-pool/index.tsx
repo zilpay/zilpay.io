@@ -10,13 +10,13 @@ import { FormInput, SwapSettings } from '@/components/swap-form';
 import { TokensModal } from '@/components/modals/tokens';
 import { BackIcon } from '@/components/icons/back';
 
-import { $pools } from '@/store/pools';
+import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
 
 import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
 
 export const AddPoolForm: React.FC = () => {
-  const { pools } = useStore($pools);
+  const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
 
   const [amount, setAmount] = React.useState(Big(0));
@@ -24,18 +24,20 @@ export const AddPoolForm: React.FC = () => {
   const [tokensModal, setTokensModal] = React.useState(false);
 
   const hanldeSelectToken0 = React.useCallback((token) => {
-    const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
+    const foundIndex = tokensStore
+    .tokens
+    .findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
       setToken(foundIndex);
     }
-  }, [pools, setToken]);
+  }, [tokensStore, setToken]);
 
   return (
     <>
       <TokensModal
         show={tokensModal}
-        pools={pools}
+        pools={tokensStore.tokens}
         warn
         include
         onClose={() => setTokensModal(false)}
@@ -62,16 +64,16 @@ export const AddPoolForm: React.FC = () => {
             </p>
             <FormInput
               value={amount}
-              token={pools[token].meta}
-              balance={pools[token].balance[wallet?.base16 || '']}
+              token={tokensStore.tokens[token].meta}
+              balance={tokensStore.tokens[token].balance[wallet?.base16 || '']}
               onSelect={() => setTokensModal(true)}
               onInput={setAmount}
               onMax={setAmount}
             />
             <FormInput
               value={Big(0)}
-              token={pools[0].meta}
-              balance={pools[0].balance[wallet?.base16 || '']}
+              token={tokensStore.tokens[0].meta}
+              balance={tokensStore.tokens[0].balance[wallet?.base16 || '']}
               disabled
             />
           </div>

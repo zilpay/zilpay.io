@@ -6,7 +6,7 @@ export interface TokenState {
   symbol: string;
 }
 
-export interface Pool {
+export interface Token {
   balance: {
     [owner: string]: bigint;
   };
