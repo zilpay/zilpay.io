@@ -13,8 +13,12 @@ import { BackIcon } from '@/components/icons/back';
 import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
 
+import { DragonDex } from '@/mixins/dex';
+
 import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
 
+
+const dex = new DragonDex();
 export const AddPoolForm: React.FC = () => {
   const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
@@ -23,6 +27,26 @@ export const AddPoolForm: React.FC = () => {
   const [token, setToken] = React.useState(DEFAULT_TOKEN_INDEX);
   const [tokensModal, setTokensModal] = React.useState(false);
 
+  const tokenBalance = React.useMemo(() => {
+    const blk = tokensStore.tokens[token].balance[String(wallet?.base16).toLowerCase()];
+
+    if (!blk) {
+      return Big(0);
+    }
+
+    return Big(blk);
+  }, [wallet, tokensStore, token]);
+
+  const limitAmount = React.useMemo(() => {
+    return dex.tokensToZil(String(amount), token);
+  }, [amount, token]);
+
+  const disabled = React.useMemo(() => {
+    const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
+    const qa = amount.mul(decimals);
+    return Number(amount) === 0 || tokenBalance.lt(qa);
+  }, [amount, tokenBalance, amount, tokensStore, token]);
+
   const hanldeSelectToken0 = React.useCallback((token) => {
     const foundIndex = tokensStore
     .tokens
@@ -30,6 +54,7 @@ export const AddPoolForm: React.FC = () => {
 
     if (foundIndex >= 0) {
       setToken(foundIndex);
+      setTokensModal(false);
     }
   }, [tokensStore, setToken]);
 
@@ -37,7 +62,7 @@ export const AddPoolForm: React.FC = () => {
     <>
       <TokensModal
         show={tokensModal}
-        pools={tokensStore.tokens}
+        tokens={tokensStore.tokens}
         warn
         include
         onClose={() => setTokensModal(false)}
@@ -65,20 +90,20 @@ export const AddPoolForm: React.FC = () => {
             <FormInput
               value={amount}
               token={tokensStore.tokens[token].meta}
-              balance={tokensStore.tokens[token].balance[wallet?.base16 || '']}
+              balance={tokensStore.tokens[token].balance[String(wallet?.base16).toLowerCase()]}
               onSelect={() => setTokensModal(true)}
               onInput={setAmount}
               onMax={setAmount}
             />
             <FormInput
-              value={Big(0)}
+              value={limitAmount}
               token={tokensStore.tokens[0].meta}
-              balance={tokensStore.tokens[0].balance[wallet?.base16 || '']}
+              balance={tokensStore.tokens[0].balance[String(wallet?.base16).toLowerCase()]}
               disabled
             />
           </div>
         </div>
-        <button>
+        <button disabled={disabled}>
           Preview
         </button>
       </div>

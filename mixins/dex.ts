@@ -115,8 +115,13 @@ export class DragonDex {
   public tokensToZil(value: string | Big, index: number) {
     const amount = Big(value);
 
+    if (amount.eq(0)) {
+      return Big(0);
+    }
+
     const decimals = this.toDecimails(this.tokens[index].meta.decimals);
     const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
+
     const qa = amount.mul(decimals).round().toString();
     const { zils } = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
 
@@ -125,6 +130,11 @@ export class DragonDex {
 
   public tokensToTokens(value: string | Big, index0: number, index1: number) {
     const amount = Big(value);
+
+    if (amount.eq(0)) {
+      return Big(0);
+    }
+
     const decimals0 = this.toDecimails(this.tokens[index0].meta.decimals);
     const decimals1 = this.toDecimails(this.tokens[index1].meta.decimals);
     const qa0 = amount.mul(decimals0).round().toString();

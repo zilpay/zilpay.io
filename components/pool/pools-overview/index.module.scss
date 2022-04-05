@@ -8,6 +8,7 @@
 .wrapper {
   background-color: var(--card-color);
 
+  min-height: 400px;
   padding: 1rem 1.25rem 0.5rem;
 
   @include border-radius(16px);

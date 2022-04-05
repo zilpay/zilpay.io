@@ -42,13 +42,14 @@ export const FormInput: React.FC<Prop> = ({
   }, [token, balance]);
 
   const hanldeOnInput = React.useCallback((event) => {
-    if (event.target.value.endsWith(',')) {
-      return;
-    }
-    if (event.target.value) {
-      onInput(Big(event.target.value));
-    } else {
-      onInput(Big(0));
+    try {
+      if (event.target.value) {
+        onInput(Big(event.target.value));
+      } else {
+        onInput(Big(0));
+      }
+    } catch {
+      ////
     }
   }, [onInput]);
 
