@@ -25,11 +25,11 @@ type Prop = {
 
 Big.PE = 999;
 
-const getAmount = (decimals: number, balance?: bigint) => {
+const getAmount = (decimals: number, balance?: string) => {
   if (!balance) {
     return '';
   }
-  
+
   const qa = Big(String(balance));
   const decimal = Big(10**decimals);
   const value = qa.div(decimal);
@@ -94,7 +94,7 @@ export var TokensModal: React.FC<Prop> = function ({
               </p>
             </div>
             <p>
-              {String(getAmount(token.meta.decimals, token.balance[wallet?.base16 || '']))}
+              {String(getAmount(token.meta.decimals, token.balance[String(wallet?.base16).toLowerCase()]))}
             </p>
           </div>
         ))}

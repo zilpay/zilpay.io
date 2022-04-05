@@ -13,7 +13,7 @@ import classNames from 'classnames';
 type Prop = {
   token: TokenState;
   value: Big;
-  balance?: bigint;
+  balance?: string;
   disabled?: boolean;
   onInput?: (value: Big) => void;
   onSelect?: () => void;

@@ -39,7 +39,7 @@ export class DragonDex {
   public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
-  public fee = [BigInt(0), BigInt(0)];
+  public fee = [BigInt(10000), BigInt(10000)];
 
   public get pools() {
     return $liquidity.state.pools;
@@ -69,7 +69,7 @@ export class DragonDex {
       ///
     }
 
-    if ($wallet.state?.base16 && listedTokens.length > $tokens.state.tokens.length) {
+    if ($wallet.state?.base16) {
       const newTokens = await this._provider.fetchTokens(
         $wallet.state?.base16,
         listedTokens,

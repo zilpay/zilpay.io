@@ -167,7 +167,7 @@ export const SwapForm: React.FC = () => {
 
   React.useEffect(() => {
     hanldeUpdate();
-  }, [wallet, hanldeUpdate]);
+  }, [hanldeUpdate]);
 
   return (
     <>
@@ -213,7 +213,7 @@ export const SwapForm: React.FC = () => {
         <FormInput
           value={topAmount}
           token={tokensStore.tokens[token0].meta}
-          balance={tokensStore.tokens[token0].balance[wallet?.base16 || '']}
+          balance={tokensStore.tokens[token0].balance[String(wallet?.base16).toLowerCase()]}
           onInput={hanldeOnChangeTop}
           onMax={hanldeOnChangeTop}
           onSelect={() => setModal0(true)}
@@ -222,7 +222,7 @@ export const SwapForm: React.FC = () => {
         <FormInput
           value={bottomAmount}
           token={tokensStore.tokens[token1].meta}
-          balance={tokensStore.tokens[token1].balance[wallet?.base16 || '']}
+          balance={tokensStore.tokens[token1].balance[String(wallet?.base16).toLowerCase()]}
           onInput={hanldeOnChangeBottom}
           onMax={hanldeOnChangeBottom}
           onSelect={() => setModal1(true)}

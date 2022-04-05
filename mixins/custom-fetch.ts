@@ -4,7 +4,7 @@ import { compact } from "@/lib/compact";
 import { toHex } from "@/lib/to-hex";
 import { chunk } from "@/lib/chunk";
 import { initParser } from "@/lib/parse-init";
-import { Pool } from "@/types/token";
+import { Token } from "@/types/token";
 import { ZilPayBase } from "./zilpay-base";
 
 type Params = string[] | number[] | (string | string[] | number[])[];
@@ -72,7 +72,7 @@ export class Blockchain {
     };
   }
 
-  public async fetchTokens(owner: string, tokens: string[], pools: Pool[]) {
+  public async fetchTokens(owner: string, tokens: string[], pools: Token[]) {
     const reqList = tokens.map((token) => ([
       this._buildBody(
         RPCMethods.GetSmartContractInit,
@@ -106,10 +106,6 @@ export class Blockchain {
       const balances = balancesRes.result ? balancesRes.result[ZRC2Fields.Balances] : {};
       const foundIndex = pools.findIndex((t) => t.meta.base16 === meta.address);
 
-      for (const key in balances) {
-        balances[key] = BigInt(balances[key]);
-      }
-
       if (foundIndex >= 0) {
         pools[foundIndex].meta = {
           decimals: meta.decimals,
@@ -139,30 +135,18 @@ export class Blockchain {
     if (batchRes[0].result) {
       pools[0].balance = {
         ...pools[0].balance,
-        [owner]: BigInt(batchRes[0].result.balance)
+        [owner.toLowerCase()]: batchRes[0].result.balance
       };
     } else {
       pools[0].balance = {
         ...pools[0].balance,
-        [owner]: BigInt(0)
+        [owner.toLowerCase()]: '0'
       };
     }
 
     return pools;
   }
 
-
-  private _unpack<T>(res: RPCResponse, field: string, defaultValue: T) {
-    if (res.error || !res.result) {
-      return defaultValue;
-    }
-
-    if (res.result && res.result[field]) {
-      return res.result[field];
-    }
-
-    return defaultValue;
-  }
 
   private _buildBody(method: string, params: Params) {
     return {

@@ -8,7 +8,7 @@ export interface TokenState {
 
 export interface Token {
   balance: {
-    [owner: string]: bigint;
+    [owner: string]: string;
   };
   meta: TokenState;
 }
