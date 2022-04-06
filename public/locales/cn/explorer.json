@@ -30,7 +30,7 @@
   "sent_banner_tx": "等待版主检查你的Banner并批准或拒绝它。如果你的Banner包含不正确的内容，版主将拒绝它，并返回一些花在Banner上的代币（ZLP）。如果Banner被批准，你的ZLP将作为版主的奖励、流动性提供者的平台奖励，同时你的Banner将显示在ZilPay移动应用程序的发现板块。",
   "sent_banner_tx_btn_close": "关闭",
   "sent_banner_tx_btn_view": "ViewBlock",
-  "sent_app_tx": "等待版主检查你的Dapp并批准或拒绝它。如果您的DApp包含不正确的内容，版主将拒绝它。如果版主批准您的DApp，它将显示在ZilPay移动应用程序的发现板块。",
+  "sent_app_tx": "等待版主检查你的Dapp并批准或拒绝它。如果你的DApp包含不正确的内容，版主将拒绝它。如果版主批准你的DApp，它将显示在ZilPay移动应用程序的发现板块。",
   "doent_installed_zilpay": "未安装ZIlPay",
   "doent_installed_zilpay_desc": "为了使用该应用程序，你需要安装ZIlpay钱包。",
   "refresh": "再次尝试",
