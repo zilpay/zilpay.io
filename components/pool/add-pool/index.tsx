@@ -16,6 +16,8 @@ import { $wallet } from '@/store/wallet';
 import { DragonDex } from '@/mixins/dex';
 
 import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
+import { AddPoolPreviewModal } from '@/components/modals/add-pool-preview';
+import { SwapSettingsModal } from '@/components/modals/settings';
 
 
 const dex = new DragonDex();
@@ -26,6 +28,8 @@ export const AddPoolForm: React.FC = () => {
   const [amount, setAmount] = React.useState(Big(0));
   const [token, setToken] = React.useState(DEFAULT_TOKEN_INDEX);
   const [tokensModal, setTokensModal] = React.useState(false);
+  const [previewModal, setPreviewModal] = React.useState(false);
+  const [settingsModal, setSettingsModal] = React.useState(false);
 
   const tokenBalance = React.useMemo(() => {
     const blk = tokensStore.tokens[token].balance[String(wallet?.base16).toLowerCase()];
@@ -58,8 +62,17 @@ export const AddPoolForm: React.FC = () => {
     }
   }, [tokensStore, setToken]);
 
+  const handleSubmit = React.useCallback((event) => {
+    event.preventDefault();
+    setPreviewModal(true);
+  }, []);
+
   return (
     <>
+      <SwapSettingsModal
+        show={settingsModal}
+        onClose={() => setSettingsModal(false)}
+      />
       <TokensModal
         show={tokensModal}
         tokens={tokensStore.tokens}
@@ -68,7 +81,17 @@ export const AddPoolForm: React.FC = () => {
         onClose={() => setTokensModal(false)}
         onSelect={hanldeSelectToken0}
       />
-      <div className={styles.container}>
+      <AddPoolPreviewModal
+        show={previewModal}
+        amount={amount}
+        limit={limitAmount}
+        tokenIndex={token}
+        onClose={() => setPreviewModal(false)}
+      />
+      <form
+        className={styles.container}
+        onSubmit={handleSubmit}
+      >
         <div className={styles.row}>
           <Link href="/pool" passHref>
             <div className={styles.hoverd}>
@@ -78,7 +101,7 @@ export const AddPoolForm: React.FC = () => {
           <h3>
             Add liquidity
           </h3>
-          <SwapSettings onClick={() => null}/>
+          <SwapSettings onClick={() => setSettingsModal(true)}/>
         </div>
         <div className={classNames(styles.row, {
           border: true
@@ -106,7 +129,7 @@ export const AddPoolForm: React.FC = () => {
         <button disabled={disabled}>
           Preview
         </button>
-      </div>
+      </form>
     </>
   );
 };
