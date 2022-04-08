@@ -463,7 +463,7 @@ export class DragonDex {
           shares[token] = {};
         }
 
-        shares[token][owner] = (contribution * SHARE_PERCENT) / balance;
+        shares[token][owner] = (balance * SHARE_PERCENT) / contribution;
       }
     }
 

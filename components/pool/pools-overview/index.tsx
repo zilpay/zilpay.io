@@ -14,9 +14,8 @@ import { $tokens } from '@/store/tokens';
 
 import { nPool } from '@/filters/n-pool';
 import { formatNumber } from '@/filters/n-format';
-import { getIconURL } from '@/lib/viewblock';
 
-import { SHARE_PERCENT_DECIMALS, ZERO_BECH32 } from '@/config/conts';
+import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
 
 
 export const PoolOverview: React.FC = () => {
