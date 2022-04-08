@@ -6,6 +6,8 @@ import Image from 'next/image';
 import classNames from 'classnames';
 import Link from 'next/link';
 
+import { ImagePair } from '@/components/pair-img';
+
 import { $wallet } from '@/store/wallet';
 import { $liquidity } from '@/store/shares';
 import { $tokens } from '@/store/tokens';
@@ -87,22 +89,12 @@ export const PoolOverview: React.FC = () => {
               key={el.meta.base16}
             >
               <div className={styles.cardrow}>
-                <div className={styles.imgwrap}>
-                  <Image
-                    src={getIconURL(ZERO_BECH32)}
-                    alt="tokens-logo"
-                    height="30"
-                    width="30"
-                    className={styles.symbol}
-                  />
-                  <Image
-                    src={getIconURL(el.meta.bech32)}
-                    alt="tokens-logo"
-                    height="30"
-                    width="30"
-                    className={classNames(styles.symbol)}
-                  />
-                </div>
+                <ImagePair
+                  tokens={[
+                    tokensStore.tokens[0].meta,
+                    el.meta
+                  ]}
+                />
                 <p>
                   ZIL / {el.meta.symbol} - <span>
                     {el.share}%
