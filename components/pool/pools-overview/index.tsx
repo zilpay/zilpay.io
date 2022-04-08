@@ -42,7 +42,7 @@ export const PoolOverview: React.FC = () => {
         if (found) {
           const [x, y] = nPool(pools[token], shares[token][owner]);
           const zilReserve = Big(x.toString()).div(dex.toDecimails(zil.decimals));
-          const tokenReserve = Big(x.toString()).div(dex.toDecimails(found.meta.decimals));
+          const tokenReserve = Big(y.toString()).div(dex.toDecimails(found.meta.decimals));
           tokens.push({
             meta: found.meta,
             pool: [

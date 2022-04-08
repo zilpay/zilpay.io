@@ -1,21 +1,17 @@
 import styles from '@/styles/pages/swap.module.scss';
 
 import Head from 'next/head';
-import { $wallet } from '@/store/wallet';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { PoolOverview } from '@/components/pool';
 import { DragonDex } from '@/mixins/dex';
-import { useStore } from 'react-stores';
 
 const dex = new DragonDex();
 
 dex.updateState();
 export const PagePool: NextPage = () => {
-  const wallet = useStore($wallet);
-
   return (
     <div className={styles.container}>
       <Head>
