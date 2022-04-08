@@ -1,18 +1,12 @@
 import styles from '@/styles/pages/swap.module.scss';
 
 import Head from 'next/head';
-import { useStore } from 'react-stores';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { AddPoolForm } from '@/components/pool';
 
-import { DragonDex } from '@/mixins/dex';
-
-const dex = new DragonDex();
-dex.updateState();
-export const PageAddPool: NextPage = () => {
+export const PageRemovePool: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -24,7 +18,6 @@ export const PageAddPool: NextPage = () => {
         />
       </Head>
       <div>
-        <AddPoolForm />
       </div>
     </div>
   );
@@ -36,4 +29,11 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => ({
   },
 });
 
-export default PageAddPool;
+export async function getStaticPaths() {
+  return {
+    paths: [`/pool/addr`],
+    fallback: true,
+  };
+}
+
+export default PageRemovePool;

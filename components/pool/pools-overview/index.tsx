@@ -92,29 +92,32 @@ export const PoolOverview: React.FC = () => {
       ) : (
         <div className={classNames(styles.wrapper, styles.cardwrapper)}>
           {ownerLising.map((el) => (
-            <div
-              className={styles.poolcard}
+            <Link
+              href={`/pool/${el.meta.base16}`}
               key={el.meta.base16}
+              passHref
             >
-              <div className={styles.cardrow}>
-                <ImagePair
-                  tokens={[
-                    tokensStore.tokens[0].meta,
-                    el.meta
-                  ]}
-                />
-                <p>
-                  ZIL / {el.meta.symbol} - <span>
-                    {el.share}%
-                  </span>
-                </p>
+              <div className={styles.poolcard}>
+                <div className={styles.cardrow}>
+                  <ImagePair
+                    tokens={[
+                      tokensStore.tokens[0].meta,
+                      el.meta
+                    ]}
+                  />
+                  <p>
+                    ZIL / {el.meta.symbol} - <span>
+                      {el.share}%
+                    </span>
+                  </p>
+                </div>
+                <div className={styles.cardrow}>
+                  <p className={styles.amount}>
+                    {formatNumber(el.pool[0])} / {formatNumber(el.pool[1])} ≈ $32
+                  </p>
+                </div>
               </div>
-              <div className={styles.cardrow}>
-                <p className={styles.amount}>
-                  {formatNumber(el.pool[0])} / {formatNumber(el.pool[1])} ≈ $32
-                </p>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}
