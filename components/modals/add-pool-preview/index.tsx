@@ -5,6 +5,7 @@ import { useTranslation } from "next-i18next";
 import Image from 'next/image';
 import { useStore } from 'react-stores';
 import Big from 'big.js';
+import { ThreeDots } from 'react-loader-spinner';
 
 import { ImagePair } from '@/components/pair-img';
 import { Modal, ModalHeader } from "components/modal";
@@ -12,7 +13,6 @@ import { Modal, ModalHeader } from "components/modal";
 import { $tokens } from '@/store/tokens';
 import { getIconURL } from '@/lib/viewblock';
 import classNames from 'classnames';
-import { $liquidity } from '@/store/shares';
 import { DragonDex } from '@/mixins/dex';
 
 
@@ -34,7 +34,8 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
 }) {
   const common = useTranslation(`common`);
   const tokensStore = useStore($tokens);
-  const liquidity = useStore($liquidity);
+
+  const [loading, setLoading] = React.useState(false);
 
   const token0 = React.useMemo(() => {
     return tokensStore.tokens[0].meta;
@@ -44,8 +45,25 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
   }, [tokensStore, tokenIndex]);
 
   const price = React.useMemo(() => {
-    return dex.tokensToZil(amount, tokenIndex)
+    return dex.tokensToZil(Big(1), tokenIndex);
   }, [tokenIndex, amount]);
+
+  const hanldeaddLiquidity = React.useCallback(async() => {
+    setLoading(true);
+    try {
+      const zilDecimals = dex.toDecimails(token0.decimals);
+      const tokenDecimails = dex.toDecimails(token1.decimals);
+  
+      const qaAmount = amount.mul(tokenDecimails).round();
+      const qaLimit = amount.mul(zilDecimals).round();
+      await dex.addLiquidity(token1.base16, qaAmount, qaLimit);
+
+      onClose();
+    } catch {
+      /////
+    }
+    setLoading(false);
+  }, [token0, token1, amount, limit, onClose]);
 
   return (
     <Modal
@@ -133,8 +151,17 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
             {token0.symbol} per {token1.symbol}
           </p>
         </div>
-        <button className={styles.submit}>
-          Add
+        <button
+          className={styles.submit}
+          onClick={hanldeaddLiquidity}
+        >
+          {loading ? (
+            <ThreeDots
+              color="var(--button-color)"
+              height={25}
+              width={50}
+            />
+          ) : 'Confirm Add'}
         </button>
       </div>
     </Modal>

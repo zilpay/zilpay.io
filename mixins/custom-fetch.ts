@@ -13,7 +13,8 @@ export enum RPCMethods {
   GetSmartContractSubState = 'GetSmartContractSubState',
   GetTransaction = 'GetTransaction',
   GetSmartContractInit = 'GetSmartContractInit',
-  GetBalance = 'GetBalance'
+  GetBalance = 'GetBalance',
+  GetLatestTxBlock = 'GetLatestTxBlock'
 }
 
 export enum DexFields {
@@ -43,6 +44,36 @@ export class Blockchain {
       jsonrpc: `2.0`,
     }));
     return this._send(batch);
+  }
+
+  public async getBlockTotalContributions(dex: string, token: string) {
+    token = token.toLowerCase();
+    dex = toHex(dex);
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.TotalContributions, [token]]
+      ),
+      this._buildBody(
+        RPCMethods.GetLatestTxBlock,
+        []
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Pools, [token]]
+      )
+    ];
+    const [resTotalContributions, resBlock, resPool] = await this._send(batch);
+    const totalContributions = resTotalContributions.result ?
+      resTotalContributions.result[DexFields.TotalContributions][token] : '0';
+    const blockNum = resBlock.result.header.BlockNum;
+    const pool = resPool.result[DexFields.Pools][token].arguments;
+
+    return {
+      totalContributions,
+      blockNum,
+      pool
+    };
   }
 
   public async fetchFullState(dex: string) {
