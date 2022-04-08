@@ -55,9 +55,9 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
       const tokenDecimails = dex.toDecimails(token1.decimals);
   
       const qaAmount = amount.mul(tokenDecimails).round();
-      const qaLimit = amount.mul(zilDecimals).round();
-      await dex.addLiquidity(token1.base16, qaAmount, qaLimit);
+      const qaLimit = limit.mul(zilDecimals).round();
 
+      await dex.addLiquidity(token1.base16, qaAmount, qaLimit);
       onClose();
     } catch {
       /////

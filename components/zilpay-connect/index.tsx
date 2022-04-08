@@ -104,7 +104,7 @@ export const ConnectZIlPay: React.FC = function () {
         $transactions.resetState();
 
         const cache = window.localStorage.getItem(
-          String(zp.wallet.defaultAccount?.base16),
+          String(acc.bech32)
         );
 
         if (cache) {
