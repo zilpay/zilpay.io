@@ -2,7 +2,6 @@ import styles from './index.module.scss';
 
 import React from 'react';
 import { useStore } from 'react-stores';
-import Image from 'next/image';
 import classNames from 'classnames';
 import Link from 'next/link';
 
@@ -16,8 +15,11 @@ import { nPool } from '@/filters/n-pool';
 import { formatNumber } from '@/filters/n-format';
 
 import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
+import Big from 'big.js';
+import { DragonDex } from '@/mixins/dex';
 
 
+const dex = new DragonDex();
 export const PoolOverview: React.FC = () => {
   const wallet = useStore($wallet);
   const liquidity = useStore($liquidity);
@@ -31,15 +33,22 @@ export const PoolOverview: React.FC = () => {
     const { pools, shares } = liquidity;
     const tokens = [];
     const owner = String(wallet.base16).toLowerCase();
+    const zil = tokensStore.tokens[0].meta;
 
     for (const token in shares) {
       if (shares[token][owner]) {
         const found = tokensStore.tokens.find((p) => p.meta.base16 === token);
 
         if (found) {
+          const [x, y] = nPool(pools[token], shares[token][owner]);
+          const zilReserve = Big(x.toString()).div(dex.toDecimails(zil.decimals));
+          const tokenReserve = Big(x.toString()).div(dex.toDecimails(found.meta.decimals));
           tokens.push({
             meta: found.meta,
-            pool: nPool(pools[token], shares[token][owner]),
+            pool: [
+              String(zilReserve),
+              String(tokenReserve)
+            ],
             share: Number(shares[token][owner]) / SHARE_PERCENT_DECIMALS
           });
         }
