@@ -373,21 +373,15 @@ export class DragonDex {
     return res.ID;
   }
 
-  public async removeLiquidity(minzil: Big, minzrc: Big, token: string, owner: string) {
+  public async removeLiquidity(minzil: Big, minzrc: Big, minContributionAmount: Big, token: string, owner: string) {
     const contractAddress = DragonDex.CONTRACT;
     const { blocks } = $settings.state;
-    const { blockNum, userContributions, pool} = await this._provider.getUserBlockTotalContributions(
+    const { blockNum } = await this._provider.getUserBlockTotalContributions(
       contractAddress,
       token,
       owner
     );
-    const [zilReserve] = pool;
     const nextBlock = Big(blockNum).add(blocks + 2);
-    const minContributionAmount = this._fraction(
-      BigInt(minzil.toString()),
-      BigInt(userContributions),
-      BigInt(zilReserve)
-    );
     const params = [
       {
         vname: 'token_address',

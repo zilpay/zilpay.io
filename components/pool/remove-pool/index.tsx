@@ -6,6 +6,7 @@ import type { Token } from '@/types/token';
 import React from 'react';
 import { useStore } from 'react-stores';
 import Link from 'next/link';
+import Big from 'big.js';
 
 import { $wallet } from '@/store/wallet';
 import { $liquidity } from '@/store/shares';
@@ -17,10 +18,12 @@ import { FormInput } from '@/components/swap-form';
 import { BackIcon } from '@/components/icons/back';
 import Slider from 'rc-slider';
 
-import Big from 'big.js';
 import { nPool } from '@/filters/n-pool';
 import { ThreeDots } from 'react-loader-spinner';
+import { formatNumber } from '@/filters/n-format';
+import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
 
+Big.PE = 999;
 
 type Prop = {
   token: Token;
@@ -36,73 +39,72 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
 
   const [zilReserve, setZilReserve] = React.useState(Big(0));
   const [tokenReserve, setTokenReserve] = React.useState(Big(0));
-  const [pool, setPool] = React.useState(liquidity.pools[String(token.meta.base16).toLowerCase()]);
-  const [userContributions, setUserContributions] = React.useState(
-    liquidity.balances[String(token.meta.base16).toLowerCase()][String(wallet?.base16).toLowerCase()]
-  );
 
   const [zil, setZil] = React.useState(Big(0));
   const [zrc, setZrc] = React.useState(Big(0));
+  const [range, setRange] = React.useState(1);
+  const [userContributions, setUserContributions] = React.useState(Big(0));
 
   const tokenAddress = React.useMemo(() => {
     return String(token.meta.base16).toLowerCase();
+  }, [token]);
+  const owner = React.useMemo(() => {
+    return String(wallet?.base16).toLowerCase();
   }, [token]);
 
   const hanldeOnRemove = React.useCallback(async() => {
     setLoading(true);
     try {
-      if (!wallet?.base16) {
+      if (!owner) {
         throw new Error();
       }
       const zilToken = tokensStore.tokens[0].meta;
       const minZIL = zil.mul(dex.toDecimails(zilToken.decimals));
       const minZrc = zrc.mul(dex.toDecimails(token.meta.decimals));
-      const res = await dex.removeLiquidity(minZIL, minZrc, tokenAddress, wallet?.base16);
+      const res = await dex.removeLiquidity(
+        minZIL,
+        minZrc,
+        userContributions,
+        tokenAddress,
+        owner
+      );
 
       console.log(res);
     } catch (err) {
       console.error(err);
     }
     setLoading(false);
-  }, [zil, zrc, tokenAddress, wallet]);
+  }, [zil, zrc, tokenAddress, userContributions, owner]);
+
+  const hanldeRange = React.useCallback((range) => {
+    const percent = BigInt(range);
+    const zil = tokensStore.tokens[0].meta;
+    const newZil = (BigInt(String(zilReserve)) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
+    const newTokens = (BigInt(String(tokenReserve)) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
+    const newUserContributions = (BigInt(liquidity.balances[tokenAddress][owner] || 0) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
+
+    setZil(Big(String(newZil)).div(dex.toDecimails(zil.decimals)));
+    setZrc(Big(String(newTokens)).div(dex.toDecimails(token.meta.decimals)));
+    setRange(range);
+    setUserContributions(Big(String(newUserContributions)));
+  }, [zilReserve, tokenReserve, tokensStore, userContributions, owner, token]);
 
   React.useEffect(() => {
     try {
-      const zil = tokensStore.tokens[0].meta;
-      const owner = String(wallet?.base16).toLowerCase();
+      const pool = liquidity.pools[String(token.meta.base16).toLowerCase()];
       const [x, y] = nPool(pool, liquidity.shares[tokenAddress][owner]);
-      const zilReserve = Big(x.toString()).div(dex.toDecimails(zil.decimals));
-      const tokenReserve = Big(y.toString()).div(dex.toDecimails(token.meta.decimals));
+
+      const zilReserve = Big(x.toString());
+      const tokenReserve = Big(y.toString());
   
-      setZilReserve(zilReserve.mul(dex.toDecimails(zil.decimals)));
-      setTokenReserve(tokenReserve.mul(dex.toDecimails(token.meta.decimals)));
-      setZil(zilReserve);
-      setZrc(tokenReserve);
+      setZilReserve(zilReserve);
+      setTokenReserve(tokenReserve);
+      setUserContributions(Big(liquidity.balances[tokenAddress][owner] || 0));
+      hanldeRange(1);
     } catch (err) {
       // console.error(err);
     }
-  }, [pool, wallet, liquidity, tokenAddress, tokensStore, token]);
-
-  const hanldeRange = React.useCallback((range) => {
-    console.log(range);
-  }, []);
-
-  React.useEffect(() => {
-    if (wallet) {
-      setLoading(true);
-
-      dex
-        .getUserDexContributions(tokenAddress, wallet.base16)
-        .then((res) => {
-          setPool([
-            BigInt(res.pool[0]),
-            BigInt(res.pool[1])
-          ]);
-          setUserContributions(res.userContributions);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [wallet, tokenAddress]);
+  }, [wallet, liquidity, tokenAddress, tokensStore, token, owner]);
 
   return (
     <div className={styles.container}>
@@ -124,14 +126,17 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
       </div>
       <div className={styles.wrapper}>
         <Slider
-          min={0}
+          min={1}
           max={100}
           step={1}
           onChange={hanldeRange}
         />
+        <p>
+          {range}%
+        </p>
         <div className={styles.cards}>
           <div className={styles.card}>
-            {String(zil.round(10))} <span>
+            {formatNumber(Number(zil))} <span>
               {tokensStore.tokens[0].meta.symbol}
             </span>
           </div>
@@ -147,7 +152,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
             />
           </svg>
           <div className={styles.card}>
-            {String(zrc.round(10))} <span>
+            {formatNumber(Number(zrc))} <span>
               {token.meta.symbol}
             </span>
           </div>
