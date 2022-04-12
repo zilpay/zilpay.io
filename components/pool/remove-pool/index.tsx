@@ -128,6 +128,21 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
         <Slider
           min={1}
           max={100}
+          railStyle={{
+            backgroundColor: 'var(--button-color)',
+            height: '6px'
+          }}
+          trackStyle={{
+            backgroundColor: 'var(--primary-color)',
+            height: '6px'
+          }}
+          handleStyle={{
+            height: '17px',
+            width: '17px',
+            borderColor: 'var(--primary-color)',
+            backgroundColor: 'var(--card-color)',
+            opacity: '1'
+          }}
           step={1}
           onChange={hanldeRange}
         />

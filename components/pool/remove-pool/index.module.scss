@@ -31,6 +31,12 @@
 .wrapper {
   @include flex-column;
   width: 100%;
+
+  & > p {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 16px;
+  }
 }
 
 .row {
