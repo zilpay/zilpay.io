@@ -1,4 +1,4 @@
-import type { Share, DexPool } from '@/types/zilliqa';
+import type { Share, DexPool, FiledBalances } from '@/types/zilliqa';
 
 import { StorageFields } from '@/config/storage-fields';
 
@@ -6,10 +6,12 @@ import { Store } from 'react-stores';
 
 let init: {
   shares: Share,
-  pools: DexPool
+  pools: DexPool,
+  balances: FiledBalances
 } = {
   shares: {},
-  pools: {}
+  pools: {},
+  balances: {}
 };
 
 try {
@@ -53,6 +55,15 @@ export function updateDexPools(pools: DexPool) {
   $liquidity.setState({
     ...$liquidity.state,
     pools
+  });
+
+  cacheState();
+}
+
+export function updateDexBalances(balances: FiledBalances) {
+  $liquidity.setState({
+    ...$liquidity.state,
+    balances
   });
 
   cacheState();

@@ -11,7 +11,7 @@ import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
 import { SHARE_PERCENT } from '@/config/conts';
-import { $liquidity, updateLiquidity } from '@/store/shares';
+import { $liquidity, updateDexBalances, updateLiquidity } from '@/store/shares';
 import { $wallet } from '@/store/wallet';
 import { StorageFields } from '@/config/storage-fields';
 import { $settings } from '@/store/settings';
@@ -56,6 +56,7 @@ export class DragonDex {
     const shares = this._getShares(balances, totalContributions);
     const dexPools = this._getPools(pools);
 
+    updateDexBalances(balances);
     updateLiquidity(shares, dexPools);
 
     const listedTokens = Object.keys(pools);
@@ -79,6 +80,15 @@ export class DragonDex {
 
       updateTokens(newTokens);
     }
+  }
+
+  public async getUserDexContributions(token: string, owner: string) {
+    const contractAddress = DragonDex.CONTRACT;
+    return await this._provider.getUserBlockTotalContributions(
+      contractAddress,
+      token,
+      owner
+    );
   }
 
   public calcAmount(amount: bigint, index: number, direction: SwapDirection) {

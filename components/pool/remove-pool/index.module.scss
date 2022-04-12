@@ -28,6 +28,11 @@
   }
 }
 
+.wrapper {
+  @include flex-column;
+  width: 100%;
+}
+
 .row {
   @include flex-between-row;
 
@@ -44,5 +49,35 @@
     &:hover {
       stroke: var(--primary-color);
     }
+  }
+}
+
+.cards {
+  @include flex-between-row;
+
+  margin-block-start: 16px;
+  margin-block-end: 16px;
+
+  div:first-child {
+    text-align: right;
+  }
+  div:last-child {
+    text-align: left;
+  }
+}
+
+.card {
+  background-color: var(--button-color);
+  padding: 16px;
+  font-size: 16px;
+  font-family: "SemiBold";
+
+  min-width: 200px;
+
+  @include border-radius(16px);
+
+  & > span {
+    font-family: "Bold";
+    color: var(--primary-color);
   }
 }

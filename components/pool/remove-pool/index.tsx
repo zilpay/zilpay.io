@@ -1,3 +1,4 @@
+import 'rc-slider/assets/index.css';
 import styles from './index.module.scss';
 
 import type { Token } from '@/types/token';
@@ -14,6 +15,7 @@ import { DragonDex } from '@/mixins/dex';
 import { ImagePair } from '@/components/pair-img';
 import { FormInput } from '@/components/swap-form';
 import { BackIcon } from '@/components/icons/back';
+import Slider from 'rc-slider';
 
 import Big from 'big.js';
 import { nPool } from '@/filters/n-pool';
@@ -34,6 +36,10 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
 
   const [zilReserve, setZilReserve] = React.useState(Big(0));
   const [tokenReserve, setTokenReserve] = React.useState(Big(0));
+  const [pool, setPool] = React.useState(liquidity.pools[String(token.meta.base16).toLowerCase()]);
+  const [userContributions, setUserContributions] = React.useState(
+    liquidity.balances[String(token.meta.base16).toLowerCase()][String(wallet?.base16).toLowerCase()]
+  );
 
   const [zil, setZil] = React.useState(Big(0));
   const [zrc, setZrc] = React.useState(Big(0));
@@ -41,15 +47,6 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
   const tokenAddress = React.useMemo(() => {
     return String(token.meta.base16).toLowerCase();
   }, [token]);
-  const pool = React.useMemo(() => {
-    return liquidity.pools[tokenAddress];
-  }, [liquidity, token, tokenAddress]);
-
-  const hanldeInputZIL = React.useCallback((value: Big) => {
-
-  }, []);
-  const hanldeInputZRC = React.useCallback((value: Big) => {
-  }, []);
 
   const hanldeOnRemove = React.useCallback(async() => {
     setLoading(true);
@@ -86,6 +83,27 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     }
   }, [pool, wallet, liquidity, tokenAddress, tokensStore, token]);
 
+  const hanldeRange = React.useCallback((range) => {
+    console.log(range);
+  }, []);
+
+  React.useEffect(() => {
+    if (wallet) {
+      setLoading(true);
+
+      dex
+        .getUserDexContributions(tokenAddress, wallet.base16)
+        .then((res) => {
+          setPool([
+            BigInt(res.pool[0]),
+            BigInt(res.pool[1])
+          ]);
+          setUserContributions(res.userContributions);
+        })
+        .finally(() => setLoading(false));
+    }
+  }, [wallet, tokenAddress]);
+
   return (
     <div className={styles.container}>
       <div className={styles.row}>
@@ -105,21 +123,35 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
         />
       </div>
       <div className={styles.wrapper}>
-        <FormInput
-          value={zil}
-          token={tokensStore.tokens[0].meta}
-          balance={String(zilReserve)}
-          onInput={hanldeInputZIL}
-          onMax={hanldeInputZIL}
+        <Slider
+          min={0}
+          max={100}
+          step={1}
+          onChange={hanldeRange}
         />
-        <br />
-        <FormInput
-          value={zrc}
-          token={token.meta}
-          balance={String(tokenReserve)}
-          onInput={hanldeInputZRC}
-          onMax={hanldeInputZRC}
-        />
+        <div className={styles.cards}>
+          <div className={styles.card}>
+            {String(zil.round(10))} <span>
+              {tokensStore.tokens[0].meta.symbol}
+            </span>
+          </div>
+          <svg
+            focusable="false"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            height="30"
+          >
+            <path
+              d="M4 15h16v-2H4v2zm0 4h16v-2H4v2zm0-8h16V9H4v2zm0-6v2h16V5H4z"
+              fill='var(--primary-color)'
+            />
+          </svg>
+          <div className={styles.card}>
+            {String(zrc.round(10))} <span>
+              {token.meta.symbol}
+            </span>
+          </div>
+        </div>
       </div>
       <button onClick={hanldeOnRemove}>
         {loading ? (
