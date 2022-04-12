@@ -46,6 +46,37 @@ export class Blockchain {
     return this._send(batch);
   }
 
+  public async getUserBlockTotalContributions(dex: string, token: string, owner: string) {
+    token = token.toLowerCase();
+    owner = owner.toLowerCase();
+    dex = toHex(dex);
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Balances, [token, owner]]
+      ),
+      this._buildBody(
+        RPCMethods.GetLatestTxBlock,
+        []
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Pools, [token]]
+      )
+    ];
+    const [resUserContributions, resBlock, resPool] = await this._send(batch);
+    const userContributions = resUserContributions.result && resUserContributions.result[DexFields.Balances] ?
+      resUserContributions.result[DexFields.Balances][token][owner] : '0';
+    const blockNum = resBlock.result.header.BlockNum;
+    const pool = resPool.result[DexFields.Pools][token].arguments;
+
+    return {
+      userContributions,
+      blockNum,
+      pool
+    };
+  }
+
   public async getBlockTotalContributions(dex: string, token: string) {
     token = token.toLowerCase();
     dex = toHex(dex);
