@@ -1,0 +1,25 @@
+@import "@/styles/mixins";
+
+.container {
+  @include flex-between-row;
+
+  padding-left: 8px;
+  padding-right: 8px;
+  
+  width: 100%;
+
+  & > p {
+    user-select: none;
+    cursor: pointer;
+  }
+}
+
+.icon {
+  cursor: pointer;
+
+  &:hover {
+    & > svg > path {
+      fill: var(--primary-color);
+    }
+  }
+}

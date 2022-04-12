@@ -9,10 +9,16 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { AddPoolForm } from '@/components/pool';
 
 import { DragonDex } from '@/mixins/dex';
+import { liquidityFromCache } from '@/store/shares';
 
 const dex = new DragonDex();
-dex.updateState();
 export const PageAddPool: NextPage = () => {
+
+  React.useEffect(() => {
+    liquidityFromCache();
+    dex.updateState();
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>

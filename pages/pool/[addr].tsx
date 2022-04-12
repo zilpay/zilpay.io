@@ -12,10 +12,10 @@ import { $tokens } from '@/store/tokens';
 
 import { DragonDex } from '@/mixins/dex';
 import { ThreeDots } from 'react-loader-spinner';
+import { liquidityFromCache } from '@/store/shares';
 
 
 const dex = new DragonDex();
-dex.updateState();
 export const PageRemovePool: NextPage = () => {
   const router = useRouter();
   const tokensStore = useStore($tokens);
@@ -25,6 +25,11 @@ export const PageRemovePool: NextPage = () => {
       (t) => t.meta.base16 === String(router.query.addr).toLowerCase()
     );
   }, [tokensStore, router]);
+  
+  React.useEffect(() => {
+    liquidityFromCache();
+    dex.updateState();
+  }, []);
 
   return (
     <div className={styles.container}>

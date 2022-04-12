@@ -14,17 +14,25 @@ let init: {
   balances: {}
 };
 
-try {
-  const fromStorage = window.localStorage.getItem(StorageFields.Liquidity);
-
-  if (fromStorage) {
-    init = JSON.parse(fromStorage);
-  }
-} catch {
-  ///
-}
-
 export const $liquidity = new Store(init);
+
+export function liquidityFromCache() {
+  const { balances, pools, shares } = $liquidity.state;
+
+  if (balances && pools && shares) {
+    return;
+  }
+
+  try {
+    const fromStorage = window.localStorage.getItem(StorageFields.Liquidity);
+  
+    if (fromStorage) {
+      $liquidity.setState(JSON.parse(fromStorage));
+    }
+  } catch {
+    ///
+  }
+}
 
 function cacheState() {
   if (typeof window !== 'undefined') {
