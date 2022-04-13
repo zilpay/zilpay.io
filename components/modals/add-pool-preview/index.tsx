@@ -183,17 +183,19 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
             </p>
           </div>
         </div>
-        <div className={styles.price}>
-          <p>
-            Current price
-          </p>
-          <h3>
-            {price.toString()}
-          </h3>
-          <p>
-            {token0.symbol} per {token1.symbol}
-          </p>
-        </div>
+        {Number(price) > 0 ? (
+          <div className={styles.price}>
+            <p>
+              Current price
+            </p>
+            <h3>
+              {price.toString()}
+            </h3>
+            <p>
+              {token0.symbol} per {token1.symbol}
+            </p>
+          </div>
+        ) : null}
         <button
           className={classNames(styles.submit, {
             allow: isAllow
