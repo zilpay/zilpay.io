@@ -6,6 +6,7 @@ import { chunk } from "@/lib/chunk";
 import { initParser } from "@/lib/parse-init";
 import { Token } from "@/types/token";
 import { ZilPayBase } from "./zilpay-base";
+import { ZERO_ADDR } from "@/config/conts";
 
 type Params = string[] | number[] | (string | string[] | number[])[];
 
@@ -98,7 +99,8 @@ export class Blockchain {
     const totalContributions = resTotalContributions.result ?
       resTotalContributions.result[DexFields.TotalContributions][token] : '0';
     const blockNum = resBlock.result.header.BlockNum;
-    const pool = resPool.result[DexFields.Pools][token].arguments;
+    const pool = resPool.result ?
+      resPool.result[DexFields.Pools][token].arguments : ['0', '0'];
 
     return {
       totalContributions,
@@ -133,6 +135,62 @@ export class Blockchain {
       totalContributions,
       pools
     };
+  }
+
+  public async getToken(token: string, owner: string) {
+    owner = owner.toLowerCase();
+
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractInit,
+        [toHex(token)]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [toHex(token), ZRC2Fields.Balances, [owner]]
+      )
+    ];
+    const [resInit, resBalances] = await this._send(batch);
+    const meta = initParser(resInit.result);
+    const balances = resBalances.result ?
+      resBalances.result[ZRC2Fields.Balances] : {};
+
+    return {
+      meta,
+      balances
+    };
+  }
+
+  public async fetchTokensBalances(owner: string, tokens: Token[]) {
+    owner = owner.toLowerCase();
+
+    const reqList = tokens.slice(1).map((token) => this._buildBody(
+      RPCMethods.GetSmartContractSubState,
+      [toHex(token.meta.base16), ZRC2Fields.Balances, [owner.toLowerCase()]]
+    ));
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetBalance,
+        [toHex(owner)]
+      ),
+      ...reqList
+    ];
+    const batchRes = await this._send(batch);
+    
+    for (let index = 0; index < tokens.length; index++) {
+      const token = tokens[index];
+
+      if (token.meta.base16 === ZERO_ADDR) {
+        tokens[index].balance[owner] = batchRes[index].result ?
+          batchRes[index].result.balance : '0';
+        continue;
+      }
+
+      tokens[index].balance[owner] = batchRes[index].result ?
+        batchRes[index].result[ZRC2Fields.Balances][owner] : '0';
+    }
+
+    return tokens;
   }
 
   public async fetchTokens(owner: string, tokens: string[], pools: Token[]) {

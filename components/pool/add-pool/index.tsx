@@ -18,14 +18,18 @@ import { DragonDex } from '@/mixins/dex';
 import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
 import { AddPoolPreviewModal } from '@/components/modals/add-pool-preview';
 import { SwapSettingsModal } from '@/components/modals/settings';
+import { $liquidity } from '@/store/shares';
 
 
 const dex = new DragonDex();
 export const AddPoolForm: React.FC = () => {
   const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
+  const liquidity = useStore($liquidity);
 
   const [amount, setAmount] = React.useState(Big(0));
+  const [limitAmount, setLimitAmount] = React.useState(Big(0));
+
   const [token, setToken] = React.useState(DEFAULT_TOKEN_INDEX);
   const [tokensModal, setTokensModal] = React.useState(false);
   const [previewModal, setPreviewModal] = React.useState(false);
@@ -41,15 +45,19 @@ export const AddPoolForm: React.FC = () => {
     return Big(blk);
   }, [wallet, tokensStore, token]);
 
-  const limitAmount = React.useMemo(() => {
-    return dex.tokensToZil(String(amount), token);
-  }, [amount, token]);
+  // const limitAmount = React.useMemo(() => {
+  //   return dex.tokensToZil(String(amount), token);
+  // }, [amount, token]);
 
   const disabled = React.useMemo(() => {
     const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
     const qa = amount.mul(decimals);
     return Number(amount) === 0 || tokenBalance.lt(qa);
   }, [amount, tokenBalance, amount, tokensStore, token]);
+
+  const hasPool = React.useMemo(() => {
+    return Boolean(liquidity.pools[tokensStore.tokens[token].meta.base16]);
+  }, [liquidity, tokensStore, token]);
 
   const hanldeSelectToken0 = React.useCallback((token) => {
     const foundIndex = tokensStore
@@ -122,7 +130,9 @@ export const AddPoolForm: React.FC = () => {
               value={limitAmount}
               token={tokensStore.tokens[0].meta}
               balance={tokensStore.tokens[0].balance[String(wallet?.base16).toLowerCase()]}
-              disabled
+              disabled={hasPool}
+              onInput={setLimitAmount}
+              onMax={setLimitAmount}
             />
           </div>
         </div>

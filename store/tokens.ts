@@ -22,11 +22,11 @@ let initState: {
     {
       balance: {},
       meta: {
-        bech32: 'zil1tjv8xrr5a8qjwfte3fmmazefccjd389ns9fd3m',
-        base16: '0x5c98730c74e9c12725798a77be8b29c624d89cb3',
-        decimals: 12,
+        bech32: 'zil1ewymycfgpc9he23usz2ju40yj2xn8h6xaczvve',
+        base16: '0xcb89b261280e0b7caa3c80952e55e4928d33df46',
+        decimals: 18,
         symbol: 'ZLP',
-        name: 'Zilapy'
+        name: 'ZIlPay'
       }
     }
   ]
@@ -39,6 +39,13 @@ function cacheState() {
     const serialized = JSON.stringify($tokens.state, (_, v) => typeof v === 'bigint' ? v.toString() : v);
     window.localStorage.setItem(StorageFields.Tokens, serialized);
   }
+}
+
+export function addToken(token: Token) {
+  const tokens = [...$tokens.state.tokens, token];
+  $tokens.setState({
+    tokens
+  });
 }
 
 export function updateTokens(tokens: Token[]) {

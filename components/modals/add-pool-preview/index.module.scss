@@ -84,8 +84,15 @@
   margin-block-end: 0.6em;
   margin-block-start: 0.6em;
 
-  &:hover {
-    color: var(--button-color);
-    background: var(--primary-color);
+  background-color: var(--warning-color);
+  color: var(--text-color);
+
+  &:global(.allow) {
+    background-color: var(--button-color);
+  
+    &:hover {
+      color: var(--button-color);
+      background: var(--primary-color);
+    }
   }
 }

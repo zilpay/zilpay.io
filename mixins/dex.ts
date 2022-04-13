@@ -5,7 +5,7 @@ import Big from 'big.js';
 import { Blockchain } from './custom-fetch';
 import { ZilPayBase } from './zilpay-base';
 
-import { $tokens, updateTokens } from '@/store/tokens';
+import { $tokens, addToken, updateTokens } from '@/store/tokens';
 
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
@@ -59,7 +59,7 @@ export class DragonDex {
     updateDexBalances(balances);
     updateLiquidity(shares, dexPools);
 
-    const listedTokens = Object.keys(pools);
+    // const listedTokens = Object.keys(pools);
 
     try {
       const fromStorage = window.localStorage.getItem(StorageFields.Tokens);
@@ -71,15 +71,37 @@ export class DragonDex {
       ///
     }
 
-    if ($wallet.state?.base16) {
-      const newTokens = await this._provider.fetchTokens(
-        $wallet.state?.base16,
-        listedTokens,
-        $tokens.state.tokens
-      );
+    // if ($wallet.state?.base16) {
+    //   const newTokens = await this._provider.fetchTokens(
+    //     $wallet.state?.base16,
+    //     listedTokens,
+    //     $tokens.state.tokens
+    //   );
 
-      updateTokens(newTokens);
-    }
+    //   updateTokens(newTokens);
+    // }
+  }
+
+  public async updateTokens() {
+    const owner = String($wallet.state?.base16);
+    const newTokens = await this._provider.fetchTokensBalances(owner, $tokens.state.tokens);
+
+    updateTokens(newTokens);
+  }
+
+  public async addCustomToken(token: string, owner: string) {
+    const { meta, balances } = await this._provider.getToken(token, owner);
+    const zp = await this.zilpay.zilpay();
+    addToken({
+      meta: {
+        base16: meta.address,
+        bech32: zp.crypto.toBech32Address(meta.address),
+        symbol: meta.symbol,
+        name: meta.name,
+        decimals: meta.decimals
+      },
+      balance: balances
+    });
   }
 
   public async getUserDexContributions(token: string, owner: string) {
@@ -326,9 +348,9 @@ export class DragonDex {
       contractAddress,
       addr
     );
-    const [zilReserve] = pool
+    const zilReserve = BigInt(pool[0]);
     const nextBlock = Big(blockNum).add(blocks + 1);
-    const minContributionAmount = this._fraction(
+    const minContributionAmount = zilReserve === BigInt(0) ? BigInt(limit.toString()) : this._fraction(
       BigInt(limit.toString()),
       BigInt(zilReserve),
       BigInt(totalContributions)

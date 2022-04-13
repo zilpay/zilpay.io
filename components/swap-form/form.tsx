@@ -189,7 +189,6 @@ export const SwapForm: React.FC = () => {
         show={modal0}
         tokens={tokensStore.tokens}
         warn
-        include
         onClose={() => setModal0(false)}
         onSelect={hanldeSelectToken0}
       />
@@ -197,7 +196,6 @@ export const SwapForm: React.FC = () => {
         show={modal1}
         tokens={tokensStore.tokens}
         warn
-        include
         onClose={() => setModal1(false)}
         onSelect={hanldeSelectToken1}
       />

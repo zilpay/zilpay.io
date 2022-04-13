@@ -14,6 +14,8 @@ import { $tokens } from '@/store/tokens';
 import { getIconURL } from '@/lib/viewblock';
 import classNames from 'classnames';
 import { DragonDex } from '@/mixins/dex';
+import { tokensMixine } from '@/mixins/token';
+import { $wallet } from '@/store/wallet';
 
 
 type Prop = {
@@ -25,6 +27,7 @@ type Prop = {
 };
 
 const dex = new DragonDex();
+const tokensMixin = new tokensMixine();
 export var AddPoolPreviewModal: React.FC<Prop> = function ({
   show,
   amount,
@@ -34,8 +37,10 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
 }) {
   const common = useTranslation(`common`);
   const tokensStore = useStore($tokens);
+  const wallet = useStore($wallet);
 
   const [loading, setLoading] = React.useState(false);
+  const [isAllow, setIsAllow] = React.useState(false);
 
   const token0 = React.useMemo(() => {
     return tokensStore.tokens[0].meta;
@@ -51,6 +56,19 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
   const hanldeaddLiquidity = React.useCallback(async() => {
     setLoading(true);
     try {
+      if (!isAllow) {
+        const owner = String(wallet?.base16).toLowerCase();
+        const balance = tokensStore.tokens[tokenIndex].balance[owner];
+        await tokensMixin.increaseAllowance(
+          DragonDex.CONTRACT,
+          token1.base16,
+          balance
+        );
+        setLoading(false);
+        setIsAllow(true);
+        return;
+      }
+
       const zilDecimals = dex.toDecimails(token0.decimals);
       const tokenDecimails = dex.toDecimails(token1.decimals);
   
@@ -59,11 +77,36 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
 
       await dex.addLiquidity(token1.base16, qaAmount, qaLimit);
       onClose();
+    } catch (err) {
+      console.log(err);
+      /////
+    }
+    setLoading(false);
+  }, [token0, token1, amount, limit, onClose, isAllow, tokensStore, tokenIndex, wallet]);
+
+  const hanldeUpdate = React.useCallback(async() => {
+    setLoading(true);
+    try {
+      const allowances = await tokensMixin.getAllowances(
+        DragonDex.CONTRACT,
+        token1.base16
+      );
+      const tokenDecimails = dex.toDecimails(token1.decimals);
+      const qaAmount = amount.mul(tokenDecimails).round();
+      setIsAllow(
+        tokensMixin.isAllow(String(qaAmount), String(allowances))
+      );
     } catch {
       /////
     }
     setLoading(false);
-  }, [token0, token1, amount, limit, onClose]);
+  }, [token1, amount]);
+
+  React.useEffect(() => {
+    if (show) {
+      hanldeUpdate();
+    }
+  }, [show, hanldeUpdate]);
 
   return (
     <Modal
@@ -152,12 +195,15 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
           </p>
         </div>
         <button
-          className={styles.submit}
+          className={classNames(styles.submit, {
+            allow: isAllow
+          })}
+          disabled={loading}
           onClick={hanldeaddLiquidity}
         >
           {loading ? (
             <ThreeDots
-              color="var(--button-color)"
+              color="var(--primary-color)"
               height={25}
               width={50}
             />
