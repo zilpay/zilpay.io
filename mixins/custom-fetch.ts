@@ -30,7 +30,7 @@ export enum ZRC2Fields {
 }
 
 export class Blockchain {
-  private _http = `https://zilliqa-isolated-server.zilliqa.com`;
+  private _http = `https://dev-api.zilliqa.com`;
   readonly #rpc = {
     id: 1,
     jsonrpc: '2.0'
@@ -123,9 +123,10 @@ export class Blockchain {
       )
     ];
     const [resBalances, resTotalContributions, resPools] = await this._send(batch);
-    const balances: FiledBalances = resBalances.result[DexFields.Balances];
-    const totalContributions: FieldTotalContributions = resTotalContributions.result[DexFields.TotalContributions];
-    const pools: FiledPools = resPools.result[DexFields.Pools];
+    const balances: FiledBalances = resBalances.result ? resBalances.result[DexFields.Balances] : {};
+    const totalContributions: FieldTotalContributions = resTotalContributions.result ?
+      resTotalContributions.result[DexFields.TotalContributions] : {};
+    const pools: FiledPools = resPools.result ? resPools.result[DexFields.Pools] : {};
 
     return {
       balances,
