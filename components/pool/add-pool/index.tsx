@@ -45,10 +45,6 @@ export const AddPoolForm: React.FC = () => {
     return Big(blk);
   }, [wallet, tokensStore, token]);
 
-  // const limitAmount = React.useMemo(() => {
-  //   return dex.tokensToZil(String(amount), token);
-  // }, [amount, token]);
-
   const disabled = React.useMemo(() => {
     const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
     const qa = amount.mul(decimals);
@@ -74,6 +70,12 @@ export const AddPoolForm: React.FC = () => {
     event.preventDefault();
     setPreviewModal(true);
   }, []);
+
+  React.useEffect(() => {
+    setLimitAmount(
+      dex.tokensToZil(String(amount), token)
+    );
+  }, [amount, token]);
 
   return (
     <>

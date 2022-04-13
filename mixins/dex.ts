@@ -182,6 +182,9 @@ export class DragonDex {
   }
 
   public async swapExactZILForTokens(zil: Big, max: Big, recipient: string, token: string) {
+    const { blocks } = $settings.state;
+    const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
+    const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
       {
         vname: 'token_address',
@@ -196,7 +199,7 @@ export class DragonDex {
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(4354343543543)
+        value: String(nextBlock)
       },
       {
         vname: 'recipient_address',
@@ -229,6 +232,9 @@ export class DragonDex {
   }
 
   public async swapExactTokensForZIL(tokens: Big, max: Big, recipient: string, token: string) {
+    const { blocks } = $settings.state;
+    const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
+    const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
       {
         vname: 'token_address',
@@ -248,7 +254,7 @@ export class DragonDex {
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(4354343543543)
+        value: String(nextBlock)
       },
       {
         vname: 'recipient_address',
@@ -281,7 +287,11 @@ export class DragonDex {
     return res;
   }
 
-  public async swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string,) {
+  public async swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string) {
+    const contractAddress = DragonDex.CONTRACT;
+    const { blocks } = $settings.state;
+    const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
+    const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
       {
         vname: 'token0_address',
@@ -306,7 +316,7 @@ export class DragonDex {
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(4354343543543)
+        value: String(nextBlock)
       },
       {
         vname: 'recipient_address',
@@ -314,7 +324,6 @@ export class DragonDex {
         value: recipient
       }
     ];
-    const contractAddress = DragonDex.CONTRACT;
     const transition = 'SwapExactTokensForTokens';
     const res = await this.zilpay.call({
       params,
@@ -349,7 +358,7 @@ export class DragonDex {
       addr
     );
     const zilReserve = BigInt(pool[0]);
-    const nextBlock = Big(blockNum).add(blocks + 1);
+    const nextBlock = Big(blockNum).add(blocks);
     const minContributionAmount = zilReserve === BigInt(0) ? BigInt(limit.toString()) : this._fraction(
       BigInt(limit.toString()),
       BigInt(zilReserve),
@@ -403,7 +412,7 @@ export class DragonDex {
       token,
       owner
     );
-    const nextBlock = Big(blockNum).add(blocks + 2);
+    const nextBlock = Big(blockNum).add(blocks);
     const params = [
       {
         vname: 'token_address',
@@ -432,13 +441,22 @@ export class DragonDex {
       }
     ];
     const transition = 'RemoveLiquidity';
-
-    return this.zilpay.call({
+    const res = await this.zilpay.call({
       params,
       contractAddress,
       transition,
       amount: '0'
     });
+
+    addTransactions({
+      timestamp: new Date().getTime(),
+      name: `RemoveLiquidity`,
+      confirmed: false,
+      hash: res.ID,
+      from: res.from
+    });
+
+    return res;
   }
 
   public toDecimails(decimals: number) {
