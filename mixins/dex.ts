@@ -31,7 +31,7 @@ export enum SwapDirection {
 }
 
 export class DragonDex {
-  public static CONTRACT = '0x3a23daa345a55e2fedbbd3c3470a8d41d7a06b8f';
+  public static CONTRACT = '0x0864fefeced1ce66928c7214e2a781145b8f921f';
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 

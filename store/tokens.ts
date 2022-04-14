@@ -22,8 +22,8 @@ let initState: {
     {
       balance: {},
       meta: {
-        bech32: 'zil1ewymycfgpc9he23usz2ju40yj2xn8h6xaczvve',
-        base16: '0xcb89b261280e0b7caa3c80952e55e4928d33df46',
+        bech32: 'zil12h94srrtmaqwgq8nw9r9rwmkgw72yn0yc7x9ud',
+        base16: '0x55cb580c6bdf40e400f3714651bb7643bca24de4',
         decimals: 18,
         symbol: 'ZLP',
         name: 'ZIlPay'
