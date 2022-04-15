@@ -14,7 +14,7 @@ import { $tokens } from '@/store/tokens';
 import { getIconURL } from '@/lib/viewblock';
 import classNames from 'classnames';
 import { DragonDex } from '@/mixins/dex';
-import { tokensMixine } from '@/mixins/token';
+import { TokensMixine } from '@/mixins/token';
 import { $wallet } from '@/store/wallet';
 
 
@@ -27,7 +27,7 @@ type Prop = {
 };
 
 const dex = new DragonDex();
-const tokensMixin = new tokensMixine();
+const tokensMixin = new TokensMixine();
 export var AddPoolPreviewModal: React.FC<Prop> = function ({
   show,
   amount,

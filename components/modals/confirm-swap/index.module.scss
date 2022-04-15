@@ -15,3 +15,12 @@
     color: var(--button-color);
   }
 }
+
+.submit {
+  background-color: var(--warning-color);
+  color: var(--text-color);
+
+  &:global(.allow) {
+    background-color: var(--primary-color);
+  }
+}

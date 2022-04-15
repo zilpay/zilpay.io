@@ -4,6 +4,7 @@ import type { TokenState } from "@/types/token";
 
 import { ThreeDots } from "react-loader-spinner";
 import Big from "big.js";
+import classNames from "classnames";
 import React from "react";
 import { useTranslation } from "next-i18next";
 
@@ -14,6 +15,9 @@ import { DragonDex, SwapDirection } from "@/mixins/dex";
 
 import { $wallet } from "@/store/wallet";
 import { useStore } from "react-stores";
+import { TokensMixine } from "@/mixins/token";
+import { $tokens } from "@/store/tokens";
+import { ZERO_ADDR } from "@/config/conts";
 
 
 type Prop = {
@@ -27,6 +31,7 @@ type Prop = {
 };
 
 
+const tokensMixin = new TokensMixine();
 const dex = new DragonDex();
 export var ConfirmSwapModal: React.FC<Prop> = function ({
   show,
@@ -41,6 +46,38 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const wallet = useStore($wallet);
 
   const [loading, setLoading] = React.useState(false);
+  const [isAllow, setIsAllow] = React.useState(false);
+
+  const approveToken = async() => {
+    const owner = String(wallet?.base16).toLowerCase();
+    const token = $tokens.state.tokens.find(
+      (t) => t.meta.base16 === exactToken.base16
+    );
+    const balance = token?.balance[owner] || '0';
+    await tokensMixin.increaseAllowance(
+      DragonDex.CONTRACT,
+      exactToken.base16,
+      balance
+    );
+  };
+
+  const hanldeUpdate = React.useCallback(async() => {
+    if (exactToken.base16 === ZERO_ADDR) return;
+
+    setLoading(true);
+    try {
+      const allowances = await tokensMixin.getAllowances(
+        DragonDex.CONTRACT,
+        exactToken.base16
+      );
+      setIsAllow(
+        tokensMixin.isAllow(String(exact), String(allowances))
+      );
+    } catch {
+      /////
+    }
+    setLoading(false);
+  }, [exactToken, exact]);
 
   const hanldeOnSwap = React.useCallback(async() => {
     if (!wallet) {
@@ -52,42 +89,58 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     try {
       switch (direction) {
         case SwapDirection.ZilToToken:
-          const res0 = await dex.swapExactZILForTokens(
+          await dex.swapExactZILForTokens(
             exact,
             limit,
             wallet.base16,
             limitToken.base16
           );    
-          console.log(res0);
           onClose();
+          return;
         case SwapDirection.TokenToZil:
-          const res = await dex.swapExactTokensForZIL(
+          if (!isAllow) {
+            await approveToken();
+            setLoading(false);
+            setIsAllow(true);
+            return;
+          }
+          await dex.swapExactTokensForZIL(
             exact,
             limit,
             wallet.base16,
             exactToken.base16
           );
-          console.log(res);
           onClose();
-          break;
+          return;
         case SwapDirection.TokenToTokens:
-          const res1 = await dex.swapExactTokensForTokens(
+          if (!isAllow) {
+            await approveToken();
+            setLoading(false);
+            setIsAllow(true);
+            return;
+          }
+          await dex.swapExactTokensForTokens(
             exact,
             limit,
             wallet.base16,
             exactToken.base16,
             limitToken.base16
           );
-          console.log(res1);
           onClose();
-          break;
+          return;
       }
     } catch {
       ///
     }
 
     setLoading(false);
-  }, [exact, limit, direction, wallet, exactToken, limitToken, onClose]);
+  }, [isAllow, exact, limit, direction, wallet, exactToken, limitToken, onClose]);
+
+  React.useEffect(() => {
+    if (show) {
+      hanldeUpdate();
+    }
+  }, [show, wallet]);
 
   return (
     <Modal
@@ -113,16 +166,23 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           disabled
         />
         <button
+          className={classNames(styles.submit, {
+            allow: isAllow
+          })}
           onClick={hanldeOnSwap}
           disabled={loading}
         >
-          {loading ? (
-            <ThreeDots
-              color="var(--button-color)"
-              height={25}
-              width={50}
-            />
-          ) : 'Confirm Swap'}
+          {isAllow ? (
+            <>
+              {loading ? (
+                <ThreeDots
+                  color="var(--button-color)"
+                  height={25}
+                  width={50}
+                />
+              ) : 'Confirm Swap'}
+            </>
+          ) : 'Approve'}
         </button>
       </div>
     </Modal>

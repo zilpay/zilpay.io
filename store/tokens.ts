@@ -5,7 +5,7 @@ import { Store } from 'react-stores';
 import { ZERO_ADDR, ZERO_BECH32 } from '@/config/conts';
 import { StorageFields } from '@/config/storage-fields';
 
-let initState: {
+const initState: {
   tokens: Token[]
 } = {
   tokens: [
@@ -34,10 +34,23 @@ let initState: {
 
 export const $tokens = new Store(initState);
 
+
 function cacheState() {
   if (typeof window !== 'undefined') {
     const serialized = JSON.stringify($tokens.state, (_, v) => typeof v === 'bigint' ? v.toString() : v);
     window.localStorage.setItem(StorageFields.Tokens, serialized);
+  }
+}
+
+export function loadTokensfromCache() {
+  try {
+    const data = window.localStorage.getItem(StorageFields.Tokens);
+
+    if (data) {
+      $tokens.setState(JSON.parse(data));
+    }
+  } catch {
+    ///
   }
 }
 
@@ -46,6 +59,7 @@ export function addToken(token: Token) {
   $tokens.setState({
     tokens
   });
+  cacheState();
 }
 
 export function updateTokens(tokens: Token[]) {

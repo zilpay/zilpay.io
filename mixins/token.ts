@@ -2,7 +2,7 @@ import { addTransactions } from "@/store/transactions";
 import { Blockchain } from "./custom-fetch";
 import { ZilPayBase } from "./zilpay-base";
 
-export class tokensMixine {
+export class TokensMixine {
   private _provider = new Blockchain();
 
   public zilpay = new ZilPayBase();

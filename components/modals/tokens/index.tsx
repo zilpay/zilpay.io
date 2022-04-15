@@ -15,6 +15,7 @@ import { formatNumber } from '@/filters/n-format';
 import Big from 'big.js';
 import { ZilPayBase } from '@/mixins/zilpay-base';
 import { DragonDex } from '@/mixins/dex';
+import { ThreeDots } from 'react-loader-spinner';
 
 type Prop = {
   show: boolean;
@@ -75,6 +76,7 @@ export var TokensModal: React.FC<Prop> = function ({
     setLoading(true);
     try {
       await dex.addCustomToken(base16, wallet.base16);
+      setImport(false);
     } catch (err) {
       console.warn(err);
       ///
@@ -112,7 +114,13 @@ export var TokensModal: React.FC<Prop> = function ({
               disabled={!Boolean(base16)}
               onClick={hanldeAddToken}
             >
-              Add
+              {loading ? (
+                <ThreeDots
+                  height="30"
+                  width="30"
+                  color="var(--primary-color)"
+                />
+              ) : 'Add'}
             </button>
             <button onClick={() => setImport(false)}>
               Cancel
