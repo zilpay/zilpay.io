@@ -183,6 +183,9 @@ export class DragonDex {
 
   public async swapExactZILForTokens(zil: Big, max: Big, recipient: string, token: string) {
     const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
+    const piece = (BigInt(String(max)) * slippage) / SHARE_PERCENT;
+    const limit = BigInt(String(max)) - piece;
     const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
     const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
@@ -194,7 +197,7 @@ export class DragonDex {
       {
         vname: 'min_token_amount',
         type: 'Uint128',
-        value: String(max)
+        value: String(limit)
       },
       {
         vname: 'deadline_block',
@@ -233,6 +236,9 @@ export class DragonDex {
 
   public async swapExactTokensForZIL(tokens: Big, max: Big, recipient: string, token: string) {
     const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
+    const piece = (BigInt(String(max)) * slippage) / SHARE_PERCENT;
+    const limit = BigInt(String(max)) - piece;
     const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
     const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
@@ -249,7 +255,7 @@ export class DragonDex {
       {
         vname: 'min_zil_amount',
         type: 'Uint128',
-        value: String(max)
+        value: String(limit)
       },
       {
         vname: 'deadline_block',
@@ -290,6 +296,9 @@ export class DragonDex {
   public async swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string) {
     const contractAddress = DragonDex.CONTRACT;
     const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
+    const piece = (BigInt(String(max)) * slippage) / SHARE_PERCENT;
+    const limit = BigInt(String(max)) - piece;
     const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
     const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
@@ -311,7 +320,7 @@ export class DragonDex {
       {
         vname: 'min_token1_amount',
         type: 'Uint128',
-        value: String(max)
+        value: String(limit)
       },
       {
         vname: 'deadline_block',
@@ -353,6 +362,7 @@ export class DragonDex {
   public async addLiquidity(addr: string, amount: Big, limit: Big) {
     const contractAddress = DragonDex.CONTRACT;
     const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
     const { blockNum, totalContributions, pool } = await this._provider.getBlockTotalContributions(
       contractAddress,
       addr
@@ -364,6 +374,8 @@ export class DragonDex {
       BigInt(zilReserve),
       BigInt(totalContributions)
     );
+    const piece = (minContributionAmount * slippage) / SHARE_PERCENT;
+    const contributionAmount = minContributionAmount - piece;
     const params = [
       {
         vname: 'token_address',
@@ -373,7 +385,7 @@ export class DragonDex {
       {
         vname: 'min_contribution_amount',
         type: 'Uint128',
-        value: String(minContributionAmount)
+        value: String(contributionAmount)
       },
       {
         vname: 'max_token_amount',

@@ -62,7 +62,10 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   };
 
   const hanldeUpdate = React.useCallback(async() => {
-    if (exactToken.base16 === ZERO_ADDR) return;
+    if (exactToken.base16 === ZERO_ADDR) {
+      setIsAllow(true);
+      return
+    };
 
     setLoading(true);
     try {

@@ -101,16 +101,19 @@ export const FormInput: React.FC<Prop> = ({
           <p>
             $73.569
           </p>
-          <div className={styles.row}>
-            {list.map((n) => (
-              <p
-                className={styles.balance}
-                onClick={() => hanldePercent(n)}
-              >
-                {n}%
-              </p>
-            ))}
-          </div>
+          {disabled ? null : (
+            <div className={styles.row}>
+              {list.map((n) => (
+                <p
+                  key={n}
+                  className={styles.balance}
+                  onClick={() => hanldePercent(n)}
+                >
+                  {n}%
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </label>
