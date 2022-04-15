@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import React from 'react';
 import { useStore } from 'react-stores';
 import classNames from 'classnames';
+import Big from 'big.js';
 import Link from 'next/link';
 
 import { ImagePair } from '@/components/pair-img';
@@ -15,7 +16,6 @@ import { nPool } from '@/filters/n-pool';
 import { formatNumber } from '@/filters/n-format';
 
 import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
-import Big from 'big.js';
 import { DragonDex } from '@/mixins/dex';
 
 
