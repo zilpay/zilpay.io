@@ -12,10 +12,14 @@ import { liquidityFromCache } from '@/store/shares';
 
 const dex = new DragonDex();
 export const PagePool: NextPage = () => {
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
+    setLoading(true);
     liquidityFromCache();
-    dex.updateState();
+    dex
+    .updateState()
+    .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -29,7 +33,7 @@ export const PagePool: NextPage = () => {
         />
       </Head>
       <div>
-        <PoolOverview />
+        <PoolOverview loading={loading}/>
       </div>
     </div>
   );
