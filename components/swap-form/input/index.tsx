@@ -7,8 +7,13 @@ import Big from "big.js";
 import Image from 'next/image';
 
 import { getIconURL } from "@/lib/viewblock";
-import { formatNumber } from "@/filters/n-format";
 import classNames from 'classnames';
+import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
+import { DragonDex } from '@/mixins/dex';
+
+
+Big.PE = 999;
+
 
 type Prop = {
   token: TokenState;
@@ -20,7 +25,8 @@ type Prop = {
   onMax?: (b: Big) => void;
 };
 
-
+const list = [10, 25, 50, 75, 100];
+const dex = new DragonDex();
 export const FormInput: React.FC<Prop> = ({
   value,
   token,
@@ -30,16 +36,13 @@ export const FormInput: React.FC<Prop> = ({
   onSelect = () => null,
   onMax = () => null
 }) => {
-  const amount = React.useMemo(() => {
-    if (!balance) {
-      return Big(0);
-    }
+  const hanldePercent = React.useCallback((n: number) => {
+    const percent = BigInt(n);
+    const value = BigInt(balance) * percent / BigInt(SHARE_PERCENT_DECIMALS);
+    const decimals = dex.toDecimails(token.decimals);
 
-    const qa = Big(String(balance));
-    const decimal = Big(10**token.decimals);
-
-    return qa.div(decimal);
-  }, [token, balance]);
+    onMax(Big(String(value)).div(decimals));
+  }, [balance, token, onMax]);
 
   const hanldeOnInput = React.useCallback((event) => {
     try {
@@ -98,12 +101,16 @@ export const FormInput: React.FC<Prop> = ({
           <p>
             $73.569
           </p>
-          <p
-            className={styles.balance}
-            onClick={() => onMax(amount)}
-          >
-            {formatNumber(Number(amount))}
-          </p>
+          <div className={styles.row}>
+            {list.map((n) => (
+              <p
+                className={styles.balance}
+                onClick={() => hanldePercent(n)}
+              >
+                {n}%
+              </p>
+            ))}
+          </div>
         </div>
       </div>
     </label>

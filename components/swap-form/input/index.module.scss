@@ -28,6 +28,14 @@
   }
 }
 
+.row {
+  @include flex-between-row;
+
+  & > p {
+    margin-left: 5px;
+  }
+}
+
 .wrapper {
   @include flex-between-row;
 
