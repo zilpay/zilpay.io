@@ -5,6 +5,7 @@ import type { TokenState } from "@/types/token";
 import { ThreeDots } from "react-loader-spinner";
 import Big from "big.js";
 import classNames from "classnames";
+import { useStore } from "react-stores";
 import React from "react";
 import { useTranslation } from "next-i18next";
 
@@ -14,7 +15,6 @@ import { FormInput } from "@/components/swap-form";
 import { DragonDex, SwapDirection } from "@/mixins/dex";
 
 import { $wallet } from "@/store/wallet";
-import { useStore } from "react-stores";
 import { TokensMixine } from "@/mixins/token";
 import { $tokens } from "@/store/tokens";
 import { ZERO_ADDR } from "@/config/conts";
