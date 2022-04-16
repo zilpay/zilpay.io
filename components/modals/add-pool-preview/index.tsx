@@ -113,7 +113,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
       show={show}
       title={(
         <ModalHeader onClose={onClose}>
-          {common.t(`add_poo_preview`)}
+          {common.t(`preview_modal.title`)}
         </ModalHeader>
       )}
       width="390px"
@@ -176,7 +176,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
           </div>
           <div className={classNames(styles.infoitem, styles.fee)}>
             <p>
-              Fee Tier
+              {common.t('preview_modal.fee')}
             </p>
             <p>
               1%
@@ -186,7 +186,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
         {Number(price) > 0 ? (
           <div className={styles.price}>
             <p>
-              Current price
+              {common.t('preview_modal.price')}
             </p>
             <h3>
               {price.toString()}
@@ -209,7 +209,11 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
               height={25}
               width={50}
             />
-          ) : 'Confirm Add'}
+          ) : (
+            <>
+              {isAllow ? common.t('preview_modal.confirm_btn') : common.t('buttons.approve')}
+            </>
+          )}
         </button>
       </div>
     </Modal>

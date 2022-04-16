@@ -13,5 +13,30 @@
   "copy_adr": "Copy address",
   "view_explorer": "View on Explorer",
   "account": "Account",
-  "connected_via": "Connectet with ZilPay wallet to"
+  "connected_via": "Connectet with ZilPay wallet to",
+  "buttons": {
+    "approve": "Approve"
+  },
+  "settings": {
+    "title": "Settings",
+    "slippage": "Slippage tolerance",
+    "deadline": "Transaction deadline",
+    "blocks": "Blocks"
+  },
+  "tokens": {
+    "title": "Tokens",
+    "warn": "Please check the tokens before investment, check with Terms Of Services.",
+    "placeholder": "input contract address",
+    "buttons": {
+      "add": "Add",
+      "cancel": "Cancel",
+      "import": "Import"
+    }
+  },
+  "preview_modal": {
+    "title": "Add pool preview",
+    "fee": "Fee Tier",
+    "price": "Current price",
+    "confirm_btn": "Confirm add"
+  }
 }

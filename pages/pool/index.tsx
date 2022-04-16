@@ -1,6 +1,7 @@
 import styles from '@/styles/pages/swap.module.scss';
 
 import Head from 'next/head';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -12,6 +13,8 @@ import { liquidityFromCache } from '@/store/shares';
 
 const dex = new DragonDex();
 export const PagePool: NextPage = () => {
+  const { t } = useTranslation(`pool`);
+
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -25,10 +28,10 @@ export const PagePool: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Pool</title>
+        <title>{t('overview.head')}</title>
         <meta
           property="og:title"
-          content={'PoolOverview'}
+          content={t('overview.head')}
           key="title"
         />
       </Head>

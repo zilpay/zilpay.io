@@ -53,7 +53,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
       show={show}
       title={(
         <ModalHeader onClose={onClose}>
-          {common.t(`settings`)}
+          {common.t(`settings.title`)}
         </ModalHeader>
       )}
       width="390px"
@@ -62,7 +62,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
       <div className={styles.container}>
         <div className={styles.wrapper}>
           <p>
-            Slippage tolerance
+            {common.t('settings.slippage')}
           </p>
           <div className={styles.row}>
             <button onClick={hanldeResetSlippage}>
@@ -81,7 +81,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
         <br />
         <div className={styles.wrapper}>
           <p>
-            Transaction deadline
+            {common.t('settings.deadline')}
           </p>
           <div className={styles.row}>
             <button onClick={hanldeResetBlocks}>
@@ -93,7 +93,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
                 value={settings.blocks}
                 onInput={hanldeInputBlocks}
               />
-              blacks
+              {common.t('settings.blocks')}
             </label>
           </div>
         </div>

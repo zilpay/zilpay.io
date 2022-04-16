@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { useStore } from 'react-stores';
 import React from 'react';
 import Big from 'big.js';
+import { useTranslation } from 'next-i18next';
 import classNames from 'classnames';
 import Link from 'next/link';
 
@@ -23,6 +24,8 @@ import { $liquidity } from '@/store/shares';
 
 const dex = new DragonDex();
 export const AddPoolForm: React.FC = () => {
+  const pool = useTranslation(`pool`);
+
   const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
   const liquidity = useStore($liquidity);
@@ -109,7 +112,7 @@ export const AddPoolForm: React.FC = () => {
             </div>
           </Link>
           <h3>
-            Add liquidity
+            {pool.t('add_pool.title')}
           </h3>
           <SwapSettings onClick={() => setSettingsModal(true)}/>
         </div>
@@ -118,7 +121,7 @@ export const AddPoolForm: React.FC = () => {
         })}>
           <div className={styles.column}>
             <p>
-              Select pair and amount
+              {pool.t('add_pool.sub_title')}
             </p>
             <FormInput
               value={amount}
@@ -139,7 +142,7 @@ export const AddPoolForm: React.FC = () => {
           </div>
         </div>
         <button disabled={disabled}>
-          Preview
+          {pool.t('add_pool.button')}
         </button>
       </form>
     </>

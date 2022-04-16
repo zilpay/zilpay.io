@@ -43,6 +43,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   onClose
 }) {
   const common = useTranslation(`common`);
+  const swap = useTranslation(`swap`);
   const wallet = useStore($wallet);
 
   const [loading, setLoading] = React.useState(false);
@@ -150,7 +151,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
       show={show}
       title={(
         <ModalHeader onClose={onClose}>
-          {common.t(`confirm_swap`)}
+          {swap.t(`modals.confirm.title`)}
         </ModalHeader>
       )}
       width="450px"
@@ -183,9 +184,9 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                   height={25}
                   width={50}
                 />
-              ) : 'Confirm Swap'}
+              ) : swap.t(`modals.confirm.btn`)}
             </>
-          ) : 'Approve'}
+          ) : common.t('buttons.approve')}
         </button>
       </div>
     </Modal>

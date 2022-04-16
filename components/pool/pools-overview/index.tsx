@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import Big from 'big.js';
 import Link from 'next/link';
 import { Puff } from 'react-loader-spinner';
+import { useTranslation } from 'next-i18next';
 
 import { ImagePair } from '@/components/pair-img';
 
@@ -25,6 +26,8 @@ type Prop = {
 
 const dex = new DragonDex();
 export const PoolOverview: React.FC<Prop> = ({ loading }) => {
+  const pool = useTranslation(`pool`);
+
   const wallet = useStore($wallet);
   const liquidity = useStore($liquidity);
   const tokensStore = useStore($tokens);
@@ -70,7 +73,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
         </h3>
         <Link href="/pool/add" passHref>
           <button>
-            + New pool
+            {pool.t('overview.button')}
           </button>
         </Link>
       </div>
@@ -94,7 +97,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
                 <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
               </svg>
               <p>
-                Your active liquidity positions will appear here.
+                {pool.t('overview.info')}
               </p>
             </>
           )}

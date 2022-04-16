@@ -2,6 +2,7 @@ import styles from './index.module.scss';
 
 import Big from 'big.js';
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 import { useStore } from 'react-stores';
 
 import { SwapSettings } from './settings';
@@ -31,6 +32,8 @@ let tokenIndex0 = 0;
 let tokenIndex1 = 1;
 
 export const SwapForm: React.FC = () => {
+  const { t } = useTranslation(`swap`);
+
   const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
 
@@ -207,7 +210,7 @@ export const SwapForm: React.FC = () => {
       >
         <div className={styles.wrapper}>
           <h3>
-            Swap
+            {t('title')}
           </h3>
           <SwapSettings onClick={() => setModal3(true)}/>
         </div>
@@ -235,7 +238,7 @@ export const SwapForm: React.FC = () => {
           ]}
         />
         <button disabled={Boolean(disabled)}>
-          Exchange
+          {t('buttons.exchange')}
         </button>
       </form>
     </>

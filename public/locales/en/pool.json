@@ -1,0 +1,19 @@
+{
+  "overview": {
+    "head": "Pools overview | ZilPay",
+    "title": "Pools Overview",
+    "button": "+ New Pool",
+    "info": "Your active liquidity positions will appear here."
+  },
+  "add_pool": {
+    "head": "Add Pools | ZIlPay",
+    "title": "Add liquidity",
+    "sub_title": "Select pair and amount:",
+    "button": "Preview"
+  },
+  "remove_pool": {
+    "head": "Remove Pool | ZIlPay",
+    "title": "Remove liquidity",
+    "button": "Remove"
+  }
+}

@@ -89,7 +89,7 @@ export var TokensModal: React.FC<Prop> = function ({
       show={show}
       title={(
         <ModalHeader onClose={onClose}>
-          {common.t(`tokens`)}
+          {common.t(`tokens.title`)}
         </ModalHeader>
       )}
       width="400px"
@@ -98,7 +98,7 @@ export var TokensModal: React.FC<Prop> = function ({
       {warn ? (
         <div className={styles.warnwrapper}>
           <p className={styles.warn}>
-            Please check the tokens before investment, check with Terms Of Services.
+            {common.t('tokens.warn')}
           </p>
         </div>
       ) : null}
@@ -106,7 +106,7 @@ export var TokensModal: React.FC<Prop> = function ({
         <div className={styles.import}>
           <input
             type="text"
-            placeholder="input contract address"
+            placeholder={common.t('tokens.placeholder')}
             onInput={hanldeInput}
           />
           <div className={styles.buttons}>
@@ -120,10 +120,10 @@ export var TokensModal: React.FC<Prop> = function ({
                   width="30"
                   color="var(--primary-color)"
                 />
-              ) : 'Add'}
+              ) : common.t('tokens.buttons.add')}
             </button>
             <button onClick={() => setImport(false)}>
-              Cancel
+              {common.t('tokens.buttons.cancel')}
             </button>
           </div>
         </div>
@@ -163,7 +163,7 @@ export var TokensModal: React.FC<Prop> = function ({
       <div className={styles.include}>
         {include && !isImport ? (
           <p onClick={() => setImport(true)}>
-            Import
+            {common.t('tokens.buttons.import')}
           </p>
         ) : null}
       </div>

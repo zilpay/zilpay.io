@@ -6,6 +6,7 @@ import type { Token } from '@/types/token';
 import React from 'react';
 import { useStore } from 'react-stores';
 import Link from 'next/link';
+import { useTranslation } from 'next-i18next';
 import Big from 'big.js';
 
 import { $wallet } from '@/store/wallet';
@@ -31,6 +32,8 @@ type Prop = {
 
 const dex = new DragonDex();
 export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
+  const pool = useTranslation(`pool`);
+
   const wallet = useStore($wallet);
   const liquidity = useStore($liquidity);
   const tokensStore = useStore($tokens);
@@ -115,7 +118,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
           </div>
         </Link>
         <h3>
-          Remove liquidity
+          {pool.t('remove_pool.title')}
         </h3>
         <ImagePair
           tokens={[
@@ -180,7 +183,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
               height={25}
               width={50}
             />
-          ) : 'Remove'}
+          ) : pool.t('remove_pool.button')}
       </button>
     </div>
   );

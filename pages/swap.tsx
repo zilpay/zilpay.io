@@ -21,10 +21,10 @@ export const PageSwap: NextPage = () => {
   return (
     <div className={styles.container}>
        <Head>
-        <title>Swap</title>
+        <title>{t('head_title')}</title>
         <meta
           property="og:title"
-          content={'Swap'}
+          content={t('head_title')}
           key="title"
         />
       </Head>

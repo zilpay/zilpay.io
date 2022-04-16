@@ -3,6 +3,7 @@ import styles from '@/styles/pages/swap.module.scss';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useStore } from 'react-stores';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -17,6 +18,8 @@ import { liquidityFromCache } from '@/store/shares';
 
 const dex = new DragonDex();
 export const PageRemovePool: NextPage = () => {
+  const pool = useTranslation(`pool`);
+
   const router = useRouter();
   const tokensStore = useStore($tokens);
 
@@ -34,10 +37,10 @@ export const PageRemovePool: NextPage = () => {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Pool</title>
+        <title>{pool.t('remove_pool.head')}</title>
         <meta
           property="og:title"
-          content={'PoolOverview'}
+          content={pool.t('remove_pool.title')}
           key="title"
         />
       </Head>
