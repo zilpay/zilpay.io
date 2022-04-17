@@ -8,7 +8,7 @@ import Image from "next/image";
 
 import { ConnectZIlPay } from "@/components/zilpay-connect";
 import { Toggle } from "@/components/toggle";
-import { $settings, updateSettingsStore, updateFromStorage } from "@/store/settings";
+import { $settings, updateSettingsStore } from "@/store/settings";
 import { Themes } from "@/config/themes";
 
 
@@ -33,9 +33,6 @@ export const NavBar: React.FC = () => {
     }
   }, [settings]);
 
-  React.useEffect(() => {
-    updateFromStorage();
-  }, []);
 
   return (
     <nav className={styles.navbar}>

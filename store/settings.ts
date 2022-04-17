@@ -37,9 +37,8 @@ export function updateFromStorage() {
         theme
       });
     }
+    window.document.body.setAttribute('theme-color', $settings.state.theme);
   } catch {
     /////
   }
-
-  window.document.body.setAttribute('theme-color', $settings.state.theme);
 }

@@ -10,6 +10,9 @@ import NextNprogress from "nextjs-progressbar";
 import { Footer } from '@/components/footer';
 import { NavBar } from '@/components/nav-bar/index';
 import { Themes } from '@/config/themes';
+import { $settings, updateSettingsStore, updateFromStorage } from '@/store/settings';
+
+updateFromStorage();
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -31,6 +34,12 @@ const App = ({ Component, pageProps }: AppProps) => {
 App.getInitialProps = async function ({ ctx }: any): Promise<{}> {
   const cookies = new Cookies(ctx.req, ctx.res);
   const theme = cookies.get('theme') || Themes.Dark;
+
+  updateSettingsStore(
+    $settings.state.slippage,
+    $settings.state.blocks,
+    theme
+  );
 
   return {
     theme
