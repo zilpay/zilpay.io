@@ -7,19 +7,4 @@
   padding-right: 8px;
   
   width: 100%;
-
-  & > p {
-    user-select: none;
-    cursor: pointer;
-  }
-}
-
-.icon {
-  cursor: pointer;
-
-  &:hover {
-    & > svg > path {
-      fill: var(--primary-color);
-    }
-  }
 }

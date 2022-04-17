@@ -8,7 +8,11 @@
   "modals": {
     "confirm": {
       "title": "Confirm Swap",
-      "btn": "Confirm Swap"
+      "btn": "Confirm Swap",
+      "price_impact": "Price Impact",
+      "min_slippage": "Minimum received after slippage",
+      "fee": "Network Fee",
+      "expected_output": "Expected Output"
     }
   }
 }

@@ -197,7 +197,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           <div className={styles.column}>
             <div className={styles.row}>
               <p>
-                Expected Output
+                {swap.t(`modals.confirm.expected_output`)}
               </p>
               <p>
                 3243242 {limitToken.symbol}
@@ -205,7 +205,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             </div>
             <div className={styles.row}>
               <p>
-                Price Impact
+                {swap.t(`modals.confirm.price_impact`)}
               </p>
               <p>
                 0.01%
@@ -215,7 +215,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           <div className={classNames(styles.column, 'muted')}>
             <div className={styles.row}>
               <p>
-                Minimum received after slippage ({settings.slippage}%)
+                {swap.t(`modals.confirm.min_slippage`)} ({settings.slippage}%)
               </p>
               <p>
                 0.01%
@@ -223,7 +223,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             </div>
             <div className={styles.row}>
               <p>
-                Network Fee
+                {swap.t(`modals.confirm.fee`)}
               </p>
               <p>
                 6ZIL ($0.3)
