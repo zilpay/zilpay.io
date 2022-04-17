@@ -8,8 +8,9 @@ import Image from "next/image";
 
 import { ConnectZIlPay } from "@/components/zilpay-connect";
 import { Toggle } from "@/components/toggle";
-import { $settings } from "@/store/settings";
+import { $settings, updateSettingsStore, updateFromStorage } from "@/store/settings";
 import { Themes } from "@/config/themes";
+
 
 export const NavBar: React.FC = () => {
   const { t } = useTranslation(`common`);
@@ -18,18 +19,23 @@ export const NavBar: React.FC = () => {
 
   const hanldeChangeTheme = React.useCallback((value: boolean) => {
     if (value) {
-      $settings.setState({
-        ...$settings.state,
-        theme: Themes.Dark
-      });
+      updateSettingsStore(
+        settings.slippage,
+        settings.blocks,
+        Themes.Dark
+      );
     } else {
-      $settings.setState({
-        ...$settings.state,
-        theme: Themes.Light
-      });
+      updateSettingsStore(
+        settings.slippage,
+        settings.blocks,
+        Themes.Light
+      );
     }
-    window.document.body.setAttribute('theme-color', $settings.state.theme);
   }, [settings]);
+
+  React.useEffect(() => {
+    updateFromStorage();
+  }, []);
 
   return (
     <nav className={styles.navbar}>

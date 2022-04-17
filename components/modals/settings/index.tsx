@@ -7,7 +7,7 @@ import { Modal, ModalHeader } from "components/modal";
 
 import { BLOCKS, SLIPPAGE } from "@/config/conts";
 
-import { $settings } from "@/store/settings";
+import { $settings, updateSettingsStore } from "@/store/settings";
 import { useStore } from "react-stores";
 
 type Prop = {
@@ -24,28 +24,32 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
   const settings = useStore($settings);
 
   const hanldeResetSlippage = React.useCallback(() => {
-    $settings.setState({
-      ...settings,
-      slippage: SLIPPAGE
-    });
+    updateSettingsStore(
+      SLIPPAGE,
+      settings.blocks,
+      settings.theme
+    );
   }, [settings]);
   const hanldeResetBlocks = React.useCallback(() => {
-    $settings.setState({
-      ...settings,
-      blocks: BLOCKS
-    });
+    updateSettingsStore(
+      settings.slippage,
+      BLOCKS,
+      settings.theme
+    );
   }, [settings]);
   const hanldeInputSlippage = React.useCallback((event) => {
-    $settings.setState({
-      ...settings,
-      slippage: Number(event.target.value)
-    });
+    updateSettingsStore(
+      Number(event.target.value),
+      settings.blocks,
+      settings.theme
+    );
   }, [settings]);
   const hanldeInputBlocks = React.useCallback((event) => {
-    $settings.setState({
-      ...settings,
-      blocks: Number(event.target.value)
-    });
+    updateSettingsStore(
+      settings.slippage,
+      Number(event.target.value),
+      settings.theme
+    );
   }, [settings]);
 
   return (

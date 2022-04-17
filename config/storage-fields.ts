@@ -1,4 +1,5 @@
 export enum StorageFields {
   Liquidity = 'liquidity',
-  Tokens = 'tokens'
+  Tokens = 'tokens',
+  Settings = 'settings'
 }

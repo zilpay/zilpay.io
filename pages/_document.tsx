@@ -2,6 +2,7 @@ import { $settings } from '@/store/settings';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class ZilPayDocument extends Document {
+
   render() {
     return (
       <Html>
@@ -23,7 +24,7 @@ class ZilPayDocument extends Document {
           <link rel="apple-touch-icon" type="image/png" sizes="200x200" href="/favicon/ms-icon-200x200.png" />
           <link rel="manifest" href="/favicon/manifest.json" />
         </Head>
-        <body theme-color={$settings.state.theme}>
+        <body theme-color={this.props.__NEXT_DATA__.props.theme}>
           <Main />
           <NextScript />
         </body>
