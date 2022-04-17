@@ -217,7 +217,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: String(zil)
-    }, '1535');
+    }, this.calcGasLimit(SwapDirection.ZilToToken).toString());
 
     const found = this.tokens.find((p) => p.meta.base16 === token);
     if (found) {
@@ -275,7 +275,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: '0'
-    }, '2060');
+    }, this.calcGasLimit(SwapDirection.TokenToZil).toString());
 
     const foundIndex = this.tokens.findIndex((p) => p.meta.base16 === token);
     if (foundIndex >= 0) {
@@ -339,7 +339,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: '0'
-    }, '3060');
+    }, this.calcGasLimit(SwapDirection.TokenToTokens).toString());
     const foundIndex0 = this.tokens.findIndex((p) => p.meta.base16 === token0);
     const foundIndex1 = this.tokens.findIndex((p) => p.meta.base16 === token1);
 
@@ -473,6 +473,19 @@ export class DragonDex {
 
   public toDecimails(decimals: number) {
     return Big(10**decimals);
+  }
+
+  public calcGasLimit(direction: SwapDirection) {
+    switch (direction) {
+      case SwapDirection.ZilToToken:
+        return Big(1535);
+      case SwapDirection.TokenToZil:
+        return Big(2060);
+      case SwapDirection.TokenToTokens:
+        return Big(3060);
+      default:
+        return Big(5000);
+    }
   }
 
   public sleepageCalc(value: bigint) {

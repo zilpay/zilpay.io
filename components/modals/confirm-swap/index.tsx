@@ -19,6 +19,8 @@ import { TokensMixine } from "@/mixins/token";
 import { $tokens } from "@/store/tokens";
 import { ZERO_ADDR } from "@/config/conts";
 import { $settings } from "@/store/settings";
+import { formatNumber } from "@/filters/n-format";
+import { DEFAUL_GAS } from "@/mixins/zilpay-base";
 
 
 type Prop = {
@@ -51,6 +53,14 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const [loading, setLoading] = React.useState(false);
   const [isAllow, setIsAllow] = React.useState(false);
 
+  const gasFee = React.useMemo(() => {
+    const gasLimit = dex.calcGasLimit(direction);
+    const gasPrice = Big(DEFAUL_GAS.gasPrice);
+    const li = gasLimit.mul(gasPrice);
+
+    return li.div(dex.toDecimails(6));
+  }, [direction]);
+
   const price = React.useMemo(() => {
     switch (direction) {
       case SwapDirection.ZilToToken:
@@ -67,6 +77,17 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
         Big(0);
     }
   }, [direction, limitToken, exactToken]);
+
+  const expectedOutput = React.useMemo(() => {
+    const value = limit.div(dex.toDecimails(limitToken.decimals));
+    return String(value);
+  }, [limit, limitToken]);
+
+  const expectedOutputAfterSleepage = React.useMemo(() => {
+    const bigValue = BigInt(String(limit));
+    const value = Big(String(dex.sleepageCalc(bigValue)));
+    return String(value.div(dex.toDecimails(limitToken.decimals)));
+  }, [limit, limitToken]);
 
   const approveToken = async() => {
     const owner = String(wallet?.base16).toLowerCase();
@@ -200,7 +221,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                 {swap.t(`modals.confirm.expected_output`)}
               </p>
               <p>
-                3243242 {limitToken.symbol}
+                {expectedOutput} {limitToken.symbol}
               </p>
             </div>
             <div className={styles.row}>
@@ -218,7 +239,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                 {swap.t(`modals.confirm.min_slippage`)} ({settings.slippage}%)
               </p>
               <p>
-                0.01%
+                {expectedOutputAfterSleepage} {limitToken.symbol}
               </p>
             </div>
             <div className={styles.row}>
@@ -226,7 +247,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                 {swap.t(`modals.confirm.fee`)}
               </p>
               <p>
-                6ZIL ($0.3)
+                {String(gasFee)}ZIL ($0.3)
               </p>
             </div>
           </div>

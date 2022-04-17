@@ -6,7 +6,7 @@ type Params = {
 };
 
 const window = global.window as any;
-const DEFAUL_GAS = {
+export const DEFAUL_GAS = {
   gasPrice: `2000`,
   gaslimit: `5000`,
 };
