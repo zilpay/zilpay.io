@@ -10,7 +10,7 @@
 
   &:global(.show-dialog) {
     display: block;
-    background: rgb(0 0 0 / 0.50);
+    background: rgba(0, 0, 0, 0.679);
   }
 }
 
@@ -24,7 +24,8 @@
   padding: 0;
   z-index: 100;
   border-radius: 16px;
-  // box-shadow: 0 0 10px #61006fbf;
+  border: 1px solid var(--border-color);
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px 0px;
 }
 
 .modalheader {

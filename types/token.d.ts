@@ -6,10 +6,9 @@ export interface TokenState {
   symbol: string;
 }
 
-export interface Pool {
-  pool: Array<bigint>;
+export interface Token {
   balance: {
-    [owner: string]: bigint;
+    [owner: string]: string;
   };
   meta: TokenState;
 }

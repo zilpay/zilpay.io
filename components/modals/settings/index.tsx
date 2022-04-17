@@ -7,7 +7,7 @@ import { Modal, ModalHeader } from "components/modal";
 
 import { BLOCKS, SLIPPAGE } from "@/config/conts";
 
-import { $settings } from "@/store/settings";
+import { $settings, updateSettingsStore } from "@/store/settings";
 import { useStore } from "react-stores";
 
 type Prop = {
@@ -24,28 +24,32 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
   const settings = useStore($settings);
 
   const hanldeResetSlippage = React.useCallback(() => {
-    $settings.setState({
-      ...settings,
-      slippage: SLIPPAGE
-    });
+    updateSettingsStore(
+      SLIPPAGE,
+      settings.blocks,
+      settings.theme
+    );
   }, [settings]);
   const hanldeResetBlocks = React.useCallback(() => {
-    $settings.setState({
-      ...settings,
-      blocks: BLOCKS
-    });
+    updateSettingsStore(
+      settings.slippage,
+      BLOCKS,
+      settings.theme
+    );
   }, [settings]);
   const hanldeInputSlippage = React.useCallback((event) => {
-    $settings.setState({
-      ...settings,
-      slippage: Number(event.target.value)
-    });
+    updateSettingsStore(
+      Number(event.target.value),
+      settings.blocks,
+      settings.theme
+    );
   }, [settings]);
   const hanldeInputBlocks = React.useCallback((event) => {
-    $settings.setState({
-      ...settings,
-      blocks: Number(event.target.value)
-    });
+    updateSettingsStore(
+      settings.slippage,
+      Number(event.target.value),
+      settings.theme
+    );
   }, [settings]);
 
   return (
@@ -53,7 +57,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
       show={show}
       title={(
         <ModalHeader onClose={onClose}>
-          {common.t(`settings`)}
+          {common.t(`settings.title`)}
         </ModalHeader>
       )}
       width="390px"
@@ -62,7 +66,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
       <div className={styles.container}>
         <div className={styles.wrapper}>
           <p>
-            Slippage tolerance
+            {common.t('settings.slippage')}
           </p>
           <div className={styles.row}>
             <button onClick={hanldeResetSlippage}>
@@ -81,7 +85,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
         <br />
         <div className={styles.wrapper}>
           <p>
-            Transaction deadline
+            {common.t('settings.deadline')}
           </p>
           <div className={styles.row}>
             <button onClick={hanldeResetBlocks}>
@@ -93,7 +97,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
                 value={settings.blocks}
                 onInput={hanldeInputBlocks}
               />
-              blacks
+              {common.t('settings.blocks')}
             </label>
           </div>
         </div>

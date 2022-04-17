@@ -1,0 +1,90 @@
+@import "@/styles/mixins";
+
+.container {
+  background-color: var(--card-color);
+  padding: 1rem 1.25rem 0.5rem;
+
+  @include border-radius(16px);
+
+  max-width: 500px;
+
+  @include flex-center-vert;
+  flex-direction: column;
+
+  & > button {
+    width: 100%;
+    padding: 20px;
+  
+    font-size: 16px;
+    text-transform: uppercase;
+  
+    margin-block-end: 0.6em;
+    margin-block-start: 0.6em;
+  
+    &:hover {
+      color: var(--button-color);
+      background: var(--primary-color);
+    }
+  }
+}
+
+.wrapper {
+  @include flex-column;
+  width: 100%;
+
+  & > p {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 16px;
+  }
+}
+
+.row {
+  @include flex-between-row;
+
+  width: 100%;
+
+  &:global(.border) {
+    padding-top: 20px;
+    border-top: 1px solid var(--button-color);;
+  }
+
+  & > div > svg {
+    cursor: pointer;
+
+    &:hover {
+      stroke: var(--primary-color);
+    }
+  }
+}
+
+.cards {
+  @include flex-between-row;
+
+  margin-block-start: 16px;
+  margin-block-end: 16px;
+
+  div:first-child {
+    text-align: right;
+  }
+  div:last-child {
+    text-align: left;
+  }
+}
+
+.card {
+  background-color: var(--button-color);
+  color: var(--text-color);
+  padding: 16px;
+  font-size: 16px;
+  font-family: "SemiBold";
+
+  min-width: 200px;
+
+  @include border-radius(16px);
+
+  & > span {
+    font-family: "Bold";
+    color: var(--primary-color);
+  }
+}

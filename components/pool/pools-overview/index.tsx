@@ -1,24 +1,70 @@
 import styles from './index.module.scss';
 
 import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { getIconURL } from '@/lib/viewblock';
-import { ZERO_BECH32 } from '@/config/conts';
+import { useStore } from 'react-stores';
 import classNames from 'classnames';
+import Big from 'big.js';
+import Link from 'next/link';
+import { Puff } from 'react-loader-spinner';
+import { useTranslation } from 'next-i18next';
 
+import { ImagePair } from '@/components/pair-img';
 
-const list = [
-  {
-    token: {
-      symbol: 'WTF',
-      bech32: 'zil1l0g8u6f9g0fsvjuu74ctyla2hltefrdyt7k5f4'
-    },
-    share: 0.3
-  }
-];
+import { $wallet } from '@/store/wallet';
+import { $liquidity } from '@/store/shares';
+import { $tokens } from '@/store/tokens';
 
-export const PoolOverview: React.FC = () => {
+import { nPool } from '@/filters/n-pool';
+import { formatNumber } from '@/filters/n-format';
+
+import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
+import { DragonDex } from '@/mixins/dex';
+
+type Prop = {
+  loading: boolean;
+};
+
+const dex = new DragonDex();
+export const PoolOverview: React.FC<Prop> = ({ loading }) => {
+  const pool = useTranslation(`pool`);
+
+  const wallet = useStore($wallet);
+  const liquidity = useStore($liquidity);
+  const tokensStore = useStore($tokens);
+
+  const ownerLising = React.useMemo(() => {
+    if (!wallet) {
+      return [];
+    }
+
+    const { pools, shares } = liquidity;
+    const tokens = [];
+    const owner = String(wallet.base16).toLowerCase();
+    const zil = tokensStore.tokens[0].meta;
+
+    for (const token in shares) {
+      if (shares[token][owner]) {
+        const found = tokensStore.tokens.find((p) => p.meta.base16 === token);
+
+        if (found) {
+          const [x, y] = nPool(pools[token], shares[token][owner]);
+          const zilReserve = Big(x.toString()).div(dex.toDecimails(zil.decimals));
+          const tokenReserve = Big(y.toString()).div(dex.toDecimails(found.meta.decimals));
+          tokens.push({
+            meta: found.meta,
+            pool: [
+              String(zilReserve),
+              String(tokenReserve)
+            ],
+            share: Number(shares[token][owner]) / SHARE_PERCENT_DECIMALS
+          });
+        }
+      }
+    }
+
+    return tokens;
+  }, [wallet, liquidity, tokensStore]);
+
   return (
     <div className={styles.container}>
       <div className={styles.row}>
@@ -27,65 +73,64 @@ export const PoolOverview: React.FC = () => {
         </h3>
         <Link href="/pool/add" passHref>
           <button>
-            + New pool
+            {pool.t('overview.button')}
           </button>
         </Link>
       </div>
-      {list.length === 0 ? (
+      {ownerLising.length === 0 ? (
         <div className={styles.wrapper}>
-          <svg
-            width="48"
-            height="48"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="var(--muted-color)"
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
-            <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
-          </svg>
-          <p>
-            Your active liquidity positions will appear here.
-          </p>
+          {loading ? (
+            <Puff color="var(--primary-color)"/>
+          ) : (
+            <>
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--muted-color)"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>
+              </svg>
+              <p>
+                {pool.t('overview.info')}
+              </p>
+            </>
+          )}
         </div>
       ) : (
         <div className={classNames(styles.wrapper, styles.cardwrapper)}>
-          {list.map((el) => (
-            <div
-              className={styles.poolcard}
-              key={el.token.bech32}
+          {ownerLising.map((el) => (
+            <Link
+              href={`/pool/${el.meta.base16}`}
+              key={el.meta.base16}
+              passHref
             >
-              <div className={styles.cardrow}>
-                <div className={styles.imgwrap}>
-                  <Image
-                    src={getIconURL(ZERO_BECH32)}
-                    alt="tokens-logo"
-                    height="30"
-                    width="30"
-                    className={styles.symbol}
+              <div className={styles.poolcard}>
+                <div className={styles.cardrow}>
+                  <ImagePair
+                    tokens={[
+                      tokensStore.tokens[0].meta,
+                      el.meta
+                    ]}
                   />
-                  <Image
-                    src={getIconURL(el.token.bech32)}
-                    alt="tokens-logo"
-                    height="30"
-                    width="30"
-                    className={classNames(styles.symbol)}
-                  />
+                  <p>
+                    ZIL / {el.meta.symbol} - <span>
+                      {el.share}%
+                    </span>
+                  </p>
                 </div>
-                <p>
-                  ZIL / {el.token.symbol} - <span>
-                    {el.share}%
-                  </span>
-                </p>
+                <div className={styles.cardrow}>
+                  <p className={styles.amount}>
+                    {formatNumber(el.pool[0])} / {formatNumber(el.pool[1])} ≈ $32
+                  </p>
+                </div>
               </div>
-              <div className={styles.cardrow}>
-                <p className={styles.amount}>
-                  321321 ZIL / 232132 {el.token.symbol} ≈ $32
-                </p>
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       )}

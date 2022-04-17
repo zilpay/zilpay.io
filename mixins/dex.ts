@@ -1,14 +1,20 @@
+import type { DexPool, FieldTotalContributions, FiledBalances, FiledPools, Share } from '@/types/zilliqa';
+
 import Big from 'big.js';
 
 import { Blockchain } from './custom-fetch';
 import { ZilPayBase } from './zilpay-base';
 
-import { $pools } from 'store/pools';
-// import { pushToList } from '@/store/transactions';
+import { $tokens, addToken, updateTokens } from '@/store/tokens';
 
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
+import { SHARE_PERCENT } from '@/config/conts';
+import { $liquidity, updateDexBalances, updateLiquidity } from '@/store/shares';
+import { $wallet } from '@/store/wallet';
+import { StorageFields } from '@/config/storage-fields';
+import { $settings } from '@/store/settings';
 
 
 Big.PE = 999;
@@ -25,7 +31,7 @@ export enum SwapDirection {
 }
 
 export class DragonDex {
-  public static CONTRACT = '0x34020700f887cee68e984177ecefff9b2f1574cd';
+  public static CONTRACT = '0x0864fefeced1ce66928c7214e2a781145b8f921f';
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 
@@ -34,44 +40,90 @@ export class DragonDex {
   public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
-  public fee = [BigInt(0), BigInt(0)];
+  public fee = [BigInt(10000), BigInt(10000)];
 
   public get pools() {
-    return $pools.state.pools;
+    return $liquidity.state.pools;
   }
 
-  public async updateState(owner: string) {
+  public get tokens() {
+    return $tokens.state.tokens;
+  }
+
+  public async updateState() {
     const contract = toHex(DragonDex.CONTRACT);
-    const tokens = this.pools.map((t) => t.meta.base16);
-    const { state, fee, minLP } = await this._provider.fetchPoolsBalances(contract, owner, tokens);
+    const { pools, balances, totalContributions } = await this._provider.fetchFullState(contract);
+    const shares = this._getShares(balances, totalContributions);
+    const dexPools = this._getPools(pools);
 
-    this.lp = minLP;
-    this.fee = fee;
+    updateDexBalances(balances);
+    updateLiquidity(shares, dexPools);
 
-    const pools = this.pools.map((value) => ({
-      ...value,
-      balance: {
-        ...value.balance,
-        [owner]: state[value.meta.base16].balance
+    // const listedTokens = Object.keys(pools);
+
+    try {
+      const fromStorage = window.localStorage.getItem(StorageFields.Tokens);
+    
+      if (fromStorage) {
+        $tokens.setState(JSON.parse(fromStorage));
+      }
+    } catch {
+      ///
+    }
+
+    // if ($wallet.state?.base16) {
+    //   const newTokens = await this._provider.fetchTokens(
+    //     $wallet.state?.base16,
+    //     listedTokens,
+    //     $tokens.state.tokens
+    //   );
+
+    //   updateTokens(newTokens);
+    // }
+  }
+
+  public async updateTokens() {
+    const owner = String($wallet.state?.base16);
+    const newTokens = await this._provider.fetchTokensBalances(owner, $tokens.state.tokens);
+
+    updateTokens(newTokens);
+  }
+
+  public async addCustomToken(token: string, owner: string) {
+    const { meta, balances } = await this._provider.getToken(token, owner);
+    const zp = await this.zilpay.zilpay();
+    addToken({
+      meta: {
+        base16: meta.address,
+        bech32: zp.crypto.toBech32Address(meta.address),
+        symbol: meta.symbol,
+        name: meta.name,
+        decimals: meta.decimals
       },
-      pool: state[value.meta.base16].pool
-    }));
-
-    $pools.setState({
-      pools
+      balance: balances
     });
   }
 
+  public async getUserDexContributions(token: string, owner: string) {
+    const contractAddress = DragonDex.CONTRACT;
+    return await this._provider.getUserBlockTotalContributions(
+      contractAddress,
+      token,
+      owner
+    );
+  }
+
   public calcAmount(amount: bigint, index: number, direction: SwapDirection) {
-    const [zilReserve, tokenReserve] = this.pools[index].pool;
+    const token = this.tokens[index].meta;
+    const [zilReserve, tokenReserve] = this.pools[String(token.base16).toLowerCase()];
     const [zilFee, tokensFee] = this.fee;
     const exactSide = ExactSide.ExactInput;
     const calculated = this._amountFor(
       direction,
       exactSide,
       amount,
-      zilReserve,
-      tokenReserve
+      BigInt(zilReserve),
+      BigInt(tokenReserve)
     );
     const tokens = this._getFee(calculated, tokensFee);
     const zils = this._getFee(calculated, zilFee);
@@ -85,29 +137,43 @@ export class DragonDex {
   public zilToTokens(value: string | Big, index: number): Big {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[index].meta.decimals);
-    const zilDecimails = this.toDecimails(this.pools[0].meta.decimals);
-    const qa = amount.mul(zilDecimails).round().toString();
-    const { tokens } = this.calcAmount(BigInt(qa), index, SwapDirection.ZilToToken);
-
-    return Big(String(tokens)).div(decimals);
+    try {
+      const decimals = this.toDecimails(this.tokens[index].meta.decimals);
+      const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
+      const qa = amount.mul(zilDecimails).round().toString();
+      const { tokens } = this.calcAmount(BigInt(qa), index, SwapDirection.ZilToToken);
+  
+      return Big(String(tokens)).div(decimals);
+    } catch {
+      return Big(0);
+    }
   }
 
   public tokensToZil(value: string | Big, index: number) {
     const amount = Big(value);
 
-    const decimals = this.toDecimails(this.pools[index].meta.decimals);
-    const zilDecimails = this.toDecimails(this.pools[0].meta.decimals);
-    const qa = amount.mul(decimals).round().toString();
-    const { zils } = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
-
-    return Big(String(zils)).div(zilDecimails);
+    try {
+      const decimals = this.toDecimails(this.tokens[index].meta.decimals);
+      const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
+  
+      const qa = amount.mul(decimals).round().toString();
+      const { zils } = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
+  
+      return Big(String(zils)).div(zilDecimails);
+    } catch {
+      return Big(0);
+    }
   }
 
   public tokensToTokens(value: string | Big, index0: number, index1: number) {
     const amount = Big(value);
-    const decimals0 = this.toDecimails(this.pools[index0].meta.decimals);
-    const decimals1 = this.toDecimails(this.pools[index1].meta.decimals);
+
+    if (amount.eq(0) || !this.tokens[index0] || !this.tokens[index1]) {
+      return Big(0);
+    }
+
+    const decimals0 = this.toDecimails(this.tokens[index0].meta.decimals);
+    const decimals1 = this.toDecimails(this.tokens[index1].meta.decimals);
     const qa0 = amount.mul(decimals0).round().toString();
     const { zils } = this.calcAmount(BigInt(qa0), index0, SwapDirection.TokenToZil);
     const { tokens } = this.calcAmount(zils, index1, SwapDirection.ZilToToken);
@@ -116,6 +182,12 @@ export class DragonDex {
   }
 
   public async swapExactZILForTokens(zil: Big, max: Big, recipient: string, token: string) {
+    const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
+    const piece = (BigInt(String(max)) * slippage) / SHARE_PERCENT;
+    const limit = BigInt(String(max)) - piece;
+    const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
+    const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
       {
         vname: 'token_address',
@@ -125,12 +197,12 @@ export class DragonDex {
       {
         vname: 'min_token_amount',
         type: 'Uint128',
-        value: String(max)
+        value: String(limit)
       },
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(4354343543543)
+        value: String(nextBlock)
       },
       {
         vname: 'recipient_address',
@@ -145,11 +217,11 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: String(zil)
-    });
+    }, this.calcGasLimit(SwapDirection.ZilToToken).toString());
 
-    const found = this.pools.find((p) => p.meta.base16 === token);
+    const found = this.tokens.find((p) => p.meta.base16 === token);
     if (found) {
-      const amount = zil.div(this.toDecimails(this.pools[0].meta.decimals));
+      const amount = zil.div(this.toDecimails(this.tokens[0].meta.decimals));
       addTransactions({
         timestamp: new Date().getTime(),
         name: `Swap ${formatNumber(String(amount))} ZIL to ${found.meta.symbol}`,
@@ -163,6 +235,12 @@ export class DragonDex {
   }
 
   public async swapExactTokensForZIL(tokens: Big, max: Big, recipient: string, token: string) {
+    const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
+    const piece = (BigInt(String(max)) * slippage) / SHARE_PERCENT;
+    const limit = BigInt(String(max)) - piece;
+    const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
+    const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
       {
         vname: 'token_address',
@@ -177,12 +255,12 @@ export class DragonDex {
       {
         vname: 'min_zil_amount',
         type: 'Uint128',
-        value: String(max)
+        value: String(limit)
       },
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(4354343543543)
+        value: String(nextBlock)
       },
       {
         vname: 'recipient_address',
@@ -197,11 +275,11 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: '0'
-    });
+    }, this.calcGasLimit(SwapDirection.TokenToZil).toString());
 
-    const foundIndex = this.pools.findIndex((p) => p.meta.base16 === token);
+    const foundIndex = this.tokens.findIndex((p) => p.meta.base16 === token);
     if (foundIndex >= 0) {
-      const tokenMeta = this.pools[foundIndex].meta;
+      const tokenMeta = this.tokens[foundIndex].meta;
       const amount = tokens.div(this.toDecimails(tokenMeta.decimals));
       addTransactions({
         timestamp: new Date().getTime(),
@@ -215,7 +293,14 @@ export class DragonDex {
     return res;
   }
 
-  public async swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string,) {
+  public async swapExactTokensForTokens(tokens: Big, max: Big, recipient: string, token0: string, token1: string) {
+    const contractAddress = DragonDex.CONTRACT;
+    const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
+    const piece = (BigInt(String(max)) * slippage) / SHARE_PERCENT;
+    const limit = BigInt(String(max)) - piece;
+    const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
+    const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
       {
         vname: 'token0_address',
@@ -235,12 +320,12 @@ export class DragonDex {
       {
         vname: 'min_token1_amount',
         type: 'Uint128',
-        value: String(max)
+        value: String(limit)
       },
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(4354343543543)
+        value: String(nextBlock)
       },
       {
         vname: 'recipient_address',
@@ -248,20 +333,19 @@ export class DragonDex {
         value: recipient
       }
     ];
-    const contractAddress = DragonDex.CONTRACT;
     const transition = 'SwapExactTokensForTokens';
     const res = await this.zilpay.call({
       params,
       contractAddress,
       transition,
       amount: '0'
-    });
-    const foundIndex0 = this.pools.findIndex((p) => p.meta.base16 === token0);
-    const foundIndex1 = this.pools.findIndex((p) => p.meta.base16 === token1);
+    }, this.calcGasLimit(SwapDirection.TokenToTokens).toString());
+    const foundIndex0 = this.tokens.findIndex((p) => p.meta.base16 === token0);
+    const foundIndex1 = this.tokens.findIndex((p) => p.meta.base16 === token1);
 
     if (foundIndex0 >= 0 && foundIndex1 >= 0) {
-      const tokenMeta0 = this.pools[foundIndex0].meta;
-      const tokenMeta1 = this.pools[foundIndex1].meta;
+      const tokenMeta0 = this.tokens[foundIndex0].meta;
+      const tokenMeta1 = this.tokens[foundIndex1].meta;
       const amount = tokens.div(this.toDecimails(tokenMeta0.decimals));
       addTransactions({
         timestamp: new Date().getTime(),
@@ -275,41 +359,72 @@ export class DragonDex {
     return res;
   }
 
-  public addLiquidity(min: Big, max: Big, amount: Big, token: string) {
+  public async addLiquidity(addr: string, amount: Big, limit: Big) {
+    const contractAddress = DragonDex.CONTRACT;
+    const { blocks } = $settings.state;
+    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
+    const { blockNum, totalContributions, pool } = await this._provider.getBlockTotalContributions(
+      contractAddress,
+      addr
+    );
+    const zilReserve = BigInt(pool[0]);
+    const nextBlock = Big(blockNum).add(blocks);
+    const minContributionAmount = zilReserve === BigInt(0) ? BigInt(limit.toString()) : this._fraction(
+      BigInt(limit.toString()),
+      BigInt(zilReserve),
+      BigInt(totalContributions)
+    );
+    const piece = (minContributionAmount * slippage) / SHARE_PERCENT;
+    const contributionAmount = minContributionAmount - piece;
     const params = [
       {
         vname: 'token_address',
         type: 'ByStr20',
-        value: token
+        value: addr
       },
       {
         vname: 'min_contribution_amount',
         type: 'Uint128',
-        value: String(min)
+        value: String(contributionAmount)
       },
       {
         vname: 'max_token_amount',
         type: 'Uint128',
-        value: String(max)
+        value: String(amount)
       },
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(max)
+        value: String(nextBlock)
       }
     ];
-    const contractAddress = DragonDex.CONTRACT;
     const transition = 'AddLiquidity';
-
-    return this.zilpay.call({
+    const res = await this.zilpay.call({
       params,
       contractAddress,
       transition,
-      amount: String(amount)
+      amount: String(limit)
+    }, '3060');
+    addTransactions({
+      timestamp: new Date().getTime(),
+      name: `addLiquidity`,
+      confirmed: false,
+      hash: res.ID,
+      from: res.from
     });
+
+    return res.ID;
   }
 
-  public removeLiquidity(minzil: Big, minzrc: Big, contribution: Big, token: string) {
+  public async removeLiquidity(minzil: Big, minzrc: Big, minContributionAmount: Big, token: string, owner: string) {
+    const contractAddress = DragonDex.CONTRACT;
+    const { blocks } = $settings.state;
+    const { blockNum } = await this._provider.getUserBlockTotalContributions(
+      contractAddress,
+      token,
+      owner
+    );
+    const nextBlock = Big(blockNum).add(blocks);
     const params = [
       {
         vname: 'token_address',
@@ -319,7 +434,7 @@ export class DragonDex {
       {
         vname: 'contribution_amount',
         type: 'Uint128',
-        value: String(contribution)
+        value: String(minContributionAmount)
       },
       {
         vname: 'min_zil_amount',
@@ -334,22 +449,51 @@ export class DragonDex {
       {
         vname: 'deadline_block',
         type: 'BNum',
-        value: String(contribution)
+        value: String(nextBlock)
       }
     ];
-    const contractAddress = DragonDex.CONTRACT;
     const transition = 'RemoveLiquidity';
-
-    return this.zilpay.call({
+    const res = await this.zilpay.call({
       params,
       contractAddress,
       transition,
       amount: '0'
+    }, '3060');
+
+    addTransactions({
+      timestamp: new Date().getTime(),
+      name: `RemoveLiquidity`,
+      confirmed: false,
+      hash: res.ID,
+      from: res.from
     });
+
+    return res;
   }
 
   public toDecimails(decimals: number) {
     return Big(10**decimals);
+  }
+
+  public calcGasLimit(direction: SwapDirection) {
+    switch (direction) {
+      case SwapDirection.ZilToToken:
+        return Big(1535);
+      case SwapDirection.TokenToZil:
+        return Big(2060);
+      case SwapDirection.TokenToTokens:
+        return Big(3060);
+      default:
+        return Big(5000);
+    }
+  }
+
+  public sleepageCalc(value: bigint) {
+    const { slippage } = $settings.state;
+    const bigSlippage = BigInt(slippage * 100);
+    const decimals = BigInt(10000);
+
+    return value - (value * bigSlippage / decimals);
   }
 
   private _outputFor(inputAmount: bigint, inputReserve: bigint, outputReserve: bigint) {
@@ -390,6 +534,42 @@ export class DragonDex {
       default:
         throw new Error("Incorect SwapDirection");
     }
+  }
+
+  private _fraction(d: bigint, x: bigint, y: bigint) {
+    return (d * y) / x;
+  }
+
+  private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions) {
+    const shares: Share = {};
+
+    for (const token in balances) {
+      const contribution = BigInt(totalContributions[token]);
+
+      for (const owner in balances[token]) {
+        const balance = BigInt(balances[token][owner]);
+
+        if (!shares[token]) {
+          shares[token] = {};
+        }
+
+        shares[token][owner] = (balance * SHARE_PERCENT) / contribution;
+      }
+    }
+
+    return shares;
+  }
+
+  private _getPools(pools: FiledPools) {
+    const newPools: DexPool = {};
+
+    for (const token in pools) {
+      const [x, y] = pools[token].arguments;
+
+      newPools[token] = [BigInt(x), BigInt(y)];
+    }
+
+    return newPools;
   }
 
   private _getFee(value: bigint, fee: bigint) {

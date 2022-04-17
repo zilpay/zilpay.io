@@ -1,41 +1,42 @@
 import styles from '@/styles/pages/swap.module.scss';
 
 import Head from 'next/head';
-import { useStore } from 'react-stores';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { PoolOverview } from '@/components/pool';
 import { DragonDex } from '@/mixins/dex';
-import { $wallet } from '@/store/wallet';
+
+import { liquidityFromCache } from '@/store/shares';
 
 const dex = new DragonDex();
 export const PagePool: NextPage = () => {
-  const wallet = useStore($wallet);
+  const { t } = useTranslation(`pool`);
 
-  const hanldeUpdate = React.useCallback(async() => {
-    if (wallet) {
-      await dex.updateState(wallet.base16);
-    }
-  }, [wallet]);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    hanldeUpdate();
-  }, [wallet, hanldeUpdate]);
+    setLoading(true);
+    liquidityFromCache();
+    dex
+    .updateState()
+    .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>Pool</title>
+        <title>{t('overview.head')}</title>
         <meta
           property="og:title"
-          content={'PoolOverview'}
+          content={t('overview.head')}
           key="title"
         />
       </Head>
       <div>
-        <PoolOverview />
+        <PoolOverview loading={loading}/>
       </div>
     </div>
   );

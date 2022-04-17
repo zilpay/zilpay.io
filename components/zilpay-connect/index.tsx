@@ -9,15 +9,19 @@ import { AccountModal } from '@/components/modals/account/index';
 import { ThreeDots } from 'react-loader-spinner';
 
 import { $wallet } from '@/store/wallet';
-import { $transactions } from '@/store/transactions';
+import { $transactions, updateTransactions } from '@/store/transactions';
 import { $net } from '@/store/netwrok';
 
 import { Blockchain } from '@/mixins/custom-fetch';
 import { ZilPayBase } from '@/mixins/zilpay-base';
 import { trim } from '@/lib/trim';
+import { DragonDex } from '@/mixins/dex';
+import { loadTokensfromCache } from '@/store/tokens';
 
 const chainFetcher = new Blockchain();
 const zilPayWallet = new ZilPayBase();
+const dex = new DragonDex();
+
 let observer: any = null;
 let observerNet: any = null;
 let observerBlock: any = null;
@@ -67,9 +71,7 @@ export const ConnectZIlPay: React.FC = function () {
       }
     }
 
-    $transactions.setState({
-      transactions
-    });
+    updateTransactions(String($wallet.state?.bech32), transactions);
   };
 
   const hanldeObserverState = React.useCallback(
@@ -92,6 +94,7 @@ export const ConnectZIlPay: React.FC = function () {
         $net.setState({
           net
         });
+        dex.updateTokens();
       });
 
       observer = zp.wallet.observableAccount().subscribe((acc: Wallet) => {
@@ -104,29 +107,34 @@ export const ConnectZIlPay: React.FC = function () {
         $transactions.resetState();
 
         const cache = window.localStorage.getItem(
-          String(zp.wallet.defaultAccount?.base16),
+          String(acc.bech32)
         );
 
         if (cache) {
           $transactions.setState(JSON.parse(cache));
         }
+
+        dex.updateTokens();
       });
 
       observerBlock = zp.wallet
         .observableBlock()
-        .subscribe(() => transactionsCheck());
+        .subscribe(() => {
+          transactionsCheck();
+          dex.updateTokens();
+        });
 
       if (zp.wallet.defaultAccount) {
         $wallet.setState(zp.wallet.defaultAccount);
       }
 
-      const cache = window.localStorage.getItem(
-        String(zp.wallet.defaultAccount?.bech32),
-      );
+      // const cache = window.localStorage.getItem(
+      //   String(zp.wallet.defaultAccount?.bech32),
+      // );
 
-      if (cache) {
-        $transactions.setState(JSON.parse(cache));
-      }
+      // if (cache) {
+      //   $transactions.setState(JSON.parse(cache));
+      // }
 
       transactionsCheck();
     },
@@ -163,6 +171,7 @@ export const ConnectZIlPay: React.FC = function () {
   };
 
   React.useEffect(() => {
+    loadTokensfromCache();
     zilPayWallet
       .zilpay()
       .then((zp) => {

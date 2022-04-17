@@ -1,0 +1,10 @@
+@import "@/styles/mixins";
+
+.container {
+  @include flex-between-row;
+
+  padding-left: 8px;
+  padding-right: 8px;
+  
+  width: 100%;
+}

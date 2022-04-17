@@ -3,6 +3,7 @@ import styles from './index.module.scss';
 import { useStore } from 'react-stores';
 import React from 'react';
 import Big from 'big.js';
+import { useTranslation } from 'next-i18next';
 import classNames from 'classnames';
 import Link from 'next/link';
 
@@ -10,38 +11,100 @@ import { FormInput, SwapSettings } from '@/components/swap-form';
 import { TokensModal } from '@/components/modals/tokens';
 import { BackIcon } from '@/components/icons/back';
 
-import { $pools } from '@/store/pools';
+import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
 
-import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
+import { DragonDex } from '@/mixins/dex';
 
+import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
+import { AddPoolPreviewModal } from '@/components/modals/add-pool-preview';
+import { SwapSettingsModal } from '@/components/modals/settings';
+import { $liquidity } from '@/store/shares';
+
+
+const dex = new DragonDex();
 export const AddPoolForm: React.FC = () => {
-  const { pools } = useStore($pools);
+  const pool = useTranslation(`pool`);
+
+  const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
+  const liquidity = useStore($liquidity);
 
   const [amount, setAmount] = React.useState(Big(0));
+  const [limitAmount, setLimitAmount] = React.useState(Big(0));
+
   const [token, setToken] = React.useState(DEFAULT_TOKEN_INDEX);
   const [tokensModal, setTokensModal] = React.useState(false);
+  const [previewModal, setPreviewModal] = React.useState(false);
+  const [settingsModal, setSettingsModal] = React.useState(false);
+
+  const tokenBalance = React.useMemo(() => {
+    const blk = tokensStore.tokens[token].balance[String(wallet?.base16).toLowerCase()];
+
+    if (!blk) {
+      return Big(0);
+    }
+
+    return Big(blk);
+  }, [wallet, tokensStore, token]);
+
+  const disabled = React.useMemo(() => {
+    const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
+    const qa = amount.mul(decimals);
+    return Number(amount) === 0 || tokenBalance.lt(qa);
+  }, [amount, tokenBalance, amount, tokensStore, token]);
+
+  const hasPool = React.useMemo(() => {
+    return Boolean(liquidity.pools[tokensStore.tokens[token].meta.base16]);
+  }, [liquidity, tokensStore, token]);
 
   const hanldeSelectToken0 = React.useCallback((token) => {
-    const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
+    const foundIndex = tokensStore
+    .tokens
+    .findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
       setToken(foundIndex);
+      setTokensModal(false);
     }
-  }, [pools, setToken]);
+  }, [tokensStore, setToken]);
+
+  const handleSubmit = React.useCallback((event) => {
+    event.preventDefault();
+    setPreviewModal(true);
+  }, []);
+
+  React.useEffect(() => {
+    setLimitAmount(
+      dex.tokensToZil(String(amount), token)
+    );
+  }, [amount, token]);
 
   return (
     <>
+      <SwapSettingsModal
+        show={settingsModal}
+        onClose={() => setSettingsModal(false)}
+      />
       <TokensModal
         show={tokensModal}
-        pools={pools}
+        tokens={tokensStore.tokens}
         warn
         include
         onClose={() => setTokensModal(false)}
         onSelect={hanldeSelectToken0}
       />
-      <div className={styles.container}>
+      <AddPoolPreviewModal
+        show={previewModal}
+        amount={amount}
+        limit={limitAmount}
+        tokenIndex={token}
+        onClose={() => setPreviewModal(false)}
+      />
+      <form
+        className={styles.container}
+        onSubmit={handleSubmit}
+      >
         <div className={styles.row}>
           <Link href="/pool" passHref>
             <div className={styles.hoverd}>
@@ -49,37 +112,39 @@ export const AddPoolForm: React.FC = () => {
             </div>
           </Link>
           <h3>
-            Add liquidity
+            {pool.t('add_pool.title')}
           </h3>
-          <SwapSettings onClick={() => null}/>
+          <SwapSettings onClick={() => setSettingsModal(true)}/>
         </div>
         <div className={classNames(styles.row, {
           border: true
         })}>
           <div className={styles.column}>
             <p>
-              Select pair and amount
+              {pool.t('add_pool.sub_title')}
             </p>
             <FormInput
               value={amount}
-              token={pools[token].meta}
-              balance={pools[token].balance[wallet?.base16 || '']}
+              token={tokensStore.tokens[token].meta}
+              balance={tokensStore.tokens[token].balance[String(wallet?.base16).toLowerCase()]}
               onSelect={() => setTokensModal(true)}
               onInput={setAmount}
               onMax={setAmount}
             />
             <FormInput
-              value={Big(0)}
-              token={pools[0].meta}
-              balance={pools[0].balance[wallet?.base16 || '']}
-              disabled
+              value={limitAmount}
+              token={tokensStore.tokens[0].meta}
+              balance={tokensStore.tokens[0].balance[String(wallet?.base16).toLowerCase()]}
+              disabled={hasPool}
+              onInput={setLimitAmount}
+              onMax={setLimitAmount}
             />
           </div>
         </div>
-        <button>
-          Preview
+        <button disabled={disabled}>
+          {pool.t('add_pool.button')}
         </button>
-      </div>
+      </form>
     </>
   );
 };

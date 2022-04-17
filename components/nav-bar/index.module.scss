@@ -27,3 +27,11 @@
     padding: 5px;
   }
 }
+
+.buttons {
+  @include flex-between-row;
+
+  & > button {
+    margin-right: 16px;
+  }
+}

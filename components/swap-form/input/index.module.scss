@@ -28,6 +28,14 @@
   }
 }
 
+.row {
+  @include flex-between-row;
+
+  & > p {
+    margin-left: 10px;
+  }
+}
+
 .wrapper {
   @include flex-between-row;
 
@@ -66,6 +74,7 @@
     padding-left: 3px;
     padding-right: 3px;
     font-family: "Bold";
+    text-shadow: none;
   }
 
   &.disabled {

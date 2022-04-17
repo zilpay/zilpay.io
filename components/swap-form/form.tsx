@@ -2,6 +2,7 @@ import styles from './index.module.scss';
 
 import Big from 'big.js';
 import React from 'react';
+import { useTranslation } from 'next-i18next';
 import { useStore } from 'react-stores';
 
 import { SwapSettings } from './settings';
@@ -10,10 +11,11 @@ import SwapIcon from 'components/icons/swap';
 import { ConfirmSwapModal } from '@/components/modals/confirm-swap';
 import { TokensModal } from '@/components/modals/tokens';
 import { SwapSettingsModal } from '@/components/modals/settings';
+import { PriceInfo } from '@/components/price-info';
 
 import { DragonDex, SwapDirection } from '@/mixins/dex';
 
-import { $pools } from '@/store/pools';
+import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
 import { ZERO_ADDR } from '@/config/conts';
 
@@ -30,7 +32,9 @@ let tokenIndex0 = 0;
 let tokenIndex1 = 1;
 
 export const SwapForm: React.FC = () => {
-  const { pools } = useStore($pools);
+  const { t } = useTranslation(`swap`);
+
+  const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
 
   const [token0, setToken0] = React.useState(tokenIndex0);
@@ -47,41 +51,39 @@ export const SwapForm: React.FC = () => {
 
   const exactAmount = React.useMemo(() => {
     if (exactType === Exact.Top) {
-      const decimals0 = dex.toDecimails(pools[tokenIndex0].meta.decimals);
+      const decimals0 = dex.toDecimails(tokensStore.tokens[tokenIndex0].meta.decimals);
       return topAmount.mul(decimals0);
     }
 
-    const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
+    const decimals1 = dex.toDecimails(tokensStore.tokens[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, pools, exactType]);
+  }, [topAmount, bottomAmount, tokensStore, exactType]);
   const limitAmount = React.useMemo(() => {
     if (exactType === Exact.Bottom) {
-      const decimals0 = dex.toDecimails(pools[tokenIndex0].meta.decimals);
+      const decimals0 = dex.toDecimails(tokensStore.tokens[tokenIndex0].meta.decimals);
       return topAmount.mul(decimals0);
     }
-    const decimals1 = dex.toDecimails(pools[tokenIndex1].meta.decimals);
+    const decimals1 = dex.toDecimails(tokensStore.tokens[tokenIndex1].meta.decimals);
 
     return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, pools, exactType]);
+  }, [topAmount, bottomAmount, tokensStore, exactType]);
 
   const disabled = React.useMemo(() => {
     return exactAmount.eq(0) || !(wallet?.base16);
   }, [exactAmount, wallet]);
 
   const hanldeUpdate = React.useCallback(async() => {
-    if (wallet) {
-      await dex.updateState(wallet.base16);
-    }
+    await dex.updateState();
   }, [wallet]);
 
   const hanldeOnChangeTop = React.useCallback((amount: Big) => {
     let result = Big(0);
 
-    if (pools[tokenIndex0].meta.base16 === ZERO_ADDR) {
+    if (tokensStore.tokens[tokenIndex0].meta.base16 === ZERO_ADDR) {
       result = dex.zilToTokens(amount, tokenIndex1);
       setDirection(SwapDirection.ZilToToken);
-    } else if (pools[tokenIndex1].meta.base16 === ZERO_ADDR) {
+    } else if (tokensStore.tokens[tokenIndex1].meta.base16 === ZERO_ADDR) {
       result = dex.tokensToZil(amount, tokenIndex0);
       setDirection(SwapDirection.TokenToZil);
     } else {
@@ -92,14 +94,14 @@ export const SwapForm: React.FC = () => {
     setExactType(Exact.Top);
     setTopAmount(amount);
     setBottomAmount(result);
-  }, [pools]);
+  }, [tokensStore]);
   const hanldeOnChangeBottom = React.useCallback((amount: Big) => {
     let result = Big(0);
 
-    if (pools[tokenIndex1].meta.base16 === ZERO_ADDR) {
+    if (tokensStore.tokens[tokenIndex1].meta.base16 === ZERO_ADDR) {
       result = dex.zilToTokens(amount, tokenIndex0);
       setDirection(SwapDirection.ZilToToken);
-    } else if (pools[tokenIndex0].meta.base16 === ZERO_ADDR) {
+    } else if (tokensStore.tokens[tokenIndex0].meta.base16 === ZERO_ADDR) {
       result = dex.tokensToZil(amount, tokenIndex1);
       setDirection(SwapDirection.TokenToZil);
     } else {
@@ -110,7 +112,7 @@ export const SwapForm: React.FC = () => {
     setExactType(Exact.Bottom);
     setTopAmount(result);
     setBottomAmount(amount);
-  }, [pools]);
+  }, [tokensStore]);
 
   const hanldeOnSwapForms = React.useCallback(() => {
     const fst = token0
@@ -143,7 +145,7 @@ export const SwapForm: React.FC = () => {
     setConfirmModal(true);
   }, []);
   const hanldeSelectToken0 = React.useCallback((token) => {
-    const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
+    const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
       tokenIndex0 = foundIndex;
@@ -153,9 +155,9 @@ export const SwapForm: React.FC = () => {
       setBottomAmount(Big(0));
       setTopAmount(Big(0));
     }
-  }, [pools]);
+  }, [tokensStore]);
   const hanldeSelectToken1 = React.useCallback((token) => {
-    const foundIndex = pools.findIndex((p) => p.meta.base16 === token.base16);
+    const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
 
     if (foundIndex >= 0) {
       tokenIndex1 = foundIndex;
@@ -165,11 +167,11 @@ export const SwapForm: React.FC = () => {
       setBottomAmount(Big(0));
       setTopAmount(Big(0));
     }
-  }, [pools]);
+  }, [tokensStore]);
 
   React.useEffect(() => {
     hanldeUpdate();
-  }, [wallet, hanldeUpdate]);
+  }, [hanldeUpdate]);
 
   return (
     <>
@@ -182,13 +184,13 @@ export const SwapForm: React.FC = () => {
         exact={exactAmount}
         limit={limitAmount}
         direction={direction}
-        limitToken={exactType === Exact.Top ? pools[tokenIndex1].meta : pools[tokenIndex0].meta}
-        exactToken={exactType === Exact.Bottom ? pools[tokenIndex1].meta : pools[tokenIndex0].meta}
+        limitToken={exactType === Exact.Top ? tokensStore.tokens[tokenIndex1].meta : tokensStore.tokens[tokenIndex0].meta}
+        exactToken={exactType === Exact.Bottom ? tokensStore.tokens[tokenIndex1].meta : tokensStore.tokens[tokenIndex0].meta}
         onClose={() => setConfirmModal(false)}
       />
       <TokensModal
         show={modal0}
-        pools={pools}
+        tokens={tokensStore.tokens}
         warn
         include
         onClose={() => setModal0(false)}
@@ -196,9 +198,9 @@ export const SwapForm: React.FC = () => {
       />
       <TokensModal
         show={modal1}
-        pools={pools}
-        warn
+        tokens={tokensStore.tokens}
         include
+        warn
         onClose={() => setModal1(false)}
         onSelect={hanldeSelectToken1}
       />
@@ -208,14 +210,14 @@ export const SwapForm: React.FC = () => {
       >
         <div className={styles.wrapper}>
           <h3>
-            Swap
+            {t('title')}
           </h3>
           <SwapSettings onClick={() => setModal3(true)}/>
         </div>
         <FormInput
           value={topAmount}
-          token={pools[token0].meta}
-          balance={pools[token0].balance[wallet?.base16 || '']}
+          token={tokensStore.tokens[token0].meta}
+          balance={tokensStore.tokens[token0].balance[String(wallet?.base16).toLowerCase()]}
           onInput={hanldeOnChangeTop}
           onMax={hanldeOnChangeTop}
           onSelect={() => setModal0(true)}
@@ -223,30 +225,20 @@ export const SwapForm: React.FC = () => {
         <SwapIcon onClick={hanldeOnSwapForms}/>
         <FormInput
           value={bottomAmount}
-          token={pools[token1].meta}
-          balance={pools[token1].balance[wallet?.base16 || '']}
+          token={tokensStore.tokens[token1].meta}
+          balance={tokensStore.tokens[token1].balance[String(wallet?.base16).toLowerCase()]}
           onInput={hanldeOnChangeBottom}
           onMax={hanldeOnChangeBottom}
           onSelect={() => setModal1(true)}
         />
-        <div className={styles.wrapper}>
-          <p>
-            1 TINCH = 0.0005395 ETH ($1.55824)
-          </p>
-          <svg
-            width="24"
-            height="25"
-            viewBox="0 0 24 25"
-            fill="none"
-          >
-            <path
-              d="M4.93193 14.1366C4.54256 14.5283 4.54442 15.1615 4.93609 15.5508C5.32777 15.9402 5.96093 15.9384 6.3503 15.5467L4.93193 14.1366ZM17.7423 15.1523C18.1328 15.5428 18.766 15.5428 19.1565 15.1523C19.547 14.7617 19.547 14.1286 19.1565 13.7381L17.7423 15.1523ZM12.2241 8.21985L12.9312 7.51275C12.7433 7.32485 12.4883 7.21946 12.2226 7.21985C11.9569 7.22025 11.7022 7.32638 11.5149 7.51483L12.2241 8.21985ZM19.1565 13.7381L12.9312 7.51275L11.517 8.92696L17.7423 15.1523L19.1565 13.7381ZM11.5149 7.51483L4.93193 14.1366L6.3503 15.5467L12.9332 8.92488L11.5149 7.51483Z"
-              fill="var(--muted-color)"
-            />
-          </svg>
-        </div>
+        <PriceInfo
+          tokens={[
+            tokensStore.tokens[token0].meta,
+            tokensStore.tokens[token1].meta
+          ]}
+        />
         <button disabled={Boolean(disabled)}>
-          Exchange
+          {t('buttons.exchange')}
         </button>
       </form>
     </>

@@ -5,8 +5,8 @@
 
   @include flex-between-row;
 
-  padding-left: 16px;
-  padding-right: 16px;
+  padding-left: 13px;
+  padding-right: 13px;
   margin-top: 5px;
 }
 
@@ -21,6 +21,7 @@
   text-decoration: none;
 
   & > p {
+    margin: 3px;
     font-size: 0.825rem;
   }
 

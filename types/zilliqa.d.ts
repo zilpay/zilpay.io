@@ -17,3 +17,32 @@ export interface Tx {
   confirmed: boolean;
   error?: boolean;
 }
+
+export interface FiledBalances {
+  [token: string]: {
+    [owner: string]: string;
+  }
+}
+
+export interface Share {
+  [token: string]: {
+    [owner: string]: bigint;
+  }
+}
+
+
+export interface DexPool {
+  [token: string]: bigint[];
+}
+
+export interface FiledPools {
+  [token: string]: {
+    argtypes: string[];
+    arguments: string[];
+    constructor: "Pair";
+  }
+}
+
+export interface FieldTotalContributions {
+  [token: string]: string;
+}

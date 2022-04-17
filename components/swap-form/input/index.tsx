@@ -7,20 +7,26 @@ import Big from "big.js";
 import Image from 'next/image';
 
 import { getIconURL } from "@/lib/viewblock";
-import { formatNumber } from "@/filters/n-format";
 import classNames from 'classnames';
+import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
+import { DragonDex } from '@/mixins/dex';
+
+
+Big.PE = 999;
+
 
 type Prop = {
   token: TokenState;
   value: Big;
-  balance?: bigint;
+  balance?: string;
   disabled?: boolean;
   onInput?: (value: Big) => void;
   onSelect?: () => void;
   onMax?: (b: Big) => void;
 };
 
-
+const list = [10, 25, 50, 75, 100];
+const dex = new DragonDex();
 export const FormInput: React.FC<Prop> = ({
   value,
   token,
@@ -30,25 +36,23 @@ export const FormInput: React.FC<Prop> = ({
   onSelect = () => null,
   onMax = () => null
 }) => {
-  const amount = React.useMemo(() => {
-    if (!balance) {
-      return Big(0);
-    }
+  const hanldePercent = React.useCallback((n: number) => {
+    const percent = BigInt(n);
+    const value = BigInt(balance) * percent / BigInt(SHARE_PERCENT_DECIMALS);
+    const decimals = dex.toDecimails(token.decimals);
 
-    const qa = Big(String(balance));
-    const decimal = Big(10**token.decimals);
-
-    return qa.div(decimal);
-  }, [token, balance]);
+    onMax(Big(String(value)).div(decimals));
+  }, [balance, token, onMax]);
 
   const hanldeOnInput = React.useCallback((event) => {
-    if (event.target.value.endsWith(',')) {
-      return;
-    }
-    if (event.target.value) {
-      onInput(Big(event.target.value));
-    } else {
-      onInput(Big(0));
+    try {
+      if (event.target.value) {
+        onInput(Big(event.target.value));
+      } else {
+        onInput(Big(0));
+      }
+    } catch {
+      ////
     }
   }, [onInput]);
 
@@ -97,12 +101,19 @@ export const FormInput: React.FC<Prop> = ({
           <p>
             $73.569
           </p>
-          <p
-            className={styles.balance}
-            onClick={() => onMax(amount)}
-          >
-            {formatNumber(Number(amount))}
-          </p>
+          {disabled ? null : (
+            <div className={styles.row}>
+              {list.map((n) => (
+                <p
+                  key={n}
+                  className={styles.balance}
+                  onClick={() => hanldePercent(n)}
+                >
+                  {n}%
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </label>

@@ -1,9 +1,11 @@
-import type { RPCResponse } from "@/types/zilliqa";
+import type { FieldTotalContributions, FiledBalances, FiledPools, RPCResponse } from "@/types/zilliqa";
 
 import { compact } from "@/lib/compact";
-import { initParser } from "@/lib/parse-init";
 import { toHex } from "@/lib/to-hex";
 import { chunk } from "@/lib/chunk";
+import { initParser } from "@/lib/parse-init";
+import { Token } from "@/types/token";
+import { ZilPayBase } from "./zilpay-base";
 import { ZERO_ADDR } from "@/config/conts";
 
 type Params = string[] | number[] | (string | string[] | number[])[];
@@ -12,33 +14,24 @@ export enum RPCMethods {
   GetSmartContractSubState = 'GetSmartContractSubState',
   GetTransaction = 'GetTransaction',
   GetSmartContractInit = 'GetSmartContractInit',
-  GetBalance = 'GetBalance'
+  GetBalance = 'GetBalance',
+  GetLatestTxBlock = 'GetLatestTxBlock'
 }
 
 export enum DexFields {
   Pools = 'pools',
   Fee = 'swap_fee',
-  MinLP = 'min_lp'
+  MinLP = 'min_lp',
+  Balances = 'balances',
+  TotalContributions = 'total_contributions'
 }
 
 export enum ZRC2Fields {
   Balances = 'balances'
 }
 
-const EMPTY_FEE = {
-  "argtypes": [
-      "Uint256",
-      "Uint256"
-  ],
-  "arguments": [
-      "10000",
-      "10000"
-  ],
-  "constructor": "Pair"
-};
-
 export class Blockchain {
-  private _http = `https://zilliqa-isolated-server.zilliqa.com`;
+  private _http = `https://dev-api.zilliqa.com`;
   readonly #rpc = {
     id: 1,
     jsonrpc: '2.0'
@@ -54,27 +47,165 @@ export class Blockchain {
     return this._send(batch);
   }
 
-  public async fetchPoolsBalances(dex: string, owner: string, list: string[]) {
-    const tokens = list.slice(1).map((token) => ([
+  public async getUserBlockTotalContributions(dex: string, token: string, owner: string) {
+    token = token.toLowerCase();
+    owner = owner.toLowerCase();
+    dex = toHex(dex);
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Balances, [token, owner]]
+      ),
+      this._buildBody(
+        RPCMethods.GetLatestTxBlock,
+        []
+      ),
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
         [dex, DexFields.Pools, [token]]
+      )
+    ];
+    const [resUserContributions, resBlock, resPool] = await this._send(batch);
+    const userContributions = resUserContributions.result && resUserContributions.result[DexFields.Balances] ?
+      resUserContributions.result[DexFields.Balances][token][owner] : '0';
+    const blockNum = resBlock.result.header.BlockNum;
+    const pool = resPool.result[DexFields.Pools][token].arguments;
+
+    return {
+      userContributions,
+      blockNum,
+      pool
+    };
+  }
+
+  public async getBlockTotalContributions(dex: string, token: string) {
+    token = token.toLowerCase();
+    dex = toHex(dex);
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.TotalContributions, [token]]
+      ),
+      this._buildBody(
+        RPCMethods.GetLatestTxBlock,
+        []
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Pools, [token]]
+      )
+    ];
+    const [resTotalContributions, resBlock, resPool] = await this._send(batch);
+    const totalContributions = resTotalContributions.result ?
+      resTotalContributions.result[DexFields.TotalContributions][token] : '0';
+    const blockNum = resBlock.result.header.BlockNum;
+    const pool = resPool.result ?
+      resPool.result[DexFields.Pools][token].arguments : ['0', '0'];
+
+    return {
+      totalContributions,
+      blockNum,
+      pool
+    };
+  }
+
+  public async fetchFullState(dex: string) {
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Balances, []]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.TotalContributions, []]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.Pools, []]
+      )
+    ];
+    const [resBalances, resTotalContributions, resPools] = await this._send(batch);
+    const balances: FiledBalances = resBalances.result ? resBalances.result[DexFields.Balances] : {};
+    const totalContributions: FieldTotalContributions = resTotalContributions.result ?
+      resTotalContributions.result[DexFields.TotalContributions] : {};
+    const pools: FiledPools = resPools.result ? resPools.result[DexFields.Pools] : {};
+
+    return {
+      balances,
+      totalContributions,
+      pools
+    };
+  }
+
+  public async getToken(token: string, owner: string) {
+    owner = owner.toLowerCase();
+
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetSmartContractInit,
+        [toHex(token)]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [toHex(token), ZRC2Fields.Balances, [owner]]
+      )
+    ];
+    const [resInit, resBalances] = await this._send(batch);
+    const meta = initParser(resInit.result);
+    const balances = resBalances.result ?
+      resBalances.result[ZRC2Fields.Balances] : {};
+
+    return {
+      meta,
+      balances
+    };
+  }
+
+  public async fetchTokensBalances(owner: string, tokens: Token[]) {
+    owner = owner.toLowerCase();
+
+    const reqList = tokens.slice(1).map((token) => this._buildBody(
+      RPCMethods.GetSmartContractSubState,
+      [toHex(token.meta.base16), ZRC2Fields.Balances, [owner.toLowerCase()]]
+    ));
+    const batch = [
+      this._buildBody(
+        RPCMethods.GetBalance,
+        [toHex(owner)]
+      ),
+      ...reqList
+    ];
+    const batchRes = await this._send(batch);
+    
+    for (let index = 0; index < tokens.length; index++) {
+      const token = tokens[index];
+
+      if (token.meta.base16 === ZERO_ADDR) {
+        tokens[index].balance[owner] = batchRes[index].result ?
+          batchRes[index].result.balance : '0';
+        continue;
+      }
+
+      tokens[index].balance[owner] = batchRes[index].result ?
+        batchRes[index].result[ZRC2Fields.Balances][owner] : '0';
+    }
+
+    return tokens;
+  }
+
+  public async fetchTokens(owner: string, tokens: string[], pools: Token[]) {
+    const reqList = tokens.map((token) => ([
+      this._buildBody(
+        RPCMethods.GetSmartContractInit,
+        [toHex(token)]
       ),
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
         [toHex(token), ZRC2Fields.Balances, [owner.toLowerCase()]]
       )
     ]));
-    const tokensBatch = compact(tokens);
+    const tokensBatch = compact(reqList);
     const batch = [
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.Fee, []]
-      ),
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.MinLP, []]
-      ),
       {
         method: RPCMethods.GetBalance,
         params: [
@@ -83,154 +214,60 @@ export class Blockchain {
         id: 1,
         jsonrpc: `2.0`,
       },
-      ...tokensBatch,
+      ...tokensBatch
     ];
     const batchRes = await this._send(batch);
-    const [resFee, minLPRes, zilsRes] = batchRes.slice(0, 3);
-    const tokensRes = batchRes.slice(3);
-    const [zilFee, tokensFee] = this._unpack(resFee, DexFields.Fee, EMPTY_FEE).arguments;
-    const minLP = this._unpack(minLPRes, DexFields.MinLP, '0');
-    const zilBalance = this._unpack(zilsRes, 'balance', '0');
+    const tokensRes = batchRes.slice(1);
     const chunks = chunk<RPCResponse>(tokensRes, 2);
-    const state: {
-      [key: string]: {
-        balance: bigint;
-        pool: Array<bigint>;
-      }
-    } = {};
+    const zp = await new ZilPayBase().zilpay();
 
-    for (let index = 0; index < list.length; index++) {
-      const token = list[index];
+    for (const iterator of chunks) {
+      const [init, balancesRes] = iterator;
+      const meta = initParser(init.result);
+      const balances = balancesRes.result ? balancesRes.result[ZRC2Fields.Balances] : {};
+      const foundIndex = pools.findIndex((t) => t.meta.base16 === meta.address);
 
-      state[token] = {
-        balance: BigInt(0),
-        pool: [BigInt(0), BigInt(0)]
-      }
-
-      if (token === ZERO_ADDR) {
-        state[token] = {
-          balance: BigInt(zilBalance),
-          pool: [BigInt(0), BigInt(0)]
+      if (foundIndex >= 0) {
+        pools[foundIndex].meta = {
+          decimals: meta.decimals,
+          bech32: zp.crypto.toBech32Address(meta.address),
+          base16: meta.address,
+          name: meta.name,
+          symbol: meta.symbol
         };
-        continue;
-      }
-
-      const chunk = chunks[index - 1];
-
-      if (chunk[0] && chunk[0].result && chunk[0].result[DexFields.Pools]) {
-        const [zilReserve, tokensReserve] = chunk[0].result[DexFields.Pools][token].arguments;
-
-        state[token]['pool'] = [BigInt(zilReserve), BigInt(tokensReserve)];
-      }
-
-      if (chunk[1] && chunk[1].result && chunk[1].result[ZRC2Fields.Balances]) {
-        const zils = chunk[1].result[ZRC2Fields.Balances][owner.toLowerCase()];
-        state[token].balance = BigInt(zils);
+        pools[foundIndex].balance = {
+          ...pools[foundIndex].balance,
+          ...balances
+        };
       } else {
-        state[token].balance = BigInt(0);
+        pools.push({
+          meta: {
+            decimals: meta.decimals,
+            bech32: zp.crypto.toBech32Address(meta.address),
+            base16: meta.address,
+            name: meta.name,
+            symbol: meta.symbol
+          },
+          balance: balances
+        });
       }
     }
 
-    return {
-      state,
-      fee: [BigInt(zilFee), BigInt(tokensFee)],
-      minLP: minLP
-    };
-  }
-
-  public async fetchDexState(contrat: string, token: string, owner: string) {
-    const poolsFiled = 'pools';
-    const feeFiled = 'swap_fee';
-    const minLPField = 'min_lp';
-    const balancesField = 'balances';
-
-    const batch = [
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          contrat,
-          poolsFiled,
-          [token]
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          contrat,
-          feeFiled,
-          []
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          contrat,
-          minLPField,
-          []
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractSubState,
-        params: [
-          toHex(token),
-          balancesField,
-          [owner]
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetSmartContractInit,
-        params: [
-          toHex(token)
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-      {
-        method: RPCMethods.GetBalance,
-        params: [
-          toHex(owner)
-        ],
-        id: 1,
-        jsonrpc: `2.0`,
-      },
-    ];
-    const [pool, fee, minLPRes, balances, resInit, zilBalance] = await this._send(batch);
-    const [zilReserve, tokenReserve] = pool.result[poolsFiled][token].arguments;
-    const [zilFee, tokensFee] = fee.result[feeFiled].arguments;
-    const minLP = minLPRes.result[minLPField];
-    const balance = balances.result ? balances.result[balancesField][owner] : 0;
-    const init = initParser(resInit.result);
-    const balancesZIL = zilBalance.error ? BigInt(0) : BigInt(zilBalance.result.balance);
-
-    return {
-      balancesZIL,
-      fee: [BigInt(zilFee), BigInt(tokensFee)],
-      pool: [BigInt(zilReserve), BigInt(tokenReserve)],
-      lp: BigInt(minLP),
-      balance: BigInt(balance),
-      init
-    };
-  }
-
-  private _unpack<T>(res: RPCResponse, field: string, defaultValue: T) {
-    if (res.error || !res.result) {
-      return defaultValue;
+    if (batchRes[0].result) {
+      pools[0].balance = {
+        ...pools[0].balance,
+        [owner.toLowerCase()]: batchRes[0].result.balance
+      };
+    } else {
+      pools[0].balance = {
+        ...pools[0].balance,
+        [owner.toLowerCase()]: '0'
+      };
     }
 
-    if (res.result && res.result[field]) {
-      return res.result[field];
-    }
-
-    return defaultValue;
+    return pools;
   }
+
 
   private _buildBody(method: string, params: Params) {
     return {
