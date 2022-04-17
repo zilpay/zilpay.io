@@ -475,6 +475,14 @@ export class DragonDex {
     return Big(10**decimals);
   }
 
+  public sleepageCalc(value: bigint) {
+    const { slippage } = $settings.state;
+    const bigSlippage = BigInt(slippage * 100);
+    const decimals = BigInt(10000);
+
+    return value - (value * bigSlippage / decimals);
+  }
+
   private _outputFor(inputAmount: bigint, inputReserve: bigint, outputReserve: bigint) {
     const numerator = inputAmount * outputReserve;
     const denominator = inputReserve + inputAmount;

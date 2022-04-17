@@ -18,6 +18,7 @@ import { $wallet } from "@/store/wallet";
 import { TokensMixine } from "@/mixins/token";
 import { $tokens } from "@/store/tokens";
 import { ZERO_ADDR } from "@/config/conts";
+import { $settings } from "@/store/settings";
 
 
 type Prop = {
@@ -45,9 +46,27 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const common = useTranslation(`common`);
   const swap = useTranslation(`swap`);
   const wallet = useStore($wallet);
+  const settings = useStore($settings);
 
   const [loading, setLoading] = React.useState(false);
   const [isAllow, setIsAllow] = React.useState(false);
+
+  const price = React.useMemo(() => {
+    switch (direction) {
+      case SwapDirection.ZilToToken:
+        const foundIndex0 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === limitToken.base16);
+        return dex.zilToTokens(String(1), foundIndex0);
+      case SwapDirection.TokenToZil:
+        const foundIndex1 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === exactToken.base16);
+        return dex.tokensToZil(String(1), foundIndex1);
+      case SwapDirection.TokenToTokens:
+        const foundIndex2 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === limitToken.base16);
+        const foundIndex3 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === exactToken.base16);
+        return dex.tokensToTokens(String(1), foundIndex2, foundIndex3);
+      default:
+        Big(0);
+    }
+  }, [direction, limitToken, exactToken]);
 
   const approveToken = async() => {
     const owner = String(wallet?.base16).toLowerCase();
@@ -169,6 +188,49 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           token={limitToken}
           disabled
         />
+        <div className={styles.price}>
+          <p>
+            1 {exactToken.symbol} = {String(price)} {limitToken.symbol} <span>($10)</span>
+          </p>
+        </div>
+        <div className={styles.info}>
+          <div className={styles.column}>
+            <div className={styles.row}>
+              <p>
+                Expected Output
+              </p>
+              <p>
+                3243242 {limitToken.symbol}
+              </p>
+            </div>
+            <div className={styles.row}>
+              <p>
+                Price Impact
+              </p>
+              <p>
+                0.01%
+              </p>
+            </div>
+          </div>
+          <div className={classNames(styles.column, 'muted')}>
+            <div className={styles.row}>
+              <p>
+                Minimum received after slippage ({settings.slippage}%)
+              </p>
+              <p>
+                0.01%
+              </p>
+            </div>
+            <div className={styles.row}>
+              <p>
+                Network Fee
+              </p>
+              <p>
+                6ZIL ($0.3)
+              </p>
+            </div>
+          </div>
+        </div>
         <button
           className={classNames(styles.submit, {
             allow: isAllow

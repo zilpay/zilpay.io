@@ -1,5 +1,7 @@
+@import "@/styles/mixins";
+
 .container {
-  padding: 10px;
+  padding: 16px;
 
   & > button {
     width: 100%;
@@ -22,5 +24,52 @@
 
   &:global(.allow) {
     background-color: var(--primary-color);
+  }
+}
+
+.price {
+  margin-block-start: 16px;
+  margin-block-end: 16px;
+  margin-left: 16px;
+
+  & > p > span {
+    font-family: "Light";
+    color: var(--muted-color);
+  }
+}
+
+.info {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-color);
+
+  @include border-radius(16px);
+}
+
+.column {
+  @include flex-column;
+
+  &:global(.muted > div) {
+    & > p {
+      color: var(--muted-color);
+    }
+  }
+
+  &:first-child {
+    border-bottom: 1px solid var(--notification-color);
+  }
+}
+
+.row {
+  @include flex-between-row;
+
+  & > p {
+    margin: 0;
+    font-weight: 400;
+    font-size: 14px;
+    font-family: "Light";
+    margin-block-end: 4px;
+    margin-block-start: 4px;
+    max-width: 220px;
   }
 }
