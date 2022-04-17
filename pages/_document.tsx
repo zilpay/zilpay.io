@@ -1,4 +1,3 @@
-import { $settings } from '@/store/settings';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class ZilPayDocument extends Document {

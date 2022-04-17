@@ -104,12 +104,12 @@ export class ZilPayBase {
     return result;
   }
 
-  async call(data: Params, gas = DEFAUL_GAS) {
+  async call(data: Params, gaslimit = DEFAUL_GAS.gaslimit) {
     const zilPay = await this.zilpay();
     const { contracts, utils } = zilPay;
     const contract = contracts.at(data.contractAddress);
-    const gasPrice = utils.units.toQa(gas.gasPrice, utils.units.Units.Li);
-    const gasLimit = utils.Long.fromNumber(gas.gaslimit);
+    const gasPrice = utils.units.toQa(DEFAUL_GAS.gasPrice, utils.units.Units.Li);
+    const gasLimit = utils.Long.fromNumber(gaslimit);
     const amount = data.amount || `0`;
 
     return await contract.call(data.transition, data.params, {

@@ -217,7 +217,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: String(zil)
-    });
+    }, '1535');
 
     const found = this.tokens.find((p) => p.meta.base16 === token);
     if (found) {
@@ -275,7 +275,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: '0'
-    });
+    }, '2060');
 
     const foundIndex = this.tokens.findIndex((p) => p.meta.base16 === token);
     if (foundIndex >= 0) {
@@ -339,7 +339,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: '0'
-    });
+    }, '3060');
     const foundIndex0 = this.tokens.findIndex((p) => p.meta.base16 === token0);
     const foundIndex1 = this.tokens.findIndex((p) => p.meta.base16 === token1);
 
@@ -404,7 +404,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: String(limit)
-    });
+    }, '3060');
     addTransactions({
       timestamp: new Date().getTime(),
       name: `addLiquidity`,
@@ -458,7 +458,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: '0'
-    });
+    }, '3060');
 
     addTransactions({
       timestamp: new Date().getTime(),
