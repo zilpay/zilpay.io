@@ -147,7 +147,7 @@ export const SwapForm: React.FC = () => {
   const hanldeSelectToken0 = React.useCallback((token) => {
     const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
 
-    if (foundIndex >= 0) {
+    if (foundIndex >= 0 && foundIndex !== tokenIndex1) {
       tokenIndex0 = foundIndex;
       setToken0(foundIndex);
       setModal0(false);
@@ -159,7 +159,7 @@ export const SwapForm: React.FC = () => {
   const hanldeSelectToken1 = React.useCallback((token) => {
     const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
 
-    if (foundIndex >= 0) {
+    if (foundIndex >= 0 && foundIndex !== tokenIndex0) {
       tokenIndex1 = foundIndex;
       setToken1(foundIndex);
       setModal1(false);
