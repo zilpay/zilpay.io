@@ -51,7 +51,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
 
   const price = React.useMemo(() => {
     return dex.tokensToZil(Big(1), tokenIndex);
-  }, [tokenIndex, amount]);
+  }, [tokenIndex]);
 
   const hanldeaddLiquidity = React.useCallback(async() => {
     setLoading(true);

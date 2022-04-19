@@ -52,7 +52,7 @@ export const AddPoolForm: React.FC = () => {
     const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
     const qa = amount.mul(decimals);
     return Number(amount) === 0 || tokenBalance.lt(qa);
-  }, [amount, tokenBalance, amount, tokensStore, token]);
+  }, [tokenBalance, amount, tokensStore, token]);
 
   const hasPool = React.useMemo(() => {
     return Boolean(liquidity.pools[tokensStore.tokens[token].meta.base16]);

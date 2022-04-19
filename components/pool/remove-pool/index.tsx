@@ -15,7 +15,6 @@ import { $tokens } from '@/store/tokens';
 import { DragonDex } from '@/mixins/dex';
 
 import { ImagePair } from '@/components/pair-img';
-import { FormInput } from '@/components/swap-form';
 import { BackIcon } from '@/components/icons/back';
 import Slider from 'rc-slider';
 
@@ -53,7 +52,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
   }, [token]);
   const owner = React.useMemo(() => {
     return String(wallet?.base16).toLowerCase();
-  }, [token]);
+  }, [wallet]);
 
   const hanldeOnRemove = React.useCallback(async() => {
     setLoading(true);
@@ -77,7 +76,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
       console.error(err);
     }
     setLoading(false);
-  }, [zil, zrc, tokenAddress, userContributions, owner]);
+  }, [zil, zrc, tokenAddress, userContributions, owner, token, tokensStore]);
 
   const hanldeRange = React.useCallback((range) => {
     const percent = BigInt(range);
@@ -90,7 +89,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     setZrc(Big(String(newTokens)).div(dex.toDecimails(token.meta.decimals)));
     setRange(range);
     setUserContributions(Big(String(newUserContributions)));
-  }, [zilReserve, tokenReserve, tokensStore, userContributions, owner, token]);
+  }, [zilReserve, tokenReserve, tokensStore, owner, token, liquidity, tokenAddress]);
 
   React.useEffect(() => {
     try {
@@ -107,7 +106,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     } catch (err) {
       // console.error(err);
     }
-  }, [wallet, liquidity, tokenAddress, tokensStore, token, owner]);
+  }, [wallet, liquidity, tokenAddress, tokensStore, token, owner, hanldeRange]);
 
   return (
     <div className={styles.container}>

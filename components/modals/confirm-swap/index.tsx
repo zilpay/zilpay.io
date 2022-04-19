@@ -88,7 +88,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     return String(value.div(dex.toDecimails(limitToken.decimals)));
   }, [limit, limitToken]);
 
-  const approveToken = async() => {
+  const approveToken = React.useCallback(async() => {
     const owner = String(wallet?.base16).toLowerCase();
     const token = $tokens.state.tokens.find(
       (t) => t.meta.base16 === exactToken.base16
@@ -99,12 +99,12 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
       exactToken.base16,
       balance
     );
-  };
+  }, [wallet, exactToken]);
 
   const hanldeUpdate = React.useCallback(async() => {
     if (exactToken.base16 === ZERO_ADDR) {
       setIsAllow(true);
-      return
+      return;
     };
 
     setLoading(true);
@@ -177,13 +177,23 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     }
 
     setLoading(false);
-  }, [isAllow, exact, limit, direction, wallet, exactToken, limitToken, onClose]);
+  }, [
+    isAllow,
+    exact,
+    limit,
+    direction,
+    wallet,
+    exactToken,
+    limitToken,
+    onClose,
+    approveToken
+  ]);
 
   React.useEffect(() => {
     if (show) {
       hanldeUpdate();
     }
-  }, [show, wallet]);
+  }, [show, wallet, hanldeUpdate]);
 
   return (
     <Modal
