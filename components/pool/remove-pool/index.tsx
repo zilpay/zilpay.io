@@ -106,7 +106,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     } catch (err) {
       // console.error(err);
     }
-  }, [wallet, liquidity, tokenAddress, tokensStore, token, owner, hanldeRange]);
+  }, [wallet, liquidity, tokenAddress, tokensStore, token, owner]);
 
   return (
     <div className={styles.container}>

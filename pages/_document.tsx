@@ -1,3 +1,4 @@
+import { Themes } from '@/config/themes';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
 class ZilPayDocument extends Document {
@@ -6,6 +7,11 @@ class ZilPayDocument extends Document {
     return (
       <Html>
         <Head>
+          {this.props.__NEXT_DATA__.props.theme === Themes.Light ? (
+            <meta name="theme-color" content="#1a5d8d" media="(prefers-color-scheme: dark)" />
+            ) : (
+            <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)" />
+          )}
           <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
           <link rel="apple-touch-icon" type="image/png" sizes="57x57" href="/favicon/apple-icon-57x57.png" />
           <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="/favicon/apple-icon-60x60.png" />
