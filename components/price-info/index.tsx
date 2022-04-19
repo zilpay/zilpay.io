@@ -12,10 +12,14 @@ import { $tokens } from "@/store/tokens";
 
 type Prop = {
   tokens: TokenState[];
+  onClick?: () => void;
 };
 
 const dex = new DragonDex();
-export var PriceInfo: React.FC<Prop> = function ({ tokens }) {
+export var PriceInfo: React.FC<Prop> = function ({
+  tokens,
+  onClick = () => null
+}) {
   const tokensStore = useStore($tokens);
 
   const price = React.useMemo(() => {
@@ -44,7 +48,7 @@ export var PriceInfo: React.FC<Prop> = function ({ tokens }) {
 
   return (
     <div className={styles.container}>
-      <p>
+      <p onClick={onClick}>
         1 {tokens[0].symbol} = {String(price)} {tokens[1].symbol} ($1.55824)
       </p>
     </div>

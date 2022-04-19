@@ -39,6 +39,7 @@ export const SwapForm: React.FC = () => {
 
   const [token0, setToken0] = React.useState(tokenIndex0);
   const [token1, setToken1] = React.useState(tokenIndex1);
+
   const [modal0, setModal0] = React.useState(false);
   const [modal1, setModal1] = React.useState(false);
   const [modal3, setModal3] = React.useState(false);
@@ -48,6 +49,7 @@ export const SwapForm: React.FC = () => {
   const [bottomAmount, setBottomAmount] = React.useState(Big(0));
   const [direction, setDirection] = React.useState(SwapDirection.ZilToToken);
   const [exactType, setExactType] = React.useState(Exact.Top);
+  const [priceFrom, setPriceFrom] = React.useState(true);
 
   const exactAmount = React.useMemo(() => {
     if (exactType === Exact.Top) {
@@ -68,10 +70,22 @@ export const SwapForm: React.FC = () => {
 
     return bottomAmount.mul(decimals1);
   }, [topAmount, bottomAmount, tokensStore, exactType]);
-
   const disabled = React.useMemo(() => {
     return exactAmount.eq(0) || !(wallet?.base16);
   }, [exactAmount, wallet]);
+  const tokensForPrice = React.useMemo(() => {
+    if (priceFrom) {
+      return [
+        tokensStore.tokens[token0].meta,
+        tokensStore.tokens[token1].meta
+      ];
+    } else {
+      return [
+        tokensStore.tokens[token1].meta,
+        tokensStore.tokens[token0].meta
+      ];
+    }
+  }, [priceFrom, tokensStore, token0, token1]);
 
   const hanldeOnChangeTop = React.useCallback((amount: Big) => {
     let result = Big(0);
@@ -224,10 +238,8 @@ export const SwapForm: React.FC = () => {
           onSelect={() => setModal1(true)}
         />
         <PriceInfo
-          tokens={[
-            tokensStore.tokens[token0].meta,
-            tokensStore.tokens[token1].meta
-          ]}
+          tokens={tokensForPrice}
+          onClick={() => setPriceFrom(!priceFrom)}
         />
         <button disabled={Boolean(disabled)}>
           {t('buttons.exchange')}
