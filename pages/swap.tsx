@@ -9,14 +9,30 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { SwapForm } from '@/components/swap-form';
 
 import { liquidityFromCache } from '@/store/shares';
+import { DragonDex } from '@/mixins/dex';
+import { Puff } from 'react-loader-spinner';
 
-
+const dex = new DragonDex();
 export const PageSwap: NextPage = () => {
   const { t } = useTranslation(`swap`);
 
-  React.useEffect(() => {
-    liquidityFromCache();
+  const [loading, setLoading] = React.useState(true);
+
+  const hanldeUpdate = React.useCallback(async() => {
+    if (typeof window !== 'undefined') {
+      liquidityFromCache();
+      try {
+        await dex.updateState();
+      } catch {
+        ///
+      }
+      setLoading(false);
+    }
   }, []);
+
+  React.useEffect(() => {
+    hanldeUpdate();
+  }, [hanldeUpdate]);
 
   return (
     <div className={styles.container}>
@@ -29,7 +45,11 @@ export const PageSwap: NextPage = () => {
         />
       </Head>
       <div>
-        <SwapForm />
+        {loading ? (
+          <Puff color="var(--primary-color)"/>
+        ) : (
+          <SwapForm />
+        )}
       </div>
     </div>
   );

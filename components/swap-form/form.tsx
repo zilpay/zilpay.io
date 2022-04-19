@@ -73,10 +73,6 @@ export const SwapForm: React.FC = () => {
     return exactAmount.eq(0) || !(wallet?.base16);
   }, [exactAmount, wallet]);
 
-  const hanldeUpdate = React.useCallback(async() => {
-    await dex.updateState();
-  }, []);
-
   const hanldeOnChangeTop = React.useCallback((amount: Big) => {
     let result = Big(0);
 
@@ -168,10 +164,6 @@ export const SwapForm: React.FC = () => {
       setTopAmount(Big(0));
     }
   }, [tokensStore]);
-
-  React.useEffect(() => {
-    hanldeUpdate();
-  }, [hanldeUpdate]);
 
   return (
     <>

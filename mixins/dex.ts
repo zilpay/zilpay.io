@@ -40,7 +40,7 @@ export class DragonDex {
   public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
-  public fee = [BigInt(10000), BigInt(10000)];
+  public fee = BigInt(9900);
 
   public get pools() {
     return $liquidity.state.pools;
@@ -116,7 +116,6 @@ export class DragonDex {
   public calcAmount(amount: bigint, index: number, direction: SwapDirection) {
     const token = this.tokens[index].meta;
     const [zilReserve, tokenReserve] = this.pools[String(token.base16).toLowerCase()];
-    const [zilFee, tokensFee] = this.fee;
     const exactSide = ExactSide.ExactInput;
     const calculated = this._amountFor(
       direction,
@@ -125,11 +124,10 @@ export class DragonDex {
       BigInt(zilReserve),
       BigInt(tokenReserve)
     );
-    const tokens = this._getFee(calculated, tokensFee);
-    const zils = this._getFee(calculated, zilFee);
+    const zils = this._getFee(calculated, this.fee);
 
     return {
-      tokens,
+      tokens: calculated,
       zils
     }
   }
@@ -478,11 +476,11 @@ export class DragonDex {
   public calcGasLimit(direction: SwapDirection) {
     switch (direction) {
       case SwapDirection.ZilToToken:
-        return Big(1535);
+        return Big(1575);
       case SwapDirection.TokenToZil:
-        return Big(2060);
+        return Big(2090);
       case SwapDirection.TokenToTokens:
-        return Big(3060);
+        return Big(3092);
       default:
         return Big(5000);
     }

@@ -16,7 +16,7 @@ import { $wallet } from '@/store/wallet';
 
 import { DragonDex } from '@/mixins/dex';
 
-import { DEFAULT_TOKEN_INDEX } from '@/config/conts';
+import { DEFAULT_TOKEN_INDEX, ZERO_ADDR } from '@/config/conts';
 import { AddPoolPreviewModal } from '@/components/modals/add-pool-preview';
 import { SwapSettingsModal } from '@/components/modals/settings';
 import { $liquidity } from '@/store/shares';
@@ -58,16 +58,16 @@ export const AddPoolForm: React.FC = () => {
     return Boolean(liquidity.pools[tokensStore.tokens[token].meta.base16]);
   }, [liquidity, tokensStore, token]);
 
-  const hanldeSelectToken0 = React.useCallback((token) => {
+  const hanldeSelectToken0 = React.useCallback((t) => {
     const foundIndex = tokensStore
     .tokens
-    .findIndex((p) => p.meta.base16 === token.base16);
+    .findIndex((p) => p.meta.base16 === t.base16);
 
-    if (foundIndex >= 0) {
+    if (foundIndex >= 0 && t.base16 !== ZERO_ADDR) {
       setToken(foundIndex);
       setTokensModal(false);
     }
-  }, [tokensStore, setToken]);
+  }, [tokensStore, token]);
 
   const handleSubmit = React.useCallback((event) => {
     event.preventDefault();
