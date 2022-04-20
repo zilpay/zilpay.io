@@ -33,6 +33,11 @@ export function updateFromStorage() {
         ...JSON.parse(data),
         theme
       });
+    } else {
+      $settings.setState({
+        ...$settings.state,
+        theme
+      });
     }
     window.document.body.setAttribute('theme-color', $settings.state.theme);
   } catch {
