@@ -8,8 +8,12 @@ import Image from 'next/image';
 
 import { getIconURL } from "@/lib/viewblock";
 import classNames from 'classnames';
-import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
+import { DEFAULT_CURRENCY, SHARE_PERCENT_DECIMALS, ZERO_ADDR } from '@/config/conts';
 import { DragonDex } from '@/mixins/dex';
+import { formatNumber } from '@/filters/n-format';
+import { useStore } from 'react-stores';
+import { $settings } from '@/store/settings';
+import { $tokens } from '@/store/tokens';
 
 
 Big.PE = 999;
@@ -36,6 +40,26 @@ export const FormInput: React.FC<Prop> = ({
   onSelect = () => null,
   onMax = () => null
 }) => {
+  const settings = useStore($settings);
+  const tokensStore = useStore($tokens);
+
+  const converted = React.useMemo(() => {
+    const rate = Big(settings.rate);
+
+    if (token.base16 === ZERO_ADDR) {
+      return formatNumber(String(value.mul(rate)), DEFAULT_CURRENCY);
+    }
+
+    const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token.base16);
+
+    if (foundIndex >= 0) {
+      const zils = dex.tokensToZil(value, foundIndex);
+      return formatNumber(String(zils.mul(rate)), DEFAULT_CURRENCY);
+    }
+
+    return 0;
+  }, [settings, value, tokensStore, token]);
+
   const hanldePercent = React.useCallback((n: number) => {
     const percent = BigInt(n);
     const value = BigInt(balance) * percent / BigInt(SHARE_PERCENT_DECIMALS);
@@ -99,7 +123,7 @@ export const FormInput: React.FC<Prop> = ({
         </div>
         <div className={styles.wrapper}>
           <p>
-            $73.569
+            {converted}
           </p>
           {disabled ? null : (
             <div className={styles.row}>
