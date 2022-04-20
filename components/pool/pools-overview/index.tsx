@@ -19,7 +19,6 @@ import { formatNumber } from '@/filters/n-format';
 
 import { DEFAULT_CURRENCY, SHARE_PERCENT_DECIMALS } from '@/config/conts';
 import { DragonDex } from '@/mixins/dex';
-import { TokenState } from '@/types/token';
 import { $settings } from '@/store/settings';
 
 type Prop = {
@@ -35,56 +34,42 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
   const tokensStore = useStore($tokens);
   const settings = useStore($settings);
 
-  const ownerLising = React.useMemo(() => {
+  const list = React.useMemo(() => {
     if (!wallet) {
       return [];
     }
-
-    const { pools, shares } = liquidity;
-
     const tokens = [];
     const owner = String(wallet.base16).toLowerCase();
-    const zil = tokensStore.tokens[0].meta;
+    const zilToken = tokensStore.tokens[0].meta;
+    const { pools, shares } = liquidity;
+    const rate = Big(settings.rate);
 
     for (const token in shares) {
-      if (shares[token][owner]) {
-        const found = tokensStore.tokens.find((p) => p.meta.base16 === token);
+      try {
+        const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token);
+        const pool = pools[token];
+        const share = shares[token][owner];
+        const limitToken = tokensStore.tokens[foundIndex];
+        const [x, y] = nPool(pool, share);
+        const zilReserve = Big(x.toString()).div(dex.toDecimails(zilToken.decimals));
+        const tokenReserve = Big(y.toString()).div(dex.toDecimails(limitToken.meta.decimals));
+        const zilsTokens = dex.tokensToZil(tokenReserve, foundIndex);
+        const zils = zilReserve.add(zilsTokens);
 
-        if (found) {
-          const [x, y] = nPool(pools[token], shares[token][owner]);
-          const zilReserve = Big(x.toString()).div(dex.toDecimails(zil.decimals));
-          const tokenReserve = Big(y.toString()).div(dex.toDecimails(found.meta.decimals));
-          tokens.push({
-            meta: found.meta,
-            pool: [
-              String(zilReserve),
-              String(tokenReserve)
-            ],
-            share: Number(shares[token][owner]) / SHARE_PERCENT_DECIMALS
-          });
-        }
+        tokens.push({
+          token: limitToken.meta,
+          zilReserve: formatNumber(String(zilReserve)),
+          tokenReserve: formatNumber(String(tokenReserve)),
+          price: formatNumber(String(zils.mul(rate)), DEFAULT_CURRENCY),
+          share: Number(share) / SHARE_PERCENT_DECIMALS
+        });
+      } catch {
+        continue;
       }
     }
 
     return tokens;
-  }, [wallet, liquidity, tokensStore]);
-
-  const poolToConverted = React.useCallback((pool0: string, pool1: string, token: TokenState) => {
-    let zils = Big(pool0);
-    const tokens = Big(pool1);
-    const rate = Big(settings.rate);
-    const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token.base16);
-
-    if (foundIndex >= 0) {
-      const zilsTokens = dex.tokensToZil(tokens, foundIndex);
-
-      zils = zils.add(zilsTokens);
-    }
-
-    zils = zils.mul(rate);
-
-    return formatNumber(String(zils), DEFAULT_CURRENCY);
-  }, [tokensStore, settings]);
+  }, [wallet, liquidity, tokensStore, settings]);
 
   return (
     <div className={styles.container}>
@@ -98,7 +83,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
           </button>
         </Link>
       </div>
-      {ownerLising.length === 0 ? (
+      {list.length === 0 ? (
         <div className={styles.wrapper}>
           {loading ? (
             <Puff color="var(--primary-color)"/>
@@ -125,10 +110,10 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
         </div>
       ) : (
         <div className={classNames(styles.wrapper, styles.cardwrapper)}>
-          {ownerLising.map((el) => (
+          {list.map((el) => (
             <Link
-              href={`/pool/${el.meta.base16}`}
-              key={el.meta.base16}
+              href={`/pool/${el.token.base16}`}
+              key={el.token.base16}
               passHref
             >
               <div className={styles.poolcard}>
@@ -136,18 +121,18 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
                   <ImagePair
                     tokens={[
                       tokensStore.tokens[0].meta,
-                      el.meta
+                      el.token
                     ]}
                   />
                   <p>
-                    ZIL / {el.meta.symbol} - <span>
+                    ZIL / {el.token.symbol} - <span>
                       {el.share}%
                     </span>
                   </p>
                 </div>
                 <div className={styles.cardrow}>
                   <p className={styles.amount}>
-                    {formatNumber(el.pool[0])} / {formatNumber(el.pool[1])} ≈ {poolToConverted(el.pool[0], el.pool[1], el.meta)}
+                    {el.zilReserve} / {el.tokenReserve} ≈ {el.price}
                   </p>
                 </div>
               </div>
