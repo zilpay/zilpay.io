@@ -5,6 +5,7 @@ import { Store } from 'react-stores';
 import cookieCutter from 'cookie-cutter';
 
 const initState = {
+  rate: 0.11858,
   slippage: SLIPPAGE,
   blocks: BLOCKS,
   theme: String(Themes.Dark)
@@ -13,15 +14,11 @@ const initState = {
 
 export const $settings = new Store(initState);
 
-export function updateSettingsStore(slippage: number, blocks: number, theme: Themes | string) {
-  $settings.setState({
-    slippage,
-    blocks,
-    theme
-  });
+export function updateSettingsStore(data: typeof initState) {
+  $settings.setState(data);
   if (typeof window !== 'undefined') {
-    cookieCutter.set('theme', theme);
-    window.document.body.setAttribute('theme-color', theme);
+    cookieCutter.set('theme', data.theme);
+    window.document.body.setAttribute('theme-color', data.theme);
     window.localStorage.setItem(StorageFields.Settings, JSON.stringify($settings.state));
   }
 }

@@ -1,6 +1,5 @@
 import styles from "./index.module.scss";
 
-import { useTranslation } from 'next-i18next'
 import React from 'react';
 import { useStore } from "react-stores";
 import Link from 'next/link';
@@ -13,26 +12,21 @@ import { Themes } from "@/config/themes";
 
 
 export const NavBar: React.FC = () => {
-  const { t } = useTranslation(`common`);
-
   const settings = useStore($settings);
 
   const hanldeChangeTheme = React.useCallback((value: boolean) => {
     if (value) {
-      updateSettingsStore(
-        settings.slippage,
-        settings.blocks,
-        Themes.Dark
-      );
+      updateSettingsStore({
+        ...settings,
+        theme: Themes.Dark
+      });
     } else {
-      updateSettingsStore(
-        settings.slippage,
-        settings.blocks,
-        Themes.Light
-      );
+      updateSettingsStore({
+        ...settings,
+        theme: Themes.Light
+      });
     }
   }, [settings]);
-
 
   return (
     <nav className={styles.navbar}>

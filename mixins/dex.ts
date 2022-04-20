@@ -124,12 +124,8 @@ export class DragonDex {
       BigInt(zilReserve),
       BigInt(tokenReserve)
     );
-    const zils = this._getFee(calculated, this.fee);
 
-    return {
-      tokens: calculated,
-      zils
-    }
+    return calculated;
   }
 
   public zilToTokens(value: string | Big, index: number): Big {
@@ -138,8 +134,9 @@ export class DragonDex {
     try {
       const decimals = this.toDecimails(this.tokens[index].meta.decimals);
       const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
-      const qa = amount.mul(zilDecimails).round().toString();
-      const { tokens } = this.calcAmount(BigInt(qa), index, SwapDirection.ZilToToken);
+      const qa = BigInt(amount.mul(zilDecimails).round().toString());
+      const result = this._getFee(qa, this.fee);
+      const tokens = this.calcAmount(result, index, SwapDirection.ZilToToken);
   
       return Big(String(tokens)).div(decimals);
     } catch {
@@ -153,11 +150,12 @@ export class DragonDex {
     try {
       const decimals = this.toDecimails(this.tokens[index].meta.decimals);
       const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
-  
+
       const qa = amount.mul(decimals).round().toString();
-      const { zils } = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
+      const zils = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
+      const result = this._getFee(zils, this.fee);
   
-      return Big(String(zils)).div(zilDecimails);
+      return Big(String(result)).div(zilDecimails);
     } catch {
       return Big(0);
     }
@@ -172,9 +170,11 @@ export class DragonDex {
 
     const decimals0 = this.toDecimails(this.tokens[index0].meta.decimals);
     const decimals1 = this.toDecimails(this.tokens[index1].meta.decimals);
+
     const qa0 = amount.mul(decimals0).round().toString();
-    const { zils } = this.calcAmount(BigInt(qa0), index0, SwapDirection.TokenToZil);
-    const { tokens } = this.calcAmount(zils, index1, SwapDirection.ZilToToken);
+    const zils = this.calcAmount(BigInt(qa0), index0, SwapDirection.TokenToZil);
+    const result = this._getFee(zils, this.fee);
+    const tokens = this.calcAmount(result, index1, SwapDirection.ZilToToken);
 
     return Big(String(tokens)).div(decimals1);
   }

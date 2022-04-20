@@ -35,11 +35,10 @@ App.getInitialProps = async function ({ ctx }: any): Promise<{}> {
   const cookies = new Cookies(ctx.req, ctx.res);
   const theme = cookies.get('theme') || Themes.Dark;
 
-  updateSettingsStore(
-    $settings.state.slippage,
-    $settings.state.blocks,
+  updateSettingsStore({
+    ...$settings.state,
     theme
-  );
+  });
 
   return {
     theme

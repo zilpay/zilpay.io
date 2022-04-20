@@ -24,32 +24,28 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
   const settings = useStore($settings);
 
   const hanldeResetSlippage = React.useCallback(() => {
-    updateSettingsStore(
-      SLIPPAGE,
-      settings.blocks,
-      settings.theme
-    );
+    updateSettingsStore({
+      ...settings,
+      slippage: SLIPPAGE
+    });
   }, [settings]);
   const hanldeResetBlocks = React.useCallback(() => {
-    updateSettingsStore(
-      settings.slippage,
-      BLOCKS,
-      settings.theme
-    );
+    updateSettingsStore({
+      ...settings,
+      blocks: BLOCKS
+    });
   }, [settings]);
   const hanldeInputSlippage = React.useCallback((event) => {
-    updateSettingsStore(
-      Number(event.target.value),
-      settings.blocks,
-      settings.theme
-    );
+    updateSettingsStore({
+      ...settings,
+      slippage: Number(event.target.value)
+    });
   }, [settings]);
   const hanldeInputBlocks = React.useCallback((event) => {
-    updateSettingsStore(
-      settings.slippage,
-      Number(event.target.value),
-      settings.theme
-    );
+    updateSettingsStore({
+      ...settings,
+      blocks: Number(event.target.value)
+    });
   }, [settings]);
 
   return (
