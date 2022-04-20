@@ -40,8 +40,6 @@ App.getInitialProps = async function ({ ctx }: any): Promise<{}> {
     theme
   });
 
-  console.log(theme);
-
   return {
     theme
   };

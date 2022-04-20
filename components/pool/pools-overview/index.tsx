@@ -17,8 +17,10 @@ import { $tokens } from '@/store/tokens';
 import { nPool } from '@/filters/n-pool';
 import { formatNumber } from '@/filters/n-format';
 
-import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
+import { DEFAULT_CURRENCY, SHARE_PERCENT_DECIMALS } from '@/config/conts';
 import { DragonDex } from '@/mixins/dex';
+import { TokenState } from '@/types/token';
+import { $settings } from '@/store/settings';
 
 type Prop = {
   loading: boolean;
@@ -31,6 +33,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
   const wallet = useStore($wallet);
   const liquidity = useStore($liquidity);
   const tokensStore = useStore($tokens);
+  const settings = useStore($settings);
 
   const ownerLising = React.useMemo(() => {
     if (!wallet) {
@@ -38,6 +41,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
     }
 
     const { pools, shares } = liquidity;
+
     const tokens = [];
     const owner = String(wallet.base16).toLowerCase();
     const zil = tokensStore.tokens[0].meta;
@@ -65,11 +69,28 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
     return tokens;
   }, [wallet, liquidity, tokensStore]);
 
+  const poolToConverted = React.useCallback((pool0: string, pool1: string, token: TokenState) => {
+    let zils = Big(pool0);
+    const tokens = Big(pool1);
+    const rate = Big(settings.rate);
+    const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token.base16);
+
+    if (foundIndex >= 0) {
+      const zilsTokens = dex.tokensToZil(tokens, foundIndex);
+
+      zils = zils.add(zilsTokens);
+    }
+
+    zils = zils.mul(rate);
+
+    return formatNumber(String(zils), DEFAULT_CURRENCY);
+  }, [tokensStore, settings]);
+
   return (
     <div className={styles.container}>
       <div className={styles.row}>
         <h3>
-          Pools Overview
+          {pool.t('overview.title')}
         </h3>
         <Link href="/pool/add" passHref>
           <button>
@@ -126,7 +147,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
                 </div>
                 <div className={styles.cardrow}>
                   <p className={styles.amount}>
-                    {formatNumber(el.pool[0])} / {formatNumber(el.pool[1])} ≈ $32
+                    {formatNumber(el.pool[0])} / {formatNumber(el.pool[1])} ≈ {poolToConverted(el.pool[0], el.pool[1], el.meta)}
                   </p>
                 </div>
               </div>

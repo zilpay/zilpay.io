@@ -16,8 +16,12 @@ export const $settings = new Store(initState);
 
 export function updateSettingsStore(data: typeof initState) {
   $settings.setState(data);
+
   if (typeof window !== 'undefined') {
-    cookieCutter.set('theme', data.theme);
+    cookieCutter.set('theme', data.theme, {
+      path: '/'
+    });
+
     window.document.body.setAttribute('theme-color', data.theme);
     window.localStorage.setItem(StorageFields.Settings, JSON.stringify($settings.state));
   }
