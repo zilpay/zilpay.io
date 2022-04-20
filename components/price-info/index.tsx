@@ -7,8 +7,10 @@ import { useStore } from "react-stores";
 import React from "react";
 
 import { DragonDex } from "@/mixins/dex";
-import { ZERO_ADDR } from "@/config/conts";
+import { DEFAULT_CURRENCY, ZERO_ADDR } from "@/config/conts";
 import { $tokens } from "@/store/tokens";
+import { $settings } from "@/store/settings";
+import { formatNumber } from "@/filters/n-format";
 
 type Prop = {
   tokens: TokenState[];
@@ -21,6 +23,7 @@ export var PriceInfo: React.FC<Prop> = function ({
   onClick = () => null
 }) {
   const tokensStore = useStore($tokens);
+  const settingsStore = useStore($settings);
 
   const price = React.useMemo(() => {
     const [x, y] = tokens;
@@ -46,10 +49,23 @@ export var PriceInfo: React.FC<Prop> = function ({
     return price;
   }, [tokens, tokensStore]);
 
+  const converted = React.useMemo(() => {
+    const [x] = tokens;
+    const { rate } = settingsStore;
+
+    if (x.base16 === ZERO_ADDR) {
+      return formatNumber(rate, DEFAULT_CURRENCY);
+    }
+
+    return formatNumber(Number(price) * rate, DEFAULT_CURRENCY);
+  }, [tokens, settingsStore, price]);
+
   return (
     <div className={styles.container}>
       <p onClick={onClick}>
-        1 {tokens[0].symbol} = {String(price)} {tokens[1].symbol} ($1.55824)
+        1 {tokens[0].symbol} = {String(price)} {tokens[1].symbol} <span>
+          ({converted})
+        </span>
       </p>
     </div>
   );

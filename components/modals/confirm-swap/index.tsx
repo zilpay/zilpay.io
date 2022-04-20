@@ -17,9 +17,11 @@ import { DragonDex, SwapDirection } from "@/mixins/dex";
 import { $wallet } from "@/store/wallet";
 import { TokensMixine } from "@/mixins/token";
 import { $tokens } from "@/store/tokens";
-import { ZERO_ADDR } from "@/config/conts";
+import { DEFAULT_CURRENCY, ZERO_ADDR } from "@/config/conts";
 import { $settings } from "@/store/settings";
 import { DEFAUL_GAS } from "@/mixins/zilpay-base";
+import { PriceInfo } from "@/components/price-info";
+import { formatNumber } from "@/filters/n-format";
 
 
 type Prop = {
@@ -51,7 +53,15 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
 
   const [loading, setLoading] = React.useState(false);
   const [isAllow, setIsAllow] = React.useState(false);
+  const [priceRevert, setPriceRevert] = React.useState(true);
 
+  const tokensPrices = React.useMemo(() => {
+    if (priceRevert) {
+      return [exactToken, limitToken];
+    }
+
+    return [limitToken, exactToken];
+  } , [priceRevert, exactToken, limitToken]);
   const gasFee = React.useMemo(() => {
     const gasLimit = dex.calcGasLimit(direction);
     const gasPrice = Big(DEFAUL_GAS.gasPrice);
@@ -59,23 +69,6 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
 
     return li.div(dex.toDecimails(6));
   }, [direction]);
-
-  const price = React.useMemo(() => {
-    switch (direction) {
-      case SwapDirection.ZilToToken:
-        const foundIndex0 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === limitToken.base16);
-        return dex.zilToTokens(String(1), foundIndex0);
-      case SwapDirection.TokenToZil:
-        const foundIndex1 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === exactToken.base16);
-        return dex.tokensToZil(String(1), foundIndex1);
-      case SwapDirection.TokenToTokens:
-        const foundIndex2 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === limitToken.base16);
-        const foundIndex3 = $tokens.state.tokens.findIndex((t) => t.meta.base16 === exactToken.base16);
-        return dex.tokensToTokens(String(1), foundIndex2, foundIndex3);
-      default:
-        Big(0);
-    }
-  }, [direction, limitToken, exactToken]);
 
   const expectedOutput = React.useMemo(() => {
     const value = limit.div(dex.toDecimails(limitToken.decimals));
@@ -218,11 +211,10 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           token={limitToken}
           disabled
         />
-        <div className={styles.price}>
-          <p>
-            1 {exactToken.symbol} = {String(price)} {limitToken.symbol} <span>($10)</span>
-          </p>
-        </div>
+        <PriceInfo
+          tokens={tokensPrices}
+          onClick={() => setPriceRevert(!priceRevert)}
+        />
         <div className={styles.info}>
           <div className={styles.column}>
             <div className={styles.row}>
@@ -256,7 +248,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                 {swap.t(`modals.confirm.fee`)}
               </p>
               <p>
-                {String(gasFee)}ZIL ($0.3)
+                {String(gasFee)}ZIL ({formatNumber(Number(gasFee) * settings.rate, DEFAULT_CURRENCY)})
               </p>
             </div>
           </div>

@@ -27,17 +27,6 @@
   }
 }
 
-.price {
-  margin-block-start: 16px;
-  margin-block-end: 16px;
-  margin-left: 16px;
-
-  & > p > span {
-    font-family: "Light";
-    color: var(--muted-color);
-  }
-}
-
 .info {
   padding: 0.75rem;
   border: 1px solid var(--border-color);

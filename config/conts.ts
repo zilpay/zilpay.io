@@ -7,3 +7,4 @@ export const BLOCKS = 10;
 export const DEFAULT_TOKEN_INDEX = 1;
 export const SHARE_PERCENT = BigInt(10000);
 export const SHARE_PERCENT_DECIMALS = 100;
+export const DEFAULT_CURRENCY = 'USD';

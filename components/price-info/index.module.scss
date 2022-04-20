@@ -10,5 +10,9 @@
 
   & > p {
     cursor: pointer;
+
+    & > span {
+      color: var(--muted-color);
+    }
   }
 }
