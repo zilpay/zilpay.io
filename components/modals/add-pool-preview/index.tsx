@@ -197,9 +197,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
           </div>
         ) : null}
         <button
-          className={classNames(styles.submit, {
-            allow: isAllow
-          })}
+          className={styles.submit}
           disabled={loading}
           onClick={hanldeaddLiquidity}
         >
