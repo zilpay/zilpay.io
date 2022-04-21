@@ -51,7 +51,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const wallet = useStore($wallet);
   const settings = useStore($settings);
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(true);
   const [isAllow, setIsAllow] = React.useState(false);
   const [priceRevert, setPriceRevert] = React.useState(true);
 
@@ -97,6 +97,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const hanldeUpdate = React.useCallback(async() => {
     if (exactToken.base16 === ZERO_ADDR) {
       setIsAllow(true);
+      setLoading(false);
       return;
     };
 
@@ -130,7 +131,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             limit,
             wallet.base16,
             limitToken.base16
-          );    
+          );
+          setLoading(false);
           onClose();
           return;
         case SwapDirection.TokenToZil:
@@ -146,6 +148,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             wallet.base16,
             exactToken.base16
           );
+          setLoading(false);
           onClose();
           return;
         case SwapDirection.TokenToTokens:
@@ -162,6 +165,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             exactToken.base16,
             limitToken.base16
           );
+          setLoading(false);
           onClose();
           return;
       }
@@ -260,17 +264,17 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           onClick={hanldeOnSwap}
           disabled={loading}
         >
-          {isAllow ? (
+          {loading ? (
+            <ThreeDots
+              color="var(--button-color)"
+              height={25}
+              width={50}
+            />
+          ) : (
             <>
-              {loading ? (
-                <ThreeDots
-                  color="var(--button-color)"
-                  height={25}
-                  width={50}
-                />
-              ) : swap.t(`modals.confirm.btn`)}
+              {isAllow ? swap.t(`modals.confirm.btn`) : common.t('buttons.approve')}
             </>
-          ) : common.t('buttons.approve')}
+          )}
         </button>
       </div>
     </Modal>

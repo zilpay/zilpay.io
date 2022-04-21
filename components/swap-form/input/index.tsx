@@ -5,6 +5,7 @@ import type { TokenState } from "@/types/token";
 import React from "react";
 import Big from "big.js";
 import Image from 'next/image';
+import toformat from 'toformat';
 
 import { getIconURL } from "@/lib/viewblock";
 import classNames from 'classnames';
@@ -31,6 +32,7 @@ type Prop = {
 
 const list = [10, 25, 50, 75, 100];
 const dex = new DragonDex();
+const FormatedBig = toformat(Big);
 export const FormInput: React.FC<Prop> = ({
   value,
   token,

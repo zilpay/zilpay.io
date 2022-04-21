@@ -22,7 +22,8 @@
     "react-dom": "18.0.0",
     "react-lazy-load-image-component": "^1.5.3",
     "react-loader-spinner": "^6.0.0-0",
-    "react-stores": "^5.5.0"
+    "react-stores": "^5.5.0",
+    "toformat": "^2.0.0"
   },
   "devDependencies": {
     "@types/big.js": "^6.1.3",
