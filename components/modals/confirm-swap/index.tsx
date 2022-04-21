@@ -22,6 +22,7 @@ import { $settings } from "@/store/settings";
 import { DEFAUL_GAS } from "@/mixins/zilpay-base";
 import { PriceInfo } from "@/components/price-info";
 import { formatNumber } from "@/filters/n-format";
+import { $liquidity } from "@/store/shares";
 
 
 type Prop = {
@@ -50,6 +51,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const swap = useTranslation(`swap`);
   const wallet = useStore($wallet);
   const settings = useStore($settings);
+  const liquidity = useStore($liquidity);
 
   const [loading, setLoading] = React.useState(true);
   const [isAllow, setIsAllow] = React.useState(false);
@@ -74,6 +76,28 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     const value = limit.div(dex.toDecimails(limitToken.decimals));
     return String(value);
   }, [limit, limitToken]);
+
+  const priceImpact = React.useMemo(() => {
+    const expectInput = exact.div(dex.toDecimails(exactToken.decimals));
+    const limitInput = limit.div(dex.toDecimails(limitToken.decimals));
+    let pool = [];
+    let price = Big(0);
+
+    switch (direction) {
+      case SwapDirection.ZilToToken:
+        pool = liquidity.pools[limitToken.base16];
+        price = Big(String(pool[0])).div(String(pool[1]));
+        return dex.calcPriceImpact(expectInput, limitInput, price);
+      case SwapDirection.TokenToZil:
+        pool = liquidity.pools[exactToken.base16];
+        price = Big(String(pool[0])).div(String(pool[1]));
+        return dex.calcPriceImpact(expectInput, limitInput, price);
+      case SwapDirection.TokenToTokens:
+        return 0;
+      default:
+        return 0;
+    }
+  }, [exact, limit, liquidity, limitToken, exactToken, direction]);
 
   const expectedOutputAfterSleepage = React.useMemo(() => {
     const bigValue = BigInt(String(limit));
@@ -234,7 +258,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                 {swap.t(`modals.confirm.price_impact`)}
               </p>
               <p>
-                0.01%
+                {String(priceImpact)}%
               </p>
             </div>
           </div>

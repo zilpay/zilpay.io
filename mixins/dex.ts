@@ -486,6 +486,18 @@ export class DragonDex {
     }
   }
 
+  public calcPriceImpact(priceInput: Big, priceOutput: Big, currentPrice: Big) {
+    try {
+      const newPrice = priceInput.div(priceOutput);
+      const value = newPrice.sub(currentPrice);
+      const percent = Big(100);
+
+      return value.div(currentPrice).mul(percent).round(2).toNumber();
+    } catch {
+      return 0;
+    }
+  }
+
   public sleepageCalc(value: bigint) {
     const { slippage } = $settings.state;
     const bigSlippage = BigInt(slippage * 100);
