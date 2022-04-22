@@ -31,7 +31,7 @@ export enum SwapDirection {
 }
 
 export class DragonDex {
-  public static CONTRACT = '0xc47aede593f92c4cf188177128d96fdcaa65f6b6';
+  public static CONTRACT = '0x19b6e1d62cd255625a4a212579962ebe1c900483';
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 
@@ -40,7 +40,7 @@ export class DragonDex {
   public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
-  public fee = BigInt(10000);
+  public fee = BigInt(5000);
 
   public get pools() {
     return $liquidity.state.pools;
