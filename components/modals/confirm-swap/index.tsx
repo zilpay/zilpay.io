@@ -92,7 +92,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           [x, y] = liquidity.pools[limitToken.base16];
           zilReserve = Big(String(x)).div(dex.toDecimails(exactToken.decimals));
           tokensReserve = Big(String(y)).div(dex.toDecimails(limitToken.decimals));
-          price = tokensReserve.div(zilReserve);
+          price = zilReserve.div(tokensReserve);
           return dex.calcPriceImpact(expectInput, limitInput, price);
         case SwapDirection.TokenToZil:
           [x, y] = liquidity.pools[exactToken.base16];
