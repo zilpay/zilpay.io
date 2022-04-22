@@ -491,8 +491,9 @@ export class DragonDex {
     const priceDiff = nextPrice.sub(currentPrice);
     const value = priceDiff.div(currentPrice);
     const _100 = Big(100);
+    const imact = value.mul(_100).round(3).toNumber();
 
-    return value.mul(_100).round(3).toNumber();
+    return Math.abs(imact);
   }
 
   public sleepageCalc(value: bigint) {

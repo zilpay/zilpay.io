@@ -52,9 +52,21 @@ export var PriceInfo: React.FC<Prop> = function ({
 
         price = zilReserve.div(tokensReserve);
       } else {
-        const foundIndexX = tokensStore.tokens.findIndex((t) => t.meta.base16 === y.base16);
-        const foundIndexY = tokensStore.tokens.findIndex((t) => t.meta.base16 === x.base16);
-        price = dex.tokensToTokens(one, foundIndexX, foundIndexY);
+        const [zilliqa] = tokensStore.tokens;
+        const [inputZils, inputTokens] = liquidity.pools[x.base16];
+        const [outpuZils, outputTokens] = liquidity.pools[y.base16];
+
+        const bigInputZils = Big(String(inputZils)).div(dex.toDecimails(zilliqa.meta.decimals));
+        const bigInputTokens = Big(String(inputTokens)).div(dex.toDecimails(x.decimals));
+
+        const bigOutpuZils = Big(String(outpuZils)).div(dex.toDecimails(zilliqa.meta.decimals));
+        const bigOutputTokens = Big(String(outputTokens)).div(dex.toDecimails(y.decimals));
+
+        const inputRate = bigInputTokens.div(bigInputZils);
+        const outpuRate = bigOutputTokens.div(bigOutpuZils);
+        const value = one.mul(outpuRate).div(inputRate);
+
+        price = value.div(one);
       }
     } catch {
       ///

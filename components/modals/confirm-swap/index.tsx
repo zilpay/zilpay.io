@@ -106,7 +106,21 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           price = tokensReserve.div(zilReserve);
           return dex.calcPriceImpact(expectInput, limitInput, price);
         case SwapDirection.TokenToTokens:
-          return 0;
+          const [zilliqa] = $tokens.state.tokens;
+          const [inputZils, inputTokens] = liquidity.pools[exactToken.base16];
+          const [outpuZils, outputTokens] = liquidity.pools[limitToken.base16];
+
+          const bigInputZils = Big(String(inputZils)).div(dex.toDecimails(zilliqa.meta.decimals));
+          const bigInputTokens = Big(String(inputTokens)).div(dex.toDecimails(exactToken.decimals));
+  
+          const bigOutpuZils = Big(String(outpuZils)).div(dex.toDecimails(zilliqa.meta.decimals));
+          const bigOutputTokens = Big(String(outputTokens)).div(dex.toDecimails(limitToken.decimals));
+
+          const inputRate = bigInputTokens.div(bigInputZils);
+          const outpuRate = bigOutputTokens.div(bigOutpuZils);
+          price = inputRate.div(outpuRate);
+
+          return dex.calcPriceImpact(expectInput, limitInput, price);
         default:
           return 0;
       }
