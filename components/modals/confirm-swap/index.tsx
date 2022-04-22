@@ -3,9 +3,10 @@ import styles from "./index.module.scss";
 import type { TokenState } from "@/types/token";
 
 import { ThreeDots } from "react-loader-spinner";
-import Big from "big.js";
+import _Big from "big.js";
 import classNames from "classnames";
 import { useStore } from "react-stores";
+import toformat from 'toformat';
 import React from "react";
 import { useTranslation } from "next-i18next";
 
@@ -25,6 +26,7 @@ import { formatNumber } from "@/filters/n-format";
 import { $liquidity } from "@/store/shares";
 
 
+const Big = toformat(_Big);
 Big.PE = 999;
 
 
@@ -32,8 +34,8 @@ type Prop = {
   show: boolean;
   exactToken: TokenState;
   limitToken: TokenState;
-  exact: Big;
-  limit: Big;
+  exact: _Big;
+  limit: _Big;
   direction: SwapDirection;
   onClose: () => void;
 };
@@ -76,8 +78,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   }, [direction]);
 
   const expectedOutput = React.useMemo(() => {
-    const value = limit.div(dex.toDecimails(limitToken.decimals));
-    return String(value);
+    const value = Big(limit.div(dex.toDecimails(limitToken.decimals)));
+    return value.toFormat();
   }, [limit, limitToken]);
 
   const priceImpact = React.useMemo(() => {
@@ -116,7 +118,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const expectedOutputAfterSleepage = React.useMemo(() => {
     const bigValue = BigInt(String(limit));
     const value = Big(String(dex.sleepageCalc(bigValue)));
-    return String(value.div(dex.toDecimails(limitToken.decimals)));
+    return Big(value.div(dex.toDecimails(limitToken.decimals))).toFormat();
   }, [limit, limitToken]);
 
   const approveToken = React.useCallback(async() => {
