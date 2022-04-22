@@ -25,6 +25,9 @@ import { formatNumber } from "@/filters/n-format";
 import { $liquidity } from "@/store/shares";
 
 
+Big.PE = 999;
+
+
 type Prop = {
   show: boolean;
   exactToken: TokenState;

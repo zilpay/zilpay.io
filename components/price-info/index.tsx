@@ -11,6 +11,11 @@ import { DEFAULT_CURRENCY, ZERO_ADDR } from "@/config/conts";
 import { $tokens } from "@/store/tokens";
 import { $settings } from "@/store/settings";
 import { formatNumber } from "@/filters/n-format";
+import { $liquidity } from "@/store/shares";
+
+
+Big.PE = 999;
+
 
 type Prop = {
   tokens: TokenState[];
@@ -24,6 +29,7 @@ export var PriceInfo: React.FC<Prop> = function ({
 }) {
   const tokensStore = useStore($tokens);
   const settingsStore = useStore($settings);
+  const liquidity = useStore($liquidity);
 
   const price = React.useMemo(() => {
     const [x, y] = tokens;
@@ -32,11 +38,17 @@ export var PriceInfo: React.FC<Prop> = function ({
 
     try {
       if (x.base16 === ZERO_ADDR && y.base16 !== ZERO_ADDR) {
-        const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === y.base16);
-        price = dex.zilToTokens(one, foundIndex);
+        const [bigZil, bigTokens] = liquidity.pools[y.base16];
+        const zilReserve = Big(String(bigZil)).div(dex.toDecimails(x.decimals));
+        const tokensReserve = Big(String(bigTokens)).div(dex.toDecimails(y.decimals));
+
+        price = tokensReserve.div(zilReserve);
       } else if (y.base16 === ZERO_ADDR && x.base16 !== ZERO_ADDR) {
-        const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === x.base16);
-        price = dex.tokensToZil(one, foundIndex);
+        const [bigZil, bigTokens] = liquidity.pools[x.base16];
+        const zilReserve = Big(String(bigZil)).div(dex.toDecimails(y.decimals));
+        const tokensReserve = Big(String(bigTokens)).div(dex.toDecimails(x.decimals));
+
+        price = zilReserve.div(tokensReserve);
       } else {
         const foundIndexX = tokensStore.tokens.findIndex((t) => t.meta.base16 === y.base16);
         const foundIndexY = tokensStore.tokens.findIndex((t) => t.meta.base16 === x.base16);
@@ -47,7 +59,7 @@ export var PriceInfo: React.FC<Prop> = function ({
     }
 
     return price;
-  }, [tokens, tokensStore]);
+  }, [tokens, tokensStore, liquidity]);
 
   const converted = React.useMemo(() => {
     const [x] = tokens;
