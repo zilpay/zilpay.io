@@ -31,7 +31,7 @@ export enum SwapDirection {
 }
 
 export class DragonDex {
-  public static CONTRACT = '0xb70fe76d8793dc256505b70a60a3d03fe30acc8c';
+  public static CONTRACT = '0xc47aede593f92c4cf188177128d96fdcaa65f6b6';
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 
@@ -40,7 +40,7 @@ export class DragonDex {
   public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
-  public fee = BigInt(9900);
+  public fee = BigInt(10000);
 
   public get pools() {
     return $liquidity.state.pools;
@@ -487,13 +487,12 @@ export class DragonDex {
   }
 
   public calcPriceImpact(priceInput: Big, priceOutput: Big, currentPrice: Big) {
-    const _price = Number(currentPrice);
-    const _input = Number(priceInput);
-    const _output = Number(priceOutput);
-    const _nextPrice = _input / _output;
-    const _value = (_nextPrice - _price) / _price * 100;
+    const nextPrice = priceInput.div(priceOutput);
+    const priceDiff = nextPrice.sub(currentPrice);
+    const value = priceDiff.div(currentPrice);
+    const _100 = Big(100);
 
-    return _value.toFixed(2);
+    return value.mul(_100).round(3).toNumber();
   }
 
   public sleepageCalc(value: bigint) {

@@ -80,22 +80,33 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const priceImpact = React.useMemo(() => {
     const expectInput = exact.div(dex.toDecimails(exactToken.decimals));
     const limitInput = limit.div(dex.toDecimails(limitToken.decimals));
-    let pool = [];
     let price = Big(0);
+    let x = BigInt(0);
+    let y = BigInt(0);
+    let zilReserve = Big(0);
+    let tokensReserve = Big(0);
 
-    switch (direction) {
-      case SwapDirection.ZilToToken:
-        pool = liquidity.pools[limitToken.base16];
-        price = Big(String(pool[0])).div(String(pool[1]));
-        return dex.calcPriceImpact(expectInput, limitInput, price);
-      case SwapDirection.TokenToZil:
-        pool = liquidity.pools[exactToken.base16];
-        price = Big(String(pool[0])).div(String(pool[1]));
-        return dex.calcPriceImpact(expectInput, limitInput, price);
-      case SwapDirection.TokenToTokens:
-        return 0;
-      default:
-        return 0;
+    try {
+      switch (direction) {
+        case SwapDirection.ZilToToken:
+          [x, y] = liquidity.pools[limitToken.base16];
+          zilReserve = Big(String(x)).div(dex.toDecimails(exactToken.decimals));
+          tokensReserve = Big(String(y)).div(dex.toDecimails(limitToken.decimals));
+          price = tokensReserve.div(zilReserve);
+          return dex.calcPriceImpact(expectInput, limitInput, price);
+        case SwapDirection.TokenToZil:
+          [x, y] = liquidity.pools[exactToken.base16];
+          zilReserve = Big(String(x)).div(dex.toDecimails(limitToken.decimals));
+          tokensReserve = Big(String(y)).div(dex.toDecimails(exactToken.decimals));
+          price = tokensReserve.div(zilReserve);
+          return dex.calcPriceImpact(expectInput, limitInput, price);
+        case SwapDirection.TokenToTokens:
+          return 0;
+        default:
+          return 0;
+      }
+    } catch {
+      return 0;
     }
   }, [exact, limit, liquidity, limitToken, exactToken, direction]);
 

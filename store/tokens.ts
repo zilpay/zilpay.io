@@ -42,11 +42,11 @@ const initState: {
     {
       balance: {},
       meta: {
-        bech32: 'zil1h2tndaeyrpfqtlkfqayu354922xtff3z45fjqf',
-        base16: '0xba9736f724185205fec90749c8d2a5528cb4a622',
+        bech32: 'zil1ze9wvxemc5jfwrsuuvm627we44ftfq5tznpcrk',
+        base16: '0x164ae61b3bc524970e1ce337a579d9ad52b4828b',
         decimals: 9,
-        symbol: 'LKT',
-        name: 'Lalka token'
+        symbol: 'USDC',
+        name: 'stabecoin'
       }
     }
   ]
