@@ -3,6 +3,10 @@
 .container {
   overflow-y: scroll;
   height: 30vh;
+
+  @media (max-width: 700px) {
+    height: calc(100vh - 257px);
+  }
 }
 
 .warnwrapper {
@@ -36,6 +40,11 @@
     &:hover {
       color: var(--primary-color);
     }
+  }
+
+  @media (max-width: 700px) {
+    @include border-bottom-radius(0);
+    height: 100%;
   }
 }
 
