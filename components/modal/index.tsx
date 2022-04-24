@@ -1,9 +1,9 @@
 import styles from "./index.module.scss";
 
 import React from "react";
+import classNames from "classnames";
 
 import { CloseIcon } from "components/icons/close";
-import classNames from "classnames";
 
 
 type Prop = {
