@@ -162,6 +162,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
             viewBox="0 0 24 24"
             aria-hidden="true"
             height="30"
+            width="30"
           >
             <path
               d="M4 15h16v-2H4v2zm0 4h16v-2H4v2zm0-8h16V9H4v2zm0-6v2h16V5H4z"

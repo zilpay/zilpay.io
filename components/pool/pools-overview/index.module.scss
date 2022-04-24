@@ -23,6 +23,14 @@
   & > p {
     color: var(--muted-color);
   }
+
+  @media (max-width: 700px) {
+    width: 100vw;
+  }
+
+  @media (max-width: 510px) {
+    @include border-radius(0);
+  }
 }
 
 .row {
@@ -43,6 +51,11 @@
       color: var(--primary-color);
       background-color: var(--button-color);
     }
+  }
+
+  @media (max-width: 700px) {
+    padding-left: 16px;
+    padding-right: 16px;
   }
 }
 
