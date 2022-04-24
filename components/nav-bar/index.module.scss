@@ -7,6 +7,14 @@
   padding-right: 16px;
 
   background-color: var(--card-color);
+
+  & > div {
+    width: 200px;
+
+    @media (max-width: 700px) {
+      width: auto;
+    }
+  }
 }
 
 .logo {
@@ -16,6 +24,10 @@
 
   & > h3 {
     margin-left: 5px;
+
+    @media (max-width: 700px) {
+      display: none;
+    }
   }
 }
 
@@ -25,6 +37,10 @@
   & > h3 {
     cursor: pointer;
     padding: 5px;
+
+    &:hover {
+      color: var(--primary-color);
+    }
   }
 }
 
@@ -33,5 +49,15 @@
 
   & > button {
     margin-right: 16px;
+
+    @media (max-width: 700px) {
+      margin: 0;
+    }
+  }
+
+  & > label {
+    @media (max-width: 700px) {
+      display: none;
+    }
   }
 }

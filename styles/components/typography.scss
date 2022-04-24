@@ -9,7 +9,13 @@ strong {
   color: var(--text-color);
   font-family: Bold;
 
-  text-shadow:0 0 1px var(--muted-color);
+  text-shadow: 0 0 1px var(--muted-color);
+}
+
+h3 {
+  @media (max-width: 700px) {
+    font-size: 14px;
+  }
 }
 
 p {
@@ -23,4 +29,8 @@ p {
 
   font-family: Regular;
   font-size: 14px;
+
+  @media (max-width: 700px) {
+    font-size: 12px;
+  }
 }
