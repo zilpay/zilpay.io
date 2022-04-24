@@ -8,12 +8,16 @@
   height: fit-content;
   padding: 16px;
   background: var(--card-color);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
+
+  @include border-bottom-radius(16px);
 
   p {
     font-size: 12px;
     font-family: "Regular";
+  }
+
+  @media (max-width: 700px) {
+    @include border-bottom-radius(0);
   }
 }
 

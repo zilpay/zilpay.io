@@ -11,6 +11,9 @@ import { AccountCard } from "@/components/account-card";
 
 import type { Wallet } from "@/types/wallet";
 import { $wallet } from "@/store/wallet";
+import { Toggle } from "@/components/toggle";
+import { $settings, updateSettingsStore } from "@/store/settings";
+import { Themes } from "@/config/themes";
 
 type Prop = {
   show: boolean;
@@ -27,6 +30,21 @@ export var AccountModal: React.FC<Prop> = function ({
   const common = useTranslation(`common`);
   const { transactions } = useStore($transactions);
   const wallet = useStore($wallet);
+  const settings = useStore($settings);
+
+  const hanldeChangeTheme = React.useCallback((value: boolean) => {
+    if (value) {
+      updateSettingsStore({
+        ...settings,
+        theme: Themes.Dark
+      });
+    } else {
+      updateSettingsStore({
+        ...settings,
+        theme: Themes.Light
+      });
+    }
+  }, [settings]);
 
   return (
     <Modal
@@ -41,6 +59,10 @@ export var AccountModal: React.FC<Prop> = function ({
     >
       <AccountCard wallet={address} />
       <div className={styles.txlist}>
+        <Toggle
+          value={settings.theme === Themes.Dark}
+          onToggle={hanldeChangeTheme}
+        />
         {transactions.length === 0 ? (
           <p className={styles.here}>
             {common.t(`tx_appear_here`)}
