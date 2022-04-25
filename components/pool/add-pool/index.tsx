@@ -75,8 +75,11 @@ export const AddPoolForm: React.FC = () => {
   }, []);
 
   React.useEffect(() => {
+    const tokenMeta = tokensStore.tokens[token].meta;
+    const pool = liquidity.pools[tokenMeta.base16];
+
     setLimitAmount(
-      dex.tokensToZil(String(amount), token)
+      dex.calcVirtualAmount(amount, tokenMeta, pool)
     );
   }, [amount, token]);
 

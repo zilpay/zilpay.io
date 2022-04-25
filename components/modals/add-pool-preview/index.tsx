@@ -179,7 +179,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
               {common.t('preview_modal.fee')}
             </p>
             <p>
-              1%
+              {dex.liquidityRewards}%
             </p>
           </div>
         </div>

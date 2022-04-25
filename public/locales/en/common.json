@@ -36,7 +36,7 @@
   },
   "preview_modal": {
     "title": "Add pool preview",
-    "fee": "Fee Tier",
+    "fee": "Liquidity rewards for each swap:",
     "price": "Current price",
     "confirm_btn": "Confirm add"
   }

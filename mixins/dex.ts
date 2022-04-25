@@ -15,6 +15,7 @@ import { $liquidity, updateDexBalances, updateLiquidity } from '@/store/shares';
 import { $wallet } from '@/store/wallet';
 import { StorageFields } from '@/config/storage-fields';
 import { $settings } from '@/store/settings';
+import { TokenState } from '@/types/token';
 
 
 Big.PE = 999;
@@ -44,6 +45,11 @@ export class DragonDex {
 
   public get tokens() {
     return $tokens.state.tokens;
+  }
+
+  public get liquidityRewards() {
+    const demon = Number(DragonDex.FEE_DEMON);
+    return (demon - Number(this.fee)) / demon;
   }
 
   public async updateState() {
@@ -394,13 +400,19 @@ export class DragonDex {
       transition,
       amount: String(limit)
     }, '3060');
-    addTransactions({
-      timestamp: new Date().getTime(),
-      name: `addLiquidity`,
-      confirmed: false,
-      hash: res.ID,
-      from: res.from
-    });
+
+    const found = this.tokens.find((t) => t.meta.base16 === addr);
+
+    if (found) {
+      const max = amount.div(this.toDecimails(found.meta.decimals)).toString();
+      addTransactions({
+        timestamp: new Date().getTime(),
+        name: `addLiquidity maximum ${formatNumber(max)} ${found.meta.symbol}`,
+        confirmed: false,
+        hash: res.ID,
+        from: res.from
+      });
+    }
 
     return res.ID;
   }
@@ -487,6 +499,18 @@ export class DragonDex {
     return Math.abs(imact);
   }
 
+  public calcVirtualAmount(amount: Big, token: TokenState, pool: bigint[]) {
+    if (!pool || pool.length < 2) {
+      return Big(0);
+    }
+
+    const zilReserve = Big(String(pool[0])).div(this.toDecimails($tokens.state.tokens[0].meta.decimals));
+    const tokensReserve = Big(String(pool[1])).div(this.toDecimails(token.decimals));
+    const zilRate = zilReserve.div(tokensReserve);
+  
+    return amount.mul(zilRate);
+  }
+
   public sleepageCalc(value: bigint) {
     const { slippage } = $settings.state;
     const bigSlippage = BigInt(slippage * 100);
@@ -501,7 +525,7 @@ export class DragonDex {
 
   private _zilToTokens(amount: bigint, inputPool: bigint[]) {
     const [zilReserve, tokenReserve] = inputPool;
-    const amountAfterFee = amount - (amount / this.protoFee);
+    const amountAfterFee = this.protoFee === BigInt(0) ? amount : amount - (amount / this.protoFee);
     return this._outputFor(amountAfterFee, BigInt(zilReserve), BigInt(tokenReserve));
   }
 
@@ -509,7 +533,7 @@ export class DragonDex {
     const [zilReserve, tokenReserve] = inputPool;
     const zils = this._outputFor(amount, BigInt(tokenReserve), BigInt(zilReserve));
 
-    return zils - (zils / this.protoFee);
+    return this.protoFee === BigInt(0) ? zils : zils - (zils / this.protoFee);
   }
 
   private _tokensToTokens(amount: bigint, inputPool: bigint[], outputPool: bigint[]) {
@@ -521,7 +545,8 @@ export class DragonDex {
       BigInt(inputZilReserve),
       DragonDex.FEE_DEMON
     );
-    const zils = zilIntermediateAmount - (zilIntermediateAmount / this.protoFee);
+    const zils = this.protoFee === BigInt(0) ?
+      zilIntermediateAmount : zilIntermediateAmount - (zilIntermediateAmount / this.protoFee);
 
     return this._outputFor(zils, BigInt(outputZilReserve), BigInt(outputTokenReserve));
   }

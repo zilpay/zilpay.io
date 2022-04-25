@@ -2,7 +2,7 @@
   "overview": {
     "head": "Pools overview | ZilPay",
     "title": "Pools Overview",
-    "button": "+ New Pool",
+    "button": "Add/Create Pool",
     "info": "Your active liquidity positions will appear here."
   },
   "add_pool": {
