@@ -19,11 +19,6 @@ import { $settings } from '@/store/settings';
 
 Big.PE = 999;
 
-export enum ExactSide {
-  ExactInput,
-  ExactOutput
-}
-
 export enum SwapDirection {
   ZilToToken,
   TokenToZil,
@@ -31,7 +26,7 @@ export enum SwapDirection {
 }
 
 export class DragonDex {
-  public static CONTRACT = '0x19b6e1d62cd255625a4a212579962ebe1c900483';
+  public static CONTRACT = '0x359d0def766c0e27acc1af30cf8c6ae02a06de81';
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 
@@ -40,7 +35,8 @@ export class DragonDex {
   public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
-  public fee = BigInt(5000);
+  public fee = BigInt(9970);
+  public protoFee = BigInt(500);
 
   public get pools() {
     return $liquidity.state.pools;
@@ -59,8 +55,6 @@ export class DragonDex {
     updateDexBalances(balances);
     updateLiquidity(shares, dexPools);
 
-    // const listedTokens = Object.keys(pools);
-
     try {
       const fromStorage = window.localStorage.getItem(StorageFields.Tokens);
     
@@ -70,16 +64,6 @@ export class DragonDex {
     } catch {
       ///
     }
-
-    // if ($wallet.state?.base16) {
-    //   const newTokens = await this._provider.fetchTokens(
-    //     $wallet.state?.base16,
-    //     listedTokens,
-    //     $tokens.state.tokens
-    //   );
-
-    //   updateTokens(newTokens);
-    // }
   }
 
   public async updateTokens() {
@@ -113,19 +97,29 @@ export class DragonDex {
     );
   }
 
-  public calcAmount(amount: bigint, index: number, direction: SwapDirection) {
-    const token = this.tokens[index].meta;
-    const [zilReserve, tokenReserve] = this.pools[String(token.base16).toLowerCase()];
-    const exactSide = ExactSide.ExactInput;
-    const calculated = this._amountFor(
-      direction,
-      exactSide,
-      amount,
-      BigInt(zilReserve),
-      BigInt(tokenReserve)
-    );
+  public calcAmount(amount: bigint, direction: SwapDirection, inputIndex: number, outputIndex = -1) {
+    const token = this.tokens[inputIndex].meta;
+    const base16 = String(token.base16).toLowerCase();
 
-    return calculated;
+    if (!token) {
+      throw new Error(`Cannot find an input-token with index: ${inputIndex}`);
+    }
+
+    switch (direction) {
+      case SwapDirection.ZilToToken:
+        return this._zilToTokens(amount, this.pools[base16]);
+      case SwapDirection.TokenToZil:
+        return this._tokensToZil(amount, this.pools[base16]);
+      case SwapDirection.TokenToTokens:
+        const outputToken = this.tokens[outputIndex].meta;
+        if (!outputToken) {
+          throw new Error(`Cannot find an output-token with index: ${outputIndex}`);
+        }
+        const base16Output = String(outputToken.base16).toLowerCase();
+        return this._tokensToTokens(amount, this.pools[base16], this.pools[base16Output]);
+      default:
+        throw new Error('Incorrect SwapDirection');
+    }
   }
 
   public zilToTokens(value: string | Big, index: number): Big {
@@ -134,9 +128,8 @@ export class DragonDex {
     try {
       const decimals = this.toDecimails(this.tokens[index].meta.decimals);
       const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
-      const qa = BigInt(amount.mul(zilDecimails).round().toString());
-      const result = this._getFee(qa, this.fee);
-      const tokens = this.calcAmount(result, index, SwapDirection.ZilToToken);
+      let qa = BigInt(amount.mul(zilDecimails).round().toString());
+      const tokens = this.calcAmount(qa, SwapDirection.ZilToToken, index);
   
       return Big(String(tokens)).div(decimals);
     } catch {
@@ -150,12 +143,10 @@ export class DragonDex {
     try {
       const decimals = this.toDecimails(this.tokens[index].meta.decimals);
       const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
-
       const qa = amount.mul(decimals).round().toString();
-      const zils = this.calcAmount(BigInt(qa), index, SwapDirection.TokenToZil);
-      const result = this._getFee(zils, this.fee);
+      const zils = this.calcAmount(BigInt(qa), SwapDirection.TokenToZil, index);
   
-      return Big(String(result)).div(zilDecimails);
+      return Big(String(zils)).div(zilDecimails);
     } catch {
       return Big(0);
     }
@@ -170,11 +161,8 @@ export class DragonDex {
 
     const decimals0 = this.toDecimails(this.tokens[index0].meta.decimals);
     const decimals1 = this.toDecimails(this.tokens[index1].meta.decimals);
-
-    const qa0 = amount.mul(decimals0).round().toString();
-    const zils = this.calcAmount(BigInt(qa0), index0, SwapDirection.TokenToZil);
-    const result = this._getFee(zils, this.fee);
-    const tokens = this.calcAmount(result, index1, SwapDirection.ZilToToken);
+    const qa = BigInt(amount.mul(decimals0).round().toString());
+    const tokens = this.calcAmount(qa, SwapDirection.TokenToTokens, index0, index1);
 
     return Big(String(tokens)).div(decimals1);
   }
@@ -219,10 +207,11 @@ export class DragonDex {
 
     const found = this.tokens.find((p) => p.meta.base16 === token);
     if (found) {
-      const amount = zil.div(this.toDecimails(this.tokens[0].meta.decimals));
+      const amount = zil.div(this.toDecimails(this.tokens[0].meta.decimals)).toString();
+      const limitAmount = max.div(this.toDecimails(found.meta.decimals)).toString();
       addTransactions({
         timestamp: new Date().getTime(),
-        name: `Swap ${formatNumber(String(amount))} ZIL to ${found.meta.symbol}`,
+        name: `Swap exact (${formatNumber(amount)} ZIL), to (${formatNumber(limitAmount)} ${found.meta.symbol})`,
         confirmed: false,
         hash: res.ID,
         from: res.from
@@ -278,10 +267,11 @@ export class DragonDex {
     const foundIndex = this.tokens.findIndex((p) => p.meta.base16 === token);
     if (foundIndex >= 0) {
       const tokenMeta = this.tokens[foundIndex].meta;
-      const amount = tokens.div(this.toDecimails(tokenMeta.decimals));
+      const amount = tokens.div(this.toDecimails(tokenMeta.decimals)).toString();
+      const limitAmount = max.div(this.toDecimails(this.tokens[0].meta.decimals)).toString();
       addTransactions({
         timestamp: new Date().getTime(),
-        name: `Swap ${formatNumber(String(amount))} ${tokenMeta.symbol} to ZIL`,
+        name: `Swap exact (${formatNumber(amount)} ${tokenMeta.symbol}) to (${formatNumber(limitAmount)} ZIL)`,
         confirmed: false,
         hash: res.ID,
         from: res.from
@@ -344,10 +334,11 @@ export class DragonDex {
     if (foundIndex0 >= 0 && foundIndex1 >= 0) {
       const tokenMeta0 = this.tokens[foundIndex0].meta;
       const tokenMeta1 = this.tokens[foundIndex1].meta;
-      const amount = tokens.div(this.toDecimails(tokenMeta0.decimals));
+      const amount = formatNumber(tokens.div(this.toDecimails(tokenMeta0.decimals)).toString());
+      const receivedAmount = formatNumber(max.div(this.toDecimails(tokenMeta1.decimals)).toString());
       addTransactions({
         timestamp: new Date().getTime(),
-        name: `Swap ${formatNumber(String(amount))} ${tokenMeta0.symbol} to ${tokenMeta1.symbol}`,
+        name: `Swap exact (${formatNumber(amount)} ${tokenMeta0.symbol}) to (${formatNumber(receivedAmount)} ${tokenMeta1.symbol})`,
         confirmed: false,
         hash: res.ID,
         from: res.from
@@ -504,48 +495,44 @@ export class DragonDex {
     return value - (value * bigSlippage / decimals);
   }
 
-  private _outputFor(inputAmount: bigint, inputReserve: bigint, outputReserve: bigint) {
-    const numerator = inputAmount * outputReserve;
-    const denominator = inputReserve + inputAmount;
-    return numerator / denominator;
-  }
-
-  private _inputFor(outputAmount: bigint, inputReserve: bigint, outputReserve: bigint) {
-    const numerator = inputReserve * outputAmount;
-    const denominator = outputReserve - outputAmount;
-    return numerator / denominator;
-  }
-
-  private _calcAmount(exact: ExactSide) {
-    switch (exact) {
-      case ExactSide.ExactInput:
-        return this._outputFor;
-      case ExactSide.ExactOutput:
-        return this._inputFor;
-      default:
-        throw new Error("Incorect ExactSide");
-    }
-  }
-
-  private _amountFor(
-    direction: SwapDirection,
-    exactSide: ExactSide,
-    exactAmount: bigint,
-    zilReserve: bigint,
-    tokenReserve: bigint
-  ) {
-    switch (direction) {
-      case SwapDirection.ZilToToken:
-        return this._calcAmount(exactSide)(exactAmount, zilReserve, tokenReserve);
-      case SwapDirection.TokenToZil:
-        return this._calcAmount(exactSide)(exactAmount, tokenReserve, zilReserve);
-      default:
-        throw new Error("Incorect SwapDirection");
-    }
-  }
-
   private _fraction(d: bigint, x: bigint, y: bigint) {
     return (d * y) / x;
+  }
+
+  private _zilToTokens(amount: bigint, inputPool: bigint[]) {
+    const [zilReserve, tokenReserve] = inputPool;
+    const amountAfterFee = amount - (amount / this.protoFee);
+    return this._outputFor(amountAfterFee, BigInt(zilReserve), BigInt(tokenReserve));
+  }
+
+  private _tokensToZil(amount: bigint, inputPool: bigint[]) {
+    const [zilReserve, tokenReserve] = inputPool;
+    const zils = this._outputFor(amount, BigInt(tokenReserve), BigInt(zilReserve));
+
+    return zils - (zils / this.protoFee);
+  }
+
+  private _tokensToTokens(amount: bigint, inputPool: bigint[], outputPool: bigint[]) {
+    const [inputZilReserve, inputTokenReserve] = inputPool;
+    const [outputZilReserve, outputTokenReserve] = outputPool;
+    const zilIntermediateAmount = this._outputFor(
+      amount,
+      BigInt(inputTokenReserve),
+      BigInt(inputZilReserve),
+      DragonDex.FEE_DEMON
+    );
+    const zils = zilIntermediateAmount - (zilIntermediateAmount / this.protoFee);
+
+    return this._outputFor(zils, BigInt(outputZilReserve), BigInt(outputTokenReserve));
+  }
+
+  private _outputFor(exactAmount: bigint, inputReserve: bigint, outputReserve: bigint, fee: bigint = this.fee) {
+    const exactAmountAfterFee = exactAmount * fee;
+    const numerator = exactAmountAfterFee * outputReserve;
+    const inputReserveAfterFee = inputReserve * DragonDex.FEE_DEMON;
+    const denominator = inputReserveAfterFee + exactAmountAfterFee;
+
+    return numerator / denominator;
   }
 
   private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions) {
@@ -578,9 +565,5 @@ export class DragonDex {
     }
 
     return newPools;
-  }
-
-  private _getFee(value: bigint, fee: bigint) {
-    return value * fee / DragonDex.FEE_DEMON;
   }
 }

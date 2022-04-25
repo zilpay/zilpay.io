@@ -27,6 +27,7 @@
     "title": "Tokens",
     "warn": "Please check the tokens before investment, check with Terms Of Services.",
     "placeholder": "input contract address",
+    "import_warn": "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade.",
     "buttons": {
       "add": "Add",
       "cancel": "Cancel",

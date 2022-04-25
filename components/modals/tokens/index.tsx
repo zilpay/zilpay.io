@@ -104,6 +104,11 @@ export var TokensModal: React.FC<Prop> = function ({
       ) : null}
       {isImport ? (
         <div className={styles.import}>
+          <div>
+            <p>
+              {common.t('tokens.import_warn')}
+            </p>
+          </div>
           <input
             type="text"
             placeholder={common.t('tokens.placeholder')}
