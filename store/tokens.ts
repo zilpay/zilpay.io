@@ -39,20 +39,23 @@ let initState: {
 if (typeof window !== 'undefined' && window.__NEXT_DATA__.props.pageProps.tokens) {
   try {
     const listedTokens = window.__NEXT_DATA__.props.pageProps.tokens as ListedTokenResponse;
-    const list: Token[] = listedTokens.list.map((t) => ({
-      balance: {},
-      meta: t
-    }));
 
-    initState = {
-      tokens: [
-        {
-          balance: {},
-          meta: ZILLIQA_TOKEN
-        },
-        ...list
-      ]
-    };
+    if (listedTokens && listedTokens.list && listedTokens.list.length > 0) {
+      const list: Token[] = listedTokens.list.map((t) => ({
+        balance: {},
+        meta: t
+      }));
+  
+      initState = {
+        tokens: [
+          {
+            balance: {},
+            meta: ZILLIQA_TOKEN
+          },
+          ...list
+        ]
+      };
+    }
   } catch (err) {
     console.warn(err);
   }
@@ -129,19 +132,21 @@ export function updateTokens(tokens: Token[]) {
 }
 
 export function loadFromServer(listedTokens: ListedTokenResponse) {
-  const list: Token[] = listedTokens.list.map((t) => ({
-    balance: {},
-    meta: t
-  }));
-  const state = {
-    tokens: [
-      {
-        balance: {},
-        meta: ZILLIQA_TOKEN
-      },
-      ...list
-    ]
-  };
-
-  $tokens.setState(state);
+  if (listedTokens && listedTokens.list && listedTokens.list.length > 0) {
+    const list: Token[] = listedTokens.list.map((t) => ({
+      balance: {},
+      meta: t
+    }));
+    const state = {
+      tokens: [
+        {
+          balance: {},
+          meta: ZILLIQA_TOKEN
+        },
+        ...list
+      ]
+    };
+  
+    $tokens.setState(state);
+  }
 }
