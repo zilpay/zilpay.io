@@ -11,8 +11,10 @@ import { SwapForm } from '@/components/swap-form';
 import { liquidityFromCache } from '@/store/shares';
 import { DragonDex } from '@/mixins/dex';
 import { Puff } from 'react-loader-spinner';
+import { ZilPayBackend } from '@/mixins/backend';
 
 const dex = new DragonDex();
+const backend = new ZilPayBackend();
 export const PageSwap: NextPage = () => {
   const { t } = useTranslation(`swap`);
 
@@ -55,10 +57,22 @@ export const PageSwap: NextPage = () => {
   );
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-  props: {
-    ...await serverSideTranslations(props.locale || `en`, [`swap`, `common`]),
-  },
-});
+export const getStaticProps = async (props: GetServerSidePropsContext) => {
+  if (props.res) {
+    // res available only at server
+    // no-store disable bfCache for any browser. So your HTML will not be cached
+    props.res.setHeader(`Cache-Control`, `no-store`);
+  }
+
+  const tokens = await backend.getListedTokens();
+
+  return {
+    props: {
+      tokens,
+      ...await serverSideTranslations(props.locale || `en`, [`swap`, `common`])
+    },
+    revalidate: 1,
+  };
+};
 
 export default PageSwap;

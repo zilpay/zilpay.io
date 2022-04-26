@@ -8,9 +8,8 @@ const initState = {
   rate: 0.11858,
   slippage: SLIPPAGE,
   blocks: BLOCKS,
-  theme: String(Themes.Dark)
+  theme: String(typeof window !== 'undefined' ? window.__NEXT_DATA__.props.theme : Themes.Dark)
 };
-
 
 export const $settings = new Store(initState);
 

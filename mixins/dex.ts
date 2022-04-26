@@ -91,7 +91,8 @@ export class DragonDex {
         bech32: zp.crypto.toBech32Address(meta.address),
         symbol: meta.symbol,
         name: meta.name,
-        decimals: meta.decimals
+        decimals: meta.decimals,
+        scope: 0
       },
       balance: balances
     });
