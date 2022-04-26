@@ -14,8 +14,10 @@ import { $tokens } from '@/store/tokens';
 import { DragonDex } from '@/mixins/dex';
 import { ThreeDots } from 'react-loader-spinner';
 import { liquidityFromCache } from '@/store/shares';
+import { ZilPayBackend } from '@/mixins/backend';
 
 
+const backend = new ZilPayBackend();
 const dex = new DragonDex();
 export const PageRemovePool: NextPage = () => {
   const pool = useTranslation(`pool`);
@@ -55,11 +57,25 @@ export const PageRemovePool: NextPage = () => {
   );
 };
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-  props: {
-    ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`]),
-  },
-});
+export const getStaticProps = async (props: GetServerSidePropsContext) => {
+  if (props.res) {
+    // res available only at server
+    // no-store disable bfCache for any browser. So your HTML will not be cached
+    props.res.setHeader(`Cache-Control`, `no-store`);
+  }
+
+  const tokens = await backend.getListedTokens();
+  const rate = await backend.getRate();
+
+  return {
+    props: {
+      tokens,
+      rate,
+      ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`])
+    },
+    revalidate: 1,
+  };
+};
 
 export async function getStaticPaths() {
   return {

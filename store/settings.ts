@@ -1,11 +1,11 @@
-import { BLOCKS, NET, SLIPPAGE } from '@/config/conts';
+import { BLOCKS, SLIPPAGE } from '@/config/conts';
 import { StorageFields } from '@/config/storage-fields';
 import { Themes } from '@/config/themes';
 import { Store } from 'react-stores';
 import cookieCutter from 'cookie-cutter';
 
 const initState = {
-  rate: 0.11858,
+  rate: Number(typeof window !== 'undefined' ? (window.__NEXT_DATA__.props.pageProps.rate || 0) : 0),
   slippage: SLIPPAGE,
   blocks: BLOCKS,
   theme: String(typeof window !== 'undefined' ? window.__NEXT_DATA__.props.theme : Themes.Dark)
@@ -26,6 +26,14 @@ export function updateSettingsStore(data: typeof initState) {
   }
 }
 
+export function updateRate(rate: number) {
+  initState.rate = rate;
+  $settings.setState({
+    ...$settings.state,
+    rate
+  });
+}
+
 export function updateFromStorage() {
   try {
     const data = window.localStorage.getItem(StorageFields.Settings);
@@ -34,12 +42,14 @@ export function updateFromStorage() {
     if (data) {
       $settings.setState({
         ...JSON.parse(data),
-        theme
+        theme,
+        rate: initState.rate
       });
     } else {
       $settings.setState({
         ...$settings.state,
-        theme
+        theme,
+        rate: initState.rate
       });
     }
     window.document.body.setAttribute('theme-color', $settings.state.theme);

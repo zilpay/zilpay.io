@@ -35,11 +35,11 @@ export class ZilPayBackend {
     const res = await fetch(url.toString());
 
     if (res.status !== 200) {
-      throw new Error(String(res.status));
+      return 0;
     }
 
     const result = await res.json();
 
-    return result.data;
+    return result.usd;
   }
 }

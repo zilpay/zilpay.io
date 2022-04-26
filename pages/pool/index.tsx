@@ -10,20 +10,44 @@ import { PoolOverview } from '@/components/pool';
 import { DragonDex } from '@/mixins/dex';
 
 import { liquidityFromCache } from '@/store/shares';
+import { ZilPayBackend } from '@/mixins/backend';
+import { updateRate } from '@/store/settings';
+import { $tokens, loadFromServer } from '@/store/tokens';
 
+const backend = new ZilPayBackend();
 const dex = new DragonDex();
-export const PagePool: NextPage = () => {
+export const PagePool: NextPage = (props: any) => {
   const { t } = useTranslation(`pool`);
 
   const [loading, setLoading] = React.useState(true);
 
+  const hanldeUpdate = React.useCallback(async() => {
+    if (typeof window !== 'undefined') {
+      liquidityFromCache();
+
+      updateRate(props.rate);
+
+      try {
+        if ($tokens.state.tokens.length < 3) {
+          loadFromServer(props.tokens);
+        } 
+      } catch {
+        ////
+      }
+
+      try {
+        await dex.updateTokens();
+        await dex.updateState();
+      } catch {
+        ///
+      }
+      setLoading(false);
+    }
+  }, [props]);
+
   React.useEffect(() => {
-    setLoading(true);
-    liquidityFromCache();
-    dex
-    .updateState()
-    .finally(() => setLoading(false));
-  }, []);
+    hanldeUpdate();
+  }, [hanldeUpdate]);
 
   return (
     <div className={styles.container}>
@@ -42,10 +66,24 @@ export const PagePool: NextPage = () => {
   );
 };
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-  props: {
-    ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`]),
-  },
-});
+export const getStaticProps = async (props: GetServerSidePropsContext) => {
+  if (props.res) {
+    // res available only at server
+    // no-store disable bfCache for any browser. So your HTML will not be cached
+    props.res.setHeader(`Cache-Control`, `no-store`);
+  }
+
+  const tokens = await backend.getListedTokens();
+  const rate = await backend.getRate();
+
+  return {
+    props: {
+      tokens,
+      rate,
+      ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`])
+    },
+    revalidate: 1,
+  };
+};
 
 export default PagePool;

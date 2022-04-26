@@ -1,5 +1,7 @@
 import styles from '@/styles/pages/swap.module.scss';
 
+import type { ListedTokenResponse, Token } from '@/types/token';
+
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
 import React from 'react';
@@ -12,10 +14,12 @@ import { liquidityFromCache } from '@/store/shares';
 import { DragonDex } from '@/mixins/dex';
 import { Puff } from 'react-loader-spinner';
 import { ZilPayBackend } from '@/mixins/backend';
+import { $tokens, loadFromServer } from '@/store/tokens';
+import { updateRate } from '@/store/settings';
 
 const dex = new DragonDex();
 const backend = new ZilPayBackend();
-export const PageSwap: NextPage = () => {
+export const PageSwap: NextPage = (props: any) => {
   const { t } = useTranslation(`swap`);
 
   const [loading, setLoading] = React.useState(true);
@@ -23,14 +27,26 @@ export const PageSwap: NextPage = () => {
   const hanldeUpdate = React.useCallback(async() => {
     if (typeof window !== 'undefined') {
       liquidityFromCache();
+
+      updateRate(props.rate);
+
       try {
+        if ($tokens.state.tokens.length < 3) {
+          loadFromServer(props.tokens);
+        } 
+      } catch {
+        ////
+      }
+
+      try {
+        await dex.updateTokens();
         await dex.updateState();
       } catch {
         ///
       }
       setLoading(false);
     }
-  }, []);
+  }, [props]);
 
   React.useEffect(() => {
     hanldeUpdate();
@@ -65,10 +81,12 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
   }
 
   const tokens = await backend.getListedTokens();
+  const rate = await backend.getRate();
 
   return {
     props: {
       tokens,
+      rate,
       ...await serverSideTranslations(props.locale || `en`, [`swap`, `common`])
     },
     revalidate: 1,

@@ -63,16 +63,6 @@ export class DragonDex {
 
     updateDexBalances(balances);
     updateLiquidity(shares, dexPools);
-
-    try {
-      const fromStorage = window.localStorage.getItem(StorageFields.Tokens);
-    
-      if (fromStorage) {
-        $tokens.setState(JSON.parse(fromStorage));
-      }
-    } catch {
-      ///
-    }
   }
 
   public async updateTokens() {

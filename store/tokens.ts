@@ -21,6 +21,17 @@ let initState: {
     {
       balance: {},
       meta: ZILLIQA_TOKEN
+    },
+    {
+      balance: {},
+      meta: {
+        bech32: 'zil12h94srrtmaqwgq8nw9r9rwmkgw72yn0yc7x9ud',
+        base16: '0x55cb580c6bdf40e400f3714651bb7643bca24de4',
+        decimals: 18,
+        symbol: 'ZLP',
+        name: 'ZilPay',
+        scope: 100
+      }
     }
   ]
 };
@@ -72,9 +83,11 @@ export function loadTokensfromCache() {
           const found = list.tokens.find((t) => t.meta.base16 === token.meta.base16);
           
           if (!found) {
+            console.log(token);
             list.tokens.push(token);
           }
         }
+
         $tokens.setState(list);
       }
     }
@@ -115,3 +128,20 @@ export function updateTokens(tokens: Token[]) {
   cacheState();
 }
 
+export function loadFromServer(listedTokens: ListedTokenResponse) {
+  const list: Token[] = listedTokens.list.map((t) => ({
+    balance: {},
+    meta: t
+  }));
+  const state = {
+    tokens: [
+      {
+        balance: {},
+        meta: ZILLIQA_TOKEN
+      },
+      ...list
+    ]
+  };
+
+  $tokens.setState(state);
+}
