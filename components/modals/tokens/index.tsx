@@ -147,8 +147,8 @@ export var TokensModal: React.FC<Prop> = function ({
                 src={getIconURL(token.meta.bech32)}
                 alt={token.meta.symbol}
                 lazyRoot={lazyRoot}
-                height="30"
-                width="30"
+                height="50"
+                width="50"
               />
               <div className={styles.tokenwrapper}>
                 <p className={styles.left}>
