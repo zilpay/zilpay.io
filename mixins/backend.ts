@@ -11,35 +11,46 @@ export class ZilPayBackend {
   private _api = `api/v1`;
 
   public async getListedTokens(): Promise<ListedTokenResponse> {
-    let url = new URL(
-      `${this._host}/${this._api}/${BackendMethods.Listed}`,
-    );
-    const res = await fetch(url.toString());
-
-    if (res.status !== 200) {
+    try {
+      const url = new URL(
+        `${this._host}/${this._api}/${BackendMethods.Listed}`,
+      );
+      const res = await fetch(url.toString());
+  
+      if (res.status !== 200) {
+        return {
+          list: [],
+          count: 0
+        };
+      }
+  
+      const result = await res.json();
+  
+      return result;
+    } catch {
       return {
         list: [],
         count: 0
       };
     }
-
-    const result = await res.json();
-
-    return result;
   }
 
   public async getRate() {
-    let url = new URL(
-      `${this._host}/${this._api}/${BackendMethods.Rate}?currency=usd`,
-    );
-    const res = await fetch(url.toString());
-
-    if (res.status !== 200) {
+    try {
+      const url = new URL(
+        `${this._host}/${this._api}/${BackendMethods.Rate}?currency=usd`,
+      );
+      const res = await fetch(url.toString());
+  
+      if (res.status !== 200) {
+        return 0;
+      }
+  
+      const result = await res.json();
+  
+      return result.usd;
+    } catch {
       return 0;
     }
-
-    const result = await res.json();
-
-    return result.usd;
   }
 }
