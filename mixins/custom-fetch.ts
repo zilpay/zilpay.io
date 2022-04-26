@@ -20,7 +20,8 @@ export enum RPCMethods {
 
 export enum DexFields {
   Pools = 'pools',
-  Fee = 'swap_fee',
+  LiquidityFee = 'liquidity_fee',
+  ProtocolFee = 'protocol_fee',
   MinLP = 'min_lp',
   Balances = 'balances',
   TotalContributions = 'total_contributions'
@@ -122,18 +123,30 @@ export class Blockchain {
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
         [dex, DexFields.Pools, []]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.LiquidityFee, []]
+      ),
+      this._buildBody(
+        RPCMethods.GetSmartContractSubState,
+        [dex, DexFields.ProtocolFee, []]
       )
     ];
-    const [resBalances, resTotalContributions, resPools] = await this._send(batch);
+    const [resBalances, resTotalContributions, resPools, resLiquidityFee, resProtocolFee] = await this._send(batch);
     const balances: FiledBalances = resBalances.result ? resBalances.result[DexFields.Balances] : {};
     const totalContributions: FieldTotalContributions = resTotalContributions.result ?
       resTotalContributions.result[DexFields.TotalContributions] : {};
     const pools: FiledPools = resPools.result ? resPools.result[DexFields.Pools] : {};
+    const liquidityFee = resLiquidityFee.result ? resLiquidityFee.result[DexFields.LiquidityFee] : '0';
+    const protocolFee = resProtocolFee.result ? resProtocolFee.result[DexFields.ProtocolFee] : '0';
 
     return {
       balances,
       totalContributions,
-      pools
+      pools,
+      liquidityFee,
+      protocolFee
     };
   }
 

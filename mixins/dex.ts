@@ -54,9 +54,12 @@ export class DragonDex {
 
   public async updateState() {
     const contract = toHex(DragonDex.CONTRACT);
-    const { pools, balances, totalContributions } = await this._provider.fetchFullState(contract);
+    const { pools, balances, totalContributions, protocolFee, liquidityFee } = await this._provider.fetchFullState(contract);
     const shares = this._getShares(balances, totalContributions);
     const dexPools = this._getPools(pools);
+
+    this.fee = BigInt(liquidityFee);
+    this.protoFee = BigInt(protocolFee);
 
     updateDexBalances(balances);
     updateLiquidity(shares, dexPools);
