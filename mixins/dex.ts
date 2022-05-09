@@ -13,7 +13,6 @@ import { addTransactions } from '@/store/transactions';
 import { SHARE_PERCENT } from '@/config/conts';
 import { $liquidity, updateDexBalances, updateLiquidity } from '@/store/shares';
 import { $wallet } from '@/store/wallet';
-import { StorageFields } from '@/config/storage-fields';
 import { $settings } from '@/store/settings';
 import { TokenState } from '@/types/token';
 
