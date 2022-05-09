@@ -36,6 +36,10 @@
   }
 
   @media (max-width: 1000px) {
-    width: auto;
+    width: 100%;
+    margin: 0;
+    margin-block-start: 4px;
+    margin-block-end: 4px;
+    @include border-radius(0);
   }
 }
