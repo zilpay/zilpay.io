@@ -11,6 +11,7 @@ type Prop = {
   userAgent?: string;
 };
 
+const iconSize = 50;
 export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
   const main = useTranslation(`main`);
 
@@ -32,8 +33,8 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
         target="_blank"
       >
         <ChromeIcon
-          height={60}
-          width={60}
+          height={iconSize}
+          width={iconSize}
           color="var(--primary-color)"
           hoverColor="var(--primary-color)"
         />
@@ -52,8 +53,8 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
         target="_blank"
       >
         <SafariIcon
-          height={60}
-          width={60}
+          height={iconSize}
+          width={iconSize}
           color="var(--primary-color)"
         />
         <b>
@@ -71,8 +72,8 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
         target="_blank"
       >
         <FireFoxIcon
-          height={60}
-          width={60}
+          height={iconSize}
+          width={iconSize}
           color="var(--primary-color)"
         />
         <b>
@@ -85,18 +86,18 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
   return (
     <div className={styles.row}>
       <FireFoxIcon
-        height={60}
-        width={60}
+        height={iconSize}
+        width={iconSize}
         color="var(--primary-color)"
       />
       <ChromeIcon
-        height={60}
-        width={60}
+        height={iconSize}
+        width={iconSize}
         color="var(--primary-color)"
       />
       <SafariIcon
-        height={60}
-        width={60}
+        height={iconSize}
+        width={iconSize}
         color="var(--primary-color)"
       />
     </div>

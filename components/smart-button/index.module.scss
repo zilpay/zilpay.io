@@ -4,7 +4,7 @@
 .button {
   cursor: pointer;
 
-  padding: 5px 16px;
+  padding: 10px 16px;
   border: 1px solid var(--primary-color);
 
   @include border-radius(8px);
