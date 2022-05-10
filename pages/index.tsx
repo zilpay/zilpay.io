@@ -13,8 +13,13 @@ import { AppLinks } from '@/config/links';
 import GitHubIcon from '@/components/icons/github';
 import LinkedinIcon from '@/components/icons/linkedin';
 import TwitterIcon from '@/components/icons/twitter';
+import { SmartButton } from '@/components/smart-button';
 
-const MainPage: NextPage = () => {
+type Prop = {
+  userAgent: string;
+};
+
+const MainPage: NextPage<Prop> = (props) => {
   const { t } = useTranslation(`main`);
 
   return (
@@ -39,6 +44,7 @@ const MainPage: NextPage = () => {
             <div className={styles.apkbtn}/>
           </a>
         </div>
+        <SmartButton userAgent={props.userAgent}/>
       </section>
       <section className={styles.features}>
         <div className={styles.cards}>
@@ -160,10 +166,24 @@ const MainPage: NextPage = () => {
   )
 };
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => ({
-  props: {
-    ...await serverSideTranslations(props.locale || `en`, [`main`, `common`]),
-  },
-});
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  let userAgent;
+
+  if (context.req) { // if you are on the server and you get a 'req' property from your context
+    userAgent = context.req.headers['user-agent'] // get the user-agent from the headers
+  } else {
+    userAgent = navigator.userAgent // if you are on the client you can access the navigator from the window object
+  }
+
+  return {
+    props: {
+      userAgent,
+      ...await serverSideTranslations(context.locale || `en`, [`main`, `common`]),
+    }
+  }
+}
+
+
 
 export default MainPage;
