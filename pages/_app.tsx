@@ -5,11 +5,13 @@ import type { AppProps } from 'next/app'
 import React from 'react';
 import Cookies from 'cookies';
 import { appWithTranslation } from 'next-i18next'
+import { GetServerSidePropsContext } from 'next';
 import NextNprogress from "nextjs-progressbar";
 
 import { Footer } from '@/components/footer';
 import { NavBar } from '@/components/nav-bar/index';
 import { Themes } from '@/config/themes';
+
 import { $settings, updateSettingsStore, updateFromStorage } from '@/store/settings';
 
 updateFromStorage();
@@ -31,8 +33,8 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 }
 
-App.getInitialProps = async function ({ ctx }: any): Promise<{}> {
-  const cookies = new Cookies(ctx.req, ctx.res);
+App.getServerSideProps = async function (context: GetServerSidePropsContext): Promise<{}> {
+  const cookies = new Cookies(context.req, context.res);
   const theme = cookies.get('theme') || Themes.Dark;
 
   updateSettingsStore({
@@ -44,5 +46,6 @@ App.getInitialProps = async function ({ ctx }: any): Promise<{}> {
     theme
   };
 }
+
 
 export default appWithTranslation(App);

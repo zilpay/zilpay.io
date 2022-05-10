@@ -17,9 +17,14 @@ import { ZilPayBackend } from '@/mixins/backend';
 import { $tokens, loadFromServer } from '@/store/tokens';
 import { updateRate } from '@/store/settings';
 
+type Prop = {
+  tokens: ListedTokenResponse;
+  rate: number;
+};
+
 const dex = new DragonDex();
 const backend = new ZilPayBackend();
-export const PageSwap: NextPage = (props: any) => {
+export const PageSwap: NextPage<Prop> = (props) => {
   const { t } = useTranslation(`swap`);
 
   const [loading, setLoading] = React.useState(true);
@@ -73,11 +78,11 @@ export const PageSwap: NextPage = (props: any) => {
   );
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => {
-  if (props.res) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  if (context.res) {
     // res available only at server
     // no-store disable bfCache for any browser. So your HTML will not be cached
-    props.res.setHeader(`Cache-Control`, `no-store`);
+    context.res.setHeader(`Cache-Control`, `no-store`);
   }
 
   const tokens = await backend.getListedTokens();
@@ -87,9 +92,8 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
     props: {
       tokens,
       rate,
-      ...await serverSideTranslations(props.locale || `en`, [`swap`, `common`])
-    },
-    revalidate: 1,
+      ...await serverSideTranslations(context.locale || `en`, [`swap`, `common`])
+    }
   };
 };
 

@@ -3,6 +3,7 @@ import styles from '@/styles/pages/main.module.scss';
 import type { NextPage } from 'next';
 
 import Image from "next/image";
+import Head from 'next/head';
 import React from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -24,6 +25,14 @@ const MainPage: NextPage<Prop> = (props) => {
 
   return (
     <>
+      <Head>
+        <title>{t(`head_title`)}</title>
+        <meta
+          property="og:title"
+          content={t(`head_title`)}
+          key="title"
+        />
+      </Head>
       <section className={styles.main}>
         <div className={styles.wrapper}>
           <h1>
