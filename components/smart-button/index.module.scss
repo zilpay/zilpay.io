@@ -3,4 +3,15 @@
 
 .button {
   cursor: pointer;
+
+  padding: 5px 16px;
+  border: 1px solid var(--primary-color);
+
+  @include border-radius(8px);
+  @include flex-between-row;
+
+  & > b {
+    margin: 5px;
+    color: var(--primary-color);
+  }
 }

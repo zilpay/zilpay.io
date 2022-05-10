@@ -1,7 +1,12 @@
 {
   "main": {
     "title": "A portal to the decentralised world",
-    "sub_title": "The most popular and faster Zilliqa wallet."
+    "sub_title": "The most popular and faster Zilliqa wallet.",
+    "button": {
+      "firefox": "FireFox Addon",
+      "safari": "Safari Addon",
+      "chrome": "Chrome Extension"
+    }
   },
   "info": {
     "card_0": {
