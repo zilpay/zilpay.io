@@ -2,6 +2,7 @@ import styles from '@/styles/pages/main.module.scss';
 
 import type { NextPage } from 'next';
 
+import Image from "next/image";
 import React from 'react';
 import { GetServerSidePropsContext } from 'next';
 import { useTranslation } from 'next-i18next';
@@ -9,6 +10,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { InfoCard } from '@/components/info-card';
 
 import { AppLinks } from '@/config/links';
+import GitHubIcon from '@/components/icons/github';
+import LinkedinIcon from '@/components/icons/linkedin';
+import TwitterIcon from '@/components/icons/twitter';
 
 const MainPage: NextPage = () => {
   const { t } = useTranslation(`main`);
@@ -107,7 +111,50 @@ const MainPage: NextPage = () => {
           </InfoCard>
         </div>
       </section>
-      <section className={styles.features}>
+      <section className={styles.team}>
+        <div className={styles.header}>
+          <h1>
+            {t(`team.title`)}
+          </h1>
+        </div>
+        <div className={styles.teamcard}>
+          <Image
+            src="/images/rinat.webp"
+            alt="me"
+            height={200}
+            width={200}
+          />
+          <h3>
+            Rinat Khasanshin
+          </h3>
+          <p>
+            CO-FOUNDER & CEO
+          </p>
+          <hr />
+          <div>
+            <a href="https://github.com/hicaru" target="_blank">
+              <GitHubIcon
+                height={15}
+                width={15}
+                color="var(--muted-color)"
+              />
+            </a>
+            <a href="https://www.linkedin.com/in/arc-warden/" target="_blank">
+              <LinkedinIcon
+                height={15}
+                width={15}
+                color="var(--muted-color)"
+              />
+            </a>
+            <a href="https://twitter.com/lich666black" target="_blank">
+              <TwitterIcon
+                height={15}
+                width={15}
+                color="var(--muted-color)"
+              />
+            </a>
+          </div>
+        </div>
       </section>
     </>
   )

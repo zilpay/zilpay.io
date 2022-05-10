@@ -233,6 +233,7 @@ export const SwapForm: React.FC = () => {
           value={bottomAmount}
           token={tokensStore.tokens[token1].meta}
           balance={tokensStore.tokens[token1].balance[String(wallet?.base16).toLowerCase()]}
+          disabled
           onInput={hanldeOnChangeBottom}
           onMax={hanldeOnChangeBottom}
           onSelect={() => setModal1(true)}

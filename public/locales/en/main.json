@@ -72,5 +72,8 @@
       "title": "ZIlSwap DEX",
       "sub_title": "Swap or provide liquidity to ZRC2 tokens"
     }
+  },
+  "team": {
+    "title": "ZIlPay Team:"
   }
 }

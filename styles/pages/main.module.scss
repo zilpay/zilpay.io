@@ -36,7 +36,8 @@
   }
 }
 
-.features {
+.features,
+.team {
   @include flex-column;
   align-items: center;
 
@@ -45,6 +46,31 @@
 
   margin-bottom: 20vh;
   margin-top: 20vh;
+}
+
+.teamcard {
+  @include flex-center-column;
+
+  & > span {
+    @include border-radius(100%);
+  }
+  & > p {
+    margin: 0;
+  }
+  & > h3 {
+    margin-block-end: 5px;
+  }
+  & > hr {
+    color: var(--primary-color);
+    width: 20px;
+  }
+  & > div {
+    @include flex-between-row;
+
+    & > a {
+      margin: 5px;
+    }
+  }
 }
 
 .header {

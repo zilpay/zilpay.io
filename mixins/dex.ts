@@ -488,8 +488,9 @@ export class DragonDex {
     const value = priceDiff.div(currentPrice);
     const _100 = Big(100);
     const imact = value.mul(_100).round(3).toNumber();
+    const v = Math.abs(imact);
 
-    return Math.abs(imact);
+    return v > 100 ? 100 : v;
   }
 
   public calcVirtualAmount(amount: Big, token: TokenState, pool: bigint[]) {

@@ -5,7 +5,6 @@ import type { TokenState } from "@/types/token";
 import React from "react";
 import Big from "big.js";
 import Image from 'next/image';
-import toformat from 'toformat';
 
 import { getIconURL } from "@/lib/viewblock";
 import classNames from 'classnames';
@@ -32,7 +31,6 @@ type Prop = {
 
 const list = [10, 25, 50, 75, 100];
 const dex = new DragonDex();
-const FormatedBig = toformat(Big);
 export const FormInput: React.FC<Prop> = ({
   value,
   token,
@@ -85,9 +83,7 @@ export const FormInput: React.FC<Prop> = ({
   return (
     <label>
       <div
-        className={classNames(styles.container, {
-          disabled
-        })}
+        className={classNames(styles.container)}
       >
         <div className={styles.wrapper}>
           <input
@@ -96,9 +92,7 @@ export const FormInput: React.FC<Prop> = ({
             onInput={hanldeOnInput}
           />
           <div
-            className={classNames(styles.dropdown, {
-              disabled
-            })}
+            className={classNames(styles.dropdown)}
             onClick={onSelect}
           >
             <Image
