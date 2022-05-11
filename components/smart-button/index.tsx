@@ -36,7 +36,6 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
           height={iconSize}
           width={iconSize}
           color="var(--primary-color)"
-          hoverColor="var(--primary-color)"
         />
         <b>
           {main.t('main.button.chrome')}
