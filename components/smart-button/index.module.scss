@@ -21,7 +21,8 @@
     & > b {
       color: var(--button-color);
     }
-    & > svg > path {
+    & > svg > path,
+    & > svg > g > path {
       fill: var(--button-color);
     }
   }
