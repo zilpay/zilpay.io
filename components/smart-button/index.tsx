@@ -31,6 +31,7 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
         className={styles.button}
         href="https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd"
         target="_blank"
+        rel="noreferrer"
       >
         <ChromeIcon
           height={iconSize}
@@ -50,6 +51,7 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
         className={styles.button}
         href="https://apps.apple.com/ru/app/zilpay-extension/id1598114655?l=en&mt=12"
         target="_blank"
+        rel="noreferrer"
       >
         <SafariIcon
           height={iconSize}
@@ -69,6 +71,7 @@ export const SmartButton: React.FC<Prop> = ({ userAgent }) => {
         className={styles.button}
         href="https://addons.mozilla.org/en-GB/firefox/addon/zilpay/"
         target="_blank"
+        rel="noreferrer"
       >
         <FireFoxIcon
           height={iconSize}

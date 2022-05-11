@@ -147,21 +147,33 @@ const MainPage: NextPage<Prop> = (props) => {
           </p>
           <hr />
           <div>
-            <a href="https://github.com/hicaru" target="_blank">
+            <a
+              href="https://github.com/hicaru"
+              target="_blank"
+              rel="noreferrer"
+            >
               <GitHubIcon
                 height={15}
                 width={15}
                 color="var(--muted-color)"
               />
             </a>
-            <a href="https://www.linkedin.com/in/arc-warden/" target="_blank">
+            <a
+              href="https://www.linkedin.com/in/arc-warden/"
+              target="_blank"
+              rel="noreferrer"
+            >
               <LinkedinIcon
                 height={15}
                 width={15}
                 color="var(--muted-color)"
               />
             </a>
-            <a href="https://twitter.com/lich666black" target="_blank">
+            <a
+              href="https://twitter.com/lich666black"
+              target="_blank"
+              rel="noreferrer"
+            >
               <TwitterIcon
                 height={15}
                 width={15}

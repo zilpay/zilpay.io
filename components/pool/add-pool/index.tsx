@@ -67,7 +67,7 @@ export const AddPoolForm: React.FC = () => {
       setToken(foundIndex);
       setTokensModal(false);
     }
-  }, [tokensStore, token]);
+  }, [tokensStore]);
 
   const handleSubmit = React.useCallback((event) => {
     event.preventDefault();
@@ -81,7 +81,7 @@ export const AddPoolForm: React.FC = () => {
     setLimitAmount(
       dex.calcVirtualAmount(amount, tokenMeta, pool)
     );
-  }, [amount, token]);
+  }, [amount, token, liquidity, tokensStore]);
 
   return (
     <>

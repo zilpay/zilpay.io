@@ -243,6 +243,7 @@ export class Blockchain {
       if (foundIndex >= 0) {
         pools[foundIndex].meta = {
           decimals: meta.decimals,
+          scope: 0,
           bech32: zp.crypto.toBech32Address(meta.address),
           base16: meta.address,
           name: meta.name,
@@ -258,6 +259,7 @@ export class Blockchain {
             decimals: meta.decimals,
             bech32: zp.crypto.toBech32Address(meta.address),
             base16: meta.address,
+            scope: 0,
             name: meta.name,
             symbol: meta.symbol
           },

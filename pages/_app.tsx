@@ -1,7 +1,5 @@
 import '../styles/globals.scss';
 
-import type { AppProps } from 'next/app'
-
 import React from 'react';
 import Cookies from 'cookies';
 import { appWithTranslation } from 'next-i18next'
@@ -14,7 +12,7 @@ import { $settings, updateSettingsStore, updateFromStorage } from '@/store/setti
 
 updateFromStorage();
 
-const App = ({ Component, pageProps }: AppProps) => {
+const App = ({ Component, pageProps }: any) => {
   return (
     <>
       <NextNprogress

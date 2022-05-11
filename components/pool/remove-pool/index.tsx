@@ -106,6 +106,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     } catch (err) {
       // console.error(err);
     }
+    // @ts-ignore
   }, [wallet, liquidity, tokenAddress, tokensStore, token, owner]);
 
   return (
