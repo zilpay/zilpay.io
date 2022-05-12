@@ -17,6 +17,9 @@ export class TokensMixine {
   public async getAllowances(spender: string, contract: string): Promise<bigint> {
     const field = `allowances`;
     const zilpay = await this.zilpay.zilpay();
+    if (!zilpay.wallet.isEnable) {
+      await zilpay.wallet.connect();
+    }
     const owner = String(zilpay.wallet.defaultAccount?.base16).toLowerCase();
     const address = spender.toLowerCase();
     const result = await this.zilpay.getSubState(contract, field, [

@@ -125,7 +125,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           return 0;
       }
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       return 0;
     }
   }, [exact, limit, liquidity, limitToken, exactToken, direction]);
@@ -172,19 +172,21 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   }, [exactToken, exact]);
 
   const hanldeOnSwap = React.useCallback(async() => {
-    if (!wallet) {
-      return;
-    }
+    const zilpay = await tokensMixin.zilpay.zilpay();
 
     setLoading(true);
 
     try {
+      if (!wallet || !zilpay.wallet.isEnable) {
+        await zilpay.wallet.connect();
+      }
+
       switch (direction) {
         case SwapDirection.ZilToToken:
           await dex.swapExactZILForTokens(
             exact,
             limit,
-            wallet.base16,
+            String(wallet?.base16),
             limitToken.base16
           );
           setLoading(false);
@@ -200,7 +202,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           await dex.swapExactTokensForZIL(
             exact,
             limit,
-            wallet.base16,
+            String(wallet?.base16),
             exactToken.base16
           );
           setLoading(false);
@@ -216,7 +218,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           await dex.swapExactTokensForTokens(
             exact,
             limit,
-            wallet.base16,
+            String(wallet?.base16),
             exactToken.base16,
             limitToken.base16
           );

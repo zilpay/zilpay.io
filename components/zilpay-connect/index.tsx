@@ -128,13 +128,13 @@ export const ConnectZIlPay: React.FC = function () {
         $wallet.setState(zp.wallet.defaultAccount);
       }
 
-      // const cache = window.localStorage.getItem(
-      //   String(zp.wallet.defaultAccount?.bech32),
-      // );
+      const cache = window.localStorage.getItem(
+        String(zp.wallet.defaultAccount?.bech32),
+      );
 
-      // if (cache) {
-      //   $transactions.setState(JSON.parse(cache));
-      // }
+      if (cache) {
+        $transactions.setState(JSON.parse(cache));
+      }
 
       transactionsCheck();
     },
