@@ -165,8 +165,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
       setIsAllow(
         tokensMixin.isAllow(String(exact), String(allowances))
       );
-    } catch {
-      /////
+    } catch (err) {
+      console.error('hanldeUpdate', err);
     }
     setLoading(false);
   }, [exactToken, exact]);
@@ -224,8 +224,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           onClose();
           return;
       }
-    } catch {
-      ///
+    } catch (err) {
+      console.error(err);
     }
 
     setLoading(false);
