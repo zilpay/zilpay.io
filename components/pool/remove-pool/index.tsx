@@ -81,7 +81,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
       console.error(err);
     }
     setLoading(false);
-  }, [zil, zrc, tokenAddress, userContributions, owner, token, tokensStore]);
+  }, [zil, zrc, tokenAddress, userContributions, owner, token, tokensStore, wallet]);
 
   const hanldeRange = React.useCallback((range) => {
     const percent = BigInt(range);
