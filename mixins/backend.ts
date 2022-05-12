@@ -18,8 +18,6 @@ export class ZilPayBackend {
         `${this._host}/${this._api}/${BackendMethods.Listed}`,
       );
       const res = await fetch(url.toString());
-
-      console.log(res);
   
       if (res.status !== 200) {
         return {
@@ -29,6 +27,8 @@ export class ZilPayBackend {
       }
   
       const result = await res.json();
+
+      console.log(result);
   
       return result;
     } catch (err) {
