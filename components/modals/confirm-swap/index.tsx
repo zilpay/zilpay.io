@@ -124,7 +124,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
         default:
           return 0;
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       return 0;
     }
   }, [exact, limit, liquidity, limitToken, exactToken, direction]);
