@@ -172,11 +172,11 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   }, [exactToken, exact]);
 
   const hanldeOnSwap = React.useCallback(async() => {
-    const zilpay = await tokensMixin.zilpay.zilpay();
-
     setLoading(true);
 
     try {
+      const zilpay = await tokensMixin.zilpay.zilpay();
+
       if (!wallet || !zilpay.wallet.isEnable) {
         await zilpay.wallet.connect();
       }

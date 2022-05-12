@@ -55,7 +55,14 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
 
   const hanldeaddLiquidity = React.useCallback(async() => {
     setLoading(true);
+
     try {
+      const zilpay = await tokensMixin.zilpay.zilpay();
+
+      if (!wallet || !zilpay.wallet.isEnable) {
+        await zilpay.wallet.connect();
+      }
+
       if (!isAllow) {
         const owner = String(wallet?.base16).toLowerCase();
         const balance = tokensStore.tokens[tokenIndex].balance[owner];

@@ -22,6 +22,7 @@ import { nPool } from '@/filters/n-pool';
 import { ThreeDots } from 'react-loader-spinner';
 import { formatNumber } from '@/filters/n-format';
 import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
+import { TokensMixine } from '@/mixins/token';
 
 Big.PE = 999;
 
@@ -29,6 +30,7 @@ type Prop = {
   token: Token;
 };
 
+const tokensMixin = new TokensMixine();
 const dex = new DragonDex();
 export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
   const pool = useTranslation(`pool`);
@@ -57,9 +59,12 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
   const hanldeOnRemove = React.useCallback(async() => {
     setLoading(true);
     try {
-      if (!owner) {
-        throw new Error();
+      const zilpay = await tokensMixin.zilpay.zilpay();
+
+      if (!wallet || !zilpay.wallet.isEnable) {
+        await zilpay.wallet.connect();
       }
+
       const zilToken = tokensStore.tokens[0].meta;
       const minZIL = zil.mul(dex.toDecimails(zilToken.decimals));
       const minZrc = zrc.mul(dex.toDecimails(token.meta.decimals));
