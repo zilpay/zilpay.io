@@ -28,8 +28,6 @@ export class ZilPayBackend {
   
       const result = await res.json();
 
-      console.log(result);
-  
       return result;
     } catch (err) {
       console.error('getListedTokens', err);
