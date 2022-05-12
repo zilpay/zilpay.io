@@ -35,7 +35,7 @@ export class DragonDex {
   public zilpay = new ZilPayBase();
 
   public lp = BigInt(0);
-  public fee = BigInt(9970);
+  public fee = BigInt(10000);
   public protoFee = BigInt(500);
 
   public get pools() {
