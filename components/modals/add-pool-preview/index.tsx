@@ -113,7 +113,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
     if (show) {
       hanldeUpdate();
     }
-  }, [show, hanldeUpdate]);
+  }, [show]);
 
   return (
     <Modal
