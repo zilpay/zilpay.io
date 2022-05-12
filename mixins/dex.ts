@@ -483,14 +483,18 @@ export class DragonDex {
   }
 
   public calcPriceImpact(priceInput: Big, priceOutput: Big, currentPrice: Big) {
-    const nextPrice = priceInput.div(priceOutput);
-    const priceDiff = nextPrice.sub(currentPrice);
-    const value = priceDiff.div(currentPrice);
-    const _100 = Big(100);
-    const imact = value.mul(_100).round(3).toNumber();
-    const v = Math.abs(imact);
-
-    return v > 100 ? 100 : v;
+    try {
+      const nextPrice = priceInput.div(priceOutput);
+      const priceDiff = nextPrice.sub(currentPrice);
+      const value = priceDiff.div(currentPrice);
+      const _100 = Big(100);
+      const imact = value.mul(_100).round(3).toNumber();
+      const v = Math.abs(imact);
+  
+      return v > 100 ? 100 : v;
+    } catch {
+      return 0;
+    }
   }
 
   public calcVirtualAmount(amount: Big, token: TokenState, pool: bigint[]) {
