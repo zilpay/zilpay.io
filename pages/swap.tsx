@@ -78,11 +78,11 @@ export const PageSwap: NextPage<Prop> = (props) => {
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  if (context.res) {
+export const getStaticProps = async (props: GetServerSidePropsContext) => {
+  if (props.res) {
     // res available only at server
     // no-store disable bfCache for any browser. So your HTML will not be cached
-    context.res.setHeader(`Cache-Control`, `no-store`);
+    props.res.setHeader(`Cache-Control`, `no-store`);
   }
 
   const tokens = await backend.getListedTokens();
@@ -92,8 +92,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       tokens,
       rate,
-      ...await serverSideTranslations(context.locale || `en`, [`swap`, `common`])
-    }
+      ...await serverSideTranslations(props.locale || `en`, [`swap`, `common`])
+    },
+    revalidate: 1,
   };
 };
 
