@@ -17,6 +17,7 @@ import { DragonDex } from '@/mixins/dex';
 import { ThreeDots } from 'react-loader-spinner';
 import { ZilPayBackend } from '@/mixins/backend';
 import { updateRate } from '@/store/settings';
+import { updateDexPools } from '@/store/shares';
 
 
 type Prop = {
@@ -41,6 +42,7 @@ export const PageRemovePool: NextPage<Prop> = (props) => {
   
   React.useEffect(() => {
     if (props.data) {
+      updateDexPools(props.data.pools);
       updateRate(props.data.rate);
       loadFromServer(props.data.tokens.list);
     }
@@ -77,6 +79,10 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
   }
 
   const data = await backend.getListedTokens();
+  
+  updateDexPools(data.pools);
+  updateRate(data.rate);
+  loadFromServer(data.tokens.list);
 
   return {
     props: {

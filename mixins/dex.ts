@@ -517,7 +517,7 @@ export class DragonDex {
     return v > 100 ? 100 : v;
   }
 
-  public calcVirtualAmount(amount: Big, token: TokenState, pool: bigint[]) {
+  public calcVirtualAmount(amount: Big, token: TokenState, pool: string[]) {
     if (!pool || pool.length < 2) {
       return Big(0);
     }

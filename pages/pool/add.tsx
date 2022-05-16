@@ -1,7 +1,8 @@
 import styles from '@/styles/pages/swap.module.scss';
 
+import type { ListedTokenResponse } from '@/types/token';
+
 import Head from 'next/head';
-import { Puff } from 'react-loader-spinner';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { GetServerSidePropsContext, NextPage } from 'next';
@@ -10,46 +11,42 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { AddPoolForm } from '@/components/pool';
 
 import { DragonDex } from '@/mixins/dex';
-import { liquidityFromCache } from '@/store/shares';
 import { ZilPayBackend } from '@/mixins/backend';
 import { updateRate } from '@/store/settings';
 import { $tokens, loadFromServer } from '@/store/tokens';
+import { updateDexPools } from '@/store/shares';
+
+
+type Prop = {
+  data: ListedTokenResponse;
+};
+
 
 const backend = new ZilPayBackend();
 const dex = new DragonDex();
-export const PageAddPool: NextPage = (props: any) => {
+export const PageAddPool: NextPage<Prop> = (props) => {
   const pool = useTranslation(`pool`);
-
-  const [loading, setLoading] = React.useState(true);
 
   const hanldeUpdate = React.useCallback(async() => {
     if (typeof window !== 'undefined') {
-      setLoading(true);
-      liquidityFromCache();
-
-      updateRate(props.rate);
-
-      try {
-        if ($tokens.state.tokens.length < 3) {
-          loadFromServer(props.tokens);
-        } 
-      } catch {
-        ////
-      }
-
       try {
         await dex.updateTokens();
         await dex.updateState();
       } catch {
         ///
       }
-      setLoading(false);
     }
   }, [props]);
 
   React.useEffect(() => {
+    if (props.data) {
+      updateDexPools(props.data.pools);
+      updateRate(props.data.rate);
+      loadFromServer(props.data.tokens.list);
+    }
+
     hanldeUpdate();
-  }, [hanldeUpdate]);
+  }, [hanldeUpdate, props]);
 
   return (
     <div className={styles.container}>
@@ -62,11 +59,7 @@ export const PageAddPool: NextPage = (props: any) => {
         />
       </Head>
       <div>
-        {loading ? (
-          <Puff color="var(--primary-color)"/>
-        ) : (
-          <AddPoolForm />
-        )}
+        <AddPoolForm />
       </div>
     </div>
   );
@@ -79,13 +72,15 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
     props.res.setHeader(`Cache-Control`, `no-store`);
   }
 
-  const tokens = await backend.getListedTokens();
-  const rate = await backend.getRate();
+  const data = await backend.getListedTokens();
+
+  updateDexPools(data.pools);
+  updateRate(data.rate);
+  loadFromServer(data.tokens.list);
 
   return {
     props: {
-      tokens,
-      rate,
+      data,
       ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`])
     },
     revalidate: 1,

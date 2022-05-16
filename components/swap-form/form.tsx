@@ -56,7 +56,7 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
         pair[0].meta,
       ];
     }
-  }, [priceFrom, tokensStore, pair]);
+  }, [priceFrom, pair]);
 
   const balances = React.useMemo(() => {
     let balance0 = '0';

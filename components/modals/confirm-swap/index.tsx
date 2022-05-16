@@ -75,7 +75,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
         pair[0].meta,
       ];
     }
-  }, [priceRevert]);
+  }, [priceRevert, pair]);
 
   const direction = React.useMemo(() => {
     return dex.getDirection(pair);
@@ -151,7 +151,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const expectedOutputAfterSleepage = React.useMemo(() => {
     const [, limitToken] = pair;
     return Big(dex.sleepageCalc(limitToken.value)).round(12).toFormat();
-  }, [pair, limit]);
+  }, [pair]);
 
   const approveToken = React.useCallback(async() => {
     const [exactToken] = pair;
@@ -240,6 +240,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
 
     setLoading(false);
   }, [
+    pair,
     isAllow,
     exact,
     limit,

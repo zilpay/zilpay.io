@@ -39,14 +39,19 @@ export const AddPoolForm: React.FC = () => {
   const [settingsModal, setSettingsModal] = React.useState(false);
 
   const tokenBalance = React.useMemo(() => {
-    const blk = tokensStore.tokens[token].balance[String(wallet?.base16).toLowerCase()];
+    let balance = '0';
+    const owner = String(wallet?.base16).toLowerCase();
 
-    if (!blk) {
-      return Big(0);
+    if (tokensStore.tokens[token] && tokensStore.tokens[token].balance[owner]) {
+      balance = tokensStore.tokens[token].balance[owner];
     }
 
-    return Big(blk);
+    return Big(balance);
   }, [wallet, tokensStore, token]);
+
+  const exceptions = React.useMemo(() => {
+    return [ZERO_ADDR, tokensStore.tokens[token].meta.base16];
+  }, [tokensStore, token]);
 
   const disabled = React.useMemo(() => {
     const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
@@ -93,7 +98,7 @@ export const AddPoolForm: React.FC = () => {
       />
       <TokensModal
         show={tokensModal}
-        tokens={tokensStore.tokens}
+        exceptions={exceptions}
         warn
         include
         onClose={() => setTokensModal(false)}
