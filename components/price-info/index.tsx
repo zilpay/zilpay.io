@@ -89,7 +89,7 @@ export var PriceInfo: React.FC<Prop> = function ({
   return (
     <div className={styles.container}>
       <p onClick={onClick}>
-        1 {tokens[0].symbol} = {price.toFormat()} {tokens[1].symbol} <span>
+        1 {tokens[0].symbol} = {price.round(12).toFormat()} {tokens[1].symbol} <span>
           ({converted})
         </span>
       </p>
