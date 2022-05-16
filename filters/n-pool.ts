@@ -1,7 +1,7 @@
 import { SHARE_PERCENT } from "@/config/conts";
 
 
-export function nPool(pool: bigint[], share: bigint) {
+export function nPool(pool: string[], share: bigint) {
   const [x, y] = pool;
 
   return [

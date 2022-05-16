@@ -1,10 +1,11 @@
 import type { Share, DexPool, FiledBalances } from '@/types/zilliqa';
+import type { ListedTokenResponse } from '@/types/token';
 
 import { StorageFields } from '@/config/storage-fields';
 
 import { Store } from 'react-stores';
 
-let init: {
+const init: {
   shares: Share,
   pools: DexPool,
   balances: FiledBalances
@@ -14,25 +15,17 @@ let init: {
   balances: {}
 };
 
-export const $liquidity = new Store(init);
+try {
+  const cache = window.__NEXT_DATA__.props.pageProps.data as ListedTokenResponse;
 
-export function liquidityFromCache() {
-  const { balances, pools, shares } = $liquidity.state;
-
-  if (balances && pools && shares) {
-    return;
+  if (cache && cache.pools) {
+    init.pools = cache.pools;
   }
-
-  try {
-    const fromStorage = window.localStorage.getItem(StorageFields.Liquidity);
-  
-    if (fromStorage) {
-      $liquidity.setState(JSON.parse(fromStorage));
-    }
-  } catch {
-    ///
-  }
+} catch {
+  // console.warn(err);
 }
+
+export const $liquidity = new Store(init);
 
 function cacheState() {
   if (typeof window !== 'undefined') {

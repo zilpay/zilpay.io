@@ -5,11 +5,23 @@ import { Store } from 'react-stores';
 import cookieCutter from 'cookie-cutter';
 
 const initState = {
-  rate: Number(typeof window !== 'undefined' ? (window.__NEXT_DATA__.props.pageProps.rate || 0) : 0),
+  rate: Number(0),
   slippage: SLIPPAGE,
   blocks: BLOCKS,
-  theme: String(typeof window !== 'undefined' ? window.__NEXT_DATA__.props.theme : Themes.Dark)
+  theme: String(Themes.Dark)
 };
+
+try {
+  if (window.__NEXT_DATA__.props.pageProps.theme) {
+    initState.theme = window.__NEXT_DATA__.props.pageProps.theme;
+  }
+
+  if (window.__NEXT_DATA__.props.pageProps.data.rate) {
+    initState.rate = Number(window.__NEXT_DATA__.props.pageProps.data.rate || 0);
+  }
+} catch {
+  ///
+}
 
 export const $settings = new Store(initState);
 

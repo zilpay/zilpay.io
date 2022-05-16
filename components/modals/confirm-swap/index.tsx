@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 
-import type { TokenState } from "@/types/token";
+import type { SwapPair } from "@/types/swap";
 
 import { ThreeDots } from "react-loader-spinner";
 import _Big from "big.js";
@@ -32,11 +32,7 @@ Big.PE = 999;
 
 type Prop = {
   show: boolean;
-  exactToken: TokenState;
-  limitToken: TokenState;
-  exact: _Big;
-  limit: _Big;
-  direction: SwapDirection;
+  pair: SwapPair[];
   onClose: () => void;
 };
 
@@ -45,11 +41,7 @@ const tokensMixin = new TokensMixine();
 const dex = new DragonDex();
 export var ConfirmSwapModal: React.FC<Prop> = function ({
   show,
-  exact,
-  limit,
-  exactToken,
-  limitToken,
-  direction,
+  pair,
   onClose
 }) {
   const common = useTranslation(`common`);
@@ -62,59 +54,85 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const [isAllow, setIsAllow] = React.useState(false);
   const [priceRevert, setPriceRevert] = React.useState(true);
 
+  const exact = React.useMemo(
+    () => BigInt(Big(pair[0].value).mul(dex.toDecimails(pair[0].meta.decimals).round())),
+    [pair]
+  );
+  const limit = React.useMemo(
+    () => BigInt(Big(pair[1].value).mul(dex.toDecimails(pair[1].meta.decimals).round())),
+    [pair]
+  );
+
   const tokensPrices = React.useMemo(() => {
     if (priceRevert) {
-      return [exactToken, limitToken];
+      return [
+        pair[0].meta,
+        pair[1].meta,
+      ];
+    } else {
+      return [
+        pair[1].meta,
+        pair[0].meta,
+      ];
+    }
+  }, [priceRevert]);
+
+  const direction = React.useMemo(() => {
+    return dex.getDirection(pair);
+  }, [pair]);
+
+  const gasFee = React.useMemo(() => {
+    if (!show) {
+      return Big(0);
     }
 
-    return [limitToken, exactToken];
-  } , [priceRevert, exactToken, limitToken]);
-  const gasFee = React.useMemo(() => {
     const gasLimit = dex.calcGasLimit(direction);
     const gasPrice = Big(DEFAUL_GAS.gasPrice);
     const li = gasLimit.mul(gasPrice);
 
     return li.div(dex.toDecimails(6));
-  }, [direction]);
+  }, [direction, show]);
 
   const expectedOutput = React.useMemo(() => {
-    const value = Big(limit.div(dex.toDecimails(limitToken.decimals)));
-    return value.round(12).toFormat();
-  }, [limit, limitToken]);
+    const [, limitToken] = pair;
+    const limit = Big(limitToken.value);
+    return limit.round(12).toFormat();
+  }, [pair]);
 
   const priceImpact = React.useMemo(() => {
-    const expectInput = exact.div(dex.toDecimails(exactToken.decimals));
-    const limitInput = limit.div(dex.toDecimails(limitToken.decimals));
+    const [exactToken, limitToken] = pair;
+    const expectInput = Big(exactToken.value);
+    const limitInput = Big(limitToken.value);
     let price = Big(0);
-    let x = BigInt(0);
-    let y = BigInt(0);
+    let x = String(0);
+    let y = String(0);
     let zilReserve = Big(0);
     let tokensReserve = Big(0);
 
     try {
       switch (direction) {
         case SwapDirection.ZilToToken:
-          [x, y] = liquidity.pools[limitToken.base16];
-          zilReserve = Big(String(x)).div(dex.toDecimails(exactToken.decimals));
-          tokensReserve = Big(String(y)).div(dex.toDecimails(limitToken.decimals));
+          [x, y] = liquidity.pools[limitToken.meta.base16];
+          zilReserve = Big(String(x)).div(dex.toDecimails(exactToken.meta.decimals));
+          tokensReserve = Big(String(y)).div(dex.toDecimails(limitToken.meta.decimals));
           price = zilReserve.div(tokensReserve);
           return dex.calcPriceImpact(expectInput, limitInput, price);
         case SwapDirection.TokenToZil:
-          [x, y] = liquidity.pools[exactToken.base16];
-          zilReserve = Big(String(x)).div(dex.toDecimails(limitToken.decimals));
-          tokensReserve = Big(String(y)).div(dex.toDecimails(exactToken.decimals));
+          [x, y] = liquidity.pools[exactToken.meta.base16];
+          zilReserve = Big(String(x)).div(dex.toDecimails(limitToken.meta.decimals));
+          tokensReserve = Big(String(y)).div(dex.toDecimails(exactToken.meta.decimals));
           price = tokensReserve.div(zilReserve);
           return dex.calcPriceImpact(expectInput, limitInput, price);
         case SwapDirection.TokenToTokens:
           const [zilliqa] = $tokens.state.tokens;
-          const [inputZils, inputTokens] = liquidity.pools[exactToken.base16];
-          const [outpuZils, outputTokens] = liquidity.pools[limitToken.base16];
+          const [inputZils, inputTokens] = liquidity.pools[exactToken.meta.base16];
+          const [outpuZils, outputTokens] = liquidity.pools[limitToken.meta.base16];
 
           const bigInputZils = Big(String(inputZils)).div(dex.toDecimails(zilliqa.meta.decimals));
-          const bigInputTokens = Big(String(inputTokens)).div(dex.toDecimails(exactToken.decimals));
+          const bigInputTokens = Big(String(inputTokens)).div(dex.toDecimails(exactToken.meta.decimals));
   
           const bigOutpuZils = Big(String(outpuZils)).div(dex.toDecimails(zilliqa.meta.decimals));
-          const bigOutputTokens = Big(String(outputTokens)).div(dex.toDecimails(limitToken.decimals));
+          const bigOutputTokens = Big(String(outputTokens)).div(dex.toDecimails(limitToken.meta.decimals));
 
           const inputRate = bigInputTokens.div(bigInputZils);
           const outpuRate = bigOutputTokens.div(bigOutpuZils);
@@ -128,29 +146,31 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
       // console.error(err);
       return 0;
     }
-  }, [exact, limit, liquidity, limitToken, exactToken, direction]);
+  }, [direction, pair, liquidity]);
 
   const expectedOutputAfterSleepage = React.useMemo(() => {
-    const bigValue = BigInt(String(limit));
-    const value = Big(String(dex.sleepageCalc(bigValue)));
-    return Big(value.div(dex.toDecimails(limitToken.decimals))).round(12).toFormat();
-  }, [limit, limitToken]);
+    const [, limitToken] = pair;
+    const value = Big(String(dex.sleepageCalc(limit)));
+    return Big(value.div(dex.toDecimails(limitToken.meta.decimals))).round(12).toFormat();
+  }, [pair, limit]);
 
   const approveToken = React.useCallback(async() => {
+    const [exactToken] = pair;
     const owner = String(wallet?.base16).toLowerCase();
     const token = $tokens.state.tokens.find(
-      (t) => t.meta.base16 === exactToken.base16
+      (t) => t.meta.base16 === exactToken.meta.base16
     );
     const balance = token?.balance[owner] || '0';
     await tokensMixin.increaseAllowance(
       DragonDex.CONTRACT,
-      exactToken.base16,
+      exactToken.meta.base16,
       balance
     );
-  }, [wallet, exactToken]);
+  }, [wallet, pair]);
 
   const hanldeUpdate = React.useCallback(async() => {
-    if (exactToken.base16 === ZERO_ADDR) {
+    const [exactToken] = pair;
+    if (exactToken.meta.base16 === ZERO_ADDR) {
       setIsAllow(true);
       setLoading(false);
       return;
@@ -160,7 +180,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     try {
       const allowances = await tokensMixin.getAllowances(
         DragonDex.CONTRACT,
-        exactToken.base16
+        exactToken.meta.base16
       );
       setIsAllow(
         tokensMixin.isAllow(String(exact), String(allowances))
@@ -169,7 +189,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
       console.error('hanldeUpdate', err);
     }
     setLoading(false);
-  }, [exactToken, exact]);
+  }, [pair, exact]);
 
   const hanldeOnSwap = React.useCallback(async() => {
     setLoading(true);
@@ -183,12 +203,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
 
       switch (direction) {
         case SwapDirection.ZilToToken:
-          await dex.swapExactZILForTokens(
-            exact,
-            limit,
-            String(wallet?.base16),
-            limitToken.base16
-          );
+          await dex.swapExactZILForTokens(exact, limit, pair[1].meta);
           setLoading(false);
           onClose();
           return;
@@ -199,12 +214,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             setIsAllow(true);
             return;
           }
-          await dex.swapExactTokensForZIL(
-            exact,
-            limit,
-            String(wallet?.base16),
-            exactToken.base16
-          );
+          await dex.swapExactTokensForZIL(exact, limit, pair[0].meta);
           setLoading(false);
           onClose();
           return;
@@ -218,9 +228,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           await dex.swapExactTokensForTokens(
             exact,
             limit,
-            String(wallet?.base16),
-            exactToken.base16,
-            limitToken.base16
+            pair[0],
+            pair[1]
           );
           setLoading(false);
           onClose();
@@ -237,8 +246,6 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     limit,
     direction,
     wallet,
-    exactToken,
-    limitToken,
     onClose,
     approveToken
   ]);
@@ -262,14 +269,14 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     >
       <div className={styles.container}>
         <FormInput
-          value={exact.div(dex.toDecimails(exactToken.decimals))}
-          token={exactToken}
+          value={Big(pair[0].value)}
+          token={pair[0].meta}
           disabled
         />
         <br />
         <FormInput
-          value={limit.div(dex.toDecimails(limitToken.decimals))}
-          token={limitToken}
+          value={Big(pair[1].value)}
+          token={pair[1].meta}
           disabled
         />
         <PriceInfo
@@ -283,7 +290,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                 {swap.t(`modals.confirm.expected_output`)}
               </p>
               <p>
-                {expectedOutput} {limitToken.symbol}
+                {expectedOutput} {pair[1].meta.symbol}
               </p>
             </div>
             <div className={styles.row}>
@@ -301,7 +308,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
                 {swap.t(`modals.confirm.min_slippage`)} ({settings.slippage}%)
               </p>
               <p>
-                {expectedOutputAfterSleepage} {limitToken.symbol}
+                {expectedOutputAfterSleepage} {pair[1].meta.symbol}
               </p>
             </div>
             <div className={styles.row}>

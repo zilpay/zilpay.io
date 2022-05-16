@@ -1,6 +1,7 @@
 import styles from '@/styles/pages/swap.module.scss';
 
-import type { ListedTokenResponse, Token } from '@/types/token';
+import type { ListedTokenResponse } from '@/types/token';
+import type { SwapPair } from '@/types/swap';
 
 import { useTranslation } from 'next-i18next';
 import Head from 'next/head';
@@ -10,16 +11,15 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { SwapForm } from '@/components/swap-form';
 
-import { liquidityFromCache } from '@/store/shares';
 import { DragonDex } from '@/mixins/dex';
-import { Puff } from 'react-loader-spinner';
 import { ZilPayBackend } from '@/mixins/backend';
-import { $tokens, loadFromServer } from '@/store/tokens';
 import { updateRate } from '@/store/settings';
+import { updateDexPools } from '@/store/shares';
+import { loadFromServer } from '@/store/tokens';
 
 type Prop = {
-  tokens: ListedTokenResponse;
-  rate: number;
+  data: ListedTokenResponse;
+  paid: SwapPair[];
 };
 
 const dex = new DragonDex();
@@ -27,21 +27,9 @@ const backend = new ZilPayBackend();
 export const PageSwap: NextPage<Prop> = (props) => {
   const { t } = useTranslation(`swap`);
 
-  const [loading, setLoading] = React.useState(true);
-
   const hanldeUpdate = React.useCallback(async() => {
     if (typeof window !== 'undefined') {
-      liquidityFromCache();
-
-      updateRate(props.rate);
-
-      try {
-        if ($tokens.state.tokens.length < 3) {
-          loadFromServer(props.tokens);
-        } 
-      } catch {
-        ////
-      }
+      updateRate(props.data.rate);
 
       try {
         await dex.updateTokens();
@@ -49,11 +37,14 @@ export const PageSwap: NextPage<Prop> = (props) => {
       } catch {
         ///
       }
-      setLoading(false);
     }
   }, [props]);
 
   React.useEffect(() => {
+    updateDexPools(props.data.pools);
+    updateRate(props.data.rate);
+    loadFromServer(props.data.tokens.list);
+
     hanldeUpdate();
   }, [hanldeUpdate]);
 
@@ -68,11 +59,9 @@ export const PageSwap: NextPage<Prop> = (props) => {
         />
       </Head>
       <div>
-        {loading ? (
-          <Puff color="var(--primary-color)"/>
-        ) : (
-          <SwapForm />
-        )}
+        {props.paid ? (
+          <SwapForm startPair={props.paid}/>
+        ) : null}
       </div>
     </div>
   );
@@ -85,13 +74,26 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
     props.res.setHeader(`Cache-Control`, `no-store`);
   }
 
-  const tokens = await backend.getListedTokens();
-  const rate = await backend.getRate();
+  const data = await backend.getListedTokens();
+  const paid = [
+    {
+      value: '0',
+      meta: data.tokens.list[0]
+    },
+    {
+      value: '0',
+      meta: data.tokens.list[1]
+    }
+  ];
+
+  updateDexPools(data.pools);
+  updateRate(data.rate);
+  loadFromServer(data.tokens.list);
 
   return {
     props: {
-      tokens,
-      rate,
+      data,
+      paid,
       ...await serverSideTranslations(props.locale || `en`, [`swap`, `common`])
     },
     revalidate: 1,

@@ -57,7 +57,7 @@ export const FormInput: React.FC<Prop> = ({
       return formatNumber(String(zils.mul(rate)), DEFAULT_CURRENCY);
     }
 
-    return 0;
+    return formatNumber(0, DEFAULT_CURRENCY);
   }, [settings, value, tokensStore, token]);
 
   const hanldePercent = React.useCallback((n: number) => {

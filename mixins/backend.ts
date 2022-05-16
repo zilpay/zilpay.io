@@ -3,7 +3,7 @@ import type { ListedTokenResponse } from "@/types/token";
 export enum BackendMethods {
   Tokens = `tokens`,
   Rate = 'rates',
-  Listed = 'dex/tokens'
+  Dex = 'dex'
 }
 
 export class ZilPayBackend {
@@ -15,14 +15,18 @@ export class ZilPayBackend {
   public async getListedTokens(): Promise<ListedTokenResponse> {
     try {
       const url = new URL(
-        `${this._host}/${this._api}/${BackendMethods.Listed}`,
+        `${this._host}/${this._api}/${BackendMethods.Dex}`,
       );
       const res = await fetch(url.toString());
   
       if (res.status !== 200) {
         return {
-          list: [],
-          count: 0
+          tokens: {
+            list: [],
+            count: 0
+          },
+          rate: 0,
+          pools: {}
         };
       }
   
@@ -32,28 +36,13 @@ export class ZilPayBackend {
     } catch (err) {
       console.error('getListedTokens', err);
       return {
-        list: [],
-        count: 0
+        tokens: {
+          list: [],
+          count: 0
+        },
+        rate: 0,
+        pools: {}
       };
-    }
-  }
-
-  public async getRate() {
-    try {
-      const url = new URL(
-        `${this._host}/${this._api}/${BackendMethods.Rate}?currency=usd`,
-      );
-      const res = await fetch(url.toString());
-  
-      if (res.status !== 200) {
-        return 0;
-      }
-  
-      const result = await res.json();
-  
-      return result.usd;
-    } catch {
-      return 0;
     }
   }
 }

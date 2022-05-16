@@ -21,13 +21,12 @@ export interface ParamItem {
 }
 
 export interface ListedTokenResponse {
-  list: {
-    bech32: string;
-    base16: string;
-    decimals: number;
-    name: string;
-    symbol: string;
-    scope: number;
-  }[],
-  count: number;
+  tokens: {
+    list: TokenState[];
+    count: number;
+  };
+  pools: {
+    [token: string]: string[];
+  };
+  rate: number;
 }

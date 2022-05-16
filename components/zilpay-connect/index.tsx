@@ -16,7 +16,6 @@ import { Blockchain } from '@/mixins/custom-fetch';
 import { ZilPayBase } from '@/mixins/zilpay-base';
 import { trim } from '@/lib/trim';
 import { DragonDex } from '@/mixins/dex';
-import { loadTokensfromCache } from '@/store/tokens';
 
 const chainFetcher = new Blockchain();
 const zilPayWallet = new ZilPayBase();
@@ -171,7 +170,6 @@ export const ConnectZIlPay: React.FC = function () {
   };
 
   React.useEffect(() => {
-    loadTokensfromCache();
     zilPayWallet
       .zilpay()
       .then((zp) => {

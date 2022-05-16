@@ -16,12 +16,13 @@ import Big from 'big.js';
 import { ZilPayBase } from '@/mixins/zilpay-base';
 import { DragonDex } from '@/mixins/dex';
 import { ThreeDots } from 'react-loader-spinner';
+import { $tokens } from '@/store/tokens';
 
 type Prop = {
   show: boolean;
-  tokens: Token[];
   warn?: boolean;
   include?: boolean;
+  exceptions?: string[];
   onClose: () => void;
   onSelect: (token: TokenState) => void;
 };
@@ -46,18 +47,23 @@ export var TokensModal: React.FC<Prop> = function ({
   show,
   onClose,
   onSelect,
-  tokens = [],
+  exceptions = [],
   warn = false,
   include = false
 }) {
   const common = useTranslation(`common`);
   const wallet = useStore($wallet);
+  const tokensStore = useStore($tokens);
 
   const lazyRoot = React.useRef(null);
 
   const [isImport, setImport] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [base16, setBase16] = React.useState('');
+
+  const tokens = React.useMemo(() => {
+    return tokensStore.tokens.filter((t) => !exceptions.includes(t.meta.base16));
+  }, [tokensStore, exceptions]);
 
   const hanldeInput = React.useCallback(async(event) => {
     try {
@@ -133,12 +139,12 @@ export var TokensModal: React.FC<Prop> = function ({
           </div>
         </div>
       ) : (
-        <div
+        <ul
           className={styles.container}
           ref={lazyRoot}
         >
           {tokens.map((token) => (
-            <div
+            <li
               key={token.meta.base16}
               className={styles.tokencard}
               onClick={() => onSelect(token.meta)}
@@ -161,9 +167,9 @@ export var TokensModal: React.FC<Prop> = function ({
               <p>
                 {String(getAmount(token.meta.decimals, token.balance[String(wallet?.base16).toLowerCase()]))}
               </p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
       <div className={styles.include}>
         {include && !isImport ? (

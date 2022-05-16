@@ -1,5 +1,8 @@
 import styles from './index.module.scss';
 
+import type { SwapPair } from '@/types/swap';
+import type { TokenState } from '@/types/token';
+
 import Big from 'big.js';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
@@ -13,171 +16,103 @@ import { TokensModal } from '@/components/modals/tokens';
 import { SwapSettingsModal } from '@/components/modals/settings';
 import { PriceInfo } from '@/components/price-info';
 
-import { DragonDex, SwapDirection } from '@/mixins/dex';
+import { DragonDex } from '@/mixins/dex';
 
 import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
-import { ZERO_ADDR } from '@/config/conts';
 
 
-enum Exact {
-  Top,
-  Bottom
-}
+type Prop = {
+  startPair: SwapPair[];
+};
+
 
 Big.PE = 999;
 const dex = new DragonDex();
 
-let tokenIndex0 = 0;
-let tokenIndex1 = 1;
-
-export const SwapForm: React.FC = () => {
+export const SwapForm: React.FC<Prop> = ({ startPair }) => {
   const { t } = useTranslation(`swap`);
 
   const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
-
-  const [token0, setToken0] = React.useState(tokenIndex0);
-  const [token1, setToken1] = React.useState(tokenIndex1);
 
   const [modal0, setModal0] = React.useState(false);
   const [modal1, setModal1] = React.useState(false);
   const [modal3, setModal3] = React.useState(false);
   const [confirmModal, setConfirmModal] = React.useState(false);
 
-  const [topAmount, setTopAmount] = React.useState(Big(0));
-  const [bottomAmount, setBottomAmount] = React.useState(Big(0));
-  const [direction, setDirection] = React.useState(SwapDirection.ZilToToken);
-  const [exactType, setExactType] = React.useState(Exact.Top);
   const [priceFrom, setPriceFrom] = React.useState(true);
+  const [pair, setPair] = React.useState<SwapPair[]>(startPair);
 
-  const exactAmount = React.useMemo(() => {
-    if (exactType === Exact.Top) {
-      const decimals0 = dex.toDecimails(tokensStore.tokens[tokenIndex0].meta.decimals);
-      return topAmount.mul(decimals0);
-    }
-
-    const decimals1 = dex.toDecimails(tokensStore.tokens[tokenIndex1].meta.decimals);
-
-    return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, tokensStore, exactType]);
-  const limitAmount = React.useMemo(() => {
-    if (exactType === Exact.Bottom) {
-      const decimals0 = dex.toDecimails(tokensStore.tokens[tokenIndex0].meta.decimals);
-      return topAmount.mul(decimals0);
-    }
-    const decimals1 = dex.toDecimails(tokensStore.tokens[tokenIndex1].meta.decimals);
-
-    return bottomAmount.mul(decimals1);
-  }, [topAmount, bottomAmount, tokensStore, exactType]);
-  const disabled = React.useMemo(() => {
-    return exactAmount.eq(0) || !(wallet?.base16);
-  }, [exactAmount, wallet]);
   const tokensForPrice = React.useMemo(() => {
     if (priceFrom) {
       return [
-        tokensStore.tokens[token0].meta,
-        tokensStore.tokens[token1].meta
+        pair[0].meta,
+        pair[1].meta,
       ];
     } else {
       return [
-        tokensStore.tokens[token1].meta,
-        tokensStore.tokens[token0].meta
+        pair[1].meta,
+        pair[0].meta,
       ];
     }
-  }, [priceFrom, tokensStore, token0, token1]);
+  }, [priceFrom, tokensStore, pair]);
 
-  const hanldeOnChangeTop = React.useCallback((amount: Big) => {
-    let result = Big(0);
+  const balances = React.useMemo(() => {
+    let balance0 = '0';
+    let balance1 = '0';
 
-    if (tokensStore.tokens[tokenIndex0].meta.base16 === ZERO_ADDR) {
-      result = dex.zilToTokens(amount, tokenIndex1);
-      setDirection(SwapDirection.ZilToToken);
-    } else if (tokensStore.tokens[tokenIndex1].meta.base16 === ZERO_ADDR) {
-      result = dex.tokensToZil(amount, tokenIndex0);
-      setDirection(SwapDirection.TokenToZil);
-    } else {
-      setDirection(SwapDirection.TokenToTokens);
-      result = dex.tokensToTokens(amount, tokenIndex0, tokenIndex1);
+    if (!wallet) {
+      return [balance0, balance1];
     }
 
-    setExactType(Exact.Top);
-    setTopAmount(amount);
-    setBottomAmount(result);
-  }, [tokensStore]);
-  const hanldeOnChangeBottom = React.useCallback((amount: Big) => {
-    let result = Big(0);
+    const found0 = tokensStore.tokens.find((t) => t.meta.base16 === pair[0].meta.base16);
+    const found1 = tokensStore.tokens.find((t) => t.meta.base16 === pair[1].meta.base16);
 
-    if (tokensStore.tokens[tokenIndex1].meta.base16 === ZERO_ADDR) {
-      result = dex.zilToTokens(amount, tokenIndex0);
-      setDirection(SwapDirection.ZilToToken);
-    } else if (tokensStore.tokens[tokenIndex0].meta.base16 === ZERO_ADDR) {
-      result = dex.tokensToZil(amount, tokenIndex1);
-      setDirection(SwapDirection.TokenToZil);
-    } else {
-      setDirection(SwapDirection.TokenToTokens);
-      result = dex.tokensToTokens(amount, tokenIndex1, tokenIndex0);
+    if (found0 && found0.balance[String(wallet.base16).toLowerCase()]) {
+      balance0 = found0.balance[String(wallet.base16).toLowerCase()];
     }
 
-    setExactType(Exact.Bottom);
-    setTopAmount(result);
-    setBottomAmount(amount);
-  }, [tokensStore]);
+    if (found1 && found1.balance[String(wallet.base16).toLowerCase()]) {
+      balance1 = found1.balance[String(wallet.base16).toLowerCase()];
+    }
+
+    return [balance0, balance1];
+  }, [pair, tokensStore, wallet]);
+
+  const disabled = React.useMemo(() => {
+    return Number(pair[0].value) <= 0 || Number(pair[1].value) <= 0 || !(wallet?.base16);
+  }, [pair, wallet]);
+
 
   const hanldeOnSwapForms = React.useCallback(() => {
-    const fst = token0
-    const second = token1
-    const amount0 = topAmount;
-    const amount1 = bottomAmount;
+    setPair(JSON.parse(JSON.stringify(pair.reverse())));
+  }, [pair]);
 
-    tokenIndex0 = second;
-    tokenIndex1 = fst;
-
-    if (exactType === Exact.Top) {
-      setExactType(Exact.Bottom);
-    } else {
-      setExactType(Exact.Top);
-    }
-
-    if (direction === SwapDirection.TokenToZil) {
-      setDirection(SwapDirection.ZilToToken);
-    } else if (direction === SwapDirection.ZilToToken) {
-      setDirection(SwapDirection.TokenToZil);
-    }
-
-    setToken1(fst);
-    setToken0(second);
-    setBottomAmount(amount0);
-    setTopAmount(amount1);
-  }, [token0, token1, topAmount, bottomAmount, direction, exactType]);
   const hanldeSubmit = React.useCallback((event) => {
     event.preventDefault();
     setConfirmModal(true);
   }, []);
-  const hanldeSelectToken0 = React.useCallback((token) => {
-    const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
 
-    if (foundIndex >= 0 && foundIndex !== tokenIndex1) {
-      tokenIndex0 = foundIndex;
-      setToken0(foundIndex);
-      setModal0(false);
+  const hanldeOnInput = React.useCallback((value) => {
+    const unLinkedPair = JSON.parse(JSON.stringify(pair));
 
-      setBottomAmount(Big(0));
-      setTopAmount(Big(0));
-    }
-  }, [tokensStore]);
-  const hanldeSelectToken1 = React.useCallback((token) => {
-    const foundIndex = tokensStore.tokens.findIndex((p) => p.meta.base16 === token.base16);
+    unLinkedPair[0].value = String(value);
+    unLinkedPair[1].value = dex.getRealPrice(unLinkedPair);
 
-    if (foundIndex >= 0 && foundIndex !== tokenIndex0) {
-      tokenIndex1 = foundIndex;
-      setToken1(foundIndex);
-      setModal1(false);
+    setPair(unLinkedPair);
+  }, [pair]);
 
-      setBottomAmount(Big(0));
-      setTopAmount(Big(0));
-    }
-  }, [tokensStore]);
+  const hanldeOnSelectToken = React.useCallback((token: TokenState, index: number) => {
+    const unLinkedPair = JSON.parse(JSON.stringify(pair));
+
+    unLinkedPair[index].value = String(0);
+    unLinkedPair[index].meta = token;
+
+    setPair(unLinkedPair);
+    setModal0(false);
+    setModal1(false);
+  }, [pair]);
 
   return (
     <>
@@ -187,65 +122,61 @@ export const SwapForm: React.FC = () => {
       />
       <ConfirmSwapModal
         show={confirmModal}
-        exact={exactAmount}
-        limit={limitAmount}
-        direction={direction}
-        limitToken={exactType === Exact.Top ? tokensStore.tokens[tokenIndex1].meta : tokensStore.tokens[tokenIndex0].meta}
-        exactToken={exactType === Exact.Bottom ? tokensStore.tokens[tokenIndex1].meta : tokensStore.tokens[tokenIndex0].meta}
+        pair={pair}
         onClose={() => setConfirmModal(false)}
       />
       <TokensModal
         show={modal0}
-        tokens={tokensStore.tokens}
         warn
         include
+        exceptions={pair.map((t) => t.meta.base16)}
         onClose={() => setModal0(false)}
-        onSelect={hanldeSelectToken0}
+        onSelect={(token) => hanldeOnSelectToken(token, 0)}
       />
       <TokensModal
         show={modal1}
-        tokens={tokensStore.tokens}
         include
         warn
+        exceptions={pair.map((t) => t.meta.base16)}
         onClose={() => setModal1(false)}
-        onSelect={hanldeSelectToken1}
+        onSelect={(token) => hanldeOnSelectToken(token, 1)}
       />
-      <form
-        className={styles.container}
-        onSubmit={hanldeSubmit}
-      >
-        <div className={styles.wrapper}>
-          <h3>
-            {t('title')}
-          </h3>
-          <SwapSettings onClick={() => setModal3(true)}/>
-        </div>
-        <FormInput
-          value={topAmount}
-          token={tokensStore.tokens[token0].meta}
-          balance={tokensStore.tokens[token0].balance[String(wallet?.base16).toLowerCase()]}
-          onInput={hanldeOnChangeTop}
-          onMax={hanldeOnChangeTop}
-          onSelect={() => setModal0(true)}
-        />
-        <SwapIcon onClick={hanldeOnSwapForms}/>
-        <FormInput
-          value={bottomAmount}
-          token={tokensStore.tokens[token1].meta}
-          balance={tokensStore.tokens[token1].balance[String(wallet?.base16).toLowerCase()]}
-          disabled
-          onInput={hanldeOnChangeBottom}
-          onMax={hanldeOnChangeBottom}
-          onSelect={() => setModal1(true)}
-        />
-        <PriceInfo
-          tokens={tokensForPrice}
-          onClick={() => setPriceFrom(!priceFrom)}
-        />
-        <button disabled={Boolean(disabled)}>
-          {t('buttons.exchange')}
-        </button>
-      </form>
+      {pair.length === 2 ? (
+        <form
+          className={styles.container}
+          onSubmit={hanldeSubmit}
+        >
+          <div className={styles.wrapper}>
+            <h3>
+              {t('title')}
+            </h3>
+            <SwapSettings onClick={() => setModal3(true)}/>
+          </div>
+          <FormInput
+            value={Big(pair[0].value)}
+            token={pair[0].meta}
+            balance={balances[0]}
+            onSelect={() => setModal0(true)}
+            onInput={hanldeOnInput}
+            onMax={hanldeOnInput}
+          />
+          <SwapIcon onClick={hanldeOnSwapForms}/>
+          <FormInput
+            value={Big(pair[1].value)}
+            token={pair[1].meta}
+            balance={balances[1]}
+            disabled
+            onSelect={() => setModal1(true)}
+          />
+          <PriceInfo
+            tokens={tokensForPrice}
+            onClick={() => setPriceFrom(!priceFrom)}
+          />
+          <button disabled={Boolean(disabled)}>
+            {t('buttons.exchange')}
+          </button>
+        </form>
+      ) : null}
     </>
   );
 }
