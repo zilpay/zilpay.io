@@ -46,7 +46,7 @@ export const PageSwap: NextPage<Prop> = (props) => {
     loadFromServer(props.data.tokens.list);
 
     hanldeUpdate();
-  }, [hanldeUpdate]);
+  }, [hanldeUpdate, props]);
 
   return (
     <div className={styles.container}>

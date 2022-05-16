@@ -1,5 +1,7 @@
 import styles from '@/styles/pages/swap.module.scss';
 
+import type { ListedTokenResponse } from '@/types/token';
+
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useStore } from 'react-stores';
@@ -9,17 +11,23 @@ import { GetServerSidePropsContext, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { RemovePoolForm } from '@/components/pool';
-import { $tokens } from '@/store/tokens';
+import { $tokens, loadFromServer } from '@/store/tokens';
 
 import { DragonDex } from '@/mixins/dex';
 import { ThreeDots } from 'react-loader-spinner';
-import { liquidityFromCache } from '@/store/shares';
 import { ZilPayBackend } from '@/mixins/backend';
+import { updateRate } from '@/store/settings';
+
+
+type Prop = {
+  data: ListedTokenResponse;
+};
 
 
 const backend = new ZilPayBackend();
 const dex = new DragonDex();
-export const PageRemovePool: NextPage = () => {
+
+export const PageRemovePool: NextPage<Prop> = (props) => {
   const pool = useTranslation(`pool`);
 
   const router = useRouter();
@@ -32,9 +40,13 @@ export const PageRemovePool: NextPage = () => {
   }, [tokensStore, router]);
   
   React.useEffect(() => {
-    liquidityFromCache();
+    if (props.data) {
+      updateRate(props.data.rate);
+      loadFromServer(props.data.tokens.list);
+    }
+
     dex.updateState();
-  }, []);
+  }, [props]);
 
   return (
     <div className={styles.container}>
@@ -64,13 +76,11 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
     props.res.setHeader(`Cache-Control`, `no-store`);
   }
 
-  const tokens = await backend.getListedTokens();
-  const rate = await backend.getRate();
+  const data = await backend.getListedTokens();
 
   return {
     props: {
-      tokens,
-      rate,
+      data,
       ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`])
     },
     revalidate: 1,

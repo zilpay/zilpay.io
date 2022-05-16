@@ -1,5 +1,7 @@
 import styles from '@/styles/pages/swap.module.scss';
 
+import type { ListedTokenResponse } from '@/types/token';
+
 import Head from 'next/head';
 import { useTranslation } from 'next-i18next';
 import React from 'react';
@@ -9,32 +11,23 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { PoolOverview } from '@/components/pool';
 import { DragonDex } from '@/mixins/dex';
 
-import { liquidityFromCache } from '@/store/shares';
 import { ZilPayBackend } from '@/mixins/backend';
 import { updateRate } from '@/store/settings';
 import { $tokens, loadFromServer } from '@/store/tokens';
 
+type Prop = {
+  data: ListedTokenResponse;
+};
+
 const backend = new ZilPayBackend();
 const dex = new DragonDex();
-export const PagePool: NextPage = (props: any) => {
+export const PagePool: NextPage<Prop> = (props) => {
   const { t } = useTranslation(`pool`);
 
   const [loading, setLoading] = React.useState(true);
 
   const hanldeUpdate = React.useCallback(async() => {
     if (typeof window !== 'undefined') {
-      liquidityFromCache();
-
-      updateRate(props.rate);
-
-      try {
-        if ($tokens.state.tokens.length < 3) {
-          loadFromServer(props.tokens);
-        } 
-      } catch {
-        ////
-      }
-
       try {
         await dex.updateTokens();
         await dex.updateState();
@@ -46,8 +39,13 @@ export const PagePool: NextPage = (props: any) => {
   }, [props]);
 
   React.useEffect(() => {
+    if (props.data) {
+      updateRate(props.data.rate);
+      loadFromServer(props.data.tokens.list);
+    }
+
     hanldeUpdate();
-  }, [hanldeUpdate]);
+  }, [hanldeUpdate, props]);
 
   return (
     <div className={styles.container}>
@@ -73,13 +71,11 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
     props.res.setHeader(`Cache-Control`, `no-store`);
   }
 
-  const tokens = await backend.getListedTokens();
-  const rate = await backend.getRate();
+  const data = await backend.getListedTokens();
 
   return {
     props: {
-      tokens,
-      rate,
+      data,
       ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`])
     },
     revalidate: 1,
