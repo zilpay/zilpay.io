@@ -79,7 +79,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
 
   const expectedOutput = React.useMemo(() => {
     const value = Big(limit.div(dex.toDecimails(limitToken.decimals)));
-    return value.toFormat();
+    return value.round(12).toFormat();
   }, [limit, limitToken]);
 
   const priceImpact = React.useMemo(() => {
@@ -133,7 +133,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const expectedOutputAfterSleepage = React.useMemo(() => {
     const bigValue = BigInt(String(limit));
     const value = Big(String(dex.sleepageCalc(bigValue)));
-    return Big(value.div(dex.toDecimails(limitToken.decimals))).toFormat();
+    return Big(value.div(dex.toDecimails(limitToken.decimals))).round(12).toFormat();
   }, [limit, limitToken]);
 
   const approveToken = React.useCallback(async() => {

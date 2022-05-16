@@ -9,9 +9,15 @@
   background-position: center center;
   background-size: 130%;
 
-  padding-top: 5vh;
+  // padding-top: 5vh;
+  // padding-bottom: 5vh;
   padding-left: 10vw;
   padding-right: 10vw;
+
+  @media (max-width: 700px) {
+    height: 100vh;
+    text-align: center;
+  }
 }
 
 .wrapper {

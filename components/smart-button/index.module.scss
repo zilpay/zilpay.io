@@ -27,3 +27,11 @@
     }
   }
 }
+
+.row {
+  @include flex-between-row;
+
+  & > svg {
+    margin: 5px;
+  }
+}
