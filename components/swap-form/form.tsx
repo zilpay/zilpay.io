@@ -120,11 +120,13 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
         show={modal3}
         onClose={() => setModal3(false)}
       />
-      <ConfirmSwapModal
-        show={confirmModal}
-        pair={pair}
-        onClose={() => setConfirmModal(false)}
-      />
+      {confirmModal ? (
+        <ConfirmSwapModal
+          show={confirmModal}
+          pair={pair}
+          onClose={() => setConfirmModal(false)}
+        />
+      ) : null}
       <TokensModal
         show={modal0}
         warn

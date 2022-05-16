@@ -150,8 +150,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
 
   const expectedOutputAfterSleepage = React.useMemo(() => {
     const [, limitToken] = pair;
-    const value = Big(String(dex.sleepageCalc(limit)));
-    return Big(value.div(dex.toDecimails(limitToken.meta.decimals))).round(12).toFormat();
+    return Big(dex.sleepageCalc(limitToken.value)).round(12).toFormat();
   }, [pair, limit]);
 
   const approveToken = React.useCallback(async() => {
@@ -228,8 +227,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
           await dex.swapExactTokensForTokens(
             exact,
             limit,
-            pair[0],
-            pair[1]
+            pair[0].meta,
+            pair[1].meta
           );
           setLoading(false);
           onClose();

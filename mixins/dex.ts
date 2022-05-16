@@ -201,9 +201,7 @@ export class DragonDex {
 
   public async swapExactZILForTokens(exact: bigint, limit: bigint, token: TokenState) {
     const { blocks } = $settings.state;
-    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
-    const piece = (limit * slippage) / SHARE_PERCENT;
-    const limitAfterSlippage = limit - piece;
+    const limitAfterSlippage = this.afterSlippage(limit);
     const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
     const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
@@ -252,9 +250,7 @@ export class DragonDex {
 
   public async swapExactTokensForZIL(exact: bigint, limit: bigint, token: TokenState) {
     const { blocks } = $settings.state;
-    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
-    const piece = (limit * slippage) / SHARE_PERCENT;
-    const limitAfterSlippage = limit - piece;
+    const limitAfterSlippage = this.afterSlippage(limit);
     const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
     const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
@@ -309,9 +305,7 @@ export class DragonDex {
   public async swapExactTokensForTokens(exact: bigint, limit: bigint, inputToken: TokenState, outputToken: TokenState) {
     const contractAddress = DragonDex.CONTRACT;
     const { blocks } = $settings.state;
-    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
-    const piece = (limit * slippage) / SHARE_PERCENT;
-    const limitAfterSlippage = limit - piece;
+    const limitAfterSlippage = this.afterSlippage(limit);
     const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
     const nextBlock = Big(NumTxBlocks).add(blocks);
     const params = [
@@ -370,7 +364,6 @@ export class DragonDex {
   public async addLiquidity(addr: string, amount: Big, limit: Big) {
     const contractAddress = DragonDex.CONTRACT;
     const { blocks } = $settings.state;
-    const slippage = BigInt($settings.state.slippage * Number(SHARE_PERCENT));
     const { blockNum, totalContributions, pool } = await this._provider.getBlockTotalContributions(
       contractAddress,
       addr
@@ -382,8 +375,7 @@ export class DragonDex {
       BigInt(zilReserve),
       BigInt(totalContributions)
     );
-    const piece = (minContributionAmount * slippage) / SHARE_PERCENT;
-    const contributionAmount = minContributionAmount - piece;
+    const limitAfterSlippage = this.afterSlippage(minContributionAmount);
     const params = [
       {
         vname: 'token_address',
@@ -393,7 +385,7 @@ export class DragonDex {
       {
         vname: 'min_contribution_amount',
         type: 'Uint128',
-        value: String(contributionAmount)
+        value: String(limitAfterSlippage)
       },
       {
         vname: 'max_token_amount',
@@ -489,6 +481,18 @@ export class DragonDex {
     return Big(10**decimals);
   }
 
+  public afterSlippage(amount: bigint) {
+    const slippage = $settings.state.slippage;
+
+    if (slippage <= 0) {
+      return amount;
+    }
+
+    const _slippage = DragonDex.FEE_DEMON - BigInt(slippage * 100);
+
+    return amount * _slippage / DragonDex.FEE_DEMON;
+  }
+
   public calcGasLimit(direction: SwapDirection) {
     switch (direction) {
       case SwapDirection.ZilToToken:
@@ -525,12 +529,18 @@ export class DragonDex {
     return amount.mul(zilRate);
   }
 
-  public sleepageCalc(value: bigint) {
-    const { slippage } = $settings.state;
-    const bigSlippage = BigInt(slippage * 100);
-    const decimals = BigInt(10000);
+  public sleepageCalc(value: string) {
+    const slippage = $settings.state.slippage;
 
-    return value - (value * bigSlippage / decimals);
+    if (slippage <= 0) {
+      return value;
+    }
+
+    const amount = Big(value);
+    const demon = Big(String(DragonDex.FEE_DEMON));
+    const slip = demon.sub(slippage * 100);
+
+    return amount.mul(slip).div(demon);
   }
 
   private _fraction(d: bigint, x: bigint, y: bigint) {
