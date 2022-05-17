@@ -150,7 +150,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
 
   const expectedOutputAfterSleepage = React.useMemo(() => {
     const [, limitToken] = pair;
-    return Big(dex.sleepageCalc(limitToken.value)).round(12).toFormat();
+    return Big(dex.sleepageCalc(String(limitToken.value))).round(12).toFormat();
   }, [pair]);
 
   const approveToken = React.useCallback(async() => {

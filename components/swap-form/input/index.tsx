@@ -29,7 +29,7 @@ type Prop = {
   onMax?: (b: Big) => void;
 };
 
-const list = [10, 25, 50, 75, 100];
+const list = [0, 10, 25, 50, 75, 100];
 const dex = new DragonDex();
 export const FormInput: React.FC<Prop> = ({
   value,
@@ -50,14 +50,8 @@ export const FormInput: React.FC<Prop> = ({
       return formatNumber(String(value.mul(rate)), DEFAULT_CURRENCY);
     }
 
-    const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token.base16);
-
-    if (foundIndex >= 0) {
-      const zils = dex.tokensToZil(value, foundIndex);
-      return formatNumber(String(zils.mul(rate)), DEFAULT_CURRENCY);
-    }
-
-    return formatNumber(0, DEFAULT_CURRENCY);
+    const zils = dex.tokensToZil(value, token);
+    return formatNumber(String(zils.mul(rate)), DEFAULT_CURRENCY);
   }, [settings, value, tokensStore, token]);
 
   const hanldePercent = React.useCallback((n: number) => {

@@ -92,40 +92,6 @@ export class DragonDex {
     });
   }
 
-  public async getUserDexContributions(token: string, owner: string) {
-    const contractAddress = DragonDex.CONTRACT;
-    return await this._provider.getUserBlockTotalContributions(
-      contractAddress,
-      token,
-      owner
-    );
-  }
-
-  public calcAmount(amount: bigint, direction: SwapDirection, inputIndex: number, outputIndex = -1) {
-    const token = this.tokens[inputIndex].meta;
-    const base16 = String(token.base16).toLowerCase();
-
-    if (!token) {
-      throw new Error(`Cannot find an input-token with index: ${inputIndex}`);
-    }
-
-    switch (direction) {
-      case SwapDirection.ZilToToken:
-        return this._zilToTokens(amount, this.pools[base16]);
-      case SwapDirection.TokenToZil:
-        return this._tokensToZil(amount, this.pools[base16]);
-      case SwapDirection.TokenToTokens:
-        const outputToken = this.tokens[outputIndex].meta;
-        if (!outputToken) {
-          throw new Error(`Cannot find an output-token with index: ${outputIndex}`);
-        }
-        const base16Output = String(outputToken.base16).toLowerCase();
-        return this._tokensToTokens(amount, this.pools[base16], this.pools[base16Output]);
-      default:
-        throw new Error('Incorrect SwapDirection');
-    }
-  }
-
   public getRealPrice(pair: SwapPair[]) {
     const [exactToken, limitToken] = pair;
     const exact = this._valueToBigInt(exactToken.value, exactToken.meta);
@@ -154,49 +120,19 @@ export class DragonDex {
     }
   }
 
-  public zilToTokens(value: string | Big, index: number): Big {
+  public tokensToZil(value: string | Big, token: TokenState) {
     const amount = Big(value);
 
     try {
-      const decimals = this.toDecimails(this.tokens[index].meta.decimals);
-      const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
-      let qa = BigInt(amount.mul(zilDecimails).round().toString());
-      const tokens = this.calcAmount(qa, SwapDirection.ZilToToken, index);
-  
-      return Big(String(tokens)).div(decimals);
-    } catch {
-      return Big(0);
-    }
-  }
-
-  public tokensToZil(value: string | Big, index: number) {
-    const amount = Big(value);
-
-    try {
-      const decimals = this.toDecimails(this.tokens[index].meta.decimals);
+      const decimals = this.toDecimails(token.decimals);
       const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
       const qa = amount.mul(decimals).round().toString();
-      const zils = this.calcAmount(BigInt(qa), SwapDirection.TokenToZil, index);
-  
+      const zils = this._tokensToZil(BigInt(qa), this.pools[token.base16]);
+
       return Big(String(zils)).div(zilDecimails);
     } catch {
       return Big(0);
     }
-  }
-
-  public tokensToTokens(value: string | Big, index0: number, index1: number) {
-    const amount = Big(value);
-
-    if (amount.eq(0) || !this.tokens[index0] || !this.tokens[index1]) {
-      return Big(0);
-    }
-
-    const decimals0 = this.toDecimails(this.tokens[index0].meta.decimals);
-    const decimals1 = this.toDecimails(this.tokens[index1].meta.decimals);
-    const qa = BigInt(amount.mul(decimals0).round().toString());
-    const tokens = this.calcAmount(qa, SwapDirection.TokenToTokens, index0, index1);
-
-    return Big(String(tokens)).div(decimals1);
   }
 
   public async swapExactZILForTokens(exact: bigint, limit: bigint, token: TokenState) {
@@ -236,7 +172,7 @@ export class DragonDex {
     }, this.calcGasLimit(SwapDirection.ZilToToken).toString());
 
     const amount = Big(String(exact)).div(this.toDecimails(this.tokens[0].meta.decimals)).toString();
-    const limitAmount = Big(String(limitAfterSlippage)).div(this.toDecimails(token.decimals)).toString();
+    const limitAmount = Big(String(limit)).div(this.toDecimails(token.decimals)).toString();
     addTransactions({
       timestamp: new Date().getTime(),
       name: `Swap exact (${formatNumber(amount)} ZIL), to (${formatNumber(limitAmount)} ${token.symbol})`,

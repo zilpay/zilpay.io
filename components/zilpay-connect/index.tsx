@@ -121,6 +121,7 @@ export const ConnectZIlPay: React.FC = function () {
         .subscribe(() => {
           transactionsCheck();
           dex.updateTokens();
+          dex.updateState();
         });
 
       if (zp.wallet.defaultAccount) {
