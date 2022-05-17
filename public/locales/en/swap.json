@@ -5,6 +5,9 @@
     "exchange": "Exchange",
     "swap": "Swap"
   },
+  "info": {
+    "verify": "Verify contract address of"
+  },
   "modals": {
     "confirm": {
       "title": "Confirm Swap",

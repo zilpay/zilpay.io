@@ -63,3 +63,31 @@
     }
   }
 }
+
+.info {
+  display: none;
+  width: 100%;
+  padding: 16px;
+  background: var(--button-color);
+
+  @include border-radius(16px);
+
+  &:global(.show) {
+    @include flex-left-column;
+  }
+
+  & > li {
+    font-size: 13px;
+    margin-block-start: 5px;
+    margin-block-end: 5px;
+    color: var(--text-color);
+    font-family: "Bold";
+
+    & > a {
+      font-family: "light";
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
+  }
+}

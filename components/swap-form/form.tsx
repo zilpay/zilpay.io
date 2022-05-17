@@ -22,6 +22,9 @@ import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
 import { $liquidity } from '@/store/shares';
 import { $net } from '@/store/netwrok';
+import classNames from 'classnames';
+import { ZERO_ADDR } from '@/config/conts';
+import { viewAddress } from '@/lib/viewblock';
 
 
 type Prop = {
@@ -44,6 +47,7 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
   const [modal1, setModal1] = React.useState(false);
   const [modal3, setModal3] = React.useState(false);
   const [confirmModal, setConfirmModal] = React.useState(false);
+  const [info, setInfo] = React.useState(false);
 
   const [priceFrom, setPriceFrom] = React.useState(true);
   const [pair, setPair] = React.useState<SwapPair[]>(startPair);
@@ -189,7 +193,23 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
           <PriceInfo
             tokens={tokensForPrice}
             onClick={() => setPriceFrom(!priceFrom)}
+            onShow={() => setInfo(!info)}
           />
+          <ul className={classNames(styles.info, {
+            show: info
+          })}>
+            <li>
+              {t('info.verify')} {pair.filter((t) => t.meta.base16 !== ZERO_ADDR).map((token) => (
+                <a
+                  href={viewAddress(token.meta.bech32)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {token.meta.symbol} {' '}
+                </a>
+              ))}
+            </li>
+          </ul>
           <button disabled={Boolean(disabled)}>
             {t('buttons.exchange')}
           </button>

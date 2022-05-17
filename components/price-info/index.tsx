@@ -13,6 +13,7 @@ import { $tokens } from "@/store/tokens";
 import { $settings } from "@/store/settings";
 import { formatNumber } from "@/filters/n-format";
 import { $liquidity } from "@/store/shares";
+import ArrowIcon from "../icons/arrow";
 
 const Big = toformat(_Big);
 
@@ -22,11 +23,13 @@ Big.PE = 999;
 type Prop = {
   tokens: TokenState[];
   onClick?: () => void;
+  onShow?: () => void;
 };
 
 const dex = new DragonDex();
 export var PriceInfo: React.FC<Prop> = function ({
   tokens,
+  onShow,
   onClick = () => null
 }) {
   const tokensStore = useStore($tokens);
@@ -93,6 +96,11 @@ export var PriceInfo: React.FC<Prop> = function ({
           ({converted})
         </span>
       </p>
+      {onShow ? (
+        <span onClick={onShow}>
+          <ArrowIcon color="var(--secondary-color)" />
+        </span>
+      ) : null}
     </div>
   );
 };

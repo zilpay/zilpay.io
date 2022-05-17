@@ -15,4 +15,14 @@
       color: var(--muted-color);
     }
   }
+
+  & > span {
+    cursor: pointer;
+
+    &:hover {
+      & > svg {
+        stroke: var(--primary-color);
+      }
+    }
+  }
 }
