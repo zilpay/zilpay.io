@@ -20,6 +20,7 @@ import { DragonDex } from '@/mixins/dex';
 
 import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
+import { $liquidity } from '@/store/shares';
 
 
 type Prop = {
@@ -35,6 +36,7 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
 
   const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
+  const liquidity = useStore($liquidity);
 
   const [modal0, setModal0] = React.useState(false);
   const [modal1, setModal1] = React.useState(false);
@@ -114,6 +116,13 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
     setModal0(false);
     setModal1(false);
   }, [pair]);
+
+  React.useEffect(() => {
+    if (Number(pair[0].value) > 0) {
+      console.log('updated');
+      hanldeOnInput(pair[0].value);
+    }
+  }, [liquidity, tokensStore]);
 
   return (
     <>
