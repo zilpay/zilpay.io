@@ -60,7 +60,9 @@ export const PagePool: NextPage<Prop> = (props) => {
         />
       </Head>
       <div>
-        <PoolOverview loading={loading}/>
+        {props.data ? (
+          <PoolOverview loading={loading}/>
+        ) : null}
       </div>
     </div>
   );
