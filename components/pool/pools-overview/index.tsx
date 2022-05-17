@@ -35,7 +35,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
   const settings = useStore($settings);
 
   const list = React.useMemo(() => {
-    if (!wallet) {
+    if (!wallet || tokensStore.tokens.length === 0) {
       return [];
     }
     const tokens = [];
