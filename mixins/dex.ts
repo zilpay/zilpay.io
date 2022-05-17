@@ -27,7 +27,9 @@ export enum SwapDirection {
   TokenToTokens
 }
 
-const CONTRACTS = {
+const CONTRACTS: {
+  [net: string]: string;
+} = {
   'mainnet': '',
   'testnet': '0x45a266fa784a9f2955fee237589c2a48c0e08132',
   'private': ''
