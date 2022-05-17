@@ -92,11 +92,4 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
   };
 };
 
-export async function getStaticPaths() {
-  return {
-    paths: [`/pool/addr`],
-    fallback: true,
-  };
-}
-
 export default PageRemovePool;
