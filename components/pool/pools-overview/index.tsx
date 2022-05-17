@@ -46,9 +46,10 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
 
     for (const token in shares) {
       try {
+        const share = shares[token][owner];
+        if (!share || share === BigInt(0)) continue;
         const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token);
         const pool = pools[token];
-        const share = shares[token][owner];
         const limitToken = tokensStore.tokens[foundIndex];
         const [x, y] = nPool(pool, share);
         const zilReserve = Big(x.toString()).div(dex.toDecimails(zilToken.decimals));

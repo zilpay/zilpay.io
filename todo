@@ -5,7 +5,7 @@
 <!-- * change defalt slippage to 1% -->
 <!-- * fixed gasLimit calc (web, extension) -->
 * add testnet and mainnet detect
-* hide pools with zero/zero
+<!-- * hide pools with zero/zero -->
 * add contract address link to Swap, Pool page
 
 * (contract) add callbacks (addPool, createPool, removePool)
