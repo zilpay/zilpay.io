@@ -37,7 +37,7 @@ export const PageAddPool: NextPage<Prop> = (props) => {
         ///
       }
     }
-  }, [props]);
+  }, []);
 
   React.useEffect(() => {
     if (props.data) {
