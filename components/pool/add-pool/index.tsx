@@ -16,14 +16,18 @@ import { $wallet } from '@/store/wallet';
 
 import { DragonDex } from '@/mixins/dex';
 
-import { DEFAULT_TOKEN_INDEX, ZERO_ADDR } from '@/config/conts';
+import { ZERO_ADDR } from '@/config/conts';
 import { AddPoolPreviewModal } from '@/components/modals/add-pool-preview';
 import { SwapSettingsModal } from '@/components/modals/settings';
 import { $liquidity } from '@/store/shares';
 
 
+type Prop = {
+  index: number;
+};
+
 const dex = new DragonDex();
-export const AddPoolForm: React.FC = () => {
+export const AddPoolForm: React.FC<Prop> = ({ index }) => {
   const pool = useTranslation(`pool`);
 
   const tokensStore = useStore($tokens);
@@ -33,7 +37,7 @@ export const AddPoolForm: React.FC = () => {
   const [amount, setAmount] = React.useState(Big(0));
   const [limitAmount, setLimitAmount] = React.useState(Big(0));
 
-  const [token, setToken] = React.useState(DEFAULT_TOKEN_INDEX);
+  const [token, setToken] = React.useState(index);
   const [tokensModal, setTokensModal] = React.useState(false);
   const [previewModal, setPreviewModal] = React.useState(false);
   const [settingsModal, setSettingsModal] = React.useState(false);

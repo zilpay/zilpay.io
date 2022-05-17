@@ -19,7 +19,7 @@ import { loadFromServer } from '@/store/tokens';
 
 type Prop = {
   data: ListedTokenResponse;
-  paid: SwapPair[];
+  pair: SwapPair[];
 };
 
 const dex = new DragonDex();
@@ -59,23 +59,21 @@ export const PageSwap: NextPage<Prop> = (props) => {
         />
       </Head>
       <div>
-        {props.paid ? (
-          <SwapForm startPair={props.paid}/>
-        ) : null}
+        <SwapForm startPair={props.pair}/>
       </div>
     </div>
   );
 }
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => {
-  if (props.res) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  if (context.res) {
     // res available only at server
     // no-store disable bfCache for any browser. So your HTML will not be cached
-    props.res.setHeader(`Cache-Control`, `no-store`);
+    context.res.setHeader(`Cache-Control`, `no-store`);
   }
 
   const data = await backend.getListedTokens();
-  const paid = [
+  let pair = [
     {
       value: '0',
       meta: data.tokens.list[0]
@@ -86,6 +84,22 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
     }
   ];
 
+  if (context.query) {
+    if (context.query['tokenIn']) {
+      const found = data.tokens.list.find((t) => t.bech32 === context.query['tokenIn']);
+      if (found) {
+        pair[0].meta = found;
+      }
+    }
+
+    if (context.query['tokenOut']) {
+      const found = data.tokens.list.find((t) => t.bech32 === context.query['tokenOut']);
+      if (found) {
+        pair[1].meta = found;
+      }
+    }
+  }
+
   updateDexPools(data.pools);
   updateRate(data.rate);
   loadFromServer(data.tokens.list);
@@ -93,11 +107,10 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
   return {
     props: {
       data,
-      paid,
-      ...await serverSideTranslations(props.locale || `en`, [`swap`, `common`])
-    },
-    revalidate: 1,
+      pair,
+      ...await serverSideTranslations(context.locale || `en`, [`swap`, `common`])
+    }
   };
-};
+}
 
 export default PageSwap;

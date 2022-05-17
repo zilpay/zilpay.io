@@ -19,6 +19,7 @@ import { updateDexPools } from '@/store/shares';
 
 type Prop = {
   data: ListedTokenResponse;
+  index: number;
 };
 
 
@@ -59,31 +60,36 @@ export const PageAddPool: NextPage<Prop> = (props) => {
         />
       </Head>
       <div>
-        <AddPoolForm />
+        <AddPoolForm index={props.index}/>
       </div>
     </div>
   );
 };
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => {
-  if (props.res) {
-    // res available only at server
-    // no-store disable bfCache for any browser. So your HTML will not be cached
-    props.res.setHeader(`Cache-Control`, `no-store`);
-  }
-
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  let index = 1;
   const data = await backend.getListedTokens();
 
   updateDexPools(data.pools);
   updateRate(data.rate);
   loadFromServer(data.tokens.list);
 
+  if (context.query) {
+    if (context.query['token']) {
+      const foundIndex = data.tokens.list.findIndex((t) => t.bech32 === context.query['token']);
+
+      if (foundIndex >= 1) {
+        index = foundIndex;
+      }
+    }
+  }
+
   return {
     props: {
       data,
-      ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`])
-    },
-    revalidate: 1,
+      index,
+      ...await serverSideTranslations(context.locale || `en`, [`pool`, `common`])
+    }
   };
 };
 
