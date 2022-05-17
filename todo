@@ -1,8 +1,9 @@
+<!-- * fix incorrect slippage calc (use ZIlPay shima) ----- -->
 * after select a token reset value for pair
 * show incorect tx list amounts
 * add url params for token autodetect
 * change defalt slippage to 1%
-* fixed gasLimit calc (web, extension)
+<!-- * fixed gasLimit calc (web, extension) -->
 * add testnet and mainnet detect
 * hide pools with zero/zero
 * add contract address link to Swap, Pool page
