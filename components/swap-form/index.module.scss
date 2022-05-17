@@ -67,7 +67,8 @@
 .info {
   display: none;
   width: 100%;
-  padding: 16px;
+  padding-left: 16px;
+  padding-right: 16px;
   background: var(--button-color);
 
   @include border-radius(16px);
@@ -76,15 +77,20 @@
     @include flex-left-column;
   }
 
+  & > p {
+    font-family: "light";
+    font-size: 10px;
+  }
+
   & > li {
     font-size: 13px;
     margin-block-start: 5px;
     margin-block-end: 5px;
     color: var(--text-color);
-    font-family: "Bold";
+    font-family: "Regular";
 
     & > a {
-      font-family: "light";
+      font-family: "Bold";
       &:hover {
         color: var(--primary-color);
       }

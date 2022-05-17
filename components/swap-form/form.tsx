@@ -198,9 +198,13 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
           <ul className={classNames(styles.info, {
             show: info
           })}>
+            <p>
+              {t('info.warn')}
+            </p>
             <li>
               {t('info.verify')} {pair.filter((t) => t.meta.base16 !== ZERO_ADDR).map((token) => (
                 <a
+                  key={token.meta.base16}
                   href={viewAddress(token.meta.bech32)}
                   target="_blank"
                   rel="noopener noreferrer"
