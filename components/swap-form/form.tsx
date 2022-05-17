@@ -106,7 +106,8 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
   const hanldeOnSelectToken = React.useCallback((token: TokenState, index: number) => {
     const unLinkedPair = JSON.parse(JSON.stringify(pair));
 
-    unLinkedPair[index].value = String(0);
+    unLinkedPair[1].value = String(0);
+    unLinkedPair[0].value = String(0);
     unLinkedPair[index].meta = token;
 
     setPair(unLinkedPair);

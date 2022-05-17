@@ -1,5 +1,5 @@
 <!-- * fix incorrect slippage calc (use ZIlPay shima) ----- -->
-* after select a token reset value for pair
+<!-- * after select a token reset value for pair -->
 * show incorect tx list amounts
 * add url params for token autodetect
 * change defalt slippage to 1%
