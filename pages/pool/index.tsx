@@ -66,11 +66,11 @@ export const PagePool: NextPage<Prop> = (props) => {
   );
 };
 
-export const getStaticProps = async (props: GetServerSidePropsContext) => {
-  if (props.res) {
+export const getServerSideProps = async (context: GetServerSidePropsContext) => {
+  if (context.res) {
     // res available only at server
     // no-store disable bfCache for any browser. So your HTML will not be cached
-    props.res.setHeader(`Cache-Control`, `no-store`);
+    context.res.setHeader(`Cache-Control`, `no-store`);
   }
 
   const data = await backend.getListedTokens();
@@ -82,9 +82,8 @@ export const getStaticProps = async (props: GetServerSidePropsContext) => {
   return {
     props: {
       data,
-      ...await serverSideTranslations(props.locale || `en`, [`pool`, `common`])
-    },
-    revalidate: 10
+      ...await serverSideTranslations(context.locale || `en`, [`pool`, `common`])
+    }
   };
 };
 
