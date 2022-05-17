@@ -21,6 +21,7 @@ import { DragonDex } from '@/mixins/dex';
 import { $tokens } from '@/store/tokens';
 import { $wallet } from '@/store/wallet';
 import { $liquidity } from '@/store/shares';
+import { $net } from '@/store/netwrok';
 
 
 type Prop = {
@@ -37,6 +38,7 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
   const tokensStore = useStore($tokens);
   const wallet = useStore($wallet);
   const liquidity = useStore($liquidity);
+  const network = useStore($net);
 
   const [modal0, setModal0] = React.useState(false);
   const [modal1, setModal1] = React.useState(false);
@@ -160,7 +162,11 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
         >
           <div className={styles.wrapper}>
             <h3>
-              {t('title')}
+              {t('title')} {network.net !== 'mainnet' ? (
+                <span>
+                  ({network.net})
+                </span>
+              ) : null}
             </h3>
             <SwapSettings onClick={() => setModal3(true)}/>
           </div>

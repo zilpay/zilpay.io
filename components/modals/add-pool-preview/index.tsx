@@ -67,7 +67,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
         const owner = String(wallet?.base16).toLowerCase();
         const balance = tokensStore.tokens[tokenIndex].balance[owner];
         await tokensMixin.increaseAllowance(
-          DragonDex.CONTRACT,
+          dex.contract,
           token1.base16,
           balance
         );
@@ -95,7 +95,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
     setLoading(true);
     try {
       const allowances = await tokensMixin.getAllowances(
-        DragonDex.CONTRACT,
+        dex.contract,
         token1.base16
       );
       const tokenDecimails = dex.toDecimails(token1.decimals);

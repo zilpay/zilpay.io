@@ -11,11 +11,12 @@ import { $tokens, addToken, updateTokens } from '@/store/tokens';
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
-import { SHARE_PERCENT, ZERO_ADDR } from '@/config/conts';
+import { NET, SHARE_PERCENT, ZERO_ADDR } from '@/config/conts';
 import { $liquidity, updateDexBalances, updateLiquidity } from '@/store/shares';
 import { $wallet } from '@/store/wallet';
 import { $settings } from '@/store/settings';
 import { TokenState } from '@/types/token';
+import { $net } from '@/store/netwrok';
 
 
 Big.PE = 999;
@@ -26,8 +27,13 @@ export enum SwapDirection {
   TokenToTokens
 }
 
+const CONTRACTS = {
+  'mainnet': '',
+  'testnet': '0x45a266fa784a9f2955fee237589c2a48c0e08132',
+  'private': ''
+};
+
 export class DragonDex {
-  public static CONTRACT = '0x45a266fa784a9f2955fee237589c2a48c0e08132';
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 
@@ -41,6 +47,10 @@ export class DragonDex {
 
   public get wallet() {
     return $wallet.state;
+  }
+
+  public get contract() {
+    return CONTRACTS[$net.state.net];
   }
 
   public get pools() {
@@ -57,7 +67,7 @@ export class DragonDex {
   }
 
   public async updateState() {
-    const contract = toHex(DragonDex.CONTRACT);
+    const contract = toHex(this.contract);
     const { pools, balances, totalContributions, protocolFee, liquidityFee } = await this._provider.fetchFullState(contract);
     const shares = this._getShares(balances, totalContributions);
     const dexPools = this._getPools(pools);
@@ -162,7 +172,7 @@ export class DragonDex {
         value: String(this.wallet?.base16).toLowerCase()
       }
     ];
-    const contractAddress = DragonDex.CONTRACT;
+    const contractAddress = this.contract;
     const transition = 'SwapExactZILForTokens';
     const res = await this.zilpay.call({
       params,
@@ -216,7 +226,7 @@ export class DragonDex {
         value: String(this.wallet?.base16).toLowerCase()
       }
     ];
-    const contractAddress = DragonDex.CONTRACT;
+    const contractAddress = this.contract;
     const transition = 'SwapExactTokensForZIL';
     const res = await this.zilpay.call({
       params,
@@ -239,7 +249,7 @@ export class DragonDex {
   }
 
   public async swapExactTokensForTokens(exact: bigint, limit: bigint, inputToken: TokenState, outputToken: TokenState) {
-    const contractAddress = DragonDex.CONTRACT;
+    const contractAddress = this.contract;
     const { blocks } = $settings.state;
     const limitAfterSlippage = this.afterSlippage(limit);
     const { NumTxBlocks } = await this.zilpay.getBlockchainInfo();
@@ -298,7 +308,7 @@ export class DragonDex {
   }
 
   public async addLiquidity(addr: string, amount: Big, limit: Big) {
-    const contractAddress = DragonDex.CONTRACT;
+    const contractAddress = this.contract;
     const { blocks } = $settings.state;
     const { blockNum, totalContributions, pool } = await this._provider.getBlockTotalContributions(
       contractAddress,
@@ -359,7 +369,7 @@ export class DragonDex {
   }
 
   public async removeLiquidity(minzil: Big, minzrc: Big, minContributionAmount: Big, token: string, owner: string) {
-    const contractAddress = DragonDex.CONTRACT;
+    const contractAddress = this.contract;
     const { blocks } = $settings.state;
     const { blockNum } = await this._provider.getUserBlockTotalContributions(
       contractAddress,

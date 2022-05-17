@@ -55,5 +55,11 @@
     font-size: 18px;
     line-height: 1;
     font-family: "Bold";
+
+    & > span {
+      font-family: "light";
+      font-size: 16px;
+      color: var(--warning-color);
+    }
   }
 }

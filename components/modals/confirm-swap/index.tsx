@@ -161,7 +161,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     );
     const balance = token?.balance[owner] || '0';
     await tokensMixin.increaseAllowance(
-      DragonDex.CONTRACT,
+      dex.contract,
       exactToken.meta.base16,
       balance
     );
@@ -178,7 +178,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     setLoading(true);
     try {
       const allowances = await tokensMixin.getAllowances(
-        DragonDex.CONTRACT,
+        dex.contract,
         exactToken.meta.base16
       );
       setIsAllow(

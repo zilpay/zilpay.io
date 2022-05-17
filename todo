@@ -4,7 +4,7 @@
 <!-- * add url params for token autodetect -->
 <!-- * change defalt slippage to 1% -->
 <!-- * fixed gasLimit calc (web, extension) -->
-* add testnet and mainnet detect
+<!-- * add testnet and mainnet detect -->
 <!-- * hide pools with zero/zero -->
 * add contract address link to Swap, Pool page
 * extension fixed size of "after slippage amount"
