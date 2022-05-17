@@ -14,6 +14,7 @@ import { formatNumber } from '@/filters/n-format';
 import { useStore } from 'react-stores';
 import { $settings } from '@/store/settings';
 import { $tokens } from '@/store/tokens';
+import ArrowIcon from '@/components/icons/arrow';
 
 
 Big.PE = 999;
@@ -98,17 +99,7 @@ export const FormInput: React.FC<Prop> = ({
             <p>
               {token.symbol}
             </p>
-            <svg
-              width="16"
-              height="17"
-              viewBox="0 0 16 17"
-              fill="none"
-            >
-              <path
-                d="M12.7121 7.40887C12.9717 7.14775 12.9705 6.72565 12.7094 6.46606C12.4483 6.20648 12.0261 6.20772 11.7666 6.46884L12.7121 7.40887ZM4.17192 6.73178C3.91157 6.47143 3.48946 6.47143 3.22911 6.73178C2.96876 6.99213 2.96876 7.41424 3.22911 7.67459L4.17192 6.73178ZM7.85072 11.3534L7.37932 11.8248C7.50458 11.9501 7.67455 12.0203 7.8517 12.0201C8.02886 12.0198 8.19862 11.949 8.32351 11.8234L7.85072 11.3534ZM3.22911 7.67459L7.37932 11.8248L8.32213 10.882L4.17192 6.73178L3.22911 7.67459ZM8.32351 11.8234L12.7121 7.40887L11.7666 6.46884L7.37793 10.8834L8.32351 11.8234Z"
-                fill="white"
-              />
-            </svg>
+            <ArrowIcon color="var(--primary-color)"/>
           </div>
         </div>
         <div className={styles.wrapper}>
