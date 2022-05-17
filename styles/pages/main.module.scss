@@ -55,6 +55,7 @@
 }
 
 .teamcard {
+  margin: 16px;
   @include flex-center-column;
 
   & > span {
@@ -92,6 +93,16 @@
     font-family: "Medium";
     font-size: 12px;
     color: var(--muted-color);
+  }
+}
+
+.teamwrapp {
+  @include flex-between-row;
+
+  flex-wrap: wrap;
+
+  @media (max-width: 700px) {
+    justify-content: center;
   }
 }
 

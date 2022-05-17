@@ -132,54 +132,84 @@ const MainPage: NextPage<Prop> = (props) => {
             {t(`team.title`)}
           </h1>
         </div>
-        <div className={styles.teamcard}>
-          <Image
-            src="/images/rinat.webp"
-            alt="me"
-            height={200}
-            width={200}
-          />
-          <h3>
-            Rinat Khasanshin
-          </h3>
-          <p>
-            CO-FOUNDER & CEO
-          </p>
-          <hr />
-          <div>
-            <a
-              href="https://github.com/hicaru"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <GitHubIcon
-                height={15}
-                width={15}
-                color="var(--muted-color)"
-              />
-            </a>
-            <a
-              href="https://www.linkedin.com/in/arc-warden/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <LinkedinIcon
-                height={15}
-                width={15}
-                color="var(--muted-color)"
-              />
-            </a>
-            <a
-              href="https://twitter.com/lich666black"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <TwitterIcon
-                height={15}
-                width={15}
-                color="var(--muted-color)"
-              />
-            </a>
+        <div className={styles.teamwrapp}>
+          <div className={styles.teamcard}>
+            <Image
+              src="/images/rinat.webp"
+              alt="me"
+              height={200}
+              width={200}
+            />
+            <h3>
+              Rinat Khasanshin
+            </h3>
+            <p>
+              CO-FOUNDER & CEO
+            </p>
+            <hr />
+            <div>
+              <a
+                href="https://github.com/hicaru"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <GitHubIcon
+                  height={15}
+                  width={15}
+                  color="var(--muted-color)"
+                />
+              </a>
+              <a
+                href="https://www.linkedin.com/in/arc-warden/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <LinkedinIcon
+                  height={15}
+                  width={15}
+                  color="var(--muted-color)"
+                />
+              </a>
+              <a
+                href="https://twitter.com/lich666black"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <TwitterIcon
+                  height={15}
+                  width={15}
+                  color="var(--muted-color)"
+                />
+              </a>
+            </div>
+          </div>
+          <div className={styles.teamcard}>
+            <Image
+              src="/images/dim.webp"
+              alt="me"
+              height={200}
+              width={200}
+            />
+            <h3>
+              Raven Simus
+            </h3>
+            <p>
+              Marketing
+            </p>
+            <hr />
+            <div>
+              <a
+                href="https://twitter.com/eblkronos"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <TwitterIcon
+                  height={15}
+                  width={15}
+                  color="var(--muted-color)"
+                />
+              </a>
+            </div>
           </div>
         </div>
       </section>
