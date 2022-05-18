@@ -2,7 +2,7 @@
   "last_update": "Last modified: May 20, 2022",
   "head_title": "Terms of Service (DEX)",
   "part0": {
-    "p0": "Welcome to zilpay.io, a website-hosted user interface (the \"Interface\" or \"App\") provided by Pintar (\"we\", \"our\", or \"us\"). The Interface provides access to a decentralized protocol on the Zilliqa blockchain that allows users to trade certain digital assets (\"ZilPay DEX\" or the \"DEX\"). The Interface is one, but not the exclusive, means of accessing the DEX.",
+    "p0": "Welcome to zilpay.io, a website-hosted user interface (the \"Interface\" or \"App\") provided by ZilPay (\"we\", \"our\", or \"us\"). The Interface provides access to a decentralized protocol on the Zilliqa blockchain that allows users to trade certain digital assets (\"ZilPay DEX\" or the \"DEX\"). The Interface is one, but not the exclusive, means of accessing the DEX.",
     "p1": "This Terms of Service Agreement (the \"Agreement\") explains the terms and conditions by which you may access and use the Interface. You must read this Agreement carefully. By accessing or using the Interface, you signify that you have read, understand, and agree to be bound by this Agreement in its entirety. If you do not agree, you are not authorized to access or use the Interface and should not use the Interface.",
     "p2": "NOTICE: Please read this Agreement carefully as it governs your use of the Interface. This Agreement contains important information. The Interface is only available to you — and you should only access the Interface — if you agree completely with these terms."
   },
@@ -27,7 +27,7 @@
     "title": "Privacy",
     "p0": "When you use the Interface, the only information we collect from you is your blockchain wallet address, completed transaction hashes, and the token names, symbols, or other blockchain identifiers of the tokens that you swap. We do not collect any personal information from you (e.g., your name or other identifiers that can be linked to you). We do, however, use third-party service providers including (but not limited to) Netlify, and Google Analytics, which may receive or independently obtain your personal information from publicly-available sources. We do not control how these third parties handle your data and you should review their privacy policies to understand how they collect, use, and share your personal information. In particular, please visit https://policies.google.com/technologies/partner-sites to learn more about how Google uses data. By accessing and using the Interface, you understand and consent to our data practices and our service providers' treatment of your information.",
     "p1": "We use the information we collect to detect, prevent, and mitigate financial crime and other illicit or harmful activities on the Interface. For these purposes, we may share the information we collect with blockchain analytics providers. We share information with these service providers only so that they can help us promote the safety, security, and integrity of the Interface. We do not retain the information we collect any longer than necessary for these purposes.",
-    "p2": "Please note that when you use the Interface, you are interacting with the Zilliqa blockchain, which provides transparency into your transactions. Pintar does not control and is not responsible for any information you make public on the Zilliqa blockchain by taking actions through the Interface."
+    "p2": "Please note that when you use the Interface, you are interacting with the Zilliqa blockchain, which provides transparency into your transactions. ZilPay does not control and is not responsible for any information you make public on the Zilliqa blockchain by taking actions through the Interface."
   },
   "part6": {
     "title": "Prohibited Activity",
@@ -81,7 +81,7 @@
   },
   "part16": {
     "title": "Legal Information",
-    "p0": "Pintar is Independent association of individual developers and is not registered legal entity at any jurisdiction (at the time of writing this Agreement). By using Interface and DEX you fully understand this fact and will not use Interface and DEX in any way in case if it is not appropriate for you and/or is not legal accordingly to your jurisdiction."
+    "p0": "ZilPay is Independent association of individual developers and is not registered legal entity at any jurisdiction (at the time of writing this Agreement). By using Interface and DEX you fully understand this fact and will not use Interface and DEX in any way in case if it is not appropriate for you and/or is not legal accordingly to your jurisdiction."
   },
   "part17": {
     "title": "Entire Agreement",
