@@ -378,6 +378,8 @@ export class DragonDex {
       token,
       owner
     );
+    const zilsAfterSlippage = this.afterSlippage(BigInt(String(minzil)));
+    const tokensAfterSlippage = this.afterSlippage(BigInt(String(minzrc)));
     const nextBlock = Big(blockNum).add(blocks);
     const params = [
       {
@@ -393,12 +395,12 @@ export class DragonDex {
       {
         vname: 'min_zil_amount',
         type: 'Uint128',
-        value: String(minzil)
+        value: String(zilsAfterSlippage)
       },
       {
         vname: 'min_token_amount',
         type: 'Uint128',
-        value: String(minzrc)
+        value: String(tokensAfterSlippage)
       },
       {
         vname: 'deadline_block',
