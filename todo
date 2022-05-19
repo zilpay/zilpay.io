@@ -1,0 +1,7 @@
+* when user see confirm modal it auto change price and reset approve button
+* when remove LP percent auto reset to 0% UI bug
+* doesnt show pool, maybe din't check blocks
+* TypeError: Cannot read properties of undefined (reading '_nextI18Next')
+* impossibe to set dot in the input
+
+* (backend) fix cache rates

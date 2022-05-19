@@ -57,15 +57,22 @@ export const AddPoolForm: React.FC<Prop> = ({ index }) => {
     return [ZERO_ADDR, tokensStore.tokens[token].meta.base16];
   }, [tokensStore, token]);
 
-  const disabled = React.useMemo(() => {
-    const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
-    const qa = amount.mul(decimals);
-    return Number(amount) === 0 || tokenBalance.lt(qa);
-  }, [tokenBalance, amount, tokensStore, token]);
-
   const hasPool = React.useMemo(() => {
     return Boolean(liquidity.pools[tokensStore.tokens[token].meta.base16]);
   }, [liquidity, tokensStore, token]);
+
+  const disabled = React.useMemo(() => {
+    const decimals = dex.toDecimails(tokensStore.tokens[token].meta.decimals);
+    const qa = amount.mul(decimals);
+    let isLess = false;
+
+    if (!hasPool) {
+      const zilDecimals = dex.toDecimails(tokensStore.tokens[0].meta.decimals);
+      isLess = BigInt(String(limitAmount.mul(zilDecimals).round())) < dex.lp;
+    }
+
+    return Number(amount) === 0 || tokenBalance.lt(qa) || isLess;
+  }, [tokenBalance, amount, limitAmount, tokensStore, token, hasPool]);
 
   const hanldeSelectToken0 = React.useCallback((t) => {
     const foundIndex = tokensStore

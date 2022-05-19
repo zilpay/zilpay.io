@@ -108,7 +108,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     props: {
       data,
       pair,
-      ...await serverSideTranslations(context.locale || `en`, [`swap`, `common`])
+      ...(await serverSideTranslations(context.locale || `en`, [`swap`, `common`]))
     }
   };
 }

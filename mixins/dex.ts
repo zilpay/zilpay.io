@@ -11,7 +11,7 @@ import { $tokens, addToken, updateTokens } from '@/store/tokens';
 import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
-import { NET, SHARE_PERCENT, ZERO_ADDR } from '@/config/conts';
+import { SHARE_PERCENT, ZERO_ADDR } from '@/config/conts';
 import { $liquidity, updateDexBalances, updateLiquidity } from '@/store/shares';
 import { $wallet } from '@/store/wallet';
 import { $settings } from '@/store/settings';
@@ -31,7 +31,7 @@ const CONTRACTS: {
   [net: string]: string;
 } = {
   'mainnet': '',
-  'testnet': '0x45a266fa784a9f2955fee237589c2a48c0e08132',
+  'testnet': '0x5f35fbabfe7226147914eb296253a68538ac33ee',
   'private': ''
 };
 
@@ -43,7 +43,7 @@ export class DragonDex {
 
   public zilpay = new ZilPayBase();
 
-  public lp = BigInt(0);
+  public lp = BigInt(100000000000000);
   public fee = BigInt(10000);
   public protoFee = BigInt(500);
 
