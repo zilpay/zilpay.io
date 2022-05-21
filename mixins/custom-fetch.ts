@@ -110,11 +110,11 @@ export class Blockchain {
     };
   }
 
-  public async fetchFullState(dex: string) {
+  public async fetchFullState(dex: string, owner: string) {
     const batch = [
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.Balances, []]
+        [dex, DexFields.Balances, [owner]]
       ),
       this._buildBody(
         RPCMethods.GetSmartContractSubState,

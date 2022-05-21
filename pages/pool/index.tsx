@@ -15,6 +15,8 @@ import { ZilPayBackend } from '@/mixins/backend';
 import { updateRate } from '@/store/settings';
 import { loadFromServer } from '@/store/tokens';
 import { updateDexPools } from '@/store/shares';
+import { useStore } from 'react-stores';
+import { $wallet } from '@/store/wallet';
 
 type Prop = {
   data: ListedTokenResponse;
@@ -24,6 +26,8 @@ const backend = new ZilPayBackend();
 const dex = new DragonDex();
 export const PagePool: NextPage<Prop> = (props) => {
   const { t } = useTranslation(`pool`);
+
+  const wallet = useStore($wallet);
 
   const [loading, setLoading] = React.useState(true);
 
@@ -44,9 +48,13 @@ export const PagePool: NextPage<Prop> = (props) => {
       updateRate(props.data.rate);
       loadFromServer(props.data.tokens.list);
     }
+  }, [props]);
 
-    hanldeUpdate();
-  }, [hanldeUpdate, props]);
+  React.useEffect(() => {
+    if (wallet) {
+      hanldeUpdate();
+    }
+  }, [hanldeUpdate, wallet]);
 
   return (
     <div className={styles.container}>

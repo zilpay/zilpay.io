@@ -99,7 +99,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
   React.useEffect(() => {
     try {
       const pool = liquidity.pools[String(token.meta.base16).toLowerCase()];
-      const [x, y] = nPool(pool, liquidity.shares[tokenAddress][owner]);
+      const [x, y] = nPool(pool, liquidity.shares[tokenAddress]);
 
       const zilReserve = Big(x.toString());
       const tokenReserve = Big(y.toString());

@@ -70,8 +70,15 @@ export class DragonDex {
 
   public async updateState() {
     const contract = toHex(this.contract);
-    const { pools, balances, totalContributions, protocolFee, liquidityFee } = await this._provider.fetchFullState(contract);
-    const shares = this._getShares(balances, totalContributions);
+    const owner = String(this.wallet?.base16).toLowerCase();
+    const {
+      pools,
+      balances,
+      totalContributions,
+      protocolFee,
+      liquidityFee
+    } = await this._provider.fetchFullState(contract, owner);
+    const shares = this._getShares(balances, totalContributions, owner);
     const dexPools = this._getPools(pools);
 
     this.fee = BigInt(liquidityFee);
@@ -534,21 +541,15 @@ export class DragonDex {
     return numerator / denominator;
   }
 
-  private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions) {
+  private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions, owner: string) {
     const shares: Share = {};
+    const userContributions = balances[owner] || {};
 
-    for (const token in balances) {
+    for (const token in userContributions) {
       const contribution = BigInt(totalContributions[token]);
+      const balance = BigInt(userContributions[token]);
 
-      for (const owner in balances[token]) {
-        const balance = BigInt(balances[token][owner]);
-
-        if (!shares[token]) {
-          shares[token] = {};
-        }
-
-        shares[token][owner] = (balance * SHARE_PERCENT) / contribution;
-      }
+      shares[token] = (balance * SHARE_PERCENT) / contribution;
     }
 
     return shares;

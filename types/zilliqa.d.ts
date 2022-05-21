@@ -25,9 +25,7 @@ export interface FiledBalances {
 }
 
 export interface Share {
-  [token: string]: {
-    [owner: string]: bigint;
-  }
+  [token: string]: bigint;
 }
 
 

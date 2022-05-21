@@ -39,14 +39,13 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
       return [];
     }
     const tokens = [];
-    const owner = String(wallet.base16).toLowerCase();
     const zilToken = tokensStore.tokens[0].meta;
     const { pools, shares } = liquidity;
     const rate = Big(settings.rate);
 
     for (const token in shares) {
       try {
-        const share = shares[token][owner];
+        const share = shares[token];
         if (!share || share === BigInt(0)) continue;
         const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token);
         const pool = pools[token];
@@ -71,7 +70,6 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
 
     return tokens;
   }, [wallet, liquidity, tokensStore, settings]);
-
 
   return (
     <div className={styles.container}>
