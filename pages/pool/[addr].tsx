@@ -18,6 +18,7 @@ import { ThreeDots } from 'react-loader-spinner';
 import { ZilPayBackend } from '@/mixins/backend';
 import { updateRate } from '@/store/settings';
 import { updateDexPools } from '@/store/shares';
+import { $wallet } from '@/store/wallet';
 
 
 type Prop = {
@@ -33,22 +34,27 @@ export const PageRemovePool: NextPage<Prop> = (props) => {
 
   const router = useRouter();
   const tokensStore = useStore($tokens);
+  const wallet = useStore($wallet);
 
   const token = React.useMemo(() => {
     return tokensStore.tokens.find(
       (t) => t.meta.base16 === String(router.query.addr).toLowerCase()
     );
   }, [tokensStore, router]);
-  
+
   React.useEffect(() => {
     if (props.data) {
       updateDexPools(props.data.pools);
       updateRate(props.data.rate);
       loadFromServer(props.data.tokens.list);
     }
-
-    dex.updateState();
   }, [props]);
+
+  React.useEffect(() => {
+    if (wallet) {
+      dex.updateState();
+    }
+  }, [wallet]);
 
   return (
     <div className={styles.container}>
