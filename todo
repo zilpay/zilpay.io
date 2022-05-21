@@ -1,4 +1,3 @@
-* when user see confirm modal it auto change price and reset approve button
 * TypeError: Cannot read properties of undefined (reading '_nextI18Next')
 * impossibe to set dot in the input
 

@@ -251,10 +251,8 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   ]);
 
   React.useEffect(() => {
-    if (show) {
-      hanldeUpdate();
-    }
-  }, [show, wallet, hanldeUpdate]);
+    hanldeUpdate();
+  }, []);
 
   return (
     <Modal
