@@ -555,11 +555,16 @@ export class DragonDex {
 
   private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions, owner: string) {
     const shares: Share = {};
+    const _zero = BigInt(0);
     const userContributions = balances[owner] || {};
 
     for (const token in userContributions) {
       const contribution = BigInt(totalContributions[token]);
       const balance = BigInt(userContributions[token]);
+
+      if (balance === _zero) {
+        continue;
+      }
 
       shares[token] = (balance * SHARE_PERCENT) / contribution;
     }
