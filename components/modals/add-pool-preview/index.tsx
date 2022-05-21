@@ -41,6 +41,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
 
   const [loading, setLoading] = React.useState(false);
   const [isAllow, setIsAllow] = React.useState(false);
+  const [rewards, setRewards] = React.useState(0);
 
   const token0 = React.useMemo(() => {
     return tokensStore.tokens[0].meta;
@@ -115,6 +116,12 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
     }
   }, [show]);
 
+  React.useEffect(() => {
+    if (show) {
+      setRewards(dex.liquidityRewards);
+    }
+  }, [show, tokensStore]);
+
   return (
     <Modal
       show={show}
@@ -186,7 +193,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
               {common.t('preview_modal.fee')}
             </p>
             <p>
-              {dex.liquidityRewards}%
+              {rewards}%
             </p>
           </div>
         </div>

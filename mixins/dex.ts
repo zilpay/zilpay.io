@@ -17,6 +17,7 @@ import { $wallet } from '@/store/wallet';
 import { $settings } from '@/store/settings';
 import { TokenState } from '@/types/token';
 import { $net } from '@/store/netwrok';
+import { $dex } from '@/store/dex';
 
 
 Big.PE = 999;
@@ -43,9 +44,17 @@ export class DragonDex {
 
   public zilpay = new ZilPayBase();
 
-  public lp = BigInt(100000000000000);
-  public fee = BigInt(10000);
-  public protoFee = BigInt(500);
+  public get lp() {
+    return $dex.state.lp;
+  }
+
+  public get fee() {
+    return $dex.state.fee;
+  }
+
+  public get protoFee() {
+    return $dex.state.protoFee;
+  }
 
   public get wallet() {
     return $wallet.state;
@@ -81,8 +90,11 @@ export class DragonDex {
     const shares = this._getShares(balances, totalContributions, owner);
     const dexPools = this._getPools(pools);
 
-    this.fee = BigInt(liquidityFee);
-    this.protoFee = BigInt(protocolFee);
+    $dex.setState({
+      fee: BigInt(liquidityFee),
+      protoFee: BigInt(protocolFee),
+      lp: $dex.state.lp
+    });
 
     updateDexBalances(balances);
     updateLiquidity(shares, dexPools);

@@ -125,7 +125,6 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
 
   React.useEffect(() => {
     if (Number(pair[0].value) > 0) {
-      console.log('updated');
       hanldeOnInput(pair[0].value);
     }
   }, [liquidity, tokensStore]);
