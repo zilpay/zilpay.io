@@ -30,7 +30,6 @@ export const PagePool: NextPage<Prop> = (props) => {
   const hanldeUpdate = React.useCallback(async() => {
     if (typeof window !== 'undefined') {
       try {
-        await dex.updateTokens();
         await dex.updateState();
       } catch {
         ///
