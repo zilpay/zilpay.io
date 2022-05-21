@@ -21,7 +21,6 @@ import Slider from 'rc-slider';
 import { nPool } from '@/filters/n-pool';
 import { ThreeDots } from 'react-loader-spinner';
 import { formatNumber } from '@/filters/n-format';
-import { SHARE_PERCENT_DECIMALS } from '@/config/conts';
 import { TokensMixine } from '@/mixins/token';
 
 Big.PE = 999;
@@ -84,11 +83,13 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
   }, [zil, zrc, tokenAddress, userContributions, owner, token, tokensStore, wallet]);
 
   const hanldeRange = React.useCallback((range) => {
+    const _100 = BigInt(100);
     const percent = BigInt(range);
     const zil = tokensStore.tokens[0].meta;
-    const newZil = (BigInt(String(zilReserve)) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
-    const newTokens = (BigInt(String(tokenReserve)) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
-    const newUserContributions = (BigInt(liquidity.balances[owner][tokenAddress] || 0) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
+    const userContributions = BigInt(liquidity.balances[owner] && liquidity.balances[owner][tokenAddress] || 0);
+    const newZil = (BigInt(String(zilReserve)) * percent) / _100;
+    const newTokens = (BigInt(String(tokenReserve)) * percent) / _100;
+    const newUserContributions = (userContributions * percent) / _100;
 
     setZil(Big(String(newZil)).div(dex.toDecimails(zil.decimals)));
     setZrc(Big(String(newTokens)).div(dex.toDecimails(token.meta.decimals)));
@@ -181,7 +182,10 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
           </div>
         </div>
       </div>
-      <button onClick={hanldeOnRemove}>
+      <button
+        disabled={loading}
+        onClick={hanldeOnRemove}
+      >
         {loading ? (
           <ThreeDots
               color="var(--primary-color)"

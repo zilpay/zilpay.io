@@ -8,7 +8,7 @@ import Image from 'next/image';
 
 import { getIconURL } from "@/lib/viewblock";
 import classNames from 'classnames';
-import { DEFAULT_CURRENCY, SHARE_PERCENT_DECIMALS, ZERO_ADDR } from '@/config/conts';
+import { DEFAULT_CURRENCY, ZERO_ADDR } from '@/config/conts';
 import { DragonDex } from '@/mixins/dex';
 import { formatNumber } from '@/filters/n-format';
 import { useStore } from 'react-stores';
@@ -57,7 +57,7 @@ export const FormInput: React.FC<Prop> = ({
 
   const hanldePercent = React.useCallback((n: number) => {
     const percent = BigInt(n);
-    const value = BigInt(balance) * percent / BigInt(SHARE_PERCENT_DECIMALS);
+    const value = BigInt(balance) * percent / BigInt(100);
     const decimals = dex.toDecimails(token.decimals);
 
     onMax(Big(String(value)).div(decimals));

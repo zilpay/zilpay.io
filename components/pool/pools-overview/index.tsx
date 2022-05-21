@@ -45,7 +45,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
 
     for (const token in shares) {
       try {
-        const share = Number(shares[token]) / SHARE_PERCENT_DECIMALS;
+        const share = Big(String(shares[token])).div(Big(SHARE_PERCENT_DECIMALS)).round(2);
         const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token);
         const pool = pools[token];
         const limitToken = tokensStore.tokens[foundIndex];
@@ -56,7 +56,7 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
         const zils = zilReserve.add(zilsTokens);
 
         tokens.push({
-          share: share === 0 ? '0.01<' : String(share),
+          share: share.lt(0.001) ? '0.01<' : String(share),
           token: limitToken.meta,
           zilReserve: formatNumber(String(zilReserve)),
           tokenReserve: formatNumber(String(tokenReserve)),
