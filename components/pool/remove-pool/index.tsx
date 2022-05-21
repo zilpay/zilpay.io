@@ -88,7 +88,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     const zil = tokensStore.tokens[0].meta;
     const newZil = (BigInt(String(zilReserve)) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
     const newTokens = (BigInt(String(tokenReserve)) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
-    const newUserContributions = (BigInt(liquidity.balances[tokenAddress][owner] || 0) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
+    const newUserContributions = (BigInt(liquidity.balances[owner][tokenAddress] || 0) * percent) / BigInt(SHARE_PERCENT_DECIMALS);
 
     setZil(Big(String(newZil)).div(dex.toDecimails(zil.decimals)));
     setZrc(Big(String(newTokens)).div(dex.toDecimails(token.meta.decimals)));
@@ -106,8 +106,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
   
       setZilReserve(zilReserve);
       setTokenReserve(tokenReserve);
-      setUserContributions(Big(liquidity.balances[tokenAddress][owner] || 0));
-      hanldeRange(1);
+      setUserContributions(Big(liquidity.balances[owner][tokenAddress] || 0));
     } catch (err) {
       // console.error(err);
     }
@@ -185,7 +184,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
       <button onClick={hanldeOnRemove}>
         {loading ? (
           <ThreeDots
-              color="var(--button-color)"
+              color="var(--primary-color)"
               height={25}
               width={50}
             />
