@@ -45,23 +45,22 @@ export const PoolOverview: React.FC<Prop> = ({ loading }) => {
 
     for (const token in shares) {
       try {
-        const share = shares[token];
-        if (!share || share === BigInt(0)) continue;
+        const share = Number(shares[token]) / SHARE_PERCENT_DECIMALS;
         const foundIndex = tokensStore.tokens.findIndex((t) => t.meta.base16 === token);
         const pool = pools[token];
         const limitToken = tokensStore.tokens[foundIndex];
-        const [x, y] = nPool(pool, share);
+        const [x, y] = nPool(pool, shares[token]);
         const zilReserve = Big(x.toString()).div(dex.toDecimails(zilToken.decimals));
         const tokenReserve = Big(y.toString()).div(dex.toDecimails(limitToken.meta.decimals));
         const zilsTokens = dex.tokensToZil(tokenReserve, limitToken.meta);
         const zils = zilReserve.add(zilsTokens);
 
         tokens.push({
+          share: share === 0 ? '0.01<' : String(share),
           token: limitToken.meta,
           zilReserve: formatNumber(String(zilReserve)),
           tokenReserve: formatNumber(String(tokenReserve)),
-          price: formatNumber(String(zils.mul(rate)), DEFAULT_CURRENCY),
-          share: Number(share) / SHARE_PERCENT_DECIMALS
+          price: formatNumber(String(zils.mul(rate)), DEFAULT_CURRENCY)
         });
       } catch {
         continue;
