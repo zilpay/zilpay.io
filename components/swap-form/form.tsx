@@ -89,8 +89,10 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
   }, [pair, tokensStore, wallet]);
 
   const disabled = React.useMemo(() => {
-    return Number(pair[0].value) <= 0 || Number(pair[1].value) <= 0 || !(wallet?.base16);
-  }, [pair, wallet]);
+    const amount = Big(pair[0].value).mul(dex.toDecimails(pair[0].meta.decimals)).round();
+    const isBalance = BigInt(String(amount)) > BigInt(balances[0]);
+    return Number(pair[0].value) <= 0 || Number(pair[1].value) <= 0 || !(wallet?.base16) || isBalance;
+  }, [pair, wallet, balances]);
 
 
   const hanldeOnSwapForms = React.useCallback(() => {
