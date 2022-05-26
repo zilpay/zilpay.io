@@ -3,6 +3,7 @@
 .container {
   overflow-y: scroll;
   height: 30vh;
+  width: 100%;
 
   @media (max-width: 700px) {
     height: calc(100vh - 257px);
@@ -102,6 +103,19 @@
 
     @include border-radius(16px);
   }
+}
+
+.listwarp {
+  @include flex-center-column;
+}
+
+.search {
+  padding: 10px;
+  text-indent: 5px;
+  margin: 10px;
+  border: 1px solid var(--button-color);
+
+  @include border-radius(10px);
 }
 
 .buttons {

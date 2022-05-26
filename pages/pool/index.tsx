@@ -33,13 +33,14 @@ export const PagePool: NextPage<Prop> = (props) => {
 
   const hanldeUpdate = React.useCallback(async() => {
     if (typeof window !== 'undefined') {
+      setLoading(true);
       try {
         await dex.updateState();
       } catch {
         ///
       }
       setLoading(false);
-    }
+  }
   }, []);
 
   React.useEffect(() => {
