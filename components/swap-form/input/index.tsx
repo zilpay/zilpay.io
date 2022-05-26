@@ -15,6 +15,7 @@ import { useStore } from 'react-stores';
 import { $settings } from '@/store/settings';
 import { $tokens } from '@/store/tokens';
 import ArrowIcon from '@/components/icons/arrow';
+import { DEFAUL_GAS } from '@/mixins/zilpay-base';
 
 
 Big.PE = 999;
@@ -25,6 +26,7 @@ type Prop = {
   value: Big;
   balance?: string;
   disabled?: boolean;
+  gasLimit?: Big;
   onInput?: (value: Big) => void;
   onSelect?: () => void;
   onMax?: (b: Big) => void;
@@ -37,6 +39,7 @@ export const FormInput: React.FC<Prop> = ({
   token,
   balance = BigInt(0),
   disabled = false,
+  gasLimit = Big(0),
   onInput = () => null,
   onSelect = () => null,
   onMax = () => null
@@ -57,11 +60,24 @@ export const FormInput: React.FC<Prop> = ({
 
   const hanldePercent = React.useCallback((n: number) => {
     const percent = BigInt(n);
-    const value = BigInt(balance) * percent / BigInt(100);
+    let value = (BigInt(balance) * percent / BigInt(100));
+
+    if (token.base16 === ZERO_ADDR) {
+      const gasPrice = Big(DEFAUL_GAS.gasPrice);
+      const li = gasLimit.mul(gasPrice);
+      const fee = BigInt(li.mul(dex.toDecimails(6)).round().toString());
+
+      if (fee > value) {
+        value = BigInt(0);
+      } else {
+        value -= fee;
+      }
+    }
+
     const decimals = dex.toDecimails(token.decimals);
 
     onMax(Big(String(value)).div(decimals));
-  }, [balance, token, onMax]);
+  }, [balance, token, onMax, gasLimit]);
 
   const hanldeOnInput = React.useCallback((event) => {
     try {

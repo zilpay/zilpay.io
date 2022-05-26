@@ -33,6 +33,8 @@ Big.PE = 999;
 type Prop = {
   show: boolean;
   pair: SwapPair[];
+  direction: SwapDirection;
+  gasLimit: _Big;
   onClose: () => void;
 };
 
@@ -42,6 +44,8 @@ const dex = new DragonDex();
 export var ConfirmSwapModal: React.FC<Prop> = function ({
   show,
   pair,
+  direction,
+  gasLimit,
   onClose
 }) {
   const common = useTranslation(`common`);
@@ -77,21 +81,16 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     }
   }, [priceRevert, pair]);
 
-  const direction = React.useMemo(() => {
-    return dex.getDirection(pair);
-  }, [pair]);
-
   const gasFee = React.useMemo(() => {
     if (!show) {
       return Big(0);
     }
 
-    const gasLimit = dex.calcGasLimit(direction);
     const gasPrice = Big(DEFAUL_GAS.gasPrice);
     const li = gasLimit.mul(gasPrice);
 
     return li.div(dex.toDecimails(6));
-  }, [direction, show]);
+  }, [direction, show, gasLimit]);
 
   const expectedOutput = React.useMemo(() => {
     const [, limitToken] = pair;

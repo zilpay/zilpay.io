@@ -94,6 +94,14 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
     return Number(pair[0].value) <= 0 || Number(pair[1].value) <= 0 || !(wallet?.base16) || isBalance;
   }, [pair, wallet, balances]);
 
+  const direction = React.useMemo(() => {
+    return dex.getDirection(pair);
+  }, [pair]);
+
+  const gasLimit = React.useMemo(() => {
+    return dex.calcGasLimit(direction);
+  }, [direction]);
+
 
   const hanldeOnSwapForms = React.useCallback(() => {
     setPair(JSON.parse(JSON.stringify(pair.reverse())));
@@ -141,6 +149,8 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
         <ConfirmSwapModal
           show={confirmModal}
           pair={pair}
+          direction={direction}
+          gasLimit={gasLimit}
           onClose={() => setConfirmModal(false)}
         />
       ) : null}
@@ -179,6 +189,7 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
             value={Big(pair[0].value)}
             token={pair[0].meta}
             balance={balances[0]}
+            gasLimit={gasLimit}
             onSelect={() => setModal0(true)}
             onInput={hanldeOnInput}
             onMax={hanldeOnInput}
