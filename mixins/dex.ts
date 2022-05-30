@@ -52,6 +52,10 @@ export class DragonDex {
     return $dex.state.fee;
   }
 
+  public get rewarded() {
+    return $dex.state.rewardsPool;
+  }
+
   public get protoFee() {
     return $dex.state.protoFee;
   }
@@ -85,12 +89,14 @@ export class DragonDex {
       balances,
       totalContributions,
       protocolFee,
-      liquidityFee
+      liquidityFee,
+      rewardsPool
     } = await this._provider.fetchFullState(contract, owner);
     const shares = this._getShares(balances, totalContributions, owner);
     const dexPools = this._getPools(pools);
 
     $dex.setState({
+      rewardsPool,
       fee: BigInt(liquidityFee),
       protoFee: BigInt(protocolFee),
       lp: $dex.state.lp
@@ -127,13 +133,14 @@ export class DragonDex {
     const [exactToken, limitToken] = pair;
     const exact = this._valueToBigInt(exactToken.value, exactToken.meta);
     let value = BigInt(0);
+    const cashback = limitToken.meta.base16 !== this.rewarded;
 
     if (exactToken.meta.base16 === ZERO_ADDR && limitToken.meta.base16 !== ZERO_ADDR) {
-      value = this._zilToTokens(exact, this.pools[limitToken.meta.base16]);
+      value = this._zilToTokens(exact, this.pools[limitToken.meta.base16], cashback);
     } else if (exactToken.meta.base16 !== ZERO_ADDR && limitToken.meta.base16 === ZERO_ADDR) {
-      value = this._tokensToZil(exact, this.pools[exactToken.meta.base16]);
+      value = this._tokensToZil(exact, this.pools[exactToken.meta.base16], cashback);
     } else {
-      value = this._tokensToTokens(exact, this.pools[exactToken.meta.base16], this.pools[limitToken.meta.base16]);
+      value = this._tokensToTokens(exact, this.pools[exactToken.meta.base16], this.pools[limitToken.meta.base16], cashback);
     }
 
     return Big(String(value)).div(this.toDecimails(limitToken.meta.decimals));
@@ -153,12 +160,13 @@ export class DragonDex {
 
   public tokensToZil(value: string | Big, token: TokenState) {
     const amount = Big(value);
+    const cashback = token.base16 !== this.rewarded;
 
     try {
       const decimals = this.toDecimails(token.decimals);
       const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
       const qa = amount.mul(decimals).round().toString();
-      const zils = this._tokensToZil(BigInt(qa), this.pools[token.base16]);
+      const zils = this._tokensToZil(BigInt(qa), this.pools[token.base16], cashback);
 
       return Big(String(zils)).div(zilDecimails);
     } catch {
@@ -516,32 +524,34 @@ export class DragonDex {
     return (d * y) / x;
   }
 
-  private _zilToTokens(amount: bigint, inputPool: string[]) {
+  private _zilToTokens(amount: bigint, inputPool: string[], cashback: boolean) {
     const [zilReserve, tokenReserve] = inputPool;
-    const amountAfterFee = this.protoFee === BigInt(0) ? amount : amount - (amount / this.protoFee);
+    const amountAfterFee = (this.protoFee === BigInt(0) || !cashback) ? amount : amount - (amount / this.protoFee);
     return this._outputFor(amountAfterFee, BigInt(zilReserve), BigInt(tokenReserve));
   }
 
-  private _tokensToZil(amount: bigint, inputPool: string[]) {
+  private _tokensToZil(amount: bigint, inputPool: string[], cashback: boolean) {
     const [zilReserve, tokenReserve] = inputPool;
     const zils = this._outputFor(amount, BigInt(tokenReserve), BigInt(zilReserve));
 
-    return this.protoFee === BigInt(0) ? zils : zils - (zils / this.protoFee);
+    return (this.protoFee === BigInt(0) || !cashback) ? zils : zils - (zils / this.protoFee);
   }
 
-  private _tokensToTokens(amount: bigint, inputPool: string[], outputPool: string[]) {
+  private _tokensToTokens(amount: bigint, inputPool: string[], outputPool: string[], cashback: boolean) {
     const [inputZilReserve, inputTokenReserve] = inputPool;
     const [outputZilReserve, outputTokenReserve] = outputPool;
+    const fee = DragonDex.FEE_DEMON - ((DragonDex.FEE_DEMON - this.fee) / BigInt(2));
     const zilIntermediateAmount = this._outputFor(
       amount,
       BigInt(inputTokenReserve),
       BigInt(inputZilReserve),
-      DragonDex.FEE_DEMON
+      fee
     );
-    const zils = this.protoFee === BigInt(0) ?
+
+    const zils = (this.protoFee === BigInt(0) || !cashback) ?
       zilIntermediateAmount : zilIntermediateAmount - (zilIntermediateAmount / this.protoFee);
 
-    return this._outputFor(zils, BigInt(outputZilReserve), BigInt(outputTokenReserve));
+    return this._outputFor(zils, BigInt(outputZilReserve), BigInt(outputTokenReserve), fee);
   }
 
   private _outputFor(exactAmount: bigint, inputReserve: bigint, outputReserve: bigint, fee: bigint = this.fee) {
