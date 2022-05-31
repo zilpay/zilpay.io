@@ -32,7 +32,7 @@ const CONTRACTS: {
   [net: string]: string;
 } = {
   'mainnet': '',
-  'testnet': '0x5f35fbabfe7226147914eb296253a68538ac33ee',
+  'testnet': '0xb0c677b5ba660925a8f1d5d9687d0c2c379e16ee',
   'private': ''
 };
 
@@ -133,7 +133,7 @@ export class DragonDex {
     const [exactToken, limitToken] = pair;
     const exact = this._valueToBigInt(exactToken.value, exactToken.meta);
     let value = BigInt(0);
-    const cashback = limitToken.meta.base16 !== this.rewarded;
+    const cashback = limitToken.meta.base16 !== this.rewarded && exactToken.meta.base16 !== this.rewarded;
 
     if (exactToken.meta.base16 === ZERO_ADDR && limitToken.meta.base16 !== ZERO_ADDR) {
       value = this._zilToTokens(exact, this.pools[limitToken.meta.base16], cashback);
