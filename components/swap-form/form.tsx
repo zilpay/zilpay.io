@@ -177,7 +177,7 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
         >
           <div className={styles.wrapper}>
             <h3>
-              {t('title')} {network.net !== 'mainnet' && false ? (
+              {t('title')} {network.net !== 'mainnet' ? (
                 <span>
                   ({network.net})
                 </span>

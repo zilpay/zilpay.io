@@ -31,7 +31,7 @@ export enum SwapDirection {
 const CONTRACTS: {
   [net: string]: string;
 } = {
-  'mainnet': '',
+  'mainnet': '0x30dfe64740ed459ea115b517bd737bbadf21b838',
   'testnet': '0xb0c677b5ba660925a8f1d5d9687d0c2c379e16ee',
   'private': ''
 };
