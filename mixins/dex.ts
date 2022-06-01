@@ -336,21 +336,28 @@ export class DragonDex {
     return res;
   }
 
-  public async addLiquidity(addr: string, amount: Big, limit: Big) {
+  public async addLiquidity(addr: string, amount: Big, limit: Big, created: boolean) {
     const contractAddress = this.contract;
     const { blocks } = $settings.state;
     const { blockNum, totalContributions, pool } = await this._provider.getBlockTotalContributions(
       contractAddress,
       addr
     );
-    const zilReserve = BigInt(pool[0]);
+    const maxExchangeRateChange = BigInt($settings.state.slippage * 100);
     const nextBlock = Big(blockNum).add(blocks);
-    const minContributionAmount = zilReserve === BigInt(0) ? BigInt(limit.toString()) : this._fraction(
-      BigInt(limit.toString()),
-      BigInt(zilReserve),
-      BigInt(totalContributions)
-    );
-    const limitAfterSlippage = this.afterSlippage(minContributionAmount);
+    const maxTokenAmount = created ?
+      BigInt(amount.toString()) * (DragonDex.FEE_DEMON + maxExchangeRateChange) / DragonDex.FEE_DEMON : BigInt(amount.toString());
+    let minContribution = BigInt(0);
+
+    if (created) {
+      const zilAmount = BigInt(limit.toString());
+      const zilReserve = Big(pool[0]);
+      const totalContribution = BigInt(totalContributions);
+      const numerator = totalContribution * zilAmount;
+      const denominator = Big(String(DragonDex.FEE_DEMON + maxExchangeRateChange)).sqrt().mul(zilReserve).round();
+      minContribution = numerator / BigInt(String(denominator));
+    }
+
     const params = [
       {
         vname: 'token_address',
@@ -360,12 +367,12 @@ export class DragonDex {
       {
         vname: 'min_contribution_amount',
         type: 'Uint128',
-        value: String(limitAfterSlippage)
+        value: String(minContribution)
       },
       {
         vname: 'max_token_amount',
         type: 'Uint128',
-        value: String(amount)
+        value: String(maxTokenAmount)
       },
       {
         vname: 'deadline_block',
@@ -502,7 +509,7 @@ export class DragonDex {
     const zilReserve = Big(String(pool[0])).div(this.toDecimails($tokens.state.tokens[0].meta.decimals));
     const tokensReserve = Big(String(pool[1])).div(this.toDecimails(token.decimals));
     const zilRate = zilReserve.div(tokensReserve);
-  
+
     return amount.mul(zilRate);
   }
 

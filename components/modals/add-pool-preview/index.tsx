@@ -23,6 +23,7 @@ type Prop = {
   amount: Big;
   limit: Big;
   tokenIndex: number;
+  hasPool: boolean;
   onClose: () => void;
 };
 
@@ -33,6 +34,7 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
   amount,
   limit,
   tokenIndex,
+  hasPool,
   onClose
 }) {
   const common = useTranslation(`common`);
@@ -79,18 +81,17 @@ export var AddPoolPreviewModal: React.FC<Prop> = function ({
 
       const zilDecimals = dex.toDecimails(token0.decimals);
       const tokenDecimails = dex.toDecimails(token1.decimals);
-  
       const qaAmount = amount.mul(tokenDecimails).round();
       const qaLimit = limit.mul(zilDecimals).round();
 
-      await dex.addLiquidity(token1.base16, qaAmount, qaLimit);
+      await dex.addLiquidity(token1.base16, qaAmount, qaLimit, hasPool);
       onClose();
     } catch (err) {
       console.log(err);
       /////
     }
     setLoading(false);
-  }, [token0, token1, amount, limit, onClose, isAllow, tokensStore, tokenIndex, wallet]);
+  }, [token0, token1, amount, limit, onClose, isAllow, tokensStore, tokenIndex, wallet, hasPool]);
 
   const hanldeUpdate = React.useCallback(async() => {
     setLoading(true);

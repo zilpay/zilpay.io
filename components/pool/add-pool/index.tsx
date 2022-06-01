@@ -120,6 +120,7 @@ export const AddPoolForm: React.FC<Prop> = ({ index }) => {
         amount={amount}
         limit={limitAmount}
         tokenIndex={token}
+        hasPool={hasPool}
         onClose={() => setPreviewModal(false)}
       />
       <form
