@@ -3,6 +3,7 @@
 .container {
   background: var(--button-color);
   border: 1px solid transparent;
+  max-width: 430px;
 
   @include border-radius(16px);
 
@@ -45,7 +46,6 @@
 
     max-width: 400px;
     height: 38px;
-    width: 233px;
 
     text-overflow: ellipsis;
     white-space: nowrap;
