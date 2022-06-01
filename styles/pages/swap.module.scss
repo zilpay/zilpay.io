@@ -1,0 +1,14 @@
+.container {
+  height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // background-image: url(/images/bg.webp);
+  // background-position: center center;
+  // background-size: 120%;
+
+  @media (max-width: 700px) {
+    height: auto;
+  }
+}

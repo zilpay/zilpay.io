@@ -1,0 +1,39 @@
+@import "./fonts";
+@import "./variables";
+@import "./mixins";
+@import "./theme";
+@import "./components";
+
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-variant: none;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'ss01' on,'ss02' on,'cv01' on,'cv03' on;
+}
+
+body {
+  background: var(--background-color);
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+  text-rendering: optimizeLegibility;
+  font-kerning: normal;
+  text-shadow:0 0 1px var(--muted-color);
+}

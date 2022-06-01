@@ -1,0 +1,45 @@
+@import "@/styles/mixins";
+
+.txlist {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 80px;
+  height: fit-content;
+  padding: 16px;
+  background: var(--card-color);
+
+  @include border-bottom-radius(16px);
+
+  p {
+    font-size: 12px;
+    font-family: "Regular";
+  }
+
+  & > label {
+    @media (min-width: 700px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 700px) {
+    @include border-bottom-radius(0);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.here {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.clear {
+  cursor: pointer;
+  user-select: none;
+  color: var(--primary-color);
+}

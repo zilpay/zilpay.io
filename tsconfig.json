@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "target": "es2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,22 +13,20 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "incremental": true,
     "baseUrl": "./",
     "paths": {
       "@/*": [
         "./*"
       ]
     },
-    "incremental": true
   },
-  "exclude": [
-    "node_modules"
-  ],
   "include": [
     "declare.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.js"
-  ]
+  ],
+  "exclude": ["node_modules"]
 }

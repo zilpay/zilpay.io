@@ -1,0 +1,37 @@
+@import "@/styles/mixins";
+
+
+.button {
+  cursor: pointer;
+
+  padding: 10px 16px;
+  background-color: var(--button-color);
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+
+  @include border-radius(8px);
+  @include flex-between-row;
+
+  & > b {
+    color: var(--primary-color);
+    margin: 5px;
+  }
+
+  &:hover {
+    background-color: var(--primary-color);
+    & > b {
+      color: var(--button-color);
+    }
+    & > svg > path,
+    & > svg > g > path {
+      fill: var(--button-color);
+    }
+  }
+}
+
+.row {
+  @include flex-between-row;
+
+  & > svg {
+    margin: 5px;
+  }
+}

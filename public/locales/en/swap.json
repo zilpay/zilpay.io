@@ -1,0 +1,22 @@
+{
+  "head_title": "Swap | ZIlPay",
+  "title": "Swap",
+  "buttons": {
+    "exchange": "Exchange",
+    "swap": "Swap"
+  },
+  "info": {
+    "warn": "ZRC-2 tokens issued by other users are not screened or audited by ZilPay. There is no guarantee that your purchased tokens will maintain its current swap value. Please conduct your own due diligence before swapping.",
+    "verify": "Verify contract address of"
+  },
+  "modals": {
+    "confirm": {
+      "title": "Confirm Swap",
+      "btn": "Confirm Swap",
+      "price_impact": "Price Impact",
+      "min_slippage": "Min received after slippage",
+      "fee": "Network Fee",
+      "expected_output": "Expected Output"
+    }
+  }
+}

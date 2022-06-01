@@ -1,0 +1,65 @@
+@import "@/styles/mixins";
+
+.container {
+  margin: 16px;
+  padding: 5px 16px;
+
+  border: 1px solid var(--notification-color);
+
+  @include border-radius(16px);
+
+  & > h4 {
+    margin: 0;
+    margin-block-end: 8px;
+    @media (max-width: 500px) {
+      font-size: 12px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    margin: 2px;
+    padding: 5px 16px;
+    width: 98vw;
+  }
+}
+
+.row {
+  @include flex-center-vert;
+  justify-content: flex-start;
+  margin-block-end: 11px;
+}
+
+.copy,
+.second {
+  @include flex-center-vert;
+
+  cursor: pointer;
+  width: fit-content;
+
+  user-select: none;
+
+  & > p {
+    font-family: "Regular";
+    color: var(--muted-color);
+    font-size: 13px;
+    margin: 0;
+    text-indent: 5px;
+
+    @media (max-width: 500px) {
+      font-size: 12px;
+    }
+  }
+
+  &:hover {
+    svg {
+      stroke: var(--primary-color);
+    }
+    p {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.second {
+  margin-left: 16px;
+}

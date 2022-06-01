@@ -1,0 +1,12 @@
+.connect {
+  min-width: 120px;
+  min-height: 47px;
+  padding: 13px;
+  border-radius: 8px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+
+  &:hover {
+    color: var(--button-color);
+    background: var(--primary-color);
+  }
+}

@@ -1,0 +1,50 @@
+.toggle {
+  display: inline-flex;
+  cursor: pointer;
+
+  & > input {
+    display: none;
+    box-sizing: border-box;
+    padding: 0;
+  }
+}
+
+.iconwrapper {
+  display: inline-flex;
+  align-items: center;
+
+  border-radius: 16px;
+  height: 24px;
+  width: 56px;
+  position: relative;
+  background: var(--warning-color) none repeat scroll 0% 0%;
+
+  & > svg {
+    margin-left: 8px;
+  }
+
+  &:global(.selected) {
+    background: var(--background-color) none repeat scroll 0% 0%;
+
+    & > svg {
+      margin-left: 34px;
+    }
+  }
+}
+
+.toogledot {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: all 0.2s cubic-bezier(0.65, 0.05, 0.36, 1) 0s;
+  left: 34px;
+
+  &:global(.selected) {
+    left: 2px;
+  }
+}

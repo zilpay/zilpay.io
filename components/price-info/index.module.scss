@@ -1,0 +1,28 @@
+@import "@/styles/mixins";
+
+.container {
+  @include flex-between-row;
+
+  padding-left: 8px;
+  padding-right: 8px;
+  
+  width: 100%;
+
+  & > p {
+    cursor: pointer;
+
+    & > span {
+      color: var(--muted-color);
+    }
+  }
+
+  & > span {
+    cursor: pointer;
+
+    &:hover {
+      & > svg {
+        stroke: var(--primary-color);
+      }
+    }
+  }
+}

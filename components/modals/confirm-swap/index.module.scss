@@ -1,0 +1,68 @@
+@import "@/styles/mixins";
+
+.container {
+  padding: 16px;
+
+  & > button {
+    width: 100%;
+    padding: 20px;
+  
+    font-size: 16px;
+    text-transform: uppercase;
+  
+    margin-block-end: 0.6em;
+    margin-block-start: 0.6em;
+  
+    background: var(--primary-color);
+    color: var(--button-color);
+  }
+}
+
+.submit {
+  background-color: var(--warning-color);
+  color: var(--text-color);
+
+  &:global(.allow) {
+    background-color: var(--primary-color);
+  }
+}
+
+.info {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--card-color);
+
+  @include border-radius(16px);
+}
+
+.column {
+  @include flex-column;
+
+  &:global(.muted > div) {
+    & > p {
+      color: var(--muted-color);
+    }
+  }
+
+  &:first-child {
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--notification-color);
+  }
+  &:last-child {
+    padding-top: 10px;
+  }
+}
+
+.row {
+  @include flex-between-row;
+
+  & > p {
+    margin: 0;
+    font-weight: 400;
+    font-size: 12px;
+    font-family: "Light";
+    margin-block-end: 3px;
+    margin-block-start: 3px;
+    max-width: 200px;
+  }
+}

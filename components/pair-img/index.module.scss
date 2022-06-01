@@ -1,0 +1,16 @@
+@import "@/styles/mixins";
+
+.symbol {
+  background: var(--card-color);
+  border: 3px solid var(--card-color) !important;
+  padding: 5px;
+
+  @include border-radius(100%);
+}
+
+.imgwrap {
+  & > span:nth-child(2) {
+    position: absolute;
+    transform: translate(-16px);
+  }
+}

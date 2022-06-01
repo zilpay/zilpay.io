@@ -1,29 +1,46 @@
-import 'slick-carousel/slick/slick.css'; 
-import 'slick-carousel/slick/slick-theme.css';
+import '../styles/globals.scss';
 
-import { AppProps } from 'next/app';
-import { appWithTranslation } from 'next-i18next'
 import React from 'react';
+import Cookies from 'cookies';
+import { appWithTranslation } from 'next-i18next'
+import NextNprogress from "nextjs-progressbar";
 
-import { Footer } from 'components/footer';
-import { Navbar } from 'components/nav-bar';
-import { MobileNavBar } from 'components/mobile-nav-bar';
+import { Footer } from '@/components/footer';
+import { NavBar } from '@/components/nav-bar/index';
+import { Themes } from '@/config/themes';
+import { $settings, updateSettingsStore, updateFromStorage } from '@/store/settings';
 
-import { isMobile, isDesktop, isAndroid, isIOS } from 'react-device-detect';
-import { BaseStyles } from '@/styles';
+updateFromStorage();
 
-const App = ({ Component, pageProps }: AppProps) => (
+const App = ({ Component, pageProps }: any) => {
+  return (
     <>
-      <BaseStyles />
-      {isDesktop && !isAndroid && !isIOS ? (
-        <Navbar />
-      ) : null}
-      {isMobile || isAndroid || isIOS ? (
-        <MobileNavBar />
-      ) : null}
+      <NextNprogress
+        color="var(--primary-color)"
+        startPosition={0.3}
+        stopDelayMs={200}
+        height={3}
+        showOnShallow
+      />
+      <NavBar />
       <Component {...pageProps} />
       <Footer />
     </>
-  )
+  );
+}
+
+App.getInitialProps = async function ({ ctx }: any): Promise<{}> {
+  const cookies = new Cookies(ctx.req, ctx.res);
+  const theme = cookies.get('theme') || Themes.Dark;
+
+  updateSettingsStore({
+    ...$settings.state,
+    theme
+  });
+
+  return {
+    theme
+  };
+}
 
 export default appWithTranslation(App);

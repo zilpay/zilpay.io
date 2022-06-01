@@ -5,5 +5,39 @@
   "legal": "Legal",
   "terms": "Terms of Service",
   "privacy": "Privacy Policy",
-  "extension-policy": "Extension Policy"
+  "dex-policy": "Dex Policy",
+  "extension-policy": "Extension Policy",
+  "clear_all": "Clear all",
+  "recent_txns": "Recent Transactions",
+  "tx_appear_here": "Your transactions will appear here...",
+  "copy_adr": "Copy address",
+  "view_explorer": "View on Explorer",
+  "account": "Account",
+  "connected_via": "Connected with ZilPay wallet to",
+  "buttons": {
+    "approve": "Approve"
+  },
+  "settings": {
+    "title": "Settings",
+    "slippage": "Slippage tolerance",
+    "deadline": "Transaction deadline",
+    "blocks": "Blocks"
+  },
+  "tokens": {
+    "title": "Tokens",
+    "warn": "Please check the tokens before investment, check with Terms Of Services.",
+    "placeholder": "input contract address",
+    "import_warn": "This token doesn't appear on the active token list(s). Make sure this is the token that you want to trade.",
+    "buttons": {
+      "add": "Add",
+      "cancel": "Cancel",
+      "import": "Import"
+    }
+  },
+  "preview_modal": {
+    "title": "Add pool preview",
+    "fee": "Liquidity rewards for each swap:",
+    "price": "Current price",
+    "confirm_btn": "Confirm add"
+  }
 }
