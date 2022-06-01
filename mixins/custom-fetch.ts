@@ -33,7 +33,7 @@ export enum ZRC2Fields {
 }
 
 export class Blockchain {
-  private _http = `https://dev-api.zilliqa.com`;
+  private _http = `https://api.zilliqa.com`;
   readonly #rpc = {
     id: 1,
     jsonrpc: '2.0'
@@ -174,6 +174,7 @@ export class Blockchain {
     const meta = initParser(resInit.result);
     const balances = resBalances.result ?
       resBalances.result[ZRC2Fields.Balances] : {};
+
 
     return {
       meta,

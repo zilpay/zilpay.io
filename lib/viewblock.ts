@@ -12,8 +12,8 @@ export function viewAddress(address: string) {
   return `${url}/${Methods.Address}/${address}?network=${NET}`;
 }
 
-export function viewTransaction(hash: string) {
-  return `${url}/${Methods.Tx}/${hash}?network=${NET}`;
+export function viewTransaction(hash: string, net = NET) {
+  return `${url}/${Methods.Tx}/${hash}?network=${net}`;
 }
 
 export function getIconURL(addr: string) {

@@ -8,6 +8,8 @@ import { viewTransaction } from "lib/viewblock";
 
 import { SuccessIcon } from "components/icons/success";
 import { RejectIcon } from "components/icons/reject";
+import { useStore } from "react-stores";
+import { $net } from "@/store/netwrok";
 
 type Prop = {
   tx: Tx;
@@ -36,10 +38,11 @@ const StatusIcon: React.FC<StatusIconProp> = function ({ rejected, loading }) {
 };
 
 export var TxCard: React.FC<Prop> = function ({ tx }) {
+  const net = useStore($net);
   return (
     <a
       className={styles.txcard}
-      href={viewTransaction(tx.hash)}
+      href={viewTransaction(tx.hash, net.net)}
       target="_blank" rel="noreferrer"
     >
       <div className={styles.wrapper}>
