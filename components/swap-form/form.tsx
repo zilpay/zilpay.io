@@ -55,13 +55,13 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
   const tokensForPrice = React.useMemo(() => {
     if (priceFrom) {
       return [
-        pair[0].meta,
-        pair[1].meta,
+        pair[0],
+        pair[1],
       ];
     } else {
       return [
-        pair[1].meta,
-        pair[0].meta,
+        pair[1],
+        pair[0],
       ];
     }
   }, [priceFrom, pair]);

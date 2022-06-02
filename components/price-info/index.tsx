@@ -1,6 +1,6 @@
 import styles from "./index.module.scss";
 
-import type { TokenState } from "@/types/token";
+import type { SwapPair } from "@/types/swap";
 
 import _Big from "big.js";
 import { useStore } from "react-stores";
@@ -21,7 +21,7 @@ Big.PE = 999;
 
 
 type Prop = {
-  tokens: TokenState[];
+  tokens: SwapPair[];
   onClick?: () => void;
   onShow?: () => void;
 };
@@ -41,29 +41,33 @@ export var PriceInfo: React.FC<Prop> = function ({
     const one = Big(1);
     let price = Big(0);
 
+    if (Number(x.value) > 0 && Number(y.value) > 0) {
+      return Big(y.value).div(x.value);
+    }
+
     try {
-      if (x.base16 === ZERO_ADDR && y.base16 !== ZERO_ADDR) {
-        const [bigZil, bigTokens] = liquidity.pools[y.base16];
-        const zilReserve = Big(String(bigZil)).div(dex.toDecimails(x.decimals));
-        const tokensReserve = Big(String(bigTokens)).div(dex.toDecimails(y.decimals));
+      if (x.meta.base16 === ZERO_ADDR && y.meta.base16 !== ZERO_ADDR) {
+        const [bigZil, bigTokens] = liquidity.pools[y.meta.base16];
+        const zilReserve = Big(String(bigZil)).div(dex.toDecimails(x.meta.decimals));
+        const tokensReserve = Big(String(bigTokens)).div(dex.toDecimails(y.meta.decimals));
 
         price = tokensReserve.div(zilReserve);
-      } else if (y.base16 === ZERO_ADDR && x.base16 !== ZERO_ADDR) {
-        const [bigZil, bigTokens] = liquidity.pools[x.base16];
-        const zilReserve = Big(String(bigZil)).div(dex.toDecimails(y.decimals));
-        const tokensReserve = Big(String(bigTokens)).div(dex.toDecimails(x.decimals));
+      } else if (y.meta.base16 === ZERO_ADDR && x.meta.base16 !== ZERO_ADDR) {
+        const [bigZil, bigTokens] = liquidity.pools[x.meta.base16];
+        const zilReserve = Big(String(bigZil)).div(dex.toDecimails(y.meta.decimals));
+        const tokensReserve = Big(String(bigTokens)).div(dex.toDecimails(x.meta.decimals));
 
         price = zilReserve.div(tokensReserve);
       } else {
         const [zilliqa] = tokensStore.tokens;
-        const [inputZils, inputTokens] = liquidity.pools[x.base16];
-        const [outpuZils, outputTokens] = liquidity.pools[y.base16];
+        const [inputZils, inputTokens] = liquidity.pools[x.meta.base16];
+        const [outpuZils, outputTokens] = liquidity.pools[y.meta.base16];
 
         const bigInputZils = Big(String(inputZils)).div(dex.toDecimails(zilliqa.meta.decimals));
-        const bigInputTokens = Big(String(inputTokens)).div(dex.toDecimails(x.decimals));
+        const bigInputTokens = Big(String(inputTokens)).div(dex.toDecimails(x.meta.decimals));
 
         const bigOutpuZils = Big(String(outpuZils)).div(dex.toDecimails(zilliqa.meta.decimals));
-        const bigOutputTokens = Big(String(outputTokens)).div(dex.toDecimails(y.decimals));
+        const bigOutputTokens = Big(String(outputTokens)).div(dex.toDecimails(y.meta.decimals));
 
         const inputRate = bigInputTokens.div(bigInputZils);
         const outpuRate = bigOutputTokens.div(bigOutpuZils);
@@ -82,7 +86,7 @@ export var PriceInfo: React.FC<Prop> = function ({
     const [x] = tokens;
     const { rate } = settingsStore;
 
-    if (x.base16 === ZERO_ADDR) {
+    if (x.meta.base16 === ZERO_ADDR) {
       return formatNumber(rate, DEFAULT_CURRENCY);
     }
 
@@ -92,7 +96,7 @@ export var PriceInfo: React.FC<Prop> = function ({
   return (
     <div className={styles.container}>
       <p onClick={onClick}>
-        1 {tokens[0].symbol} = {price.round(12).toFormat()} {tokens[1].symbol} <span>
+        1 {tokens[0].meta.symbol} = {price.round(12).toFormat()} {tokens[1].meta.symbol} <span>
           ({converted})
         </span>
       </p>
