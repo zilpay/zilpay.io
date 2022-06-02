@@ -43,6 +43,7 @@
   & > input {
     font-size: 28px;
     font-weight: 500;
+    width: 58%;
 
     max-width: 400px;
     height: 38px;
@@ -70,7 +71,7 @@
 
   @include flex-between-row;
 
-  min-width: 100px;
+  min-width: 120px;
   height: 38px;
   padding-left: 10px;
   padding-right: 10px;
