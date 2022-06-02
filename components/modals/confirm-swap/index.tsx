@@ -70,13 +70,13 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   const tokensPrices = React.useMemo(() => {
     if (priceRevert) {
       return [
-        pair[0].meta,
-        pair[1].meta,
+        pair[0],
+        pair[1],
       ];
     } else {
       return [
-        pair[1].meta,
-        pair[0].meta,
+        pair[1],
+        pair[0],
       ];
     }
   }, [priceRevert, pair]);
