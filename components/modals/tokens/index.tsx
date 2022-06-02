@@ -65,10 +65,9 @@ export var TokensModal: React.FC<Prop> = function ({
 
   const tokens = React.useMemo(() => {
     return tokensStore.tokens.filter(
-      (t) => !exceptions.includes(t.meta.base16)
-        && t.meta.symbol.toLowerCase().includes(search.toLowerCase())
+      (t) => t.meta.symbol.toLowerCase().includes(search.toLowerCase())
     );
-  }, [tokensStore, exceptions, search]);
+  }, [tokensStore, search]);
 
   const hanldeInput = React.useCallback(async(event) => {
     try {
@@ -95,12 +94,20 @@ export var TokensModal: React.FC<Prop> = function ({
     setLoading(false);
   }, [wallet, base16]);
 
+  const hanldeOnSelect = React.useCallback((token: TokenState) => {
+    if (exceptions.includes(token.base16)) {
+      return;
+    }
+
+    onSelect(token);
+  }, [exceptions]);
+
   const handleSubmit = React.useCallback((event) => {
     event.preventDefault();
     const [first] = tokens;
 
     if (first) {
-      onSelect(first.meta);
+      hanldeOnSelect(first.meta);
     }
   }, [tokens]);
 
@@ -177,7 +184,7 @@ export var TokensModal: React.FC<Prop> = function ({
               <li
                 key={token.meta.base16}
                 className={styles.tokencard}
-                onClick={() => onSelect(token.meta)}
+                onClick={() => hanldeOnSelect(token.meta)}
               >
                 <Image
                   src={getIconURL(token.meta.bech32)}
