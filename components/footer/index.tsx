@@ -124,7 +124,7 @@ export const Footer: React.FC = () => {
               />
             </a>
             <a
-              href="https://github.com/zilpay/zil-pay"
+              href="https://github.com/zilpay"
               target="_blank"
               rel="noopener noreferrer"
             >
