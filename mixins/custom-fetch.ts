@@ -36,8 +36,8 @@ export enum ZRC2Fields {
 
 export class Blockchain {
   private _http = {
-    "mainnet": `https://api.zilliqa.com`,
-    "testnet": "`https://dev-api.zilliqa.com`"
+    "mainnet": "https://api.zilliqa.com",
+    "testnet": "https://dev-api.zilliqa.com"
   };
   readonly #rpc = {
     id: 1,
