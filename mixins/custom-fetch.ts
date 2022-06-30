@@ -8,6 +8,8 @@ import { Token } from "@/types/token";
 import { ZilPayBase } from "./zilpay-base";
 import { ZERO_ADDR } from "@/config/conts";
 
+import { $net } from '@/store/netwrok';
+
 type Params = string[] | number[] | (string | string[] | number[])[];
 
 export enum RPCMethods {
@@ -33,11 +35,19 @@ export enum ZRC2Fields {
 }
 
 export class Blockchain {
-  private _http = `https://api.zilliqa.com`;
+  private _http = {
+    "mainnet": `https://api.zilliqa.com`,
+    "testnet": "`https://dev-api.zilliqa.com`"
+  };
   readonly #rpc = {
     id: 1,
     jsonrpc: '2.0'
   };
+
+  public get http() {
+    const net = $net.state.net as 'mainnet' | 'testnet';
+    return this._http[net];
+  }
 
   public async getTransaction(...hash: string[]) {
     const batch = hash.map((hash) => ({
@@ -301,7 +311,7 @@ export class Blockchain {
   }
 
   private async _send(batch: object[]): Promise<RPCResponse[]> {
-    const res = await fetch(this._http, {
+    const res = await fetch(this.http, {
       method: `POST`,
       headers: {
         "Content-Type": `application/json`,
