@@ -22,6 +22,14 @@ export const Footer: React.FC = () => {
   return (
   <div className={styles.container}>
       <div className={styles.wrapper}>
+        <div className={styles.office}>
+          <h3>
+            {t(`office`)}
+          </h3>
+          <p>
+            {t(`office_value`)}
+          </p>
+        </div>
         <div className={styles.involved}>
           <h3>
             {t(`footer_icons`)}
