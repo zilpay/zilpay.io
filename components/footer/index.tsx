@@ -13,6 +13,7 @@ import GoogleIcon from "@/components/icons/google";
 import MediumIcon from "@/components/icons/medium";
 import TelegramIcon from "@/components/icons/telegram";
 import TwitterIcon from "@/components/icons/twitter";
+
 import SafariIcon from "../icons/safari";
 import { AppLinks } from "@/config/links";
 

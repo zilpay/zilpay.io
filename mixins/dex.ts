@@ -78,7 +78,7 @@ export class DragonDex {
 
   public get liquidityRewards() {
     const demon = Number(DragonDex.FEE_DEMON);
-    return (demon - Number(this.fee)) / demon;
+    return (demon - Number(this.fee)) / demon * 100;
   }
 
   public async updateState() {

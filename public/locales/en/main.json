@@ -2,7 +2,7 @@
   "head_title": "ZilPay | Introduce",
   "main": {
     "title": "A portal to the decentralised world",
-    "sub_title": "The most popular and faster Zilliqa wallet.",
+    "sub_title": "The most popular and fastest Zilliqa wallet.",
     "button": {
       "firefox": "FireFox Addon",
       "safari": "Safari Addon",
@@ -43,12 +43,12 @@
       "sub_title": "Your assets will always be safe."
     },
     "card_4": {
-      "title": "Transaction resetting",
-      "sub_title": "You can reset your nounce at any given time"
+      "title": "Fast dex",
+      "sub_title": "You can access the exchange directly from your wallet."
     },
     "card_5": {
-      "title": "Seamless experience",
-      "sub_title": "You will always have a stable and reliable experience"
+      "title": "NFTs",
+      "sub_title": "you can collect your NFT tokens."
     }
   },
   "apps": {
