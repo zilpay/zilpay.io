@@ -20,6 +20,7 @@ import { ZERO_ADDR } from '@/config/conts';
 import { AddPoolPreviewModal } from '@/components/modals/add-pool-preview';
 import { SwapSettingsModal } from '@/components/modals/settings';
 import { $liquidity } from '@/store/shares';
+import { TokenState } from '@/types/token';
 
 
 type Prop = {
@@ -74,7 +75,7 @@ export const AddPoolForm: React.FC<Prop> = ({ index }) => {
     return Number(amount) === 0 || tokenBalance.lt(qa) || isLess;
   }, [tokenBalance, amount, limitAmount, tokensStore, token, hasPool]);
 
-  const hanldeSelectToken0 = React.useCallback((t) => {
+  const hanldeSelectToken0 = React.useCallback((t: TokenState) => {
     const foundIndex = tokensStore
     .tokens
     .findIndex((p) => p.meta.base16 === t.base16);
@@ -85,7 +86,7 @@ export const AddPoolForm: React.FC<Prop> = ({ index }) => {
     }
   }, [tokensStore]);
 
-  const handleSubmit = React.useCallback((event) => {
+  const handleSubmit = React.useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setPreviewModal(true);
   }, []);

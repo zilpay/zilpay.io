@@ -79,10 +79,12 @@ export const FormInput: React.FC<Prop> = ({
     onMax(Big(String(value)).div(decimals));
   }, [balance, token, onMax, gasLimit]);
 
-  const hanldeOnInput = React.useCallback((event) => {
+  const hanldeOnInput = React.useCallback((event: React.FormEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+
     try {
-      if (event.target.value) {
-        onInput(Big(event.target.value));
+      if (target.value) {
+        onInput(Big(target.value));
       } else {
         onInput(Big(0));
       }

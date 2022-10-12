@@ -10,10 +10,12 @@ type Prop = {
   title?: React.ReactNode;
   show: boolean;
   width?: string;
+  children?: React.ReactNode;
   onClose: () => void;
 };
 
 type HeadProp = {
+  children?: React.ReactNode;
   onClose: () => void;
 };
 

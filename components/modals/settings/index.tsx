@@ -35,16 +35,16 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
       blocks: BLOCKS
     });
   }, [settings]);
-  const hanldeInputSlippage = React.useCallback((event) => {
+  const hanldeInputSlippage = React.useCallback((event: React.FormEvent<HTMLInputElement>) => {
     updateSettingsStore({
       ...settings,
-      slippage: Number(event.target.value)
+      slippage: Number((event.target as HTMLInputElement).value)
     });
   }, [settings]);
-  const hanldeInputBlocks = React.useCallback((event) => {
+  const hanldeInputBlocks = React.useCallback((event: React.FormEvent<HTMLInputElement>) => {
     updateSettingsStore({
       ...settings,
-      blocks: Number(event.target.value)
+      blocks: Number((event.target as HTMLInputElement).value)
     });
   }, [settings]);
 
@@ -72,7 +72,7 @@ export var SwapSettingsModal: React.FC<Prop> = function ({
               <input
                 type="number"
                 value={settings.slippage}
-                onInput={hanldeInputSlippage}
+                onInput={(e) => hanldeInputSlippage(e)}
               />
               %
             </label>

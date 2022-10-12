@@ -9,6 +9,7 @@ type Prop = {
   url: string;
   title: string;
   selected?: boolean;
+  children?: React.ReactNode;
 };
 
 export const InfoCard: React.FC<Prop> = ({ url, title, selected, children }) => (

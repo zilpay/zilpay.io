@@ -82,9 +82,9 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     setLoading(false);
   }, [zil, zrc, tokenAddress, userContributions, owner, token, tokensStore, wallet]);
 
-  const hanldeRange = React.useCallback((range) => {
+  const hanldeRange = React.useCallback((range: number | number[]) => {
     const _100 = BigInt(100);
-    const percent = BigInt(range);
+    const percent = BigInt(Number(range));
     const zil = tokensStore.tokens[0].meta;
     const userContributions = BigInt(liquidity.balances[owner] && liquidity.balances[owner][tokenAddress] || 0);
     const newZil = (BigInt(String(zilReserve)) * percent) / _100;
@@ -93,7 +93,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
 
     setZil(Big(String(newZil)).div(dex.toDecimails(zil.decimals)));
     setZrc(Big(String(newTokens)).div(dex.toDecimails(token.meta.decimals)));
-    setRange(range);
+    setRange(Number(range));
     setUserContributions(Big(String(newUserContributions)));
   }, [zilReserve, tokenReserve, tokensStore, owner, token, liquidity, tokenAddress]);
 

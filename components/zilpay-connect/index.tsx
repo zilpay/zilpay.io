@@ -74,7 +74,7 @@ export const ConnectZIlPay: React.FC = function () {
   };
 
   const hanldeObserverState = React.useCallback(
-    (zp) => {
+    (zp: any) => {
       $net.setState({
         net: zp.wallet.net
       });

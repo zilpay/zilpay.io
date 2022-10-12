@@ -69,10 +69,10 @@ export var TokensModal: React.FC<Prop> = function ({
     );
   }, [tokensStore, search]);
 
-  const hanldeInput = React.useCallback(async(event) => {
+  const hanldeInput = React.useCallback(async(event: React.FormEvent<HTMLInputElement>) => {
     try {
       const zp = await zilpay.zilpay();
-      const base16 = zp.crypto.fromBech32Address(event.target.value);
+      const base16 = zp.crypto.fromBech32Address((event.target as HTMLInputElement).value);
 
       setBase16(base16);
     } catch {
@@ -102,7 +102,7 @@ export var TokensModal: React.FC<Prop> = function ({
     onSelect(token);
   }, [exceptions]);
 
-  const handleSubmit = React.useCallback((event) => {
+  const handleSubmit = React.useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const [first] = tokens;
 

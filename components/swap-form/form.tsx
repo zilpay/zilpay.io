@@ -107,12 +107,12 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
     setPair(JSON.parse(JSON.stringify(pair.reverse())));
   }, [pair]);
 
-  const hanldeSubmit = React.useCallback((event) => {
+  const hanldeSubmit = React.useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setConfirmModal(true);
   }, []);
 
-  const hanldeOnInput = React.useCallback((value) => {
+  const hanldeOnInput = React.useCallback((value: string | Big) => {
     const unLinkedPair = JSON.parse(JSON.stringify(pair));
 
     unLinkedPair[0].value = String(value);
