@@ -480,13 +480,13 @@ export class DragonDex {
   public calcGasLimit(direction: SwapDirection) {
     switch (direction) {
       case SwapDirection.ZilToToken:
-        return Big(2637);
+        return Big(4637);
       case SwapDirection.TokenToZil:
-        return Big(3163);
+        return Big(5163);
       case SwapDirection.TokenToTokens:
-        return Big(4183);
+        return Big(6183);
       default:
-        return Big(5000);
+        return Big(7000);
     }
   }
 
