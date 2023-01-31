@@ -152,6 +152,10 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
     return Big(dex.sleepageCalc(String(limitToken.value))).round(12).toFormat();
   }, [pair]);
 
+  const disabled = React.useMemo(() => {
+    return loading || priceImpact > 10;
+  }, [priceImpact, loading]);
+
   const approveToken = React.useCallback(async() => {
     const [exactToken] = pair;
     const owner = String(wallet?.base16).toLowerCase();
@@ -323,7 +327,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
             allow: isAllow
           })}
           onClick={hanldeOnSwap}
-          disabled={loading}
+          disabled={disabled}
         >
           {loading ? (
             <ThreeDots
