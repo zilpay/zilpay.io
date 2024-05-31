@@ -9,10 +9,17 @@ import { Footer } from '@/components/footer';
 import { NavBar } from '@/components/nav-bar/index';
 import { Themes } from '@/config/themes';
 import { $settings, updateSettingsStore, updateFromStorage } from '@/store/settings';
+import { initZilPayWeb3 } from '@zilpay/zilpay-web3';
 
 updateFromStorage();
 
 const App = ({ Component, pageProps }: any) => {
+  React.useEffect(() => {
+    if (globalThis.document) {
+      initZilPayWeb3();
+    }
+  }, []);
+
   return (
     <>
       <NextNprogress
@@ -29,7 +36,7 @@ const App = ({ Component, pageProps }: any) => {
   );
 }
 
-App.getInitialProps = async function ({ ctx }: any): Promise<{}> {
+App.getInitialProps = async function({ ctx }: any): Promise<{}> {
   const cookies = new Cookies(ctx.req, ctx.res);
   const theme = cookies.get('theme') || Themes.Dark;
 

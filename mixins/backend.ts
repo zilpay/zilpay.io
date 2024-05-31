@@ -18,7 +18,7 @@ export class ZilPayBackend {
         `${this._host}/${this._api}/${BackendMethods.Dex}`,
       );
       const res = await fetch(url.toString());
-  
+
       if (res.status !== 200) {
         return {
           tokens: {
@@ -29,7 +29,7 @@ export class ZilPayBackend {
           pools: {}
         };
       }
-  
+
       const result = await res.json();
 
       return result;
