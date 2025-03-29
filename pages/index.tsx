@@ -49,6 +49,9 @@ const MainPage: NextPage<Prop> = (props) => {
           <a href={AppLinks.GOOGLE}>
             <div className={styles.googlebtn}/>
           </a>
+          <a href={AppLinks.RUSTORE}>
+            <div className={styles.rustorebtn}/>
+          </a>
           <a href={AppLinks.APK}>
             <div className={styles.apkbtn}/>
           </a>

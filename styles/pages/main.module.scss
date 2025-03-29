@@ -1,16 +1,13 @@
 @import "../mixins.scss";
 
 .main {
-  height: 70vh;
+  height: 80vh;
 
   @include flex-center-top-column;
 
-  // background-image: url(/images/bg.webp);
   background-position: center center;
   background-size: 130%;
 
-  // padding-top: 5vh;
-  // padding-bottom: 5vh;
   padding-left: 10vw;
   padding-right: 10vw;
 
@@ -129,7 +126,8 @@
 
 .iosbtn,
 .googlebtn,
-.apkbtn {
+.apkbtn,
+.rustorebtn {
   width: 160px;
   height: 50px;
   display: block;
@@ -142,6 +140,9 @@
 
 .googlebtn {
   background: url(/images/download_buttons.svg) 0 -101px;
+}
+.rustorebtn {
+  background: url(/images/download_buttons.svg) 0 -255px;
 }
 
 .apkbtn {
