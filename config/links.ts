@@ -3,6 +3,7 @@ export enum AppLinks {
   IOS = 'https://apps.apple.com/ru/app/zilpay/id1547105860',
   GOOGLE = 'https://play.google.com/store/apps/details?id=com.zilpaymobile',
   RUSTORE = 'https://www.rustore.ru/catalog/app/com.zilpaymobile',
+  APPGALLERY = 'https://appgallery.huawei.com/app/C113872161',
   FIREFOX = 'https://addons.mozilla.org/en-GB/firefox/addon/zilpay/',
   CHROME = 'https://chrome.google.com/webstore/detail/zilpay/klnaejjgbibmhlephnhpmaofohgkpgkd',
   SAFARI = 'https://apps.apple.com/ru/app/zilpay-extension/id1598114655?l=en&mt=12'

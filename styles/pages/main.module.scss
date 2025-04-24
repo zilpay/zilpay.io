@@ -127,7 +127,8 @@
 .iosbtn,
 .googlebtn,
 .apkbtn,
-.rustorebtn {
+.rustorebtn,
+.appgallerybtn {
   width: 160px;
   height: 50px;
   display: block;
@@ -143,6 +144,9 @@
 }
 .rustorebtn {
   background: url(/images/download_buttons.svg) 0 -255px;
+}
+.appgallerybtn {
+  background: url(/images/download_buttons.svg) 0 -153px;
 }
 
 .apkbtn {
