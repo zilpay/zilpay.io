@@ -86,7 +86,7 @@ export const RemovePoolForm: React.FC<Prop> = ({ token }) => {
     const _100 = BigInt(100);
     const percent = BigInt(Number(range));
     const zil = tokensStore.tokens[0].meta;
-    const userContributions = BigInt(liquidity.balances[owner] && liquidity.balances[owner][tokenAddress] || 0);
+    const userContributions = BigInt(liquidity.balances[tokenAddress] && liquidity.balances[tokenAddress][owner] || 0);
     const newZil = (BigInt(String(zilReserve)) * percent) / _100;
     const newTokens = (BigInt(String(tokenReserve)) * percent) / _100;
     const newUserContributions = (userContributions * percent) / _100;
