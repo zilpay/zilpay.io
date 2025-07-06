@@ -611,8 +611,6 @@ export class DragonDex {
     for (const token in userContributions) {
       try {
         const contribution = BigInt(totalContributions[token]);
-
-        console.log(userContributions[token], owner, token);
         const balance = BigInt(userContributions[token][owner.toLowerCase()]);
 
         if (balance === _zero) {
