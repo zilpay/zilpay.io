@@ -12,15 +12,15 @@ const nextConfig = {
     disableStaticImages: true,
     dangerouslyAllowSVG: true
   },
-  headers() {
-    return [
-      {
-        // Apply these headers to all routes in your application.
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ]
-  }
+  // headers() {
+  //   return [
+  //     {
+  //       // Apply these headers to all routes in your application.
+  //       source: '/:path*',
+  //       headers: securityHeaders,
+  //     },
+  //   ]
+  // }
 }
 
 module.exports = nextConfig
