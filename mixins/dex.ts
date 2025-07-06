@@ -9,7 +9,6 @@ import { ZilPayBase } from './zilpay-base';
 import { $tokens, addToken, updateTokens } from '@/store/tokens';
 
 import { formatNumber } from '@/filters/n-format';
-import { addTransactions } from '@/store/transactions';
 import { SHARE_PERCENT, ZERO_ADDR } from '@/config/conts';
 import { $liquidity, updateDexBalances, updateLiquidity } from '@/store/shares';
 import { $wallet } from '@/store/wallet';
@@ -241,13 +240,6 @@ export class DragonDex {
 
     const amount = Big(String(exact)).div(this.toDecimails(this.tokens[0].meta.decimals)).toString();
     const limitAmount = Big(String(limit)).div(this.toDecimails(token.decimals)).toString();
-    addTransactions({
-      timestamp: new Date().getTime(),
-      name: `Swap exact (${formatNumber(amount)} ZIL), to (${formatNumber(limitAmount)} ${token.symbol})`,
-      confirmed: false,
-      hash: res.ID,
-      from: res.from
-    });
 
     return res;
   }
@@ -295,13 +287,6 @@ export class DragonDex {
 
     const amount = Big(String(exact)).div(this.toDecimails(token.decimals)).toString();
     const limitAmount = Big(String(limit)).div(this.toDecimails(this.tokens[0].meta.decimals)).toString();
-    addTransactions({
-      timestamp: new Date().getTime(),
-      name: `Swap exact (${formatNumber(amount)} ${token.symbol}) to (${formatNumber(limitAmount)} ZIL)`,
-      confirmed: false,
-      hash: res.ID,
-      from: res.from
-    });
 
     return res;
   }
@@ -354,13 +339,6 @@ export class DragonDex {
 
     const amount = formatNumber(Big(String(exact)).div(this.toDecimails(inputToken.decimals)).toString());
     const receivedAmount = formatNumber(Big(String(limit)).div(this.toDecimails(outputToken.decimals)).toString());
-    addTransactions({
-      timestamp: new Date().getTime(),
-      name: `Swap exact (${formatNumber(amount)} ${inputToken.symbol}) to (${formatNumber(receivedAmount)} ${outputToken.symbol})`,
-      confirmed: false,
-      hash: res.ID,
-      from: res.from
-    });
 
     return res;
   }
@@ -417,19 +395,6 @@ export class DragonDex {
       amount: String(limit)
     }, '5060');
 
-    const found = this.tokens.find((t) => t.meta.base16 === addr);
-
-    if (found) {
-      const max = amount.div(this.toDecimails(found.meta.decimals)).toString();
-      addTransactions({
-        timestamp: new Date().getTime(),
-        name: `addLiquidity maximum ${formatNumber(max)} ${found.meta.symbol}`,
-        confirmed: false,
-        hash: res.ID,
-        from: res.from
-      });
-    }
-
     return res.ID;
   }
 
@@ -477,15 +442,8 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: '0'
-    }, '3060');
+    }, '5060');
 
-    addTransactions({
-      timestamp: new Date().getTime(),
-      name: `RemoveLiquidity`,
-      confirmed: false,
-      hash: res.ID,
-      from: res.from
-    });
 
     return res;
   }
@@ -507,16 +465,7 @@ export class DragonDex {
   }
 
   public calcGasLimit(direction: SwapDirection) {
-    switch (direction) {
-      case SwapDirection.ZilToToken:
-        return Big(4637);
-      case SwapDirection.TokenToZil:
-        return Big(5163);
-      case SwapDirection.TokenToTokens:
-        return Big(6183);
-      default:
-        return Big(7000);
-    }
+    return Big(7000);
   }
 
   public calcPriceImpact(priceInput: Big, priceOutput: Big, currentPrice: Big) {
