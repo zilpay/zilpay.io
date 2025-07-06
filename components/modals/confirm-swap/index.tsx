@@ -153,7 +153,7 @@ export var ConfirmSwapModal: React.FC<Prop> = function ({
   }, [pair]);
 
   const disabled = React.useMemo(() => {
-    return loading || priceImpact > 10;
+    return loading || priceImpact > 30;
   }, [priceImpact, loading]);
 
   const approveToken = React.useCallback(async() => {
