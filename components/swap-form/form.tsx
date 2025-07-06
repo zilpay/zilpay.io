@@ -187,6 +187,14 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
             </h3>
             <SwapSettings onClick={() => setModal3(true)}/>
           </div>
+          <div className={styles.stakingLinks}>
+            <a href="https://stakezil.com/?poolId=MHgxZjBl" target="_blank" rel="noopener noreferrer">
+              Zilliqa stake (Amazing pool)
+            </a>
+            <a href="https://stakezil.com/?poolId=MHhDRGIw" target="_blank" rel="noopener noreferrer">
+              Zilliqa stake (2ZilMoon)
+            </a>
+          </div>
           <FormInput
             value={Big(pair[0].value)}
             token={pair[0].meta}
