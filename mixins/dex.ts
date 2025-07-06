@@ -8,7 +8,6 @@ import { ZilPayBase } from './zilpay-base';
 
 import { $tokens, addToken, updateTokens } from '@/store/tokens';
 
-import { toHex } from '@/lib/to-hex';
 import { formatNumber } from '@/filters/n-format';
 import { addTransactions } from '@/store/transactions';
 import { SHARE_PERCENT, ZERO_ADDR } from '@/config/conts';
@@ -18,6 +17,7 @@ import { $settings } from '@/store/settings';
 import { TokenState } from '@/types/token';
 import { $net } from '@/store/netwrok';
 import { $dex } from '@/store/dex';
+import { toHex } from '@/lib/to-hex';
 
 const PROY_ZILSWAP = "0xcccfdec2c9842f3f7ece2b9be996e814d59ca0cc".toLowerCase();
 
@@ -81,28 +81,18 @@ export class DragonDex {
   }
 
   public async updateState() {
-    // const contract = toHex(this.contract);
-    // const owner = String(this.wallet?.base16).toLowerCase();
-    // const {
-    //   pools,
-    //   balances,
-    //   totalContributions,
-    //   protocolFee,
-    //   liquidityFee,
-    //   rewardsPool
-    // } = await this._provider.fetchFullState(contract, owner);
-    // const shares = this._getShares(balances, totalContributions, owner);
-    // const dexPools = this._getPools(pools);
+    const contract = toHex(this.contract);
+    const owner = String(this.wallet?.base16).toLowerCase();
+    const {
+      pools,
+      balances,
+      totalContributions,
+    } = await this._provider.fetchFullState(contract, owner);
+    const shares = this._getShares(balances, totalContributions, owner);
+    const dexPools = this._getPools(pools);
 
-    // $dex.setState({
-    //   rewardsPool,
-    //   fee: BigInt(liquidityFee),
-    //   protoFee: BigInt(protocolFee),
-    //   lp: $dex.state.lp
-    // });
-
-    // updateDexBalances(balances);
-    // updateLiquidity(shares, dexPools);
+    updateDexBalances(balances);
+    updateLiquidity(shares, dexPools);
   }
 
   public async updateTokens() {
@@ -425,7 +415,7 @@ export class DragonDex {
       contractAddress,
       transition,
       amount: String(limit)
-    }, '3060');
+    }, '5060');
 
     const found = this.tokens.find((t) => t.meta.base16 === addr);
 
@@ -613,20 +603,26 @@ export class DragonDex {
     return numerator / denominator;
   }
 
-  private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions, owner: string) {
+  private _getShares(balances: FiledBalances, totalContributions: FieldTotalContributions, owner: string): Share {
     const shares: Share = {};
     const _zero = BigInt(0);
-    const userContributions = balances[owner] || {};
+    const userContributions = balances;
 
     for (const token in userContributions) {
-      const contribution = BigInt(totalContributions[token]);
-      const balance = BigInt(userContributions[token]);
+      try {
+        const contribution = BigInt(totalContributions[token]);
 
-      if (balance === _zero) {
-        continue;
+        console.log(userContributions[token], owner, token);
+        const balance = BigInt(userContributions[token][owner.toLowerCase()]);
+
+        if (balance === _zero) {
+          continue;
+        }
+
+        shares[token] = (balance * SHARE_PERCENT) / contribution;
+      } catch {
+        ///        
       }
-
-      shares[token] = (balance * SHARE_PERCENT) / contribution;
     }
 
     return shares;

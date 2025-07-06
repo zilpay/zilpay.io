@@ -125,45 +125,29 @@ export class Blockchain {
     const batch = [
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.Balances, [owner]]
+        [dex, 'balances', []] 
       ),
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.TotalContributions, []]
+        [dex, 'total_contributions', []] 
       ),
       this._buildBody(
         RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.Pools, []]
+        [dex, 'pools', []] 
       ),
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.LiquidityFee, []]
-      ),
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.ProtocolFee, []]
-      ),
-      this._buildBody(
-        RPCMethods.GetSmartContractSubState,
-        [dex, DexFields.RewardsPool, []]
-      )
     ];
-    const [resBalances, resTotalContributions, resPools, resLiquidityFee, resProtocolFee, resRewardsPool] = await this._send(batch);
-    const balances: FiledBalances = resBalances.result ? resBalances.result[DexFields.Balances] : {};
+
+    const [resBalances, resTotalContributions, resPools, ] = await this._send(batch);
+
+    const balances: FiledBalances = resBalances.result ? resBalances.result.balances : {};
     const totalContributions: FieldTotalContributions = resTotalContributions.result ?
-      resTotalContributions.result[DexFields.TotalContributions] : {};
-    const pools: FiledPools = resPools.result ? resPools.result[DexFields.Pools] : {};
-    const liquidityFee = resLiquidityFee.result ? resLiquidityFee.result[DexFields.LiquidityFee] : '0';
-    const protocolFee = resProtocolFee.result ? resProtocolFee.result[DexFields.ProtocolFee] : '0';
-    const rewardsPool = resRewardsPool.result ? resRewardsPool.result[DexFields.RewardsPool] : ZERO_ADDR;
+      resTotalContributions.result.total_contributions : {};
+    const pools: FiledPools = resPools.result ? resPools.result.pools : {};
 
     return {
       balances,
       totalContributions,
       pools,
-      liquidityFee,
-      protocolFee,
-      rewardsPool
     };
   }
 
