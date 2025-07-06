@@ -19,6 +19,8 @@ import { TokenState } from '@/types/token';
 import { $net } from '@/store/netwrok';
 import { $dex } from '@/store/dex';
 
+const PROY_ZILSWAP = "0xcccfdec2c9842f3f7ece2b9be996e814d59ca0cc".toLowerCase();
+
 
 Big.PE = 999;
 
@@ -31,12 +33,13 @@ export enum SwapDirection {
 const CONTRACTS: {
   [net: string]: string;
 } = {
-  'mainnet': '0x30dfe64740ed459ea115b517bd737bbadf21b838',
+  'mainnet': '0x459CB2d3BAF7e61cFbD5FE362f289aE92b2BaBb0',
   'testnet': '0xb0c677b5ba660925a8f1d5d9687d0c2c379e16ee',
   'private': ''
 };
 
 export class DragonDex {
+  public static FEE_DENOM = 10000n;
   public static REWARDS_DECIMALS = BigInt('100000000000');
   public static FEE_DEMON = BigInt('10000');
 
@@ -50,10 +53,6 @@ export class DragonDex {
 
   public get fee() {
     return $dex.state.fee;
-  }
-
-  public get rewarded() {
-    return $dex.state.rewardsPool;
   }
 
   public get protoFee() {
@@ -77,39 +76,39 @@ export class DragonDex {
   }
 
   public get liquidityRewards() {
-    const demon = Number(DragonDex.FEE_DEMON);
-    return (demon - Number(this.fee)) / demon * 100;
+    const fee_bp = Number(DragonDex.FEE_DENOM - this.fee); // e.g. 30
+    return (fee_bp / 100); // e.g. 0.3%
   }
 
   public async updateState() {
-    const contract = toHex(this.contract);
-    const owner = String(this.wallet?.base16).toLowerCase();
-    const {
-      pools,
-      balances,
-      totalContributions,
-      protocolFee,
-      liquidityFee,
-      rewardsPool
-    } = await this._provider.fetchFullState(contract, owner);
-    const shares = this._getShares(balances, totalContributions, owner);
-    const dexPools = this._getPools(pools);
+    // const contract = toHex(this.contract);
+    // const owner = String(this.wallet?.base16).toLowerCase();
+    // const {
+    //   pools,
+    //   balances,
+    //   totalContributions,
+    //   protocolFee,
+    //   liquidityFee,
+    //   rewardsPool
+    // } = await this._provider.fetchFullState(contract, owner);
+    // const shares = this._getShares(balances, totalContributions, owner);
+    // const dexPools = this._getPools(pools);
 
-    $dex.setState({
-      rewardsPool,
-      fee: BigInt(liquidityFee),
-      protoFee: BigInt(protocolFee),
-      lp: $dex.state.lp
-    });
+    // $dex.setState({
+    //   rewardsPool,
+    //   fee: BigInt(liquidityFee),
+    //   protoFee: BigInt(protocolFee),
+    //   lp: $dex.state.lp
+    // });
 
-    updateDexBalances(balances);
-    updateLiquidity(shares, dexPools);
+    // updateDexBalances(balances);
+    // updateLiquidity(shares, dexPools);
   }
 
   public async updateTokens() {
     const owner = String($wallet.state?.base16);
+    if (!owner || owner === 'undefined') return;
     const newTokens = await this._provider.fetchTokensBalances(owner, $tokens.state.tokens);
-
     updateTokens(newTokens);
   }
 
@@ -129,21 +128,46 @@ export class DragonDex {
     });
   }
 
-  public getRealPrice(pair: SwapPair[]) {
+  public getRealPrice(pair: SwapPair[]): string {
     const [exactToken, limitToken] = pair;
-    const exact = this._valueToBigInt(exactToken.value, exactToken.meta);
-    let value = BigInt(0);
-    const cashback = limitToken.meta.base16 !== this.rewarded && exactToken.meta.base16 !== this.rewarded;
-
-    if (exactToken.meta.base16 === ZERO_ADDR && limitToken.meta.base16 !== ZERO_ADDR) {
-      value = this._zilToTokens(exact, this.pools[limitToken.meta.base16], cashback);
-    } else if (exactToken.meta.base16 !== ZERO_ADDR && limitToken.meta.base16 === ZERO_ADDR) {
-      value = this._tokensToZil(exact, this.pools[exactToken.meta.base16], cashback);
-    } else {
-      value = this._tokensToTokens(exact, this.pools[exactToken.meta.base16], this.pools[limitToken.meta.base16], cashback);
+    if (!exactToken.value || Number(exactToken.value) <= 0) {
+      return '0';
     }
 
-    return Big(String(value)).div(this.toDecimails(limitToken.meta.decimals));
+    const exact = this._valueToBigInt(exactToken.value, exactToken.meta);
+    let value = 0n;
+    
+    try {
+      const direction = this.getDirection(pair);
+      switch (direction) {
+        case SwapDirection.ZilToToken: {
+          const pool = this.pools[limitToken.meta.base16];
+          if (!pool) return '0';
+          value = this._outputFor(exact, BigInt(pool[0]), BigInt(pool[1]));
+          break;
+        }
+        case SwapDirection.TokenToZil: {
+          const pool = this.pools[exactToken.meta.base16];
+          if (!pool) return '0';
+          value = this._outputFor(exact, BigInt(pool[1]), BigInt(pool[0]));
+          break;
+        }
+        case SwapDirection.TokenToTokens: {
+          const inputPool = this.pools[exactToken.meta.base16];
+          const outputPool = this.pools[limitToken.meta.base16];
+          if (!inputPool || !outputPool) return '0';
+          
+          const zilIntermediate = this._outputFor(exact, BigInt(inputPool[1]), BigInt(inputPool[0]));
+          value = this._outputFor(zilIntermediate, BigInt(outputPool[0]), BigInt(outputPool[1]));
+          break;
+        }
+      }
+    } catch (err) {
+        console.error("Price calculation error:", err);
+        return '0';
+    }
+    
+    return Big(value.toString()).div(this.toDecimails(limitToken.meta.decimals)).toFixed();
   }
 
   public getDirection(pair: SwapPair[]) {
@@ -158,18 +182,33 @@ export class DragonDex {
     }
   }
 
-  public tokensToZil(value: string | Big, token: TokenState) {
+  public tokensToZil(value: string | Big, token: TokenState): Big {
     const amount = Big(value);
-    const cashback = token.base16 !== this.rewarded;
 
     try {
+      const pool = this.pools[token.base16];
+      if (!pool) {
+        return Big(0);
+      }
+
       const decimals = this.toDecimails(token.decimals);
       const zilDecimails = this.toDecimails(this.tokens[0].meta.decimals);
-      const qa = amount.mul(decimals).round().toString();
-      const zils = this._tokensToZil(BigInt(qa), this.pools[token.base16], cashback);
+    
+      const qa = amount.mul(decimals).round();
 
-      return Big(String(zils)).div(zilDecimails);
-    } catch {
+      const zilReserve = BigInt(pool[0]);
+      const tokenReserve = BigInt(pool[1]);
+
+      const zils = this._outputFor(
+        BigInt(qa.toString()), 
+        tokenReserve,          
+        zilReserve             
+      );
+
+      return Big(zils.toString()).div(zilDecimails);
+    
+    } catch (err) {
+      console.error("tokensToZil calculation error:", err);
       return Big(0);
     }
   }
@@ -201,7 +240,7 @@ export class DragonDex {
         value: String(this.wallet?.base16).toLowerCase()
       }
     ];
-    const contractAddress = this.contract;
+    const contractAddress = PROY_ZILSWAP;
     const transition = 'SwapExactZILForTokens';
     const res = await this.zilpay.call({
       params,
@@ -252,7 +291,7 @@ export class DragonDex {
       {
         vname: 'recipient_address',
         type: 'ByStr20',
-        value: String(this.wallet?.base16).toLowerCase()
+        value: PROY_ZILSWAP
       }
     ];
     const contractAddress = this.contract;
@@ -531,10 +570,14 @@ export class DragonDex {
     return (d * y) / x;
   }
 
-  private _zilToTokens(amount: bigint, inputPool: string[], cashback: boolean) {
+  private _zilToTokens(amount: bigint, inputPool: string[]): bigint {
     const [zilReserve, tokenReserve] = inputPool;
-    const amountAfterFee = (this.protoFee === BigInt(0) || !cashback) ? amount : amount - (amount / this.protoFee);
-    return this._outputFor(amountAfterFee, BigInt(zilReserve), BigInt(tokenReserve));
+
+    return this._outputFor(
+    amount,                 
+    BigInt(zilReserve),     
+    BigInt(tokenReserve)    
+    );
   }
 
   private _tokensToZil(amount: bigint, inputPool: string[], cashback: boolean) {

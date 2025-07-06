@@ -118,6 +118,8 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
     unLinkedPair[0].value = String(value);
     unLinkedPair[1].value = dex.getRealPrice(unLinkedPair);
 
+    console.log(unLinkedPair);
+
     setPair(unLinkedPair);
   }, [pair]);
 
@@ -226,7 +228,7 @@ export const SwapForm: React.FC<Prop> = ({ startPair }) => {
               ))}
             </li>
           </ul>
-          <button disabled={Boolean(disabled)}>
+          <button>
             {t('buttons.exchange')}
           </button>
         </form>
